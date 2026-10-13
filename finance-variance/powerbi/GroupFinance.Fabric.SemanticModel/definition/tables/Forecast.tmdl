@@ -1,0 +1,91 @@
+table Forecast
+	lineageTag: a6d21f43-7ffb-5959-8b4b-7d0b65877999
+
+	column 'Entity Key'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		formatString: 0
+		lineageTag: 36db6c8f-02f5-5e64-8d73-2f5c54033732
+		summarizeBy: none
+		sourceColumn: entity_key
+
+	column 'Entity Code'
+		dataType: string
+		lineageTag: 8cf8ae03-0453-5ce8-a35f-3755087bcebc
+		summarizeBy: none
+		sourceColumn: entity_code
+
+	column 'Line ID'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: e63aab18-4414-52e1-b6b4-f23a8273c52f
+		summarizeBy: none
+		sourceColumn: line_id
+
+	column Period
+		dataType: dateTime
+		isHidden
+		isAvailableInMdx: false
+		formatString: dd mmm yyyy
+		lineageTag: 344a217d-6412-5b36-a8c0-4351998d45bc
+		summarizeBy: none
+		sourceColumn: period
+
+	column 'Fiscal Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: ef624a35-4e5e-5462-ba81-b741ec90eed7
+		summarizeBy: none
+		sourceColumn: fiscal_year
+
+	column 'Amount USD'
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 564c4d12-3210-5cf2-9dc0-69ae17b7efca
+		summarizeBy: sum
+		sourceColumn: amount_usd
+
+	column Submitted
+		dataType: dateTime
+		formatString: dd mmm
+		lineageTag: 62b7667b-d6d9-5b7c-936a-8b960af0c3a2
+		summarizeBy: none
+		sourceColumn: submitted
+
+	column 'Is Late Submission'
+		dataType: boolean
+		lineageTag: 001e3290-e714-52f1-9731-8d117dbe2531
+		summarizeBy: none
+		sourceColumn: is_late_submission
+
+	column 'Source File'
+		dataType: string
+		lineageTag: 4ab2f3a6-a6d6-5254-8d56-655de9232d52
+		summarizeBy: none
+		sourceColumn: source_file
+
+	column 'Row Index'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		formatString: 0
+		lineageTag: 21490334-63ff-5f75-9425-a190cfe0b533
+		summarizeBy: none
+		sourceColumn: row_index
+
+	partition Forecast = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "forecast"]}[Data],
+				    #"Choose columns" = Table.SelectColumns(Data, {"entity_key", "entity_code", "line_id", "period", "fiscal_year", "amount_usd", "submitted", "is_late_submission", "source_file", "row_index"}),
+				    Typed = Table.TransformColumnTypes(#"Choose columns", {{"entity_key", Int64.Type}, {"entity_code", type text}, {"line_id", type text}, {"period", type date}, {"fiscal_year", Int64.Type}, {"amount_usd", type number}, {"submitted", type date}, {"is_late_submission", type logical}, {"source_file", type text}, {"row_index", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

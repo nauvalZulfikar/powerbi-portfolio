@@ -1,0 +1,43 @@
+table Shipments
+	lineageTag: a4a6fc70-62b0-5f82-991b-e0900ee30f60
+
+	column 'Shipment Vendor'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6a212b8e-b1f0-5ce7-a8b2-4724ca5e1b9f
+		summarizeBy: none
+		sourceColumn: vendor_no
+
+	column 'Shipment Store'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f7c5fa4a-13f8-52f6-aafd-a0247cf94f42
+		summarizeBy: none
+		sourceColumn: store
+
+	column 'Lead Day'
+		dataType: int64
+		formatString: 0
+		lineageTag: 841f3600-f1db-59a2-9044-4c813d5565fd
+		summarizeBy: none
+		sourceColumn: lead_days
+
+	column 'Shipment Count'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 713a8abc-cf2c-58ed-9545-764759443a49
+		summarizeBy: none
+		sourceColumn: shipments
+
+	partition Shipments = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_shipment.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"vendor_no", Int64.Type}, {"store", Int64.Type}, {"lead_days", Int64.Type}, {"shipments", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,220 @@
+table Date
+	lineageTag: e620f4a6-923a-5d82-bb09-354d735179c3
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: dd mmm yyyy
+		lineageTag: b4caa22f-4a88-5fa5-ac5e-d993ef2b86b7
+		summarizeBy: none
+		sourceColumn: Date
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: b27ed194-2c14-504c-be55-a33d958194a2
+		summarizeBy: none
+		sourceColumn: Year
+
+	column 'Year Quarter'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 90833fe4-c0c1-5a96-810b-6e3f22257557
+		summarizeBy: none
+		sourceColumn: Year Quarter
+
+	column Quarter
+		dataType: string
+		lineageTag: 0c4cd825-50c9-57de-ac1f-99986b08f4f5
+		summarizeBy: none
+		sourceColumn: Quarter
+		sortByColumn: 'Year Quarter'
+
+	column 'Year Month'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: dd51fb66-d7d7-5545-90b5-26e2960aa2d6
+		summarizeBy: none
+		sourceColumn: Year Month
+
+	column Month
+		dataType: string
+		lineageTag: c2d46135-1646-58bf-aff7-cc2f875d83d7
+		summarizeBy: none
+		sourceColumn: Month
+		sortByColumn: 'Year Month'
+
+	column 'Month Start'
+		dataType: dateTime
+		formatString: mmm yyyy
+		lineageTag: 85811d45-4dd7-5b9a-8042-259b38c52f45
+		summarizeBy: none
+		sourceColumn: Month Start
+
+	column 'Month of Year'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 600884f2-3a21-5bef-864c-0f144d0261e0
+		summarizeBy: none
+		sourceColumn: Month of Year
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: 74a92398-abcf-5d24-b08f-5d7ef1b16eb8
+		summarizeBy: none
+		sourceColumn: Month Name
+		sortByColumn: 'Month of Year'
+
+	column 'Fiscal Year Number'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: fbcb06da-fdb8-513d-9c9c-b3b7cee64a31
+		summarizeBy: none
+		sourceColumn: Fiscal Year Number
+
+	column 'Fiscal Year'
+		dataType: string
+		lineageTag: 961b436e-2999-5751-99fa-f517d0ae0a02
+		summarizeBy: none
+		sourceColumn: Fiscal Year
+		sortByColumn: 'Fiscal Year Number'
+
+	column 'Fiscal Quarter Number'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6545e681-f843-511a-804b-fde187f32a75
+		summarizeBy: none
+		sourceColumn: Fiscal Quarter Number
+
+	column 'Fiscal Quarter'
+		dataType: string
+		lineageTag: a30fdce4-b97a-550d-9763-2599df5bd3f4
+		summarizeBy: none
+		sourceColumn: Fiscal Quarter
+		sortByColumn: 'Fiscal Quarter Number'
+
+	column 'Fiscal Month Number'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 057ace34-0283-5aac-a7bc-6956695c00c3
+		summarizeBy: none
+		sourceColumn: Fiscal Month Number
+
+	hierarchy Fiscal
+		lineageTag: b3b10829-3683-5e1e-b9e5-cf466b7f700d
+
+		level 'Fiscal Year'
+			lineageTag: 5dcf8856-d10f-5160-bf6e-957d16ccdf94
+			column: 'Fiscal Year'
+
+		level 'Fiscal Quarter'
+			lineageTag: d21eac80-85d4-5359-9bd0-e99064d19e54
+			column: 'Fiscal Quarter'
+
+		level Month
+			lineageTag: 2f603294-83ea-5c71-8a03-0ea7e15c8062
+			column: Month
+
+	hierarchy Calendar
+		lineageTag: b36c00b6-a4ab-54f2-82d8-ae114dc76138
+
+		level Year
+			lineageTag: 72baed9b-3d89-5735-b35b-83081a3cec2b
+			column: Year
+
+		level Quarter
+			lineageTag: 10fb05de-e50b-5b24-b0aa-3a2e7c341e9b
+			column: Quarter
+
+		level Month
+			lineageTag: 4968b5b6-1d05-5048-8436-2a1ae39b7c7e
+			column: Month
+
+	calendar Gregorian
+
+		calendarColumnGroup = year
+			primaryColumn: Year
+
+		calendarColumnGroup = quarter
+			primaryColumn: 'Year Quarter'
+			associatedColumn: Quarter
+
+		calendarColumnGroup = month
+			primaryColumn: 'Year Month'
+			associatedColumn: Month
+
+		calendarColumnGroup = monthOfYear
+			primaryColumn: 'Month of Year'
+			associatedColumn: 'Month Name'
+
+		calendarColumnGroup = date
+			primaryColumn: Date
+
+	calendar Fiscal
+
+		calendarColumnGroup = year
+			primaryColumn: 'Fiscal Year Number'
+			associatedColumn: 'Fiscal Year'
+
+		calendarColumnGroup = quarter
+			primaryColumn: 'Fiscal Quarter Number'
+			associatedColumn: 'Fiscal Quarter'
+
+		calendarColumnGroup = month
+			primaryColumn: 'Fiscal Month Number'
+			associatedColumn: Month
+
+		calendarColumnGroup = date
+			primaryColumn: Date
+
+	partition Date = m
+		mode: import
+		source =
+				// One row per day from the first order month to the end of the last order or target month.
+				// The fiscal year starts in month FiscalYearStart (parameter, 7 = July: FY2013 = Jul 2012 - Jun 2013) and
+				// is named after the calendar year it ends in.
+				let
+				    Dates = List.Buffer(Sales[Order Date] & Targets[Date]),
+				    First = Date.StartOfMonth(List.Min(Dates)),
+				    Last = Date.EndOfMonth(List.Max(Dates)),
+				    Days = List.Dates(First, Duration.Days(Last - First) + 1, #duration(1, 0, 0, 0)),
+				    Base = Table.FromList(Days, Splitter.SplitByNothing(), type table [Date = date]),
+				    Columns = Table.AddColumn(Base, "Parts", each
+				        let
+				            d = [Date],
+				            fy = Date.Year(d) + (if FiscalYearStart > 1 and Date.Month(d) >= FiscalYearStart then 1 else 0),
+				            fm = Number.Mod(Date.Month(d) - FiscalYearStart, 12) + 1
+				        in
+				            [
+				                Year = Date.Year(d),
+				                #"Year Quarter" = Date.Year(d) * 10 + Date.QuarterOfYear(d),
+				                Quarter = Text.From(Date.Year(d)) & " Q" & Text.From(Date.QuarterOfYear(d)),
+				                #"Year Month" = Date.Year(d) * 100 + Date.Month(d),
+				                Month = Date.ToText(d, [Format = "MMM yyyy", Culture = "en-US"]),
+				                #"Month Start" = Date.StartOfMonth(d),
+				                #"Month of Year" = Date.Month(d),
+				                #"Month Name" = Date.ToText(d, [Format = "MMM", Culture = "en-US"]),
+				                #"Fiscal Year Number" = fy,
+				                #"Fiscal Year" = "FY" & Text.From(fy),
+				                #"Fiscal Quarter Number" = fy * 10 + Number.IntegerDivide(fm - 1, 3) + 1,
+				                #"Fiscal Quarter" = "FY" & Text.From(fy) & " Q" & Text.From(Number.IntegerDivide(fm - 1, 3) + 1),
+				                #"Fiscal Month Number" = fy * 100 + fm
+				            ]),
+				    Expanded = Table.ExpandRecordColumn(Columns, "Parts",
+				        {"Year", "Year Quarter", "Quarter", "Year Month", "Month", "Month Start", "Month of Year", "Month Name",
+				         "Fiscal Year Number", "Fiscal Year", "Fiscal Quarter Number", "Fiscal Quarter", "Fiscal Month Number"})
+				in
+				    Table.TransformColumnTypes(Expanded, {
+				        {"Year", Int64.Type}, {"Year Quarter", Int64.Type}, {"Quarter", type text}, {"Year Month", Int64.Type},
+				        {"Month", type text}, {"Month Start", type date}, {"Month of Year", Int64.Type}, {"Month Name", type text},
+				        {"Fiscal Year Number", Int64.Type}, {"Fiscal Year", type text}, {"Fiscal Quarter Number", Int64.Type},
+				        {"Fiscal Quarter", type text}, {"Fiscal Month Number", Int64.Type}})
+
+	annotation PBI_ResultType = Table

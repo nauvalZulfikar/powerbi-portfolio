@@ -1,0 +1,23 @@
+table 'Bridge Step'
+	lineageTag: 1e87b6b0-7af1-5135-8e51-d8c5d3dac817
+
+	column Step
+		dataType: string
+		lineageTag: 02692dd2-77d6-5b04-a8a7-fc33a1c4bc33
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Step]
+		sortByColumn: 'Step Order'
+
+	column 'Step Order'
+		dataType: int64
+		lineageTag: 15b01e51-584f-57d2-a3cc-9f2ef3f7d2da
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Step Order]
+		isHidden
+		formatString: 0
+
+	partition 'Bridge Step' = calculated
+		mode: import
+		source = DATATABLE ( "Step", STRING, "Step Order", INTEGER, { { "Opening stock", 1 }, { "Received", 2 }, { "Sold", 3 } } )

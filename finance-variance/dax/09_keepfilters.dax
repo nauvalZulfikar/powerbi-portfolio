@@ -1,0 +1,13 @@
+// Replace vs add a filter. Old Fin.OnLine: CALCULATE ( value, 'P&L Line'[Line ID] = "S4" ) REPLACES the
+// row's line filter, so every row of a P&L matrix repeats operating profit. New Fin.OnLine wraps it in
+// KEEPFILTERS: the filter is intersected with the row's line, so only the Operating profit row keeps a value.
+// Expected (DuckDB, FY2013 actual, NOT run in Power BI):
+//   "Replace" = 13,793,626 on every line; "KEEPFILTERS" = 13,793,626 on Operating profit, blank elsewhere.
+EVALUATE
+SUMMARIZECOLUMNS (
+    'P&L Line'[Line],
+    TREATAS ( { 2013 }, 'Date'[Year] ),
+    "Replace", CALCULATE ( [Actual], 'P&L Line'[Line ID] = "S4" ),
+    "KEEPFILTERS", [Operating Profit]
+)
+ORDER BY 'P&L Line'[Line]

@@ -1,0 +1,11 @@
+[
+  {
+    "ID": "PROJ_RESTOCK_USES_UDF",
+    "Name": "[Project] Restock maths must call the Stock.* DAX UDF",
+    "Category": "Project",
+    "Description": "inventory-restock: a Restock measure that does safety-stock / order-quantity maths (SQRT, ROUNDUP, NORM.S) must go through Stock.SafetyStock / Stock.ReorderPoint / Stock.OrderQty so the formula lives in one place.",
+    "Severity": 3,
+    "Scope": "Measure",
+    "Expression": "DisplayFolder == \"Restock\" and RegEx.IsMatch(Expression, \"(?i)SQRT|ROUNDUP|NORM\\\\.S\") and not Expression.Contains(\"Stock.\")"
+  }
+]

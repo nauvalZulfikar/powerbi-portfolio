@@ -1,0 +1,11 @@
+[
+  {
+    "ID": "PROJ_VARIANCE_SIGNED_FORMAT",
+    "Name": "[Project] Variance measures must show their sign",
+    "Category": "Project",
+    "Description": "finance-variance: a money or % variance needs an explicit negative section in its format string ((\\$#,0) or +0.0%;-0.0%), so an overrun never reads as a beat. Ranks, bars, colours, flags and shares are not variances.",
+    "Severity": 3,
+    "Scope": "Measure",
+    "Expression": "RegEx.IsMatch(Name, \"(?i)variance\") and not RegEx.IsMatch(Name, \"(?i)rank|bar|color|status|arrow|share|p95|outlier\") and not FormatString.Contains(\";\")"
+  }
+]

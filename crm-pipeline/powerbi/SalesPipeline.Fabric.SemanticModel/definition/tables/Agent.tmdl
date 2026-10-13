@@ -1,0 +1,67 @@
+table Agent
+	lineageTag: a57853c8-ac65-5a0d-a61d-d1d1f0e698ef
+
+	column 'Owner ID'
+		dataType: string
+		isKey
+		isHidden
+		lineageTag: 3b323b31-b6ed-5292-bbe8-095e838b88c4
+		summarizeBy: none
+		sourceColumn: owner_id
+
+	column 'Sales Agent'
+		dataType: string
+		lineageTag: 5af021df-abf3-534c-badb-121a9202f627
+		summarizeBy: none
+		sourceColumn: agent
+
+	column Manager
+		dataType: string
+		lineageTag: a5a9d1ad-0c1c-5a2f-a58f-14728303159c
+		summarizeBy: none
+		sourceColumn: manager
+
+	column Region
+		dataType: string
+		lineageTag: f49c6c66-edb6-542a-aae7-553b93ff0eda
+		summarizeBy: none
+		sourceColumn: regional_office
+
+	column Email
+		dataType: string
+		lineageTag: 1c0ac8f9-a735-5d6b-91de-dcb6ec0f9715
+		summarizeBy: none
+		sourceColumn: email
+
+	column 'Has Deals'
+		dataType: boolean
+		lineageTag: bd8ef491-b37f-5795-97d3-41c96d4f04a1
+		summarizeBy: none
+		sourceColumn: has_deals
+
+	hierarchy 'Sales Team'
+		lineageTag: d3e86d56-e0e4-5034-bf0e-75ec522700de
+
+		level Region
+			lineageTag: d2f7c1e6-f3d9-57b8-847e-a61b92d56d7f
+			column: Region
+
+		level Manager
+			lineageTag: 27ef5ec4-57b0-5699-b036-6b2ef177c78f
+			column: Manager
+
+		level 'Sales Agent'
+			lineageTag: b9fd5051-33ad-5b62-b840-a3f8d820b94c
+			column: 'Sales Agent'
+
+	partition Agent = m
+		mode: dual
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "dim_agent"]}[Data],
+				    Typed = Table.TransformColumnTypes(Data, {{"owner_id", type text}, {"agent", type text}, {"manager", type text}, {"regional_office", type text}, {"email", type text}, {"has_deals", type logical}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

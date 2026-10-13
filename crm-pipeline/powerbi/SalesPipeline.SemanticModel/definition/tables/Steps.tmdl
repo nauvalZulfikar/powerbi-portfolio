@@ -1,0 +1,24 @@
+table Steps
+	lineageTag: 9464ea51-bff7-5c95-965f-dfaa38613612
+
+	column Step
+		dataType: string
+		lineageTag: 716bef0b-7b28-57f7-b67d-8027407fb7fe
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Step]
+		isKey
+		sortByColumn: 'Step Order'
+
+	column 'Step Order'
+		dataType: int64
+		lineageTag: 4d2760d8-1d0d-5fa3-b882-b37f5a713a8e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Step Order]
+		isHidden
+		formatString: 0
+
+	partition Steps = calculated
+		mode: import
+		source = DATATABLE ( "Step", STRING, "Step Order", INTEGER, { { "Created", 1 }, { "Engaged", 2 }, { "Closed", 3 }, { "Won", 4 } } )

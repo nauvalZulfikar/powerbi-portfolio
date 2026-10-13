@@ -1,0 +1,35 @@
+table Status
+	lineageTag: 069f2aa4-7e03-5696-b179-5231dff22af1
+
+	column Status
+		dataType: string
+		isKey
+		lineageTag: 564f3f3b-3840-5243-ad23-fafb2a621c2c
+		summarizeBy: none
+		sourceColumn: status
+		sortByColumn: 'Status Sort'
+
+	column 'Status Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a913c080-d5d6-5899-9d42-116165cbce6e
+		summarizeBy: none
+		sourceColumn: status_sort
+
+	column 'Status Rule'
+		dataType: string
+		lineageTag: ef3ab493-4e38-5af7-8e22-ac0b6ab90249
+		summarizeBy: none
+		sourceColumn: status_rule
+
+	partition Status = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_status.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"status", type text}, {"status_sort", Int64.Type}, {"status_rule", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

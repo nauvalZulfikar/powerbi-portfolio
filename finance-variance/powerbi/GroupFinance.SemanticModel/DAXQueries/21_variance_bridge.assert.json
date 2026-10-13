@@ -1,0 +1,5 @@
+{"rows": 1, "checks": [
+  {"column": "[FX Effect]", "equals": -68720.72, "tolerance": 1},
+  {"column": "[Operational Variance]", "equals": -1059900.31, "tolerance": 1},
+  {"column": "[Gap]", "equals": 0, "tolerance": 0.01}
+]}

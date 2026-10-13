@@ -1,0 +1,31 @@
+relationship 0552bbaa-7365-5b8a-a7fd-74d442f70528
+	fromColumn: 'Daily Sales Detail'.'Detail Date'
+	toColumn: Date.Date
+
+relationship 64a89329-8182-5e48-8194-8541a387836a
+	fromColumn: 'Daily Sales Detail'.'Detail Store'
+	toColumn: Store.'Store No'
+
+relationship 3c627a6e-c527-51c3-bd92-c374841dda6b
+	fromColumn: 'Daily Sales Detail'.'Detail Brand'
+	toColumn: Item.'Brand No'
+
+relationship b87a9998-bcdf-55dd-b550-2ad313107f99
+	fromColumn: 'Daily Sales'.'Sales Date'
+	toColumn: Date.Date
+
+relationship 87fff965-0a3c-5f7a-84dd-2bb0fb169187
+	fromColumn: 'Daily Sales'.'Sales Store'
+	toColumn: Store.'Store No'
+
+relationship 53d80baf-ec52-5d07-a615-d274f84a1512
+	fromColumn: 'Daily Sales'.'Sales Brand'
+	toColumn: Item.'Brand No'
+
+relationship 57c42f97-3b5c-55e3-a6a4-1aa25ecdf3d4
+	fromColumn: Stock.'Stock Store'
+	toColumn: Store.'Store No'
+
+relationship 80324826-a91d-524a-a99c-2102ba643ca1
+	fromColumn: Stock.'Stock Brand'
+	toColumn: Item.'Brand No'

@@ -1,0 +1,11 @@
+[
+  {
+    "ID": "PROJ_CRM_WIN_RATE_CLOSED_ONLY",
+    "Name": "[Project] Win-rate measures must divide by closed deals (open deals don't count)",
+    "Category": "Project",
+    "Description": "crm-pipeline: a win rate is won ÷ (won + lost). Any measure named '... Win Rate' must build on [Win Rate] or [Closed Deals], never on [Deals], which includes open deals and drags the rate down.",
+    "Severity": 3,
+    "Scope": "Measure",
+    "Expression": "Name.EndsWith(\"Win Rate\") and not (Expression.Contains(\"[Win Rate]\") or Expression.Contains(\"[Closed Deals]\"))"
+  }
+]

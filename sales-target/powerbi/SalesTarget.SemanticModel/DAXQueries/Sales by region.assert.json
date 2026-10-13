@@ -1,0 +1,15 @@
+{
+  "checks": [
+    {
+      "column": "Territories[Region]",
+      "row": 0,
+      "equals": "Southwest"
+    },
+    {
+      "column": "[Net Sales]",
+      "row": 0,
+      "equals": 18466458.79,
+      "tolerance": 0.01
+    }
+  ]
+}

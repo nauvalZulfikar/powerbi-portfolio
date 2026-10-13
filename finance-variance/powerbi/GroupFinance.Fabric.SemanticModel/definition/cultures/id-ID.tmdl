@@ -1,0 +1,360 @@
+cultureInfo id-ID
+
+	translations
+
+		model Model
+
+			table GL
+				caption: Buku Besar
+
+			table Date
+				caption: Tanggal
+
+			table Entity
+				caption: Entitas
+
+			table Department
+				caption: Departemen
+
+			table Account
+				caption: Akun
+
+			table 'P&L Line'
+				caption: Baris Laba Rugi
+
+			table Headcount
+				caption: Jumlah Karyawan
+
+			table 'FX Rates'
+				caption: Kurs
+
+			table 'Budget Drivers'
+				caption: Asumsi Anggaran
+
+			table Forecast
+				caption: Prakiraan
+
+			table 'Compare To'
+				caption: Bandingkan Dengan
+
+			table 'Time View'
+				caption: Tampilan Waktu
+
+			table _Measures
+				caption: Ukuran
+
+				measure Actual
+					caption: Realisasi
+					displayFolder: Buku Besar
+
+				measure Budget
+					caption: Anggaran
+					displayFolder: Buku Besar
+
+				measure 'Prior Year'
+					caption: Tahun Lalu
+					displayFolder: Buku Besar
+
+				measure 'Forecast Amount'
+					displayFolder: Buku Besar
+
+				measure 'Actual at Budget Rate'
+					displayFolder: Buku Besar
+
+				measure Outlook
+					displayFolder: Buku Besar
+
+				measure Comparison
+					caption: Pembanding
+					displayFolder: Selisih
+
+				measure Variance
+					caption: Selisih
+					displayFolder: Selisih
+
+				measure 'Variance %'
+					caption: Selisih %
+					displayFolder: Selisih
+
+				measure 'Budget Variance'
+					displayFolder: Selisih
+
+				measure 'FX Effect'
+					caption: Efek Kurs
+					displayFolder: Selisih
+
+				measure 'Operational Variance'
+					displayFolder: Selisih
+
+				measure 'Outlook vs Budget'
+					displayFolder: Selisih
+
+				measure 'Variance Color'
+					displayFolder: Selisih
+
+				measure 'Bridge Amount'
+					displayFolder: Selisih
+
+				measure 'Net Sales'
+					caption: Penjualan Bersih
+					displayFolder: Baris Utama
+
+				measure 'Net Sales Variance'
+					displayFolder: Baris Utama
+
+				measure 'Gross Margin %'
+					caption: Margin Kotor %
+					displayFolder: Baris Utama
+
+				measure 'Operating Expenses'
+					caption: Beban Operasional
+					displayFolder: Baris Utama
+
+				measure 'Operating Expenses Variance'
+					displayFolder: Baris Utama
+
+				measure 'Operating Profit'
+					caption: Laba Operasional
+					displayFolder: Baris Utama
+
+				measure 'Operating Profit Comparison'
+					displayFolder: Baris Utama
+
+				measure 'Operating Profit Variance'
+					caption: Selisih Laba Operasional
+					displayFolder: Baris Utama
+
+				measure 'Operating Profit Variance %'
+					displayFolder: Baris Utama
+
+				measure 'Operating Profit Budget'
+					displayFolder: Baris Utama
+
+				measure 'Operating Profit Outlook'
+					displayFolder: Baris Utama
+
+				measure 'Operating Profit FX Effect'
+					displayFolder: Baris Utama
+
+				measure 'Operating Profit Operational Variance'
+					displayFolder: Baris Utama
+
+				measure 'Operating Profit Forecast'
+					displayFolder: Baris Utama
+
+				measure 'Operating Profit vs Forecast'
+					displayFolder: Baris Utama
+
+				measure 'Entities Submitted'
+					displayFolder: Baris Utama
+
+				measure 'Late Submissions'
+					displayFolder: Baris Utama
+
+				measure 'Opex Spend'
+					displayFolder: Baris Utama
+
+				measure 'Operating Margin %'
+					displayFolder: Baris Utama
+
+				measure 'Net Income'
+					caption: Laba Bersih
+					displayFolder: Baris Utama
+
+				measure 'Entity Variance Rank'
+					caption: Peringkat Selisih Entitas
+					displayFolder: Peringkat
+
+				measure 'Account Variance Rank'
+					caption: Peringkat Selisih Akun
+					displayFolder: Peringkat
+
+				measure 'Entity Variance Bar'
+					displayFolder: Peringkat
+
+				measure 'Account Variance Bar'
+					displayFolder: Peringkat
+
+				measure 'Group Share'
+					displayFolder: Konsolidasi
+
+				measure 'Non-Controlling Interest'
+					displayFolder: Konsolidasi
+
+				measure 'Intercompany Eliminated'
+					displayFolder: Konsolidasi
+
+				measure 'Avg FX Rate'
+					displayFolder: Kurs
+
+				measure 'Budget FX Rate'
+					displayFolder: Kurs
+
+				measure 'FX Move vs Budget %'
+					displayFolder: Kurs
+
+				measure 'EUR per USD'
+					displayFolder: Kurs
+
+				measure 'CAD per USD'
+					displayFolder: Kurs
+
+				measure 'AUD per USD'
+					displayFolder: Kurs
+
+				measure 'FX Shock Value'
+					displayFolder: Kurs
+
+				measure 'Foreign Currency Actual'
+					displayFolder: Kurs
+
+				measure 'Actual at FX Shock'
+					displayFolder: Kurs
+
+				measure 'FX Shock Impact'
+					displayFolder: Kurs
+
+				measure 'Operating Profit at FX Shock'
+					displayFolder: Kurs
+
+				measure 'Avg Headcount'
+					caption: Rata-rata Karyawan
+					displayFolder: Karyawan
+
+				measure 'Cost per Head'
+					displayFolder: Karyawan
+
+				measure 'Salary per Head'
+					displayFolder: Karyawan
+
+				measure 'Sales per Head'
+					displayFolder: Karyawan
+
+				measure 'Headcount PY'
+					displayFolder: Karyawan
+
+				measure 'Heads Closing'
+					displayFolder: Karyawan
+
+				measure 'Heads Plan'
+					displayFolder: Karyawan
+
+				measure 'Heads vs Plan'
+					displayFolder: Karyawan
+
+				measure 'Entities Behind Budget'
+					displayFolder: Selisih
+
+				measure 'Entities with Budget'
+					displayFolder: Selisih
+
+				measure 'Accounts Posted'
+					displayFolder: Buku Besar
+
+				measure 'Variance Status'
+					displayFolder: Selisih
+
+				measure 'Share of Group Opex'
+					displayFolder: Baris Utama
+
+				measure 'Share of Region Variance'
+					displayFolder: Selisih
+
+				measure 'Overrun Only'
+					displayFolder: Selisih
+
+				measure 'Operating Overrun Only'
+					displayFolder: Selisih
+
+				measure 'Actual by Posting Date'
+					displayFolder: Buku Besar
+
+				measure 'Cut-off Drift'
+					displayFolder: Buku Besar
+
+				measure 'Journal Amount'
+					displayFolder: Buku Besar
+
+				measure 'Journal Lines'
+					displayFolder: Buku Besar
+
+				measure 'Opex Rolling 12M'
+					displayFolder: Baris Utama
+
+				measure 'Driver Growth'
+					displayFolder: Selisih
+
+				measure 'Operating Profit PM'
+					displayFolder: Baris Utama
+
+				measure 'Variance Running Total'
+					displayFolder: Selisih
+
+				measure 'Biggest Miss Entity'
+					displayFolder: Peringkat
+
+				measure 'Metric Value'
+					displayFolder: Baris Utama
+
+				measure 'Opex Overrun'
+					displayFolder: Analisis
+
+				measure 'Overrun Cumulative %'
+					displayFolder: Analisis
+
+				measure 'Accounts to 80% Overrun'
+					displayFolder: Analisis
+
+				measure 'Overrunning Accounts'
+					displayFolder: Analisis
+
+				measure 'Pareto Title'
+					displayFolder: Analisis
+
+				measure 'Spend Class'
+					displayFolder: Analisis
+
+				measure 'Entities in Band'
+					displayFolder: Analisis
+
+				measure 'Variance P95'
+					displayFolder: Analisis
+
+				measure 'Is Variance Outlier'
+					displayFolder: Analisis
+
+				measure 'Outlier Cells'
+					displayFolder: Analisis
+
+				measure 'Opex Outlook'
+					displayFolder: Analisis
+
+				measure 'Opex Trend Forecast'
+					displayFolder: Analisis
+
+				measure 'Variance Arrow'
+					displayFolder: Tampilan Laporan
+
+				measure 'Alt Text Operating Profit'
+					displayFolder: Tampilan Laporan
+
+				measure 'Alt Text Biggest Miss'
+					displayFolder: Tampilan Laporan
+
+				measure 'Alt Text Opex'
+					displayFolder: Tampilan Laporan
+
+				measure 'Outlier Fill'
+					displayFolder: Tampilan Laporan
+
+				measure 'Line Row Fill'
+					displayFolder: Tampilan Laporan
+
+				measure 'Period Label'
+					displayFolder: Tampilan Laporan
+
+				measure 'As Of Label'
+					displayFolder: Tampilan Laporan
+
+				measure 'Headline Insight'
+					displayFolder: Tampilan Laporan

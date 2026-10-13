@@ -1,0 +1,55 @@
+table Stage
+	lineageTag: e41d2dc6-d057-58c0-8f13-f030c795ffd8
+
+	column 'Stage Key'
+		dataType: string
+		isKey
+		isHidden
+		lineageTag: 44508167-1574-555c-94b2-7c478d32d03a
+		summarizeBy: none
+		sourceColumn: stage_key
+
+	column Stage
+		dataType: string
+		lineageTag: 64c769bb-2a91-510a-9b85-6526830836bd
+		summarizeBy: none
+		sourceColumn: stage
+		sortByColumn: 'Stage Sort'
+
+	column 'Stage Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5f8baec3-e818-5f99-a743-68240141510f
+		summarizeBy: none
+		sourceColumn: stage_sort
+
+	column 'Is Open'
+		dataType: boolean
+		lineageTag: f89bf2a7-f8e6-5aab-80fa-0c22ac2b21aa
+		summarizeBy: none
+		sourceColumn: is_open
+
+	column 'Is Closed'
+		dataType: boolean
+		lineageTag: 327c1468-2bbb-57ed-aacd-8e95252eee32
+		summarizeBy: none
+		sourceColumn: is_closed
+
+	column 'Is Won'
+		dataType: boolean
+		lineageTag: 9f987c27-86ba-5afa-aabe-88e0807dc6db
+		summarizeBy: none
+		sourceColumn: is_won
+
+	partition Stage = m
+		mode: dual
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "dim_stage"]}[Data],
+				    Typed = Table.TransformColumnTypes(Data, {{"stage_key", type text}, {"stage", type text}, {"stage_sort", Int64.Type}, {"is_open", type logical}, {"is_closed", type logical}, {"is_won", type logical}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,636 @@
+table _Measures
+	lineageTag: bd31d0a4-db05-5d34-838e-56e327dcad1c
+
+	/// Opportunities in the current filter.
+	measure Deals = COUNTROWS ( Opportunities )
+		formatString: #,0
+		displayFolder: Deals
+		lineageTag: b82a181f-576a-59d2-8d93-e00d5c6a0eb0
+
+	/// Deals closed as won.
+	measure 'Won Deals' = CALCULATE ( [Deals], Opportunities[Stage Key] = "closedwon" )
+		formatString: #,0
+		displayFolder: Deals
+		lineageTag: f5d46059-2636-59ee-b7ad-e78526c7176c
+
+	/// Deals closed as lost.
+	measure 'Lost Deals' = CALCULATE ( [Deals], Opportunities[Stage Key] = "closedlost" )
+		formatString: #,0
+		displayFolder: Deals
+		lineageTag: 2f6c4ba5-faee-5fa3-918c-60a13bc42dc7
+
+	/// Won plus lost deals.
+	measure 'Closed Deals' = [Won Deals] + [Lost Deals]
+		formatString: #,0
+		displayFolder: Deals
+		lineageTag: 30d7a1f4-f0e8-56c6-8dfd-86ecadea5b96
+
+	/// Won ÷ closed (won + lost). Open deals are not counted.
+	measure 'Win Rate' = Kpi.Rate ( [Won Deals], [Closed Deals] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Deals
+		lineageTag: 3308f45a-3a68-5b95-897a-4186c531e45d
+
+	/// Close value of won deals.
+	measure 'Won Revenue' = CALCULATE ( SUM ( Opportunities[Close Value] ), Opportunities[Stage Key] = "closedwon" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Deals
+		lineageTag: dd77d794-932c-5244-9d58-edef9ca7e0f6
+
+	/// Won revenue with a dynamic format string: $1.23M, $45K or $678 depending on size.
+	measure 'Won Revenue Compact' = [Won Revenue]
+		displayFolder: Deals
+		lineageTag: d806f902-fe40-585c-bf0e-c006f87d605b
+		formatStringDefinition = SWITCH ( TRUE (), ABS ( SELECTEDMEASURE () ) >= 1e6, "$#,0.00,,""M""", ABS ( SELECTEDMEASURE () ) >= 1e3, "$#,0,""K""", "$#,0" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING","MEASURES_SHOULD_NOT_BE_DIRECT_REFERENCES_OF_OTHER_MEASURES"]}
+
+	/// Won revenue per won deal.
+	measure 'Avg Deal Size' = Kpi.Rate ( [Won Revenue], [Won Deals] )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Deals
+		lineageTag: bda934cf-faef-5ae5-afa1-a2ca3c6beaee
+
+	/// Average days from engage to close, closed deals only.
+	measure 'Avg Cycle Days' = AVERAGE ( Opportunities[Cycle Days] )
+		formatString: #,0
+		displayFolder: Deals
+		lineageTag: 5d7fd408-2a13-5f18-b124-4efaafa9749a
+
+	/// Won revenue ÷ list price of the products sold. Above 100% = sold over list.
+	measure 'Price Realisation' = Kpi.Rate ( [Won Revenue], CALCULATE ( SUM ( Opportunities[List Price] ), Opportunities[Stage Key] = "closedwon" ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Deals
+		lineageTag: f79315c9-362e-589b-8130-ba19e13d328d
+
+	/// Share of won revenue across everything in the visual.
+	measure 'Revenue Share' = DIVIDE ( [Won Revenue], CALCULATE ( [Won Revenue], ALLSELECTED () ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Deals
+		lineageTag: 87f7508d-1400-5131-9148-fe7b669cae39
+
+	/// The measure picked in the Metric field parameter; its format string follows the pick.
+	measure 'Selected Metric' =
+			SWITCH ( SELECTEDVALUE ( Metric[Metric Order], 0 ),
+			    0, [Won Revenue],
+			    1, [Win Rate],
+			    2, [Avg Deal Size],
+			    3, [Avg Cycle Days],
+			    4, [Deals]
+			)
+		displayFolder: Deals
+		lineageTag: 234a28dd-face-5315-8101-e97431094aa7
+		formatStringDefinition = SWITCH ( SELECTEDVALUE ( Metric[Metric Order], 0 ), 1, "0.0%", 3, "0", 4, "#,0", "\$#,0" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// List price minus close value, summed over won deals (SUMX, row by row).
+	measure 'Discount Leakage' = SUMX ( FILTER ( Opportunities, Opportunities[Stage Key] = "closedwon" ), Opportunities[List Price] - Opportunities[Close Value] )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Deals
+		lineageTag: 0bf5db2e-f9c0-5249-8bcb-999a84512a0e
+
+	/// Catalogue list price of every won deal, read from Product with RELATED.
+	measure 'Catalog Value Won' = SUMX ( FILTER ( Opportunities, Opportunities[Stage Key] = "closedwon" ), RELATED ( Product[List Price] ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Deals
+		lineageTag: 9426ba9f-61f1-56b4-984d-6c70d2b99b85
+
+	/// Won revenue from deals larger than the average won deal in the current filter (FILTER inside CALCULATE).
+	measure 'Above-Average Deal Revenue' =
+			VAR _avg = [Avg Deal Size]
+			RETURN
+			    CALCULATE ( [Won Revenue], FILTER ( Opportunities, Opportunities[Close Value] > _avg ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Deals
+		lineageTag: 4ccd2fc8-bf4b-56ed-be09-738f117e2550
+
+	/// Won revenue from Large (5k+) accounts. KEEPFILTERS intersects with a Size Band slicer instead of overriding it.
+	measure 'Won Revenue Large Accounts' = CALCULATE ( [Won Revenue], KEEPFILTERS ( Account[Size Band] = "Large (5k+)" ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Deals
+		lineageTag: 0e256314-fae4-5557-be66-1488ab6c1c5f
+
+	/// Accounts with at least one won deal (DISTINCTCOUNT), excluding the no-account row.
+	measure 'Active Accounts' = CALCULATE ( DISTINCTCOUNT ( Opportunities[Account ID] ), Opportunities[Stage Key] = "closedwon", Opportunities[Has Account] = TRUE () )
+		formatString: #,0
+		displayFolder: Accounts
+		lineageTag: 06904ada-192b-5e84-9a06-a5f1ab8ad6b1
+
+	/// Accounts with any deal in the filter: Opportunities as a CALCULATE filter carries its expanded table to Account.
+	measure 'Accounts Touched' = CALCULATE ( COUNTROWS ( Account ), Opportunities )
+		formatString: #,0
+		displayFolder: Accounts
+		lineageTag: 4b95dd61-0d32-5061-b2e2-14124c155e83
+
+	/// Won revenue averaged over the accounts in the filter (AVERAGEX).
+	measure 'Avg Revenue per Account' = AVERAGEX ( VALUES ( Account[Account] ), [Won Revenue] )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Accounts
+		lineageTag: dc7401d2-0bcd-5758-b09b-07b686a7cd2d
+
+	/// Won revenue of the ten largest accounts among those selected (TOPN).
+	measure 'Top 10 Accounts Revenue' = CALCULATE ( [Won Revenue], TOPN ( 10, ALLSELECTED ( Account[Account] ), [Won Revenue], DESC ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Accounts
+		lineageTag: ec758b4d-23c6-55db-913a-6dc2052cdffa
+
+	/// Pareto: won revenue of this account and every larger one, as a share of all selected accounts (WINDOW).
+	measure 'Account Cumulative Share' =
+			VAR _cum = CALCULATE ( [Won Revenue], WINDOW ( 1, ABS, 0, REL, ALLSELECTED ( Account[Account] ), ORDERBY ( [Won Revenue], DESC, Account[Account], ASC ) ) )
+			RETURN
+			    IF ( NOT ISBLANK ( [Won Revenue] ), DIVIDE ( _cum, CALCULATE ( [Won Revenue], ALLSELECTED ( Account[Account] ) ) ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Accounts
+		lineageTag: ee13c28d-8f5c-592a-8699-5e0c6b903cee
+
+	/// A = accounts making the first 80% of won revenue in the current selection, B = the next 15%, C = the rest.
+	measure 'Account ABC' =
+			VAR _rev = [Won Revenue]
+			VAR _accounts = ADDCOLUMNS ( ALLSELECTED ( Account[Account] ), "@rev", [Won Revenue] )
+			VAR _total = SUMX ( _accounts, [@rev] )
+			VAR _cum = SUMX ( FILTER ( _accounts, [@rev] >= _rev ), [@rev] )
+			VAR _share = DIVIDE ( _cum, _total )
+			RETURN
+			    IF ( HASONEVALUE ( Account[Account] ) && _rev > 0,
+			        SWITCH ( TRUE (), _share <= 0.8, "A", _share <= 0.95, "B", "C" ) )
+		displayFolder: Accounts
+		lineageTag: ae02ca2a-e444-5f4c-adfa-5829d0de331d
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Pareto: how many accounts make the first 80% of won revenue in the selection.
+	measure 'Accounts to 80%' = COUNTROWS ( FILTER ( ALLSELECTED ( Account[Account] ), VAR _s = [Account Cumulative Share] RETURN NOT ISBLANK ( _s ) && _s <= 0.8 ) )
+		formatString: #,0
+		displayFolder: Accounts
+		lineageTag: ceb3301b-a4f5-59fd-9aeb-f35b00043a5b
+
+	/// Accounts to 80% as a share of the accounts with won revenue in the selection.
+	measure 'Share of Accounts to 80%' = Kpi.Rate ( [Accounts to 80%], COUNTROWS ( FILTER ( ALLSELECTED ( Account[Account] ), [Won Revenue] > 0 ) ) )
+		formatString: 0%
+		displayFolder: Accounts
+		lineageTag: df2014b6-3df5-5d2e-a0f5-ae2dc4d0ae6e
+
+	/// Accounts whose won revenue in the current filter falls inside the Account Segment band.
+	measure 'Accounts in Segment' =
+			VAR _lo = MIN ( 'Account Segment'[Low] )
+			VAR _hi = MAX ( 'Account Segment'[High] )
+			RETURN
+			    COUNTROWS ( FILTER ( VALUES ( Account[Account] ), VAR _r = [Won Revenue] RETURN _r > 0 && _r >= _lo && _r < _hi ) )
+		formatString: #,0
+		displayFolder: Accounts
+		lineageTag: 3cfc2930-1967-5ad0-8c0f-8502706eb450
+
+	/// Won revenue of the accounts inside the Account Segment band.
+	measure 'Segment Revenue' =
+			VAR _lo = MIN ( 'Account Segment'[Low] )
+			VAR _hi = MAX ( 'Account Segment'[High] )
+			RETURN
+			    SUMX ( FILTER ( VALUES ( Account[Account] ), VAR _r = [Won Revenue] RETURN _r > 0 && _r >= _lo && _r < _hi ), [Won Revenue] )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Accounts
+		lineageTag: e7863134-1140-5835-b42a-bb1c4cc9a2ea
+
+	/// Won revenue one quarter back on the Gregorian calendar.
+	measure 'Won Revenue PQ' = Kpi.PriorQuarter ( [Won Revenue], 'Gregorian' )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Variance
+		lineageTag: 61e578eb-8e3f-5d3a-b0ff-3cefa120a19a
+
+	/// Won revenue minus won revenue one quarter back.
+	measure 'Revenue Change QoQ' = [Won Revenue] - [Won Revenue PQ]
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Variance
+		lineageTag: 82f2e14f-c62f-5fd7-8be8-a34c50369a3c
+
+	/// Won revenue minus won revenue one month back (calendar-based, no axis needed).
+	measure 'Revenue Change MoM' = [Won Revenue] - [Revenue Last Month]
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Variance
+		lineageTag: b9e56f07-a5ea-5986-ad65-19d9e0a5c07b
+
+	/// Part of the QoQ change from winning more or fewer deals at last quarter's mix and prices.
+	measure 'Volume Effect' =
+			VAR _qc = CALCULATE ( [Won Deals], ALLSELECTED ( Product ) )
+			VAR _qp = Kpi.PriorQuarter ( CALCULATE ( [Won Deals], ALLSELECTED ( Product ) ), 'Gregorian' )
+			RETURN
+			    SUMX ( VALUES ( Product[Product] ),
+			        VAR _np = Kpi.PriorQuarter ( [Won Deals], 'Gregorian' )
+			        VAR _pp = Kpi.PriorQuarter ( [Avg Deal Size], 'Gregorian' )
+			        RETURN ( _qc - _qp ) * DIVIDE ( _np, _qp ) * _pp )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Variance
+		lineageTag: 06017fd1-20cc-54c2-a336-260853fef902
+
+	/// Part of the QoQ change from selling a different product mix, at last quarter's prices.
+	measure 'Mix Effect' =
+			VAR _qc = CALCULATE ( [Won Deals], ALLSELECTED ( Product ) )
+			VAR _qp = Kpi.PriorQuarter ( CALCULATE ( [Won Deals], ALLSELECTED ( Product ) ), 'Gregorian' )
+			RETURN
+			    SUMX ( VALUES ( Product[Product] ),
+			        VAR _nc = [Won Deals]
+			        VAR _np = Kpi.PriorQuarter ( [Won Deals], 'Gregorian' )
+			        VAR _pp = Kpi.PriorQuarter ( [Avg Deal Size], 'Gregorian' )
+			        RETURN _qc * ( DIVIDE ( _nc, _qc ) - DIVIDE ( _np, _qp ) ) * _pp )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Variance
+		lineageTag: 0cc49573-755c-591e-ae03-2b7b3304f6f8
+
+	/// Part of the QoQ change from a different average deal size per product.
+	measure 'Price Effect' =
+			SUMX ( VALUES ( Product[Product] ),
+			    VAR _nc = [Won Deals]
+			    VAR _pc = [Avg Deal Size]
+			    VAR _pp = Kpi.PriorQuarter ( [Avg Deal Size], 'Gregorian' )
+			    RETURN _nc * ( _pc - _pp ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Variance
+		lineageTag: c640f1bd-a0c2-5e98-b9f0-a1437c9083f4
+
+	/// Revenue Change QoQ minus volume, mix and price effects; zero when the bridge closes.
+	measure 'Bridge Check' = [Revenue Change QoQ] - [Volume Effect] - [Mix Effect] - [Price Effect]
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Variance
+		lineageTag: 0a207829-3b0a-53a4-9ba2-6b2dfe506bee
+
+	/// 90th percentile of engage-to-close days over the closed deals in the filter (PERCENTILEX.INC).
+	measure 'P90 Cycle Days' = PERCENTILEX.INC ( FILTER ( Opportunities, NOT ISBLANK ( Opportunities[Cycle Days] ) ), Opportunities[Cycle Days], 0.9 )
+		formatString: #,0
+		displayFolder: Outliers
+		lineageTag: 762425f6-ef89-55b5-92fe-407cb898648a
+
+	/// How many standard deviations an agent's stale share sits from the average agent in the selection; above 2 = outlier.
+	measure 'Agent Stale Z-Score' =
+			VAR _s = IF ( [Open Pipeline] > 0, COALESCE ( [Stale Share], 0 ) )
+			VAR _agents = ADDCOLUMNS ( FILTER ( ALLSELECTED ( Agent[Sales Agent] ), [Open Pipeline] > 0 ), "@s", COALESCE ( [Stale Share], 0 ) )
+			VAR _mu = AVERAGEX ( _agents, [@s] )
+			VAR _sd = STDEVX.P ( _agents, [@s] )
+			RETURN
+			    IF ( HASONEVALUE ( Agent[Sales Agent] ) && NOT ISBLANK ( _s ), DIVIDE ( _s - _mu, _sd ) )
+		formatString: +0.00;-0.00;0.00
+		displayFolder: Outliers
+		lineageTag: 17695cad-e3c2-5e8a-a6b5-7e74ea3e8433
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Linear trend of monthly won revenue (LINESTX); months after the last sync are a projection, not a forecast with seasonality.
+	measure 'Revenue Trend Forecast' =
+			VAR _pts = CALCULATETABLE (
+			    FILTER ( ADDCOLUMNS ( VALUES ( 'Date'[Month Start] ), "@x", YEAR ( 'Date'[Month Start] ) * 12 + MONTH ( 'Date'[Month Start] ), "@y", [Won Revenue] ), NOT ISBLANK ( [@y] ) ),
+			    REMOVEFILTERS ( 'Date' ) )
+			VAR _fit = LINESTX ( _pts, [@y], [@x] )
+			VAR _m = MAX ( 'Date'[Month Start] )
+			RETURN
+			    IF ( HASONEVALUE ( 'Date'[Month Start] ) && COUNTROWS ( _pts ) >= 3 && _m >= MINX ( _pts, 'Date'[Month Start] ),
+			        MAXX ( _fit, [Intercept] ) + MAXX ( _fit, [Slope1] ) * ( YEAR ( _m ) * 12 + MONTH ( _m ) ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Outliers
+		lineageTag: 04dd2a56-ecb6-5515-914e-1a08c14c0daf
+
+	/// Win rate of the whole region of the agent or manager in the row (ALLEXCEPT).
+	measure 'Region Win Rate' = CALCULATE ( [Win Rate], ALLEXCEPT ( Agent, Agent[Region] ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Team
+		lineageTag: de184b0a-0192-5c82-8267-8c60133c1265
+
+	/// Win rate minus the win rate of the region it belongs to.
+	measure 'Win Rate vs Region' = [Win Rate] - [Region Win Rate]
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Team
+		lineageTag: 94616f55-892d-5630-b03f-99edf360ccd9
+
+	/// Font colour for Win Rate vs Region: green above the region, red below.
+	measure 'Win Rate vs Region Color' =
+			VAR _d = [Win Rate vs Region]
+			RETURN
+			    SWITCH ( TRUE (), ISBLANK ( _d ), BLANK (), _d >= 0, "#1E7B34", "#B42318" )
+		displayFolder: Team
+		lineageTag: 7a994b9a-a535-561e-9410-a018cdd35efe
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Deals on the Stage Flow link in the row: Created → Engaged / still prospecting, Engaged → Won / Lost / still engaging.
+	measure 'Flow Deals' =
+			SWITCH ( SELECTEDVALUE ( 'Stage Flow'[To] ),
+			    "Engaged", CALCULATE ( [Deals], NOT ISBLANK ( Opportunities[Engaged Date] ) ),
+			    "Still prospecting", CALCULATE ( [Deals], Opportunities[Stage Key] = "prospecting" ),
+			    "Won", [Won Deals],
+			    "Lost", [Lost Deals],
+			    "Still engaging", CALCULATE ( [Deals], Opportunities[Stage Key] = "engaging" )
+			)
+		formatString: #,0
+		displayFolder: Flow
+		lineageTag: fe1722e3-1ec1-5902-9746-1f0bb08383a5
+
+	/// Deals that went from the From Stage at the previous month-end sync to the To Stage at this one.
+	measure 'Transition Deals' = COUNTROWS ( 'Stage Transitions' )
+		formatString: #,0
+		displayFolder: Flow
+		lineageTag: 5fbdbbc6-85e1-5218-9680-dd4bff5dbf6e
+
+	/// Deals still open at the last sync. Ignores date filters.
+	measure 'Open Deals' = CALCULATE ( [Deals], Opportunities[Stage Key] IN { "engaging", "prospecting" }, REMOVEFILTERS ( 'Date' ) )
+		formatString: #,0
+		displayFolder: Pipeline
+		lineageTag: 0a0f502c-ee63-5a33-b7ba-0e372e80bc66
+
+	/// List value of open deals (no amount exists until a deal closes).
+	measure 'Open Pipeline' = CALCULATE ( SUM ( Opportunities[Open Value] ), REMOVEFILTERS ( 'Date' ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Pipeline
+		lineageTag: 9f4e1106-729d-5a7a-bd42-7d97039ff87c
+
+	/// Selected Stale Threshold; default = P90 Cycle Days over all closed deals (104).
+	measure 'Stale Days' = SELECTEDVALUE ( 'Stale Threshold'[Stale Threshold], ROUND ( CALCULATE ( [P90 Cycle Days], REMOVEFILTERS () ), 0 ) )
+		formatString: #,0
+		displayFolder: Pipeline
+		lineageTag: 63df5096-aa11-58c3-9c45-d3e32f0f8959
+
+	/// Engaging deals older than the stale threshold.
+	measure 'Stale Deals' =
+			VAR _t = [Stale Days]
+			RETURN
+			    CALCULATE ( [Deals], Opportunities[Stage Key] = "engaging", Opportunities[Age Days] > _t, REMOVEFILTERS ( 'Date' ) )
+		formatString: #,0
+		displayFolder: Pipeline
+		lineageTag: abc9f6d6-3643-5537-87a7-99dbb4559526
+
+	/// List value of engaging deals older than the stale threshold.
+	measure 'Stale Pipeline' =
+			VAR _t = [Stale Days]
+			RETURN
+			    CALCULATE ( SUM ( Opportunities[Open Value] ), Opportunities[Stage Key] = "engaging", Opportunities[Age Days] > _t, REMOVEFILTERS ( 'Date' ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Pipeline
+		lineageTag: eb1cc780-89d8-5049-af21-5adbd24ae407
+
+	/// Share of open pipeline value that is stale.
+	measure 'Stale Share' = Kpi.Rate ( [Stale Pipeline], [Open Pipeline] )
+		formatString: 0%
+		displayFolder: Pipeline
+		lineageTag: 5b0dd11e-64cf-5f0a-bf32-96fb8077bee7
+
+	/// Open pipeline minus stale deals.
+	measure 'Live Pipeline' = [Open Pipeline] - [Stale Pipeline]
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Pipeline
+		lineageTag: 124db75f-7c90-5279-9b75-9d9abbccfda7
+
+	/// Selected Win Probability; defaults to the historical win rate.
+	measure 'Forecast Win Rate' = SELECTEDVALUE ( 'Win Probability'[Win Probability], CALCULATE ( [Win Rate], REMOVEFILTERS ( 'Date', Stage ) ) )
+		formatString: 0%
+		displayFolder: Pipeline
+		lineageTag: 9143c5f1-8db8-55da-8e33-957bce26fb48
+
+	/// Live pipeline × forecast win rate × historical price realisation. Stale deals are assumed lost.
+	measure 'Weighted Forecast' = [Live Pipeline] * [Forecast Win Rate] * CALCULATE ( [Price Realisation], REMOVEFILTERS ( 'Date', Stage ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Pipeline
+		lineageTag: 453cbe3e-0b3e-50e8-b706-48969575d2ed
+
+	/// Open deals not linked to any account: a CRM hygiene gap.
+	measure 'Open Without Account' = CALCULATE ( [Deals], Opportunities[Stage Key] IN { "engaging", "prospecting" }, Opportunities[Has Account] = FALSE (), REMOVEFILTERS ( 'Date' ) )
+		formatString: #,0
+		displayFolder: Pipeline
+		lineageTag: a056b5f4-216b-56f0-92e4-2ec21c65e8d6
+
+	/// Open list value at the latest snapshot in the filter.
+	measure 'Snapshot Open Pipeline' =
+			VAR _d = MAX ( 'Pipeline Snapshots'[Snapshot Date] )
+			RETURN
+			    CALCULATE (
+			        SUM ( 'Pipeline Snapshots'[Snapshot Open Value] ),
+			        'Pipeline Snapshots'[Snapshot Date] = _d
+			    )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Snapshots
+		lineageTag: 00e68ee4-faeb-51ed-852f-a6867c526356
+
+	/// Open deals at the latest snapshot in the filter.
+	measure 'Snapshot Open Deals' =
+			VAR _d = MAX ( 'Pipeline Snapshots'[Snapshot Date] )
+			RETURN
+			    CALCULATE (
+			        COUNTROWS ( 'Pipeline Snapshots' ),
+			        'Pipeline Snapshots'[Snapshot Date] = _d,
+			        'Pipeline Snapshots'[Stage Key] IN { "engaging", "prospecting" }
+			    )
+		formatString: #,0
+		displayFolder: Snapshots
+		lineageTag: 432381e9-d904-5912-a9c8-7d5afe9fa8e8
+
+	/// Engaging value older than the stale threshold at that snapshot.
+	measure 'Snapshot Stale Pipeline' =
+			VAR _t = [Stale Days]
+			VAR _d = MAX ( 'Pipeline Snapshots'[Snapshot Date] )
+			RETURN
+			    CALCULATE (
+			        SUM ( 'Pipeline Snapshots'[Snapshot Open Value] ),
+			        'Pipeline Snapshots'[Snapshot Date] = _d,
+			        'Pipeline Snapshots'[Stage Key] = "engaging",
+			        'Pipeline Snapshots'[Snapshot Age Days] > _t
+			    )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Snapshots
+		lineageTag: 8705b0ed-7a54-58d3-843d-6e8f1fe07fe5
+
+	/// Stale share of open value at the latest snapshot in the filter.
+	measure 'Snapshot Stale Share' = Kpi.Rate ( [Snapshot Stale Pipeline], [Snapshot Open Pipeline] )
+		formatString: 0%
+		displayFolder: Snapshots
+		lineageTag: e7b6b0e0-d2b7-586d-8434-a355afc6d699
+
+	/// Deals that reached the step.
+	measure 'Funnel Deals' = COUNTROWS ( Funnel )
+		formatString: #,0
+		displayFolder: Funnel
+		lineageTag: f302c6a1-99b6-5184-9aac-1b29ec148c45
+
+	/// Funnel deals ÷ deals created.
+	measure 'Share of Created' = Kpi.Rate ( [Funnel Deals], CALCULATE ( [Funnel Deals], Funnel[Step Sort] = 1 ) )
+		formatString: 0%
+		displayFolder: Funnel
+		lineageTag: 0724aa97-1b97-5c39-ad21-30056b751454
+
+	/// Deals at this step ÷ deals at the step before it (window function OFFSET).
+	measure 'Step Conversion' =
+			VAR _prev = CALCULATE ( [Funnel Deals], OFFSET ( -1, ALLSELECTED ( Steps[Step], Steps[Step Order] ), ORDERBY ( Steps[Step Order], ASC ) ) )
+			RETURN
+			    Kpi.Rate ( [Funnel Deals], _prev )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Funnel
+		lineageTag: 483f87d2-a598-5e5b-83fb-98c48faadd80
+
+	/// List value of the deals that reached the step: Steps filters Opportunities through the Funnel bridge (many-to-many).
+	measure 'Value Reaching Step' = CALCULATE ( SUM ( Opportunities[List Price] ), CROSSFILTER ( Funnel[Opportunity ID], Opportunities[Opportunity ID], BOTH ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Funnel
+		lineageTag: e8d7230c-861b-581f-8e61-d19c66035289
+
+	/// Average list price of the deals that reached the step (many-to-many).
+	measure 'Avg Value Reaching Step' = CALCULATE ( AVERAGE ( Opportunities[List Price] ), CROSSFILTER ( Funnel[Opportunity ID], Opportunities[Opportunity ID], BOTH ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Funnel
+		lineageTag: 882156d0-79ed-5165-8491-f88742b270a9
+
+	/// Won revenue one month back on the Gregorian calendar (calendar-based time intelligence).
+	measure 'Revenue Last Month' = Kpi.PriorMonth ( [Won Revenue], 'Gregorian' )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Trends
+		lineageTag: f12b798b-f1ef-5202-911b-73e20ebccbd8
+
+	/// Won revenue of the previous month on the visual's axis (window function OFFSET).
+	measure 'Prev Month Revenue' = CALCULATE ( [Won Revenue], OFFSET ( -1, ALLSELECTED ( 'Date'[Month Start] ), ORDERBY ( 'Date'[Month Start], ASC ) ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Trends
+		lineageTag: ee215cac-a23d-567f-a10f-e5c0da6f03cf
+
+	/// Won revenue change against the previous month on the axis.
+	measure 'MoM Change' =
+			VAR _prev = [Prev Month Revenue]
+			RETURN
+			    Kpi.Rate ( [Won Revenue] - _prev, _prev )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Trends
+		lineageTag: 7f6fcbec-6117-5a60-948a-6376605fdf12
+
+	/// Won revenue of this month and the two before it (window function WINDOW).
+	measure 'Rolling 3M Revenue' = CALCULATE ( [Won Revenue], WINDOW ( -2, REL, 0, REL, ALLSELECTED ( 'Date'[Month Start] ), ORDERBY ( 'Date'[Month Start], ASC ) ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Trends
+		lineageTag: 9e0d9a69-24c7-5c3c-adac-576aa1e3c24c
+
+	/// Won revenue of the best month among those selected (window function INDEX).
+	measure 'Best Month Revenue' = CALCULATE ( [Won Revenue], INDEX ( 1, ALLSELECTED ( 'Date'[Month Start] ), ORDERBY ( [Won Revenue], DESC ) ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Trends
+		lineageTag: b7c3f82a-c1b6-55e1-9bd3-5fbe0213245f
+
+	/// Name of the best month by won revenue (window function INDEX).
+	measure 'Best Month' = FORMAT ( MAXX ( INDEX ( 1, ALLSELECTED ( 'Date'[Month Start] ), ORDERBY ( [Won Revenue], DESC ) ), 'Date'[Month Start] ), "mmm yyyy" )
+		displayFolder: Trends
+		lineageTag: 590d8beb-b6c4-55c0-968c-ace857cf7838
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Won revenue as a share of the level above in the Sales Team hierarchy: agent of manager, manager of region, region of total.
+	measure 'Share of Parent' =
+			SWITCH (
+			    TRUE (),
+			    ISINSCOPE ( Agent[Sales Agent] ), Kpi.ShareOf ( [Won Revenue], Agent[Sales Agent] ),
+			    ISINSCOPE ( Agent[Manager] ), Kpi.ShareOf ( [Won Revenue], Agent[Manager] ),
+			    ISINSCOPE ( Agent[Region] ), Kpi.ShareOf ( [Won Revenue], Agent[Region] ),
+			    1
+			)
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Trends
+		lineageTag: ce9bbef2-6996-5724-8fe0-34771c767fa6
+
+	/// Win rate in this segment ÷ win rate of every other closed deal in the visual; 1.20 = 20% more likely to win.
+	measure 'Win Rate Lift' = Kpi.Lift ( [Won Deals], [Closed Deals], CALCULATE ( [Won Deals], ALLSELECTED () ), CALCULATE ( [Closed Deals], ALLSELECTED () ) )
+		formatString: 0.00
+		displayFolder: Drivers
+		lineageTag: 45f740ca-ec34-55fd-a437-2687748ad539
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Extraction runs in the filter.
+	measure 'Sync Count' = COUNTROWS ( 'Sync Runs' )
+		formatString: #,0
+		displayFolder: Sync
+		lineageTag: 1497ab14-7e32-557b-bb52-743f41cb0178
+
+	/// HTTP requests sent to the CRM API.
+	measure 'API Requests' = SUM ( 'Sync Runs'[Requests] )
+		formatString: #,0
+		displayFolder: Sync
+		lineageTag: 4736bae7-7700-59cb-89db-0cae176267b0
+
+	/// Requests that were retried after a 429 or 5xx.
+	measure 'API Retries' = SUM ( 'Sync Runs'[Retries] )
+		formatString: #,0
+		displayFolder: Sync
+		lineageTag: afd2bc5a-0571-515e-be86-636d0b48bc4c
+
+	/// 429 responses (rate limit), retried after Retry-After.
+	measure 'Throttled Requests' = SUM ( 'Sync Runs'[Rate Limited 429] )
+		formatString: #,0
+		displayFolder: Sync
+		lineageTag: 92740814-7a4f-50b7-b9cf-f0238f08011a
+
+	/// 5xx responses, retried with backoff.
+	measure 'Server Error Responses' = SUM ( 'Sync Runs'[Server Errors 5xx] )
+		formatString: #,0
+		displayFolder: Sync
+		lineageTag: d965c0ef-2147-5b8c-9e39-2de5868a0473
+
+	/// Deal versions appended to the raw history.
+	measure 'Deal Versions Loaded' = SUM ( 'Sync Runs'[Versions Added] )
+		formatString: #,0
+		displayFolder: Sync
+		lineageTag: 879db6a2-5fdf-58cb-8525-7aadf59f8ccc
+
+	/// Date of the latest extraction run.
+	measure 'Last Sync' = MAX ( 'Sync Runs'[Sync Date] )
+		formatString: dd mmm yyyy
+		displayFolder: Sync
+		lineageTag: 9dd4c6a6-73e3-5033-b53a-f34c7fa2a844
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// API responses per run and outcome (Sync Run Events, unpivoted in Power Query).
+	measure 'Run Responses' = SUM ( 'Sync Run Events'[Value] )
+		formatString: #,0
+		displayFolder: Sync
+		lineageTag: a626d93e-44f1-536d-bec4-072099236e11
+
+	/// Stages where the mart's deal count or close value differs from the seed CSV.
+	measure 'Reconciliation Gaps' = COUNTROWS ( FILTER ( 'Source Reconciliation', 'Source Reconciliation'[Deals Diff] <> 0 || 'Source Reconciliation'[Value Diff] <> 0 ) )
+		formatString: #,0
+		displayFolder: Data Trust
+		lineageTag: 03521827-b06e-5e71-ad82-1de8bf1795c5
+
+	/// Won revenue of the managers listed in the RLS access table, applied to Agent with TREATAS (no relationship).
+	measure 'Revenue Covered by RLS' = CALCULATE ( [Won Revenue], KEEPFILTERS ( TREATAS ( VALUES ( 'Manager Access'[Manager] ), Agent[Manager] ) ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Data Trust
+		lineageTag: 529c1f47-bd4d-5263-bac8-807657ea93dc
+
+	/// Share of won revenue whose manager has a row in the RLS access table.
+	measure 'RLS Coverage' = Kpi.Rate ( [Revenue Covered by RLS], [Won Revenue] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Data Trust
+		lineageTag: c895b4e5-b954-592d-8fb2-fef464cf37be
+
+	/// Agents whose first.last login differs from the model email, or whose manager has no RLS row.
+	measure 'Login Mismatches' = COUNTROWS ( FILTER ( 'Agent Login Check', NOT 'Agent Login Check'[Email Matches] || NOT 'Agent Login Check'[Manager In RLS Table] ) )
+		formatString: #,0
+		displayFolder: Data Trust
+		lineageTag: 41826f77-cb70-53f4-8e6c-35fc112b6d75
+
+	/// One-sentence summary that follows the slicers.
+	measure Headline =
+			VAR _w = [Won Revenue]
+			VAR _r = [Win Rate]
+			VAR _s = [Stale Share]
+			RETURN
+			    "Won " & Fmt.Money ( _w ) & " at a " & FORMAT ( _r, "0%" ) & " win rate. "
+			        & FORMAT ( [Stale Deals], "#,0" ) & " of " & FORMAT ( [Open Deals], "#,0" )
+			        & " open deals are older than " & [Stale Days] & " days, holding " & FORMAT ( _s, "0%" ) & " of the open pipeline."
+		displayFolder: Narrative
+		lineageTag: abd8b113-9292-5e5b-a814-3a13a33c8850
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	column Value
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f827f77f-8a26-588b-a1ae-9a9485e0319d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition _Measures = calculated
+		mode: import
+		source = {1}

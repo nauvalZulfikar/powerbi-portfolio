@@ -1,0 +1,424 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "line_anomaly",
+  "position": {
+    "x": 924,
+    "y": 216,
+    "z": 2100,
+    "width": 652,
+    "height": 332,
+    "tabOrder": 1500
+  },
+  "visual": {
+    "visualType": "lineChart",
+    "objects": {
+      "categoryAxis": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9.0D"
+                }
+              }
+            },
+            "labelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#6F6D68'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "valueAxis": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9.0D"
+                }
+              }
+            },
+            "labelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#6F6D68'"
+                    }
+                  }
+                }
+              }
+            },
+            "gridlineShow": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "gridlineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#ECEBE6'"
+                    }
+                  }
+                }
+              }
+            },
+            "gridlineStyle": {
+              "expr": {
+                "Literal": {
+                  "Value": "'solid'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "lineStyles": [
+        {
+          "properties": {
+            "strokeWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "2L"
+                }
+              }
+            },
+            "showMarker": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dataPoint": [
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#52514e'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Measures.January Sales"
+          }
+        }
+      ],
+      "anomalyDetection": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "displayName": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Anomaly'"
+                }
+              }
+            },
+            "markerShow": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "markerColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#C2410C'"
+                    }
+                  }
+                }
+              }
+            },
+            "markerShape": {
+              "expr": {
+                "Literal": {
+                  "Value": "'circle'"
+                }
+              }
+            },
+            "markerShapeSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "6.0D"
+                }
+              }
+            },
+            "confidenceBandShow": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "confidenceBandColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#6F6D68'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "80.0D"
+                }
+              }
+            },
+            "transform": {
+              "Name": "anomaly",
+              "Algorithm": "AnomalyDetection",
+              "Input": {
+                "Parameters": [
+                  {
+                    "Literal": {
+                      "Value": "0.7D"
+                    },
+                    "Name": "Sensitivity"
+                  }
+                ],
+                "Table": {
+                  "Name": "anomaly_in",
+                  "Columns": [
+                    {
+                      "Role": "X",
+                      "Expression": {
+                        "Column": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Entity": "Date"
+                            }
+                          },
+                          "Property": "Date"
+                        },
+                        "Name": "Date.Date"
+                      }
+                    },
+                    {
+                      "Role": "Y",
+                      "Expression": {
+                        "Measure": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Entity": "_Measures"
+                            }
+                          },
+                          "Property": "January Sales"
+                        },
+                        "Name": "_Measures.January Sales"
+                      }
+                    }
+                  ]
+                }
+              },
+              "Output": {
+                "Table": {
+                  "Name": "anomaly_out",
+                  "Columns": [
+                    {
+                      "Role": "anomaly.IsAnomaly",
+                      "Expression": {
+                        "TransformOutputRoleRef": {
+                          "Role": "anomaly.IsAnomaly"
+                        },
+                        "Name": "anomaly.anomaly.IsAnomaly"
+                      }
+                    },
+                    {
+                      "Role": "anomaly.ExpectedValue",
+                      "Expression": {
+                        "TransformOutputRoleRef": {
+                          "Role": "anomaly.ExpectedValue"
+                        },
+                        "Name": "anomaly.anomaly.ExpectedValue"
+                      }
+                    },
+                    {
+                      "Role": "anomaly.LowerBound",
+                      "Expression": {
+                        "TransformOutputRoleRef": {
+                          "Role": "anomaly.LowerBound"
+                        },
+                        "Name": "anomaly.anomaly.LowerBound"
+                      }
+                    },
+                    {
+                      "Role": "anomaly.UpperBound",
+                      "Expression": {
+                        "TransformOutputRoleRef": {
+                          "Role": "anomaly.UpperBound"
+                        },
+                        "Name": "anomaly.anomaly.UpperBound"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Measures.January Sales"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Which January days sold unusually high or low?'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Sales per day, with anomalies flagged'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Analytics pane anomaly detection: sensitivity 70%'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Date"
+                    }
+                  },
+                  "Property": "Date"
+                }
+              },
+              "queryRef": "Date.Date",
+              "nativeQueryRef": "Date"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "January Sales"
+                }
+              },
+              "queryRef": "_Measures.January Sales",
+              "nativeQueryRef": "January Sales"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

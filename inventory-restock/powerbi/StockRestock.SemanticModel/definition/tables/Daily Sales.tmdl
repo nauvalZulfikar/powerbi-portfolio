@@ -1,0 +1,50 @@
+table 'Daily Sales'
+	lineageTag: ed7f418c-e675-558f-a554-61ed2e41d45d
+
+	column 'Sales Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: ff35b41d-f8f0-5ba8-939e-7414c9e0736a
+		summarizeBy: none
+		sourceColumn: date
+
+	column 'Sales Store'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f3f1680e-057d-5226-9a53-8ffb7d73943d
+		summarizeBy: none
+		sourceColumn: store
+
+	column 'Sales Brand'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: db3c41b0-6a92-56bd-80ec-64c0d62f60cd
+		summarizeBy: none
+		sourceColumn: brand
+
+	column 'Units Sold'
+		dataType: int64
+		formatString: #,0
+		lineageTag: b567171e-9872-5de9-b6b8-036e577c2922
+		summarizeBy: none
+		sourceColumn: units
+
+	column 'Sales Dollars'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 65d52870-6b09-5411-ad0f-3d11c86eee43
+		summarizeBy: none
+		sourceColumn: dollars
+
+	partition 'Daily Sales' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_sales_daily.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"date", type date}, {"store", Int64.Type}, {"brand", Int64.Type}, {"units", Int64.Type}, {"dollars", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

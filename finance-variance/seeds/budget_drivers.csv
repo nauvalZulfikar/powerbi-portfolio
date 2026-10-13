@@ -1,0 +1,27 @@
+line_id,fiscal_year,growth,rationale
+L01,2012,0.12,Sales target: +12% on prior-year actual
+L02,2012,0.12,Intercompany volume follows trade sales
+L03,2012,0.12,Returns & discounts held at prior-year share of sales
+L04,2012,0.10,Cost of sales grows slower than sales: 2-pt margin-improvement target
+L05,2012,0.06,Merit increase + planned hires
+L06,2012,0.12,Commissions follow sales
+L07,2012,0.00,Travel frozen at prior-year spend
+L08,2012,0.08,Marketing push behind sales target
+L09,2012,0.03,Lease and utility indexation
+L10,2012,0.02,Depreciation per fixed-asset schedule
+L11,2012,0.03,Inflation
+L12,2012,0.00,Other income & expense held flat
+L13,2012,0.12,Tax follows profit
+L01,2013,0.10,Sales target: +10% on prior-year actual
+L02,2013,0.10,Intercompany volume follows trade sales
+L03,2013,0.10,Returns & discounts held at prior-year share of sales
+L04,2013,0.08,Cost of sales grows slower than sales: 2-pt margin-improvement target
+L05,2013,0.05,Merit increase
+L06,2013,0.10,Commissions follow sales
+L07,2013,-0.05,Travel cut 5% (cost programme)
+L08,2013,0.05,Marketing
+L09,2013,0.03,Lease and utility indexation
+L10,2013,0.02,Depreciation per fixed-asset schedule
+L11,2013,0.03,Inflation
+L12,2013,0.00,Other income & expense held flat
+L13,2013,0.10,Tax follows profit

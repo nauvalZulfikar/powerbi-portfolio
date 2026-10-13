@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "grp_stale",
+  "position": {
+    "x": 912,
+    "y": 604,
+    "z": 2700,
+    "width": 664,
+    "height": 276,
+    "tabOrder": 1700
+  },
+  "visualGroup": {
+    "displayName": "Stale table",
+    "groupMode": "ScaleMode"
+  }
+}

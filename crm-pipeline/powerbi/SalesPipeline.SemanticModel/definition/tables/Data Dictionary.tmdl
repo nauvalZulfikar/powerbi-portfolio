@@ -1,0 +1,43 @@
+table 'Data Dictionary'
+	lineageTag: c011f540-0323-5fb1-8029-3496361ee244
+
+	column 'Source Table'
+		dataType: string
+		lineageTag: 3dba7a3d-d565-5ce0-91e0-2322ff34519b
+		summarizeBy: none
+		sourceColumn: Source Table
+
+	column 'Source Field'
+		dataType: string
+		lineageTag: 456d1931-6187-5d75-81f1-f1c03ee1ab77
+		summarizeBy: none
+		sourceColumn: Source Field
+
+	column Description
+		dataType: string
+		lineageTag: 6b040d80-72f8-527a-90a4-e4a941c19a98
+		summarizeBy: none
+		sourceColumn: Description
+
+	column 'Model Table'
+		dataType: string
+		lineageTag: 99584b9a-22d4-51b7-b29e-1a539ab67ced
+		summarizeBy: none
+		sourceColumn: Model Table
+
+	partition 'Data Dictionary' = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(RawFolder & "data_dictionary.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Renamed = Table.RenameColumns(PromotedHeaders, {{"Table", "Source Table"}, {"Field", "Source Field"}}),
+				    // The CSV has trailing spaces (e.g. 'Sales agent '): trim every text column
+				    Trimmed = Table.TransformColumns(Renamed, {{"Source Table", Text.Trim, type text}, {"Source Field", Text.Trim, type text},
+				        {"Description", Text.Trim, type text}}),
+				    AddedModelTable = Table.AddColumn(Trimmed, "Model Table", each Record.FieldOrDefault([accounts = "Account",
+				        products = "Product", sales_teams = "Agent", sales_pipeline = "Opportunities"], [Source Table], "?"), type text)
+				in
+				    AddedModelTable
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,14 @@
+table 'Stale Threshold'
+	lineageTag: 26c142c9-cdbc-59a9-9453-734c532b5820
+
+	column 'Stale Threshold'
+		dataType: int64
+		lineageTag: fffc74b4-9532-5ed7-bbeb-01bd6fcbec60
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Stale Threshold]
+		formatString: 0
+
+	partition 'Stale Threshold' = calculated
+		mode: import
+		source = SELECTCOLUMNS ( GENERATESERIES ( 30, 180, 1 ), "Stale Threshold", [Value] )

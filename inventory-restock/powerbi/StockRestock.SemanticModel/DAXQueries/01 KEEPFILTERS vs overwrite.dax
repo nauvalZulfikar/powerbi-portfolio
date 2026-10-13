@@ -1,0 +1,8 @@
+// Out-of-stock lines in class A per ABC class: KEEPFILTERS intersects, a plain filter overwrites.
+EVALUATE
+SUMMARIZECOLUMNS (
+    ABC[ABC Class],
+    "Out of stock", [Out of Stock Lines],
+    "A, KEEPFILTERS", [Out of Stock Lines A],
+    "A, overwrite", CALCULATE ( [Out of Stock Lines], ABC[ABC Key] = "A" )
+)

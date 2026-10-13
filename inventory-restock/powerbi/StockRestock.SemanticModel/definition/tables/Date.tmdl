@@ -1,0 +1,132 @@
+table Date
+	lineageTag: 12ea15b8-d1e4-538f-9d39-4a4912175932
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: dd mmm yyyy
+		lineageTag: d2d6b69d-4f42-544a-b980-b45601802411
+		summarizeBy: none
+		sourceColumn: date
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: b0f82aa5-7a24-593c-b8e1-83f25ed1d2d9
+		summarizeBy: none
+		sourceColumn: year
+
+	column Month
+		dataType: string
+		lineageTag: e40d2e4c-832f-5a5b-908c-9e4c45c17cd2
+		summarizeBy: none
+		sourceColumn: month
+		sortByColumn: 'Month Sort'
+
+	column 'Month Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 85de0fd5-f351-5f27-89c9-9cd9542b31d6
+		summarizeBy: none
+		sourceColumn: month_sort
+
+	column 'Month Start'
+		dataType: dateTime
+		formatString: mmm yyyy
+		lineageTag: b31eeaa3-29cb-5b41-b87f-b236d5aca6de
+		summarizeBy: none
+		sourceColumn: month_start
+
+	column Weekday
+		dataType: string
+		lineageTag: d91a6ba6-864d-5a32-b02e-e927c1e83cd1
+		summarizeBy: none
+		sourceColumn: weekday
+		sortByColumn: 'Weekday Sort'
+
+	column 'Weekday Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 84c6e57b-51ff-59ce-b97a-896c3dbba8b4
+		summarizeBy: none
+		sourceColumn: weekday_sort
+
+	column Quarter
+		dataType: string
+		lineageTag: ed923b15-5e5b-5a2d-892c-830e60fa3136
+		summarizeBy: none
+		sourceColumn: quarter
+		sortByColumn: 'Year Quarter'
+
+	column 'Year Quarter'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ab5f134c-d4fc-5637-8b7a-3a1e22d7d5f6
+		summarizeBy: none
+		sourceColumn: year_quarter
+
+	column 'Month of Year'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a9de5e7b-b92a-5e25-b726-779487b63e79
+		summarizeBy: none
+		sourceColumn: month_of_year
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: 812cdeec-430f-5a2a-b7d8-7d8fe3950172
+		summarizeBy: none
+		sourceColumn: month_name
+		sortByColumn: 'Month of Year'
+
+	hierarchy Calendar
+		lineageTag: aaf36416-b532-5150-9398-4df060d972c3
+
+		level Year
+			lineageTag: f3d055e8-fa05-5dcb-bf02-9dc15fa0fb03
+			column: Year
+
+		level Quarter
+			lineageTag: bf04a65b-2e28-5952-877b-572e3950f477
+			column: Quarter
+
+		level 'Month Start'
+			lineageTag: efbe6ba4-be36-5ed7-a556-23935a2f3c29
+			column: 'Month Start'
+
+	calendar Gregorian
+		lineageTag: d9a2eb85-c6b5-5a59-8de7-ff70b084b399
+
+		calendarColumnGroup = year
+			primaryColumn: Year
+
+		calendarColumnGroup = quarter
+			primaryColumn: 'Year Quarter'
+			associatedColumn: Quarter
+
+		calendarColumnGroup = month
+			primaryColumn: 'Month Sort'
+			associatedColumn: Month
+
+		calendarColumnGroup = monthOfYear
+			primaryColumn: 'Month of Year'
+			associatedColumn: 'Month Name'
+
+		calendarColumnGroup = date
+			primaryColumn: Date
+
+	partition Date = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_date.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"date", type date}, {"year", Int64.Type}, {"month", type text}, {"month_sort", Int64.Type}, {"month_start", type date}, {"weekday", type text}, {"weekday_sort", Int64.Type}, {"quarter", type text}, {"year_quarter", Int64.Type}, {"month_of_year", Int64.Type}, {"month_name", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

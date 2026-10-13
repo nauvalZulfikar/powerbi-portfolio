@@ -1,0 +1,52 @@
+table 'Budget Drivers'
+	lineageTag: d0f901d6-316b-516c-b519-71e144c11590
+
+	column 'Fiscal Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: 2a5c8557-73f4-53c5-a290-60cefc0e91c9
+		summarizeBy: none
+		sourceColumn: fiscal_year
+
+	column 'Line ID'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: 23b6068e-4344-5a4b-a5f6-b56f2a720aaa
+		summarizeBy: none
+		sourceColumn: line_id
+
+	column 'Driver Line'
+		dataType: string
+		lineageTag: 0a7bf2f8-e028-5acb-9626-32f73ad5661f
+		summarizeBy: none
+		sourceColumn: line
+		sortByColumn: 'Line Sort'
+
+	column 'Line Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: bcfb6a16-cff8-5192-9c5f-0d08de4b4cdc
+		summarizeBy: none
+		sourceColumn: line_sort
+
+	column Growth
+		dataType: double
+		formatString: +0.0%;-0.0%;0.0%
+		lineageTag: aed8ee80-0c3b-534a-942b-6b6fa5032ecf
+		summarizeBy: none
+		sourceColumn: growth
+
+	column Rationale
+		dataType: string
+		lineageTag: f3aab291-7892-549c-a442-11ebd65ffb4d
+		summarizeBy: none
+		sourceColumn: rationale
+
+	partition 'Budget Drivers' = entity
+		mode: directLake
+		source
+			entityName: budget_drivers
+			schemaName: dbo
+			expressionSource: DatabaseQuery

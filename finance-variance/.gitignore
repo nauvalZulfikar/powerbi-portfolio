@@ -1,0 +1,20 @@
+.venv/
+data/raw/
+data/warehouse/
+data/marts/*.parquet
+__pycache__/
+.DS_Store
+powerbi/**/.pbi/localSettings.json
+powerbi/**/.pbi/cache.abf
+tools/**/bin/
+tools/**/obj/
+reports/dashboard.html
+# pbi-kit templates/pbip.gitignore (merged)
+powerbi/**/.pbi/unappliedChanges.json
+*.pbix.bak
+node_modules/
+.env
+fabric_cicd.error.log
+bpa-result.json
+report.log
+bpa-*.json

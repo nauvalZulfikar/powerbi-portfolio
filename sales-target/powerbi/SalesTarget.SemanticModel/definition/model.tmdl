@@ -1,0 +1,41 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+ref table Sales
+ref table Targets
+ref table Reps
+ref table Territories
+ref table Products
+ref table Resellers
+ref table Date
+ref table 'Category Plan'
+ref table 'Cleaning Log'
+ref table 'Target Stretch'
+ref table 'ABC Class'
+ref table 'Reseller Size Bands'
+ref table 'Reseller Cohort'
+ref table 'RFM Transition'
+ref table 'Subcategory Pairs'
+ref table 'Time Intelligence'
+ref table 'Analyze By'
+ref table Metric
+ref table _Measures
+
+ref role 'Sales Manager'
+ref role 'Data Steward'
+ref role 'Branch Europe'
+ref role 'Branch North America'
+ref role 'Branch Pacific'
+
+ref perspective 'Sales Review'
+ref perspective 'Data Quality'
+
+ref cultureInfo en-US

@@ -1,0 +1,16 @@
+role 'External Partner'
+	modelPermission: read
+
+	tablePermission Account
+
+		columnPermission 'Annual Revenue' = none
+		columnPermission Employees = none
+
+	tablePermission 'Sync Runs'
+		metadataPermission: none
+
+	tablePermission 'Sync Run Events'
+		metadataPermission: none
+
+	tablePermission 'Agent Login Check'
+		metadataPermission: none

@@ -1,0 +1,16 @@
+== Test
+[info]   18:36:19 - Parameter file validation passed
+deploy powerbi → Test (DRY RUN)
+items in scope (SemanticModel, Report): 2
+  Report         'SalesTarget'                        SalesTarget.Report
+  SemanticModel  'SalesTarget'                        SalesTarget.SemanticModel
+  find_replace[0] 'expression InboxFolder = "([^"]*)"' → '\\\\fileserver\\pbi-test\\sales-target\\inbox': SalesTarget.SemanticModel/definition/expressions.tmdl
+fabric-cicd parameter validation: OK
+== Prod
+[info]   18:36:20 - Parameter file validation passed
+deploy powerbi → Prod (DRY RUN)
+items in scope (SemanticModel, Report): 2
+  Report         'SalesTarget'                        SalesTarget.Report
+  SemanticModel  'SalesTarget'                        SalesTarget.SemanticModel
+  find_replace[0] 'expression InboxFolder = "([^"]*)"' → '\\\\fileserver\\pbi\\sales-target\\inbox': SalesTarget.SemanticModel/definition/expressions.tmdl
+fabric-cicd parameter validation: OK

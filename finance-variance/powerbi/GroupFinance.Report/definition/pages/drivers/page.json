@@ -1,0 +1,94 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "drivers",
+  "displayName": "Variance Drivers",
+  "displayOption": "FitToPage",
+  "width": 1600,
+  "height": 900,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "image": {
+            "image": {
+              "name": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'canvas.png'"
+                  }
+                }
+              },
+              "url": {
+                "expr": {
+                  "ResourcePackageItem": {
+                    "PackageName": "RegisteredResources",
+                    "PackageType": 1,
+                    "ItemName": "canvas.png"
+                  }
+                }
+              },
+              "scaling": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'Fit'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0.0D"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspace": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#E9E8E3'"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "table_top_var",
+      "target": "waterfall_bridge",
+      "type": "HighlightFilter"
+    },
+    {
+      "source": "table_top_var",
+      "target": "bar_fx_ccy",
+      "type": "NoFilter"
+    },
+    {
+      "source": "waterfall_bridge",
+      "target": "bar_fx_ccy",
+      "type": "NoFilter"
+    },
+    {
+      "source": "decomp_variance",
+      "target": "bar_fx_ccy",
+      "type": "NoFilter"
+    },
+    {
+      "source": "table_top_var",
+      "target": "combo_pareto",
+      "type": "NoFilter"
+    }
+  ]
+}

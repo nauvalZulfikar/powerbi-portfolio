@@ -1,0 +1,12 @@
+// Expanded table: a filter on 'P&L Line' reaches GL through the bridge
+//   'P&L Line' 1-* 'Line Account' *-1 Account (both directions) 1-* GL.
+// CALCULATETABLE ( GL, ... ) returns GL rows because GL's expanded table includes Account,
+// and the bidirectional bridge lets the P&L Line filter flow into Account.
+// Expected (computed in DuckDB on the same marts, NOT run in Power BI):
+//   Actual 2,661 rows, -38,983,146 USD; Budget 2,244 rows, -27,843,128 USD (2011-2013).
+EVALUATE
+SUMMARIZECOLUMNS (
+    GL[Scenario],
+    "Rows", COUNTROWS ( CALCULATETABLE ( GL, 'P&L Line'[Line] = "Salaries & benefits" ) ),
+    "Amount USD", CALCULATE ( SUM ( GL[Amount USD] ), 'P&L Line'[Line] = "Salaries & benefits" )
+)

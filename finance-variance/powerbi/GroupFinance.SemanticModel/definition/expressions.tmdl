@@ -1,0 +1,97 @@
+expression DataFolder = "/path/to/powerbi-portfolio/finance-variance/data/marts/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 229e541c-4eda-5396-9c4a-81bf5ecf1e78
+
+	annotation PBI_ResultType = Text
+
+expression RawFolder = "/path/to/powerbi-portfolio/finance-variance/data/raw/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 508fe3d8-d296-5a0e-99c1-197c649eac21
+
+	annotation PBI_ResultType = Text
+
+expression ForecastFolder = "/path/to/powerbi-portfolio/finance-variance/seeds/forecast/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: ced72ef6-3d19-5320-9b92-ec486a481507
+
+	annotation PBI_ResultType = Text
+
+expression SourceMode = "Local" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 69e4f839-91cc-5115-98c3-ec36bb1cc03b
+
+	annotation PBI_ResultType = Text
+
+expression SqlEndpoint = "<workspace>.datawarehouse.fabric.microsoft.com" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 731523e4-6726-5a76-bca2-bac7ed5e075a
+
+	annotation PBI_ResultType = Text
+
+expression LakehouseDb = "finance_lh" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: fc154d29-c0d0-5d18-93ba-dd998c68d5f1
+
+	annotation PBI_ResultType = Text
+
+expression RangeStart = #datetime(2011, 1, 1, 0, 0, 0) meta [IsParameterQuery=true, Type="DateTime", IsParameterQueryRequired=true]
+	lineageTag: 1ee97e9f-b1bf-5610-aa26-4c41b37fad81
+
+	annotation PBI_ResultType = DateTime
+
+expression RangeEnd = #datetime(2014, 1, 1, 0, 0, 0) meta [IsParameterQuery=true, Type="DateTime", IsParameterQueryRequired=true]
+	lineageTag: e0257840-df6c-5ad8-8b5d-b18915849c3a
+
+	annotation PBI_ResultType = DateTime
+
+/// Not loaded (staging): referenced by other queries.
+expression 'FX Daily Raw' =
+		let
+		    Source = Csv.Document(File.Contents(RawFolder & "FactCurrencyRate.csv"), [Delimiter = "|", Columns = 5, Encoding = 65001, QuoteStyle = QuoteStyle.None]),
+		    #"Name columns" = Table.RenameColumns(Source, {{"Column1", "CurrencyKey"}, {"Column2", "DateKey"}, {"Column3", "AverageRate"}, {"Column4", "EndOfDayRate"}, {"Column5", "RateDate"}}),
+		    #"Choose columns" = Table.SelectColumns(#"Name columns", {"CurrencyKey", "RateDate", "AverageRate"}),
+		    #"Split date from time" = Table.SplitColumn(#"Choose columns", "RateDate", Splitter.SplitTextByDelimiter(" ", QuoteStyle.None), {"Rate Day", "Rate Time"}),
+		    #"Remove time" = Table.RemoveColumns(#"Split date from time", {"Rate Time"}),
+		    #"Type with en-US locale" = Table.TransformColumnTypes(#"Remove time", {{"CurrencyKey", Int64.Type}, {"Rate Day", type date}, {"AverageRate", type number}}, "en-US"),
+		    Currencies = Csv.Document(File.Contents(RawFolder & "DimCurrency.csv"), [Delimiter = "|", Columns = 3, Encoding = 65001, QuoteStyle = QuoteStyle.None]),
+		    #"Name currency columns" = Table.RenameColumns(Currencies, {{"Column1", "CurrencyKey"}, {"Column2", "Rate Currency"}, {"Column3", "Currency Name"}}),
+		    #"Type currency key" = Table.TransformColumnTypes(#"Name currency columns", {{"CurrencyKey", Int64.Type}}),
+		    #"Merge currency code" = Table.NestedJoin(#"Type with en-US locale", {"CurrencyKey"}, #"Type currency key", {"CurrencyKey"}, "Currency", JoinKind.Inner),
+		    #"Expand currency code" = Table.ExpandTableColumn(#"Merge currency code", "Currency", {"Rate Currency"}),
+		    #"Keep group currencies" = Table.SelectRows(#"Expand currency code", each List.Contains({"EUR", "CAD", "AUD"}, [Rate Currency]))
+		in
+		    #"Keep group currencies"
+	lineageTag: 6d2bdac3-04b7-5c38-bc25-eb41b0c0a36f
+
+	annotation PBI_ResultType = Table
+
+/// Not loaded (staging): referenced by other queries.
+expression 'FX Rate Errors' =
+		let
+		    Source = #"FX Daily Raw",
+		    #"Keep rows with errors" = Table.SelectRowsWithErrors(Source, {"AverageRate", "Rate Day"}),
+		    #"Add reason" = Table.AddColumn(#"Keep rows with errors", "Reason", each let rate = try [AverageRate], day = try [Rate Day] in if rate[HasError] then rate[Error][Message] else day[Error][Message], type text)
+		in
+		    #"Add reason"
+	lineageTag: 3f781348-2e96-5f39-b3a4-64ed13c0ea98
+
+	annotation PBI_ResultType = Table
+
+/// Not loaded (staging): referenced by other queries.
+expression 'Parse Forecast File' =
+		(content as binary, fileName as text) as table =>
+		let
+		    Culture = if Text.Contains(fileName, "de-DE") then "de-DE" else "en-US",
+		    FiscalYear = Number.From(Text.Middle(fileName, Text.PositionOf(fileName, "FY") + 2, 4)),
+		    Source = Csv.Document(content, [Delimiter = if Culture = "de-DE" then ";" else ",", Columns = 16, Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+		    #"Skip title rows" = Table.Skip(Source, 2),
+		    #"Promote headers" = Table.PromoteHeaders(#"Skip title rows", [PromoteAllScalars = true]),
+		    #"Blank entity to null" = Table.ReplaceValue(#"Promote headers", "", null, Replacer.ReplaceValue, {"Entity"}),
+		    #"Fill down entity" = Table.FillDown(#"Blank entity to null", {"Entity"}),
+		    #"Replace n/a" = Table.ReplaceValue(#"Fill down entity", "n/a", null, Replacer.ReplaceValue, {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"}),
+		    #"Replace dash" = Table.ReplaceValue(#"Replace n/a", "-", null, Replacer.ReplaceValue, {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"}),
+		    #"Remove total" = Table.RemoveColumns(#"Replace dash", {"Total"}),
+		    #"Add row index" = Table.AddIndexColumn(#"Remove total", "row_index", 1, 1, Int64.Type),
+		    #"Unpivot months" = Table.UnpivotOtherColumns(#"Add row index", {"Entity", "Line", "Submitted", "row_index"}, "Month", "Amount"),
+		    #"Type with file locale" = Table.TransformColumnTypes(#"Unpivot months", {{"Amount", type number}, {"Submitted", type date}}, Culture),
+		    #"Add fiscal year" = Table.AddColumn(#"Type with file locale", "fiscal_year", each FiscalYear, Int64.Type),
+		    #"Add source file" = Table.AddColumn(#"Add fiscal year", "source_file", each fileName, type text)
+		in
+		    #"Add source file"
+	lineageTag: ecbbc0c0-1b24-58ea-b7b5-dc106f4c0d38
+
+	annotation PBI_ResultType = Function

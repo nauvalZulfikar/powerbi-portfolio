@@ -1,0 +1,67 @@
+/// Folder with the Parquet marts (pipeline output).
+expression DataFolder = "/path/to/powerbi-portfolio/inventory-restock/data/marts/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: dc2c1bdf-9331-5e21-a25f-ebb2fc7300fa
+
+	annotation PBI_ResultType = Text
+
+/// Folder with the raw CSV exports (Power Query tables).
+expression RawFolder = "/path/to/powerbi-portfolio/inventory-restock/data/raw/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 2a4f0242-20ea-5437-a385-7792af219e20
+
+	annotation PBI_ResultType = Text
+
+expression 'Price List Raw' =
+		let
+		    // Dec 2017 vendor price list, straight from the CSV export
+		    Source = Csv.Document(File.Contents(RawFolder & "2017PurchasePricesDec.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+		    // the first row holds the column names
+		    #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+		    // a line without a brand number is not an item (guards against blank lines at the end of an export)
+		    #"Removed blank brands" = Table.SelectRows(#"Promoted headers", each [Brand] <> null and Text.Trim([Brand]) <> "")
+		in
+		    #"Removed blank brands"
+	lineageTag: ebb6fb48-e46a-50f3-b620-22ca4820f560
+
+	annotation PBI_ResultType = Table
+
+expression 'Price List 2017' =
+		let
+		    Source = #"Price List Raw",
+		    // whole-number keys: a brand or vendor that is not a number can't join to anything
+		    #"Changed key types" = Table.TransformColumnTypes(Source, {{"Brand", Int64.Type}, {"VendorNumber", Int64.Type}}, "en-US"),
+		    #"Removed key errors" = Table.RemoveRowsWithErrors(#"Changed key types", {"Brand", "VendorNumber"}),
+		    // prices: a malformed cell becomes null instead of failing the refresh
+		    #"Parsed prices" = Table.TransformColumns(#"Removed key errors", {
+		        {"Price", each try Number.FromText(_, "en-US") otherwise null, type nullable number},
+		        {"PurchasePrice", each try Number.FromText(_, "en-US") otherwise null, type nullable number}}),
+		    // one item (brand 4202) has no size, description or price: drop it
+		    #"Removed blank sizes" = Table.SelectRows(#"Parsed prices", each [Size] <> null and [Size] <> ""),
+		    // tidy the size labels before splitting: "1500ml" -> "1500mL", "750mL  3" -> "750mL 3"
+		    #"Fixed ml" = Table.ReplaceValue(#"Removed blank sizes", "ml", "mL", Replacer.ReplaceText, {"Size"}),
+		    #"Fixed double spaces" = Table.ReplaceValue(#"Fixed ml", "  ", " ", Replacer.ReplaceText, {"Size"}),
+		    // "750mL 4 Pk" -> "750mL" | "4"; anything after the pack count is dropped
+		    #"Split size" = Table.SplitColumn(#"Fixed double spaces", "Size",
+		        Splitter.SplitTextByDelimiter(" ", QuoteStyle.None), {"Size Text", "Pack Text"}),
+		    // four items have size "Unknown"
+		    #"Unknown size to null" = Table.ReplaceValue(#"Split size", "Unknown", null, Replacer.ReplaceValue, {"Size Text"}),
+		    #"Added Size mL" = Table.AddColumn(#"Unknown size to null", "Size mL",
+		        each try Number.FromText(Text.BeforeDelimiter([Size Text], "mL"), "en-US") otherwise null, type nullable number),
+		    // bottles per sellable unit: 1 unless the size names a pack ("+ 3/" gift packs count as 1)
+		    #"Added Pack Units" = Table.AddColumn(#"Added Size mL", "Pack Units",
+		        each if [Pack Text] = null then 1 else try Int64.From(Number.FromText([Pack Text])) otherwise 1, Int64.Type),
+		    // vendor names are padded and upper case in the export
+		    #"Cleaned text" = Table.TransformColumns(#"Added Pack Units", {
+		        {"VendorName", each Text.Proper(Text.Trim(_)), type text}, {"Description", Text.Trim, type text}}),
+		    // one row per brand, so the merge into Item can never duplicate an item
+		    #"Removed duplicate brands" = Table.Distinct(#"Cleaned text", {"Brand"}),
+		    #"Removed helper columns" = Table.RemoveColumns(#"Removed duplicate brands", {"Size Text", "Pack Text", "Volume", "Classification"}),
+		    #"Renamed columns" = Table.RenameColumns(#"Removed helper columns", {
+		        {"Brand", "Brand No"}, {"Description", "List Description"}, {"Price", "List Price"},
+		        {"PurchasePrice", "Purchase Price 2017"}, {"VendorNumber", "List Vendor No"}, {"VendorName", "List Vendor"}}),
+		    #"Reordered columns" = Table.ReorderColumns(#"Renamed columns", {
+		        "Brand No", "List Description", "Size mL", "Pack Units", "List Price", "Purchase Price 2017", "List Vendor No", "List Vendor"})
+		in
+		    #"Reordered columns"
+	lineageTag: 94214801-7e93-581d-8ea5-fc28c080c8d0
+
+	annotation PBI_ResultType = Table

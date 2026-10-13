@@ -1,0 +1,1335 @@
+{
+  "model": "finance-variance/powerbi/GroupFinance.SemanticModel/definition",
+  "rules": 75,
+  "violations": [
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Entity\u0027[Effective Ownership]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027GL\u0027[Translation Rate]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027GL\u0027[Plan Rate]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027GL\u0027[Amount USD]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027GL\u0027[Amount USD at Budget Rate]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027GL Journal\u0027[Amount USD]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Headcount\u0027[Heads]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027FX Rates\u0027[Average Rate]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027FX Rates\u0027[Budget Rate]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Budget Drivers\u0027[Growth]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Forecast\u0027[Amount USD]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Variance Band\u0027[Lower]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Variance Band\u0027[Upper]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027FX Shock\u0027[FX Shock]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Department\u0027[Department Key]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Account\u0027[Account Key]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027As Of Month\u0027[As Of Month]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Variance Band\u0027[Lower]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Variance Band\u0027[Upper]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027_Measures\u0027[Value]"
+    },
+    {
+      "RuleId": "MINIMIZE_POWER_QUERY_TRANSFORMATIONS",
+      "Rule": "[Performance] Minimize Power Query transformations",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "Partition",
+      "Object": "\u0027FX Rates\u0027.Partitions[FX Rates]"
+    },
+    {
+      "RuleId": "MINIMIZE_POWER_QUERY_TRANSFORMATIONS",
+      "Rule": "[Performance] Minimize Power Query transformations",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "Partition",
+      "Object": "\u0027Forecast\u0027.Partitions[Forecast]"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Compare To\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027As Of Month\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Variance Band\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027FX Shock\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Analyze By\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Metric\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027_Measures\u0027"
+    },
+    {
+      "RuleId": "CHECK_IF_BI-DIRECTIONAL_AND_MANY-TO-MANY_RELATIONSHIPS_ARE_VALID",
+      "Rule": "[Performance] Check if bi-directional and many-to-many relationships are valid",
+      "Severity": 1,
+      "Category": "Performance",
+      "Scope": "Relationship",
+      "Object": "\u0027Headcount Plan\u0027[Region] \u2192 \u0027Entity\u0027[Region]"
+    },
+    {
+      "RuleId": "CHECK_IF_BI-DIRECTIONAL_AND_MANY-TO-MANY_RELATIONSHIPS_ARE_VALID",
+      "Rule": "[Performance] Check if bi-directional and many-to-many relationships are valid",
+      "Severity": 1,
+      "Category": "Performance",
+      "Scope": "Relationship",
+      "Object": "\u0027Line Account\u0027[Account Key] \u2192 \u0027Account\u0027[Account Key]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Account\u0027[PnL Sign]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027GL\u0027[Translation Rate]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027GL\u0027[Plan Rate]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Forecast\u0027[Row Index]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Analyze By\u0027[Analyze By Fields]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Metric\u0027[Metric Fields]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027_Measures\u0027[Value]"
+    },
+    {
+      "RuleId": "REMOVE_ROLES_WITH_NO_MEMBERS",
+      "Rule": "[Maintenance] Remove roles with no members",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "ModelRole",
+      "Object": "Role[Entity Manager]"
+    },
+    {
+      "RuleId": "REMOVE_ROLES_WITH_NO_MEMBERS",
+      "Rule": "[Maintenance] Remove roles with no members",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "ModelRole",
+      "Object": "Role[Europe Finance]"
+    },
+    {
+      "RuleId": "REMOVE_ROLES_WITH_NO_MEMBERS",
+      "Rule": "[Maintenance] Remove roles with no members",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "ModelRole",
+      "Object": "Role[External Auditor]"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Budget Drivers\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Entity Access\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Variance Step\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Compare To\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027As Of Month\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Variance Band\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027FX Shock\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Analyze By\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Metric\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027_Measures\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Date\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Entity\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Department\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Account\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027P\u0026L Line\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027GL\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027GL Journal\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Headcount\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027FX Rates\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Budget Drivers\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Variance Step\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Forecast\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Headcount Plan\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Date]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Year]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Quarter]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Month Number]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Month Name]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Month Start]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Year Quarter]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Month Year]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Entity\u0027[Entity Key]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Entity\u0027[Entity]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Entity\u0027[Region]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Entity\u0027[Unit]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Entity\u0027[Country]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Entity\u0027[Functional Currency]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Entity\u0027[Effective Ownership]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Entity\u0027[Consolidated From]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Department\u0027[Department]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Account\u0027[Account Code]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Account\u0027[Account]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Account\u0027[Detail Line]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027P\u0026L Line\u0027[Line ID]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027P\u0026L Line\u0027[Line]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027P\u0026L Line\u0027[Line Kind]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027P\u0026L Line\u0027[Is Operating]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027GL\u0027[Scenario]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027GL\u0027[Budget Source]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027GL\u0027[Is Elimination]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027GL\u0027[Currency]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027GL Journal\u0027[Journal ID]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027GL Journal\u0027[Posting Date]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027FX Rates\u0027[Rate Currency]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027FX Rates\u0027[Average Rate]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027FX Rates\u0027[Budget Rate]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Budget Drivers\u0027[Fiscal Year]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Budget Drivers\u0027[Driver Line]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Budget Drivers\u0027[Growth]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Budget Drivers\u0027[Rationale]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Variance Step\u0027[Step]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Forecast\u0027[Entity Code]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Forecast\u0027[Fiscal Year]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Forecast\u0027[Submitted]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Forecast\u0027[Is Late Submission]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Forecast\u0027[Source File]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Headcount Plan\u0027[Fiscal Year]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Time View\u0027[Time View]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Entity\u0027[Has Budget]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Entity\u0027[Currency Group]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Compare To\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027As Of Month\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Variance Band\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027FX Shock\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Analyze By\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Metric\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027_Measures\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Compare To\u0027[Compare To]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027As Of Month\u0027[As Of]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Variance Band\u0027[Band]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027FX Shock\u0027[FX Shock]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Analyze By\u0027[Analyze By]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Metric\u0027[Metric]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculationGroup",
+      "Object": "\u0027Time View\u0027"
+    },
+    {
+      "RuleId": "DATECOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Date\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Date]"
+    },
+    {
+      "RuleId": "DATECOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Date\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Entity\u0027[Consolidated From]"
+    },
+    {
+      "RuleId": "DATECOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Date\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027GL\u0027[Posting Date]"
+    },
+    {
+      "RuleId": "DATECOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Date\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027GL Journal\u0027[Posting Date]"
+    },
+    {
+      "RuleId": "MONTHCOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Month\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Month Start]"
+    },
+    {
+      "RuleId": "MONTHCOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Month\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027As Of Month\u0027[As Of Month]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Variance %]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Gross Margin %]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Operating Profit Variance %]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Operating Margin %]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[FX Move vs Budget %]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[FX Shock Value]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Share of Group Opex]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Share of Region Variance]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Driver Growth]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Overrun Cumulative %]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Variance P95]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Avg FX Rate]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Budget FX Rate]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[EUR per USD]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[CAD per USD]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[AUD per USD]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Heads vs Plan]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Date]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Entity\u0027[Region]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027P\u0026L Line\u0027[Line ID]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Line Account\u0027[Line ID]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027GL\u0027[Period]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027GL\u0027[Posting Date]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027GL Journal\u0027[Period]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Headcount\u0027[Period]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027FX Rates\u0027[Period]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Forecast\u0027[Period]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Headcount Plan\u0027[Region]"
+    },
+    {
+      "RuleId": "HIDE_FOREIGN_KEYS",
+      "Rule": "[Formatting] Hide foreign keys",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Entity\u0027[Entity Key]"
+    },
+    {
+      "RuleId": "HIDE_FOREIGN_KEYS",
+      "Rule": "[Formatting] Hide foreign keys",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Entity\u0027[Region]"
+    },
+    {
+      "RuleId": "HIDE_FOREIGN_KEYS",
+      "Rule": "[Formatting] Hide foreign keys",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027P\u0026L Line\u0027[Line ID]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Year]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027FX Rates\u0027[Average Rate]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027FX Rates\u0027[Budget Rate]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Budget Drivers\u0027[Growth]"
+    }
+  ],
+  "skipped": []
+}

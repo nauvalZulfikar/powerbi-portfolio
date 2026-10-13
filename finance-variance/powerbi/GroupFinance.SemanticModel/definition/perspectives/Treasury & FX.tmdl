@@ -1,0 +1,19 @@
+perspective 'Treasury & FX'
+
+	perspectiveTable GL
+		includeAll
+
+	perspectiveTable 'FX Rates'
+		includeAll
+
+	perspectiveTable 'FX Shock'
+		includeAll
+
+	perspectiveTable Date
+		includeAll
+
+	perspectiveTable Entity
+		includeAll
+
+	perspectiveTable _Measures
+		includeAll

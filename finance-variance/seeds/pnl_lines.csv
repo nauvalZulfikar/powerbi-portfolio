@@ -1,0 +1,20 @@
+line_id,line,sort,kind,parent_line
+L01,Trade sales,10,detail,S1
+L02,Intercompany sales,20,detail,S1
+L03,Returns & discounts,30,detail,S1
+S1,Net sales,40,subtotal,S2
+L04,Cost of sales,50,detail,S2
+S2,Gross margin,60,subtotal,S4
+L05,Salaries & benefits,70,detail,S3
+L06,Commissions,80,detail,S3
+L07,Travel & entertainment,90,detail,S3
+L08,Marketing,100,detail,S3
+L09,Occupancy & utilities,110,detail,S3
+L10,Depreciation & amortisation,120,detail,S3
+L11,"Office, professional & other",130,detail,S3
+S3,Operating expenses,140,subtotal,S4
+S4,Operating profit,150,subtotal,S5
+L12,Other income & expense,160,detail,S5
+S5,Profit before tax,170,subtotal,S6
+L13,Taxes,180,detail,S6
+S6,Net income,190,total,

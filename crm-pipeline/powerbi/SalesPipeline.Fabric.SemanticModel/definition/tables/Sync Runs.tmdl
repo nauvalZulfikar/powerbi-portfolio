@@ -1,0 +1,124 @@
+table 'Sync Runs'
+	lineageTag: 557e2f86-46f2-56e7-a2a3-68b95eb30d5b
+
+	column 'Run ID'
+		dataType: string
+		lineageTag: 0d8484de-bbad-593e-8f5a-4c895d6f8da2
+		summarizeBy: none
+		sourceColumn: run_id
+
+	column 'Sync Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: a87e62f5-ac30-53cc-b874-9d69e1191937
+		summarizeBy: none
+		sourceColumn: as_of
+
+	column Mode
+		dataType: string
+		lineageTag: d5d40526-e426-52e1-a10a-b872dbf8c1c7
+		summarizeBy: none
+		sourceColumn: mode
+
+	column 'Started At'
+		dataType: dateTime
+		formatString: dd mmm yyyy hh:nn
+		lineageTag: cf63ef81-617c-58cd-aa71-15e1d195c6ac
+		summarizeBy: none
+		sourceColumn: started_at
+
+	column 'Run Seconds'
+		dataType: double
+		formatString: 0.0
+		lineageTag: 743f0f3c-23f2-581e-8dcf-d08d00da5fd0
+		summarizeBy: none
+		sourceColumn: seconds
+
+	column Requests
+		dataType: int64
+		formatString: 0
+		lineageTag: 38e1b817-f828-547b-8b25-26039f6513c3
+		summarizeBy: none
+		sourceColumn: requests
+
+	column Retries
+		dataType: int64
+		formatString: 0
+		lineageTag: ad128705-5250-5528-bbfc-528761134d91
+		summarizeBy: none
+		sourceColumn: retries
+
+	column 'Rate Limited 429'
+		dataType: int64
+		formatString: 0
+		lineageTag: e0c1286b-a859-5e5d-b43d-8ed0f69d41d5
+		summarizeBy: none
+		sourceColumn: rate_limited
+
+	column 'Server Errors 5xx'
+		dataType: int64
+		formatString: 0
+		lineageTag: 15c66b4d-f14c-5667-b886-8bfc5c0fafcf
+		summarizeBy: none
+		sourceColumn: server_errors
+
+	column Owners
+		dataType: int64
+		formatString: 0
+		lineageTag: f07b3f08-827d-54ec-a8a3-cc103523947e
+		summarizeBy: none
+		sourceColumn: owners
+
+	column Companies
+		dataType: int64
+		formatString: 0
+		lineageTag: 5514ca0c-592c-5492-85be-aeaf9df06451
+		summarizeBy: none
+		sourceColumn: companies
+
+	column Products
+		dataType: int64
+		formatString: 0
+		lineageTag: 70155dea-3975-5853-a61f-64b4129a450f
+		summarizeBy: none
+		sourceColumn: products
+
+	column 'Deals Seen'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 57d3883d-939d-5428-80b7-64cbcf5ef3d1
+		summarizeBy: none
+		sourceColumn: deals_seen
+
+	column 'Versions Added'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 763b40db-4b7b-58cb-b4c4-7042c55ecf31
+		summarizeBy: none
+		sourceColumn: deal_versions_added
+
+	column 'Watermark Before'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: a8ea502a-74f6-5b71-8460-b79e2ad47ba7
+		summarizeBy: none
+		sourceColumn: watermark_before
+
+	column 'Watermark After'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: 50f03fc5-ad12-5a8e-b1bc-c0064b3457fd
+		summarizeBy: none
+		sourceColumn: watermark_after
+
+	partition 'Sync Runs' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "sync_runs"]}[Data],
+				    Typed = Table.TransformColumnTypes(Data, {{"run_id", type text}, {"as_of", type date}, {"mode", type text}, {"started_at", type datetime}, {"seconds", type number}, {"requests", Int64.Type}, {"retries", Int64.Type}, {"rate_limited", Int64.Type}, {"server_errors", Int64.Type}, {"owners", Int64.Type}, {"companies", Int64.Type}, {"products", Int64.Type}, {"deals_seen", Int64.Type}, {"deal_versions_added", Int64.Type}, {"watermark_before", type datetime}, {"watermark_after", type datetime}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

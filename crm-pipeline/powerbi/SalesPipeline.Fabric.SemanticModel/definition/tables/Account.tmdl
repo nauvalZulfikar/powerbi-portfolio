@@ -1,0 +1,89 @@
+table Account
+	lineageTag: 179a25b5-4f9d-5c3a-87f2-651c6059d3fe
+
+	column 'Account ID'
+		dataType: string
+		isKey
+		isHidden
+		lineageTag: 2f500b80-af86-5c33-a6b4-609724d4f31b
+		summarizeBy: none
+		sourceColumn: account_id
+
+	column Account
+		dataType: string
+		lineageTag: a9c8d102-6719-5066-9b0c-b83970ca25ae
+		summarizeBy: none
+		sourceColumn: account
+
+	column Sector
+		dataType: string
+		lineageTag: c769d174-8434-5767-b2f7-dc658573cb67
+		summarizeBy: none
+		sourceColumn: sector
+
+	column Country
+		dataType: string
+		dataCategory: Country
+		lineageTag: 58ca548d-db54-5822-afe9-5f22216d66a1
+		summarizeBy: none
+		sourceColumn: country
+
+	column 'Parent Company'
+		dataType: string
+		lineageTag: dfcce963-2e79-55c0-854e-f283e9c7af4a
+		summarizeBy: none
+		sourceColumn: parent_company
+
+	column 'Is Subsidiary'
+		dataType: boolean
+		lineageTag: 3149c6a7-c7bf-5f11-b404-10b699a280d7
+		summarizeBy: none
+		sourceColumn: is_subsidiary
+
+	column Employees
+		dataType: int64
+		formatString: #,0
+		lineageTag: ca673baf-a2f3-5ef4-9889-467d66e07bfc
+		summarizeBy: none
+		sourceColumn: employees
+
+	column 'Annual Revenue'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 1eea7edd-a4b5-5437-b903-3c320d70d265
+		summarizeBy: none
+		sourceColumn: annual_revenue
+
+	column 'Founded Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: a6779ae9-6e07-5b5c-a9cb-3122fdb29f9c
+		summarizeBy: none
+		sourceColumn: founded_year
+
+	column 'Size Band'
+		dataType: string
+		lineageTag: 28bbc366-c33e-5930-8f4d-002ee301275f
+		summarizeBy: none
+		sourceColumn: size_band
+		sortByColumn: 'Size Sort'
+
+	column 'Size Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: daa18422-dcad-5e62-9182-12edbb0245c1
+		summarizeBy: none
+		sourceColumn: size_sort
+
+	partition Account = m
+		mode: dual
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "dim_account"]}[Data],
+				    Typed = Table.TransformColumnTypes(Data, {{"account_id", type text}, {"account", type text}, {"sector", type text}, {"country", type text}, {"parent_company", type text}, {"is_subsidiary", type logical}, {"employees", Int64.Type}, {"annual_revenue", type number}, {"founded_year", Int64.Type}, {"size_band", type text}, {"size_sort", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

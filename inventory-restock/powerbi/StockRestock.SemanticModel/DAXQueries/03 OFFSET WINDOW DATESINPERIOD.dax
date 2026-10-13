@@ -1,0 +1,11 @@
+// Three ways to look back a month and average three: window functions vs time intelligence.
+EVALUATE
+SUMMARIZECOLUMNS (
+    'Date'[Month Start],
+    "Received", [Received Value],
+    "Prev (OFFSET)", [Received Value Prev (OFFSET)],
+    "Prior month (DATEADD)", [Received Value Prior Month],
+    "3M (WINDOW)", [Received Value 3M (WINDOW)],
+    "3M avg (DATESINPERIOD)", [Received Value 3M Avg]
+)
+ORDER BY 'Date'[Month Start]

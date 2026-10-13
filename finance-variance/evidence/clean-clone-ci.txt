@@ -1,0 +1,72 @@
+=== finance-variance — clean clone @ f5c7d39, 2026-10-09 19:01:45
+data/ in clone: []  (gitignored → absent, as on a runner)
+
+### ci: build_report.py (data-free)
+109 warnings across 7 codes. Full detail: --verbose table, --json, or -o FILE.
+
+Valid (109 warnings, 78 info)
+ 
+→ exit 0
+
+### ci: report diff vs committed
+→ exit 0
+
+### ci: BPA powerbi/GroupFinance.DirectLake.SemanticModel
+INFO  REMOVE_ROLES_WITH_NO_MEMBERS                            ModelRole              Role[External Auditor]
+
+BPA powerbi/GroupFinance.DirectLake.SemanticModel/definition: 75 rules, 162 violations — error 0, warning 58, info 104; 0 skipped
+✓ no violations with severity >= 3
+→ exit 0
+
+### ci: BPA powerbi/GroupFinance.Fabric.SemanticModel
+INFO  REMOVE_ROLES_WITH_NO_MEMBERS                            ModelRole              Role[External Auditor]
+
+BPA powerbi/GroupFinance.Fabric.SemanticModel/definition: 75 rules, 178 violations — error 0, warning 73, info 105; 0 skipped
+✓ no violations with severity >= 3
+→ exit 0
+
+### ci: BPA powerbi/GroupFinance.SemanticModel
+INFO  REMOVE_ROLES_WITH_NO_MEMBERS                            ModelRole              Role[External Auditor]
+
+BPA powerbi/GroupFinance.SemanticModel/definition: 75 rules, 166 violations — error 0, warning 60, info 106; 0 skipped
+✓ no violations with severity >= 3
+→ exit 0
+
+### ci: TOM powerbi/GroupFinance.DirectLake.SemanticModel
+✓ model.Validate(): no errors
+✓ round-trip serialize/deserialize OK
+→ exit 0
+
+### ci: TOM powerbi/GroupFinance.Fabric.SemanticModel
+✓ model.Validate(): no errors
+✓ round-trip serialize/deserialize OK
+→ exit 0
+
+### ci: TOM powerbi/GroupFinance.SemanticModel
+✓ model.Validate(): no errors
+✓ round-trip serialize/deserialize OK
+→ exit 0
+
+### ci: DAX offline
+ok   22_ic_elimination.dax [assert]
+7/7 passed, 3 with assert file; asserts NOT executed (offline)
+→ exit 0
+
+### ci: pbir validate --all powerbi/GroupFinance.Report
+Valid (109 warnings, 78 info)
+→ exit 0
+
+### data job (opt-in) — not run here: needs src/pipeline.py to download the source data
+
+### proof it needs data: build_model.py in the clone
+_duckdb.IOException: IO Error: Cannot open database "/tmp/build" in read-only mode: database does not exist
+→ exit 1
+  (expected non-zero: this is why build_model.py + the model stale check live in the data job)
+
+git status after ci steps (should be clean apart from gitignored output):
+=== finance-variance ci job verdict: PASS
+
+### data job, model half, on the working copy (local warehouse already built; pipeline.py NOT rerun, no download)
+build_model.py → exit 0
+
+model stale check → exit 0

@@ -1,0 +1,45 @@
+table 'Analyze By'
+	lineageTag: f118c8aa-7e0b-5614-83a3-2f7c3ecbb0f7
+
+	column 'Analyze By'
+		dataType: string
+		lineageTag: e071ddb2-3b97-5d51-bad3-5d916dd00df5
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Analyze By Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Analyze By Fields'
+
+	column 'Analyze By Fields'
+		dataType: string
+		isHidden
+		lineageTag: d6a5a5e0-e17e-5d18-88dc-94f9734f635f
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Analyze By Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	column 'Analyze By Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: df2c4589-b12c-5492-851a-6cea642546f5
+		summarizeBy: none
+		sourceColumn: [Value3]
+
+	partition 'Analyze By' = calculated
+		mode: import
+		source =
+				{
+				    ( "Rep", NAMEOF ( Reps[Rep] ), 0 ),
+				    ( "Region", NAMEOF ( Territories[Region] ), 1 ),
+				    ( "Country", NAMEOF ( Territories[Country] ), 2 ),
+				    ( "Category", NAMEOF ( Products[Category] ), 3 ),
+				    ( "Business Type", NAMEOF ( Resellers[Business Type] ), 4 )
+				}

@@ -1,0 +1,55 @@
+perspective 'Sales Review'
+
+	perspectiveTable Sales
+		includeAll
+
+	perspectiveTable Targets
+		includeAll
+
+	perspectiveTable Reps
+		includeAll
+
+	perspectiveTable Territories
+		includeAll
+
+	perspectiveTable Products
+		includeAll
+
+	perspectiveTable Resellers
+		includeAll
+
+	perspectiveTable Date
+		includeAll
+
+	perspectiveTable 'Category Plan'
+		includeAll
+
+	perspectiveTable 'Time Intelligence'
+		includeAll
+
+	perspectiveTable 'Analyze By'
+		includeAll
+
+	perspectiveTable Metric
+		includeAll
+
+	perspectiveTable 'Target Stretch'
+		includeAll
+
+	perspectiveTable 'ABC Class'
+		includeAll
+
+	perspectiveTable 'Reseller Size Bands'
+		includeAll
+
+	perspectiveTable 'Reseller Cohort'
+		includeAll
+
+	perspectiveTable 'RFM Transition'
+		includeAll
+
+	perspectiveTable 'Subcategory Pairs'
+		includeAll
+
+	perspectiveTable _Measures
+		includeAll

@@ -1,0 +1,79 @@
+relationship 34c6ef0b-909d-5f0e-a2d4-e9278e346a67
+	fromColumn: GL.Period
+	toColumn: Date.Date
+
+relationship a77c60eb-f294-58d9-8e83-a1d99608f1a2
+	isActive: false
+	fromColumn: GL.'Posting Date'
+	toColumn: Date.Date
+
+relationship 29cc7fc4-ae78-51ec-b68d-a948b151074f
+	fromColumn: 'GL Journal'.Period
+	toColumn: Date.Date
+
+relationship edeeca37-37c8-5085-ae9f-b3104a057943
+	fromColumn: 'GL Journal'.'Entity Key'
+	toColumn: Entity.'Entity Key'
+
+relationship c1d9e816-dcfc-5bfc-b745-f478c09402cd
+	fromColumn: 'GL Journal'.'Department Key'
+	toColumn: Department.'Department Key'
+
+relationship e3c54417-1293-5685-98ab-cb46bc5824e3
+	fromColumn: 'GL Journal'.'Account Key'
+	toColumn: Account.'Account Key'
+
+relationship 8be1e754-dbc1-539d-99a0-d6689705c353
+	fromCardinality: many
+	toCardinality: many
+	fromColumn: 'Headcount Plan'.Region
+	toColumn: Entity.Region
+
+relationship 2c54a41e-caa9-5e9d-800b-6e87dda0dd4d
+	fromColumn: 'Headcount Plan'.'Department Key'
+	toColumn: Department.'Department Key'
+
+relationship 37fd1dec-abca-5047-b710-aa02e22b976d
+	fromColumn: GL.'Entity Key'
+	toColumn: Entity.'Entity Key'
+
+relationship 3d98836d-ce5c-5558-8dfb-a09241c90778
+	fromColumn: GL.'Department Key'
+	toColumn: Department.'Department Key'
+
+relationship 2e5aefd0-f227-5a4b-b8d9-114a66d84d4e
+	fromColumn: GL.'Account Key'
+	toColumn: Account.'Account Key'
+
+relationship fd223109-6688-5806-afa3-ca421f38e241
+	fromColumn: Headcount.Period
+	toColumn: Date.Date
+
+relationship a69af7ce-2578-538d-bed5-4b63931ad69c
+	fromColumn: Headcount.'Entity Key'
+	toColumn: Entity.'Entity Key'
+
+relationship 7a2281e5-6642-5a20-9ac3-483d80027d0a
+	fromColumn: Headcount.'Department Key'
+	toColumn: Department.'Department Key'
+
+relationship d009d7ed-cddf-5456-aa70-b3274c9cd0c7
+	fromColumn: 'FX Rates'.Period
+	toColumn: Date.Date
+
+relationship 8d35d0b5-259e-525d-92aa-868f48d5eeea
+	fromColumn: Forecast.Period
+	toColumn: Date.Date
+
+relationship 28df5725-f198-5f83-84d3-d0fdee641784
+	fromColumn: Forecast.'Entity Key'
+	toColumn: Entity.'Entity Key'
+
+relationship df3d8d63-4a1b-5854-97f7-be558760eac2
+	crossFilteringBehavior: bothDirections
+	fromColumn: 'Line Account'.'Account Key'
+	toColumn: Account.'Account Key'
+
+relationship d0d0c555-6253-5f44-83d4-d4cb96c2fada
+	fromColumn: 'Line Account'.'Line ID'
+	toColumn: 'P&L Line'.'Line ID'

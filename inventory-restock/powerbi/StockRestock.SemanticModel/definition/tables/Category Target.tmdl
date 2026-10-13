@@ -1,0 +1,32 @@
+table 'Category Target'
+	lineageTag: 8d455325-091c-5a26-9095-6980e62d7fa4
+
+	column Category
+		dataType: string
+		lineageTag: 5581ef5b-e27f-5c87-8dcd-fd2fd8751c61
+		summarizeBy: none
+		sourceColumn: category
+
+	column 'Target ABC'
+		dataType: string
+		lineageTag: b77f64e2-27a7-50e4-a386-147372bc0e3a
+		summarizeBy: none
+		sourceColumn: abc
+
+	column 'Target Cover Days'
+		dataType: int64
+		formatString: 0
+		lineageTag: e991e43b-4798-5e16-8197-9feee08f366a
+		summarizeBy: none
+		sourceColumn: target_cover_days
+
+	partition 'Category Target' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "category_target.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"category", type text}, {"abc", type text}, {"target_cover_days", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

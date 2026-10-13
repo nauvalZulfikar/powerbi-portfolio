@@ -1,0 +1,100 @@
+table 'Pipeline Snapshots'
+	lineageTag: 13838513-8b3b-5c65-b2e4-4ad46c60c1ec
+
+	column 'Snapshot Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: 3d8ce510-1e88-5726-ad0a-af3cdec92509
+		summarizeBy: none
+		sourceColumn: snapshot_date
+
+	column 'Opportunity ID'
+		dataType: string
+		isHidden
+		lineageTag: 29c9db93-bfa2-5c71-a6f1-53767155c586
+		summarizeBy: none
+		sourceColumn: opportunity_id
+
+	column 'Owner ID'
+		dataType: string
+		isHidden
+		lineageTag: 4c2f6269-8ca2-5abc-9c00-01f2b809ebbb
+		summarizeBy: none
+		sourceColumn: owner_id
+
+	column 'Account ID'
+		dataType: string
+		isHidden
+		lineageTag: d9e2b8d1-84db-56d8-a947-1d4606c3decd
+		summarizeBy: none
+		sourceColumn: account_id
+
+	column 'Product ID'
+		dataType: string
+		isHidden
+		lineageTag: e7a844e7-33ef-5490-9a91-231df1b80898
+		summarizeBy: none
+		sourceColumn: product_id
+
+	column 'Stage Key'
+		dataType: string
+		isHidden
+		lineageTag: 4c28d4f8-5f5f-5b72-9653-cc4d314e491d
+		summarizeBy: none
+		sourceColumn: stage_key
+
+	column 'Snapshot Age Days'
+		dataType: int64
+		formatString: 0
+		lineageTag: 0b34360d-cabd-5edf-934c-1965c6bfc025
+		summarizeBy: none
+		sourceColumn: age_days
+
+	column 'Age Band'
+		dataType: string
+		isHidden
+		lineageTag: 5d8bb239-0b38-5c9d-a83c-67d89916012f
+		summarizeBy: none
+		sourceColumn: age_band
+
+	column 'Snapshot Open Value'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 24bc7de4-d599-55fc-b173-00529a810dae
+		summarizeBy: none
+		sourceColumn: open_value
+
+	column 'Snapshot Close Value'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: bf556a34-c80d-5c7e-a9bf-d82d6988c78f
+		summarizeBy: none
+		sourceColumn: close_value
+
+	refreshPolicy
+		policyType: basic
+		rollingWindowGranularity: year
+		rollingWindowPeriods: 3
+		incrementalGranularity: month
+		incrementalPeriods: 1
+		sourceExpression =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_pipeline_snapshot.parquet")),
+				    Data = Source,
+				    Typed = Table.TransformColumnTypes(Data, {{"snapshot_date", type date}, {"opportunity_id", type text}, {"owner_id", type text}, {"account_id", type text}, {"product_id", type text}, {"stage_key", type text}, {"age_days", Int64.Type}, {"age_band", type text}, {"open_value", type number}, {"close_value", type number}}),
+				    InRange = Table.SelectRows(Typed, each DateTime.From([snapshot_date]) >= RangeStart and DateTime.From([snapshot_date]) < RangeEnd)
+				in
+				    InRange
+
+	partition 'Pipeline Snapshots' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_pipeline_snapshot.parquet")),
+				    Data = Source,
+				    Typed = Table.TransformColumnTypes(Data, {{"snapshot_date", type date}, {"opportunity_id", type text}, {"owner_id", type text}, {"account_id", type text}, {"product_id", type text}, {"stage_key", type text}, {"age_days", Int64.Type}, {"age_band", type text}, {"open_value", type number}, {"close_value", type number}}),
+				    InRange = Table.SelectRows(Typed, each DateTime.From([snapshot_date]) >= RangeStart and DateTime.From([snapshot_date]) < RangeEnd)
+				in
+				    InRange
+
+	annotation PBI_ResultType = Table

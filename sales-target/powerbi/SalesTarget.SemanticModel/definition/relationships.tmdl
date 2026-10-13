@@ -1,0 +1,63 @@
+relationship adc9fc63-f65b-5849-9947-29e85be253b7
+	isActive: true
+	crossFilteringBehavior: oneDirection
+	fromColumn: Sales.'Order Date'
+	toColumn: Date.Date
+
+relationship 589e9c3b-37d8-55eb-a8a8-7b913cf678a5
+	isActive: false
+	crossFilteringBehavior: oneDirection
+	fromColumn: Sales.'Ship Date'
+	toColumn: Date.Date
+
+relationship ac39afea-33e5-5f03-921c-95f01b460ae5
+	isActive: true
+	crossFilteringBehavior: oneDirection
+	fromColumn: Sales.'Rep Key'
+	toColumn: Reps.'Rep Key'
+
+relationship 7bb1d358-e515-5b15-9b4c-0886ea0363e3
+	isActive: true
+	crossFilteringBehavior: oneDirection
+	fromColumn: Sales.'Territory Key'
+	toColumn: Territories.'Territory Key'
+
+relationship 2fea0c34-5b13-549e-9a16-f1e95828d92b
+	isActive: true
+	crossFilteringBehavior: oneDirection
+	fromColumn: Sales.'Product Code'
+	toColumn: Products.'Product Code'
+
+relationship a1d8b15f-b0e8-5ae2-9309-7813cffb3cb0
+	isActive: true
+	crossFilteringBehavior: oneDirection
+	fromColumn: Sales.'Reseller Code'
+	toColumn: Resellers.'Reseller Code'
+
+relationship 331eedb2-a818-5e87-b9ab-0bd743ccef6d
+	isActive: true
+	crossFilteringBehavior: oneDirection
+	fromColumn: Targets.Date
+	toColumn: Date.Date
+
+relationship 035cdd65-8afd-5c49-b0b4-ea1aadb2da68
+	isActive: true
+	crossFilteringBehavior: oneDirection
+	fromColumn: Targets.'Rep Key'
+	toColumn: Reps.'Rep Key'
+
+relationship b811b23e-79df-53e9-9109-6e319f86aee8
+	isActive: true
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: many
+	fromColumn: 'Category Plan'.Category
+	toColumn: Products.Category
+
+relationship e794fe4a-b482-5bb9-8c97-880764849b86
+	isActive: true
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: many
+	fromColumn: 'Category Plan'.'Fiscal Quarter'
+	toColumn: Date.'Fiscal Quarter'

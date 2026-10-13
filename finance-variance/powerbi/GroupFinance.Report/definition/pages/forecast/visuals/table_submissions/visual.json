@@ -1,0 +1,171 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "table_submissions",
+  "position": {
+    "x": 1152,
+    "y": 216,
+    "z": 2000,
+    "width": 424,
+    "height": 332,
+    "tabOrder": 1200
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "objects": {
+      "grid": [
+        {
+          "properties": {
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "2L"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Submissions. One row per entity block; deadline 10 Jan'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Submissions'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'One row per entity block; deadline 10 Jan'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Forecast"
+                    }
+                  },
+                  "Property": "Entity Code"
+                }
+              },
+              "queryRef": "Forecast.Entity Code",
+              "nativeQueryRef": "Entity Code",
+              "displayName": "Entity"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Forecast"
+                    }
+                  },
+                  "Property": "Submitted"
+                }
+              },
+              "queryRef": "Forecast.Submitted",
+              "nativeQueryRef": "Submitted"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Forecast"
+                    }
+                  },
+                  "Property": "Is Late Submission"
+                }
+              },
+              "queryRef": "Forecast.Is Late Submission",
+              "nativeQueryRef": "Is Late Submission",
+              "displayName": "Late"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Operating Profit Forecast"
+                }
+              },
+              "queryRef": "_Measures.Operating Profit Forecast",
+              "nativeQueryRef": "Operating Profit Forecast",
+              "displayName": "OP forecast"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Forecast"
+                  }
+                },
+                "Property": "Entity Code"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    }
+  }
+}

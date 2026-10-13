@@ -1,0 +1,7 @@
+// Vendors with more than $10K to order, biggest first.
+EVALUATE
+FILTER (
+    SUMMARIZECOLUMNS ( Vendor[Vendor], "@Order", [Order Value], "@Lines", [Lines To Order] ),
+    [@Order] > 10000
+)
+ORDER BY [@Order] DESC

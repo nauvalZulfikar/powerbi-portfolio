@@ -1,0 +1,77 @@
+table 'Subcategory Pairs'
+	lineageTag: 2948ec51-8147-5382-a917-5df190f67673
+
+	column 'Subcategory A'
+		dataType: string
+		lineageTag: 366cc354-e42c-523f-bb00-883da69e58c5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Subcategory A]
+
+	column 'Subcategory B'
+		dataType: string
+		lineageTag: a5b6365a-7093-5aae-825b-286109731e85
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Subcategory B]
+
+	column 'Orders Together'
+		dataType: int64
+		lineageTag: c4d07750-2488-52f5-8b2d-6cf463dd1074
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Orders Together]
+		formatString: #,0
+
+	column Support
+		dataType: double
+		lineageTag: 8d20638f-92e4-5083-b71c-0e729e81fe8a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Support]
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+
+	column 'Confidence A to B'
+		dataType: double
+		lineageTag: 26bb448a-561f-5586-8d41-79152e29786c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Confidence A to B]
+		formatString: 0%
+
+	column 'Confidence B to A'
+		dataType: double
+		lineageTag: 3b21de38-481f-571f-8a14-c9ddb9c99759
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Confidence B to A]
+		formatString: 0%
+
+	column Lift
+		dataType: double
+		lineageTag: a2262993-144a-5781-ac9c-db621b4f08ad
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Lift]
+		formatString: 0.00
+
+	partition 'Subcategory Pairs' = calculated
+		mode: import
+		source =
+				VAR _os = SUMMARIZE ( Sales, Sales[Order Number], Products[Subcategory] )
+				VAR _orders = COUNTROWS ( SUMMARIZE ( Sales, Sales[Order Number] ) )
+				VAR _sub = GROUPBY ( SELECTCOLUMNS ( _os, "Sub", Products[Subcategory] & "" ), [Sub], "@o", SUMX ( CURRENTGROUP (), 1 ) )
+				VAR _l = SELECTCOLUMNS ( _os, "Ord", Sales[Order Number] & "", "Subcategory A", Products[Subcategory] & "" )
+				VAR _r = SELECTCOLUMNS ( _os, "Ord", Sales[Order Number] & "", "Subcategory B", Products[Subcategory] & "" )
+				VAR _pairs = FILTER ( NATURALINNERJOIN ( _l, _r ), [Subcategory A] < [Subcategory B] )
+				VAR _g = GROUPBY ( _pairs, [Subcategory A], [Subcategory B], "@n", SUMX ( CURRENTGROUP (), 1 ) )
+				RETURN SELECTCOLUMNS ( FILTER ( _g, [@n] >= 30 ),
+				    "Subcategory A", [Subcategory A],
+				    "Subcategory B", [Subcategory B],
+				    "Orders Together", [@n],
+				    "Support", DIVIDE ( [@n], _orders ),
+				    "Confidence A to B", VAR _a = [Subcategory A] RETURN DIVIDE ( [@n], MAXX ( FILTER ( _sub, [Sub] = _a ), [@o] ) ),
+				    "Confidence B to A", VAR _b = [Subcategory B] RETURN DIVIDE ( [@n], MAXX ( FILTER ( _sub, [Sub] = _b ), [@o] ) ),
+				    "Lift", VAR _a = [Subcategory A] VAR _b = [Subcategory B]
+				        RETURN DIVIDE ( [@n] * _orders,
+				            MAXX ( FILTER ( _sub, [Sub] = _a ), [@o] ) * MAXX ( FILTER ( _sub, [Sub] = _b ), [@o] ) ) )

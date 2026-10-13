@@ -1,0 +1,45 @@
+table Headcount
+	lineageTag: 20b3b308-f8cc-5fa9-874d-25275cf5a4a3
+
+	column Period
+		dataType: dateTime
+		isHidden
+		isAvailableInMdx: false
+		formatString: dd mmm yyyy
+		lineageTag: fc256f05-02f4-50e6-8650-1be51f7dd12f
+		summarizeBy: none
+		sourceColumn: period
+
+	column 'Entity Key'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		formatString: 0
+		lineageTag: c7f30f55-58e5-52b2-9060-ccbafc0e1b53
+		summarizeBy: none
+		sourceColumn: entity_key
+
+	column 'Department Key'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		formatString: 0
+		lineageTag: 97515d9d-6238-5ea7-9548-d992d754a1e3
+		summarizeBy: none
+		sourceColumn: department_key
+
+	column Heads
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		formatString: #,0
+		lineageTag: 8aa5295a-20da-51ca-b3b2-28b62c12efa0
+		summarizeBy: sum
+		sourceColumn: headcount
+
+	partition Headcount = entity
+		mode: directLake
+		source
+			entityName: fact_headcount
+			schemaName: dbo
+			expressionSource: DatabaseQuery

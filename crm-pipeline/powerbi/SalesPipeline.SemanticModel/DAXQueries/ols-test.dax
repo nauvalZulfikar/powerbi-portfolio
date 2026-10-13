@@ -1,0 +1,9 @@
+// Object-level security test. In DAX query view pick "View as" > role External Partner, then run.
+// Expected: query 1 fails with an error that Account[Annual Revenue] cannot be found;
+// query 2 returns won revenue per sector (the role still sees every deal).
+// Not run yet: Power BI Desktop is not available on the build machine.
+EVALUATE
+TOPN ( 5, SELECTCOLUMNS ( Account, "Account", Account[Account], "Annual Revenue", Account[Annual Revenue] ) )
+
+EVALUATE
+SUMMARIZECOLUMNS ( Account[Sector], "Won Revenue", [Won Revenue] )

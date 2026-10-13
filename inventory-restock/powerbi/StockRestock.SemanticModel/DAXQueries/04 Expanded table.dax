@@ -1,0 +1,7 @@
+// 'Daily Sales' as a CALCULATE filter is its expanded table: Store and Item travel to Stock.
+EVALUATE
+SUMMARIZECOLUMNS (
+    Item[Category],
+    "Stock value", [Stock Value],
+    "of January sellers", [Stock Value of Jan Sellers]
+)

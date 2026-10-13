@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Restock Komposit"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "5d1c7e2a-8b40-4f69-a3e5-0c9b6d27f418"
+  }
+}

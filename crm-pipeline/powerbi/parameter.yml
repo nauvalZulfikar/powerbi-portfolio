@@ -1,0 +1,43 @@
+# fabric-cicd parameter.yml (pbi-kit) — per-environment values for crm-pipeline.
+# deploy.py --env Test|Prod picks the column. Placeholders only: real workspace/lakehouse names go here,
+# secrets never (they live in the GitHub environments Test/Prod).
+# Each regex matches the TMDL `expression X = "..."` line, so it works whatever value is committed.
+
+find_replace:
+  # SalesPipeline (Import): the parquet marts and the raw CRM JSON. On the Service these are a
+  # gateway-visible share; the committed value is the dev Mac path.
+  - find_value: 'expression DataFolder = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "\\\\fileserver\\pbi-test\\crm-pipeline\\data\\marts\\"
+      Prod: "\\\\fileserver\\pbi\\crm-pipeline\\data\\marts\\"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+  - find_value: 'expression RawFolder = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "\\\\fileserver\\pbi-test\\crm-pipeline\\data\\raw\\"
+      Prod: "\\\\fileserver\\pbi\\crm-pipeline\\data\\raw\\"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+  # SalesPipeline.Fabric (composite): the Lakehouse SQL endpoint + database per stage.
+  - find_value: 'expression SqlEndpoint = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "sales-pipeline-test.datawarehouse.fabric.microsoft.com"
+      Prod: "sales-pipeline-prod.datawarehouse.fabric.microsoft.com"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+  - find_value: 'expression LakehouseDb = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "crm_lakehouse_test"
+      Prod: "crm_lakehouse"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+# Reports are bound byPath to SalesPipeline.SemanticModel; fabric-cicd rebinds them to the model it just
+# published in the same workspace, so no semantic_model_binding is needed.

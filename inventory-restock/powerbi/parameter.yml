@@ -1,0 +1,25 @@
+# fabric-cicd parameter.yml — per-environment values for StockRestock (from tools/pbi-kit/deploy/parameter.example.yml).
+# Keys under replace_value = --env (Test / Prod). No secrets here: workspace ids and the service principal live in
+# GitHub environment variables/secrets. The committed TMDL carries this Mac's local paths; on the Service the
+# Parquet marts and the raw CSV exports are read from a gateway-visible share instead (placeholders below).
+find_replace:
+  # Parquet marts written by src/pipeline.py (every import table)
+  - find_value: 'expression DataFolder = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "\\\\fileserver\\pbi-test\\inventory-restock\\marts\\"
+      Prod: "\\\\fileserver\\pbi\\inventory-restock\\marts\\"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+  # Raw CSV exports the Power Query tables shape (price list, vendor catalog)
+  - find_value: 'expression RawFolder = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "\\\\fileserver\\pbi-test\\inventory-restock\\raw\\"
+      Prod: "\\\\fileserver\\pbi\\inventory-restock\\raw\\"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+# StockRestock.Report is bound byPath to StockRestock.SemanticModel: fabric-cicd rebinds it to the model it
+# publishes in the same workspace, so no semantic_model_binding entry is needed.

@@ -1,0 +1,1 @@
+{"name": "m-validate", "private": true, "type": "module", "dependencies": {"@microsoft/powerquery-parser": "2.0.0"}}

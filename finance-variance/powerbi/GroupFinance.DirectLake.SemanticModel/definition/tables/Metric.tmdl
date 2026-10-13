@@ -1,0 +1,47 @@
+table Metric
+	lineageTag: dea3b175-dbec-5c52-a265-f58fde407a0f
+
+	column Metric
+		dataType: string
+		lineageTag: 94ee1db3-0377-57e9-9066-1e824624bb19
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Metric Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Metric Fields'
+
+	column 'Metric Fields'
+		dataType: string
+		isHidden
+		lineageTag: b3a10bf1-27c9-5c22-8634-adb0b5c8f00d
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Metric Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	column 'Metric Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8a0aaeff-e31e-58b4-9dab-77697b2b6f2c
+		summarizeBy: none
+		sourceColumn: [Value3]
+
+	partition Metric = calculated
+		mode: import
+		source =
+				{
+				    ( "Actual", NAMEOF ( [Operating Profit] ), 0 ),
+				    ( "Comparison", NAMEOF ( [Operating Profit Comparison] ), 1 ),
+				    ( "Outlook", NAMEOF ( [Operating Profit Outlook] ), 2 ),
+				    ( "Variance", NAMEOF ( [Operating Profit Variance] ), 3 ),
+				    ( "FX Effect", NAMEOF ( [Operating Profit FX Effect] ), 4 ),
+				    ( "Operational Variance", NAMEOF ( [Operating Profit Operational Variance] ), 5 ),
+				    ( "Prior month", NAMEOF ( [Operating Profit PM] ), 6 )
+				}

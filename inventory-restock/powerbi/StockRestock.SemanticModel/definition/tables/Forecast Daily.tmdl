@@ -1,0 +1,42 @@
+table 'Forecast Daily'
+	lineageTag: 8ca0deac-c188-59ac-bb22-e4e3119400b4
+
+	column 'Forecast Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: 3e2f0b57-0d65-5437-ad99-0d22e4e88f76
+		summarizeBy: none
+		sourceColumn: date
+
+	column Series
+		dataType: string
+		lineageTag: d6e72cce-1f52-53ab-baa2-f0d3564d7e34
+		summarizeBy: none
+		sourceColumn: series
+		sortByColumn: 'Series Sort'
+
+	column 'Series Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e4e18c45-f6fe-55f7-a7a1-d781c4e46e7d
+		summarizeBy: none
+		sourceColumn: series_sort
+
+	column 'Series Units'
+		dataType: double
+		formatString: #,0
+		lineageTag: ea640902-66f2-5b3d-9fce-eaf80b4da8f9
+		summarizeBy: none
+		sourceColumn: units
+
+	partition 'Forecast Daily' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "forecast_daily.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"date", type date}, {"series", type text}, {"series_sort", Int64.Type}, {"units", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

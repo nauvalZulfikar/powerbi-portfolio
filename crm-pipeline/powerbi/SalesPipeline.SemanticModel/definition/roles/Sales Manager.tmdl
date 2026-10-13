@@ -1,0 +1,8 @@
+role 'Sales Manager'
+	modelPermission: read
+
+	tablePermission Agent = VAR _u = USERPRINCIPALNAME () RETURN NOT ISEMPTY ( FILTER ( 'Manager Access', 'Manager Access'[User Email] = _u && 'Manager Access'[Region] = Agent[Region] && ( 'Manager Access'[Manager] = "" || 'Manager Access'[Manager] = Agent[Manager] ) ) )
+
+
+	tablePermission 'Manager Access' = 'Manager Access'[User Email] = USERPRINCIPALNAME ()
+

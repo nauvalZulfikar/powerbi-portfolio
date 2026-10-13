@@ -1,0 +1,49 @@
+table Store
+	lineageTag: 69ccb380-cdf3-5607-9d0e-5606893caefc
+
+	column 'Store No'
+		dataType: int64
+		isKey
+		formatString: 0
+		lineageTag: 35930489-7bcd-5b03-9632-04b67cca0f2f
+		summarizeBy: none
+		sourceColumn: store
+
+	column City
+		dataType: string
+		dataCategory: City
+		lineageTag: cf4350f8-ee71-5215-bc26-7630b3011dbd
+		summarizeBy: none
+		sourceColumn: city
+
+	column 'Store Name'
+		dataType: string
+		lineageTag: aeb6ed3c-7859-5639-ac2b-40d8ea492af1
+		summarizeBy: none
+		sourceColumn: store_label
+		sortByColumn: 'Store No'
+
+	column 'Opened 2016'
+		dataType: boolean
+		lineageTag: 5967ae49-03fb-55b9-a8b3-122093e429cd
+		summarizeBy: none
+		sourceColumn: opened_2016
+
+	column 'Closed 2016'
+		dataType: boolean
+		lineageTag: e43a006c-3392-5156-99c0-978f9bacbf42
+		summarizeBy: none
+		sourceColumn: closed_2016
+
+	partition Store = m
+		mode: dual
+		source =
+				let
+				    Source = PostgreSQL.Database(PgServer, PgDatabase),
+				    Data = Source{[Schema = "inventory", Item = "dim_store"]}[Data],
+				    Selected = Table.SelectColumns(Data, {"store", "city", "store_label", "opened_2016", "closed_2016"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"store", Int64.Type}, {"city", type text}, {"store_label", type text}, {"opened_2016", type logical}, {"closed_2016", type logical}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

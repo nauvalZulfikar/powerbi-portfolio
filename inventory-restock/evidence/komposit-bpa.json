@@ -1,0 +1,967 @@
+{
+  "model": "inventory-restock/powerbi/Restock Komposit.SemanticModel/definition",
+  "rules": 75,
+  "violations": [
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Item\u0027[Retail Price]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Item\u0027[Item Unit Cost]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Item\u0027[Item Sales 2016]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Unit Cost]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Unit Price]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Stock Cost]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Stock Retail]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Sales Value]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Jan Factor]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Daily Rate]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Daily Forecast]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Daily SD]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Lead Days]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Lead SD]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Safety Units]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Reorder Point]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Order Up To]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Cover Days]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Order Units]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Order Cost]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Daily Sales Detail\u0027[Detail Store]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Daily Sales Detail\u0027[Detail Brand]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Daily Sales Detail\u0027[Detail Date]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Daily Sales Detail\u0027[Units]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Daily Sales Detail\u0027[Dollars]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Daily Sales\u0027[Sales Date]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Daily Sales\u0027[Sales Store]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Daily Sales\u0027[Sales Brand]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Daily Sales\u0027[Units Sold]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Daily Sales\u0027[Sales Dollars]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Daily Sales\u0027[Sales Rows]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Item\u0027[Vendor No]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Item\u0027[Item ABC]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Stock Store]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Stock Brand]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Stock Vendor]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Stock Category]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Stock ABC]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Stock Cover Band]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Stock Status]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027_Measures\u0027[Value]"
+    },
+    {
+      "RuleId": "MINIMIZE_POWER_QUERY_TRANSFORMATIONS",
+      "Rule": "[Performance] Minimize Power Query transformations",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "Partition",
+      "Object": "\u0027Daily Sales\u0027.Partitions[Daily Sales]"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027_Measures\u0027"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Daily Sales\u0027[Units Sold]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Daily Sales\u0027[Sales Dollars]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Daily Sales\u0027[Sales Rows]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Item\u0027[Vendor No]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Item\u0027[Item ABC]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Stock Vendor]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Stock Category]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Stock ABC]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Stock Cover Band]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Stock Status]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027_Measures\u0027[Value]"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027_Measures\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Daily Sales Detail\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Date\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Store\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Item\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Stock\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Daily Sales Detail\u0027[Price]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Daily Sales Detail\u0027[Excise Tax]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Date]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Year]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Month]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Month Start]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Weekday]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Quarter]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Month Name]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Store\u0027[Store No]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Store\u0027[City]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Store\u0027[Store Name]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Store\u0027[Opened 2016]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Store\u0027[Closed 2016]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Item\u0027[Brand No]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Item\u0027[Item]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Item\u0027[Size]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Item\u0027[Volume ml]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Item\u0027[Category]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Item\u0027[Retail Price]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Item\u0027[Item Unit Cost]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Item\u0027[Item Sales 2016]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Inventory ID]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Begin Units]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Received Units]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[End Units]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Sold Units]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Days Active]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Jan Units]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[New Line 2016]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Line Origin]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Last Receipt]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Opening State]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Unit Cost]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Unit Price]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Stock Cost]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Stock Retail]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Sales Value]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Jan Factor]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Daily Rate]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Daily Forecast]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Daily SD]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Lead Days]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Lead SD]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Safety Units]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Reorder Point]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Order Up To]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Cover Days]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Order Units]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[Order Cost]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027_Measures\u0027"
+    },
+    {
+      "RuleId": "DATECOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Date\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Daily Sales Detail\u0027[Detail Date]"
+    },
+    {
+      "RuleId": "DATECOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Date\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Daily Sales\u0027[Sales Date]"
+    },
+    {
+      "RuleId": "DATECOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Date\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Date]"
+    },
+    {
+      "RuleId": "MONTHCOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Month\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Month Start]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Daily Sales Detail\u0027[Detail Date]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Daily Sales\u0027[Sales Date]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Date]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Item\u0027[Brand No]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stock\u0027[End Units]"
+    }
+  ],
+  "skipped": []
+}

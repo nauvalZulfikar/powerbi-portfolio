@@ -1,0 +1,12 @@
+// Limited relationship: Category Plan relates many-to-many to Products[Category] and Date[Fiscal Quarter].
+// It filters like a normal relationship, but the engine adds no blank row for unmatched values and RELATED
+// cannot cross it (only TREATAS / the relationship itself). Category Target is SYNTHETIC: the quarter's quota
+// split by the prior fiscal year's category mix.
+EVALUATE
+SUMMARIZECOLUMNS (
+    Products[Category],
+    "Net Sales", [Net Sales],
+    "Category Target", [Category Target],
+    "Category Attainment", [Category Attainment]
+)
+ORDER BY [Net Sales] DESC

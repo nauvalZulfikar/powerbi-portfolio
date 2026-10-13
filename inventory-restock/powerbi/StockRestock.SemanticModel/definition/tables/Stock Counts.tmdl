@@ -1,0 +1,89 @@
+table 'Stock Counts'
+	lineageTag: 61746913-46ca-5ce5-9e57-b9ced70bce88
+
+	column 'Count Inventory ID'
+		dataType: string
+		isHidden
+		lineageTag: 5014738a-64d1-59e5-82d1-0b31a9e45e24
+		summarizeBy: none
+		sourceColumn: Count Inventory ID
+
+	column 'Count Store'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ad263792-74f2-5d93-aa8e-4e97d4f53609
+		summarizeBy: none
+		sourceColumn: Count Store
+
+	column 'Count City'
+		dataType: string
+		lineageTag: a3c8e9a0-6382-56be-ac9c-5d2300e22fa6
+		summarizeBy: none
+		sourceColumn: Count City
+
+	column 'Count Brand'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 02afd503-56ea-5440-aee2-f277e120dacd
+		summarizeBy: none
+		sourceColumn: Count Brand
+
+	column 'Counted Units'
+		dataType: int64
+		formatString: #,0
+		lineageTag: aecf783d-9c54-5d4b-8e3d-262ebe3bb09e
+		summarizeBy: none
+		sourceColumn: Counted Units
+
+	column 'Count Price'
+		dataType: double
+		formatString: \$#,0.00
+		lineageTag: f5876eb6-2b87-537b-8101-bc540b2487ff
+		summarizeBy: none
+		sourceColumn: Count Price
+
+	column 'Count Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: 59156156-0633-524b-ab87-9900504a8b0f
+		summarizeBy: none
+		sourceColumn: Count Date
+
+	partition 'Stock Counts' = m
+		mode: import
+		source =
+				let
+				    // both count files share one layout; only the name of the date column differs
+				    ReadCount = (file as text, dateColumn as text) as table =>
+				        let
+				            Source = Csv.Document(File.Contents(RawFolder & file), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				            #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				            #"Renamed date" = Table.RenameColumns(#"Promoted headers", {{dateColumn, "Count Date"}})
+				        in
+				            #"Renamed date",
+				    #"Opening count" = ReadCount("BegInvFINAL12312016.csv", "startDate"),
+				    #"Closing count" = ReadCount("EndInvFINAL12312016.csv", "endDate"),
+				    // Append: the 1 Jan and 31 Dec counts stacked in one table (the base of the semi-additive measures)
+				    #"Appended counts" = Table.Combine({#"Opening count", #"Closing count"}),
+				    // keep only what the model uses
+				    #"Selected columns" = Table.SelectColumns(#"Appended counts", {"InventoryId", "Store", "City", "Brand", "onHand", "Price", "Count Date"}),
+				    #"Changed types" = Table.TransformColumnTypes(#"Selected columns", {
+				        {"Store", Int64.Type}, {"Brand", Int64.Type}, {"onHand", Int64.Type}, {"Price", type number}, {"Count Date", type date}}, "en-US"),
+				    // a line without a count is not a count
+				    #"Kept counted lines" = Table.SelectRows(#"Changed types", each [onHand] <> null),
+				    // store 46 closed in 2016: its 1,284 rows of 31 Dec have an empty city, its 1 Jan rows don't
+				    #"Blank city to null" = Table.ReplaceValue(#"Kept counted lines", "", null, Replacer.ReplaceValue, {"City"}),
+				    #"Sorted store, date" = Table.Sort(#"Blank city to null", {{"Store", Order.Ascending}, {"Count Date", Order.Ascending}}),
+				    #"Filled city" = Table.FillDown(#"Sorted store, date", {"City"}),
+				    #"Proper city" = Table.TransformColumns(#"Filled city", {{"City", each Text.Proper(Text.Trim(_)), type text}}),
+				    // the same line counted twice on one day would double the stock
+				    #"Removed duplicates" = Table.Distinct(#"Proper city"),
+				    #"Renamed columns" = Table.RenameColumns(#"Removed duplicates", {
+				        {"InventoryId", "Count Inventory ID"}, {"Store", "Count Store"}, {"City", "Count City"}, {"Brand", "Count Brand"},
+				        {"onHand", "Counted Units"}, {"Price", "Count Price"}})
+				in
+				    #"Renamed columns"
+
+	annotation PBI_ResultType = Table

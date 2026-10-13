@@ -1,0 +1,61 @@
+table Products
+	lineageTag: 8419eccb-b4c7-53b4-aa36-ee4b1c488a0e
+
+	column 'Product Code'
+		dataType: string
+		isKey
+		lineageTag: ee705ea6-3e5b-55bf-a68a-d0ea7519cbd6
+		summarizeBy: none
+		sourceColumn: Product Code
+
+	column Product
+		dataType: string
+		lineageTag: dfe08535-823e-55ab-b9df-86c50a2d118c
+		summarizeBy: none
+		sourceColumn: Product
+
+	column Subcategory
+		dataType: string
+		lineageTag: 97ab6d43-64bc-5ce2-a30e-8bc4e88d36d6
+		summarizeBy: none
+		sourceColumn: Subcategory
+
+	column Category
+		dataType: string
+		lineageTag: 4761a0d7-0f7d-5c49-a5c2-b09b0f0bfe20
+		summarizeBy: none
+		sourceColumn: Category
+
+	column 'Standard Cost'
+		dataType: decimal
+		isHidden
+		formatString: \$#,0.00
+		lineageTag: af3eb914-e20b-5c48-a160-d8e29c8d6bab
+		summarizeBy: none
+		sourceColumn: Standard Cost
+
+	hierarchy 'Product Hierarchy'
+		lineageTag: 3963686b-58ae-505a-9417-944fe4e9af92
+
+		level Category
+			lineageTag: 4c6cdd23-e763-5f81-b36a-0aca81b2344f
+			column: Category
+
+		level Subcategory
+			lineageTag: 51a2af99-253a-5f4b-af90-bbeac2fc563a
+			column: Subcategory
+
+		level Product
+			lineageTag: b70b884e-12d2-54df-822a-a183faf33739
+			column: Product
+
+	partition Products = m
+		mode: import
+		source =
+				let
+				    Source = fnReference("Products")
+				in
+				    Table.TransformColumnTypes(Source, {{"Product Code", type text}, {"Product", type text}, {"Subcategory", type text}, {"Category", type text},
+				        {"Standard Cost", type nullable number}})
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,135 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "IBCS variance: AC (solid) vs BU (outline) by P&L line, absolute variance on the right.",
+  "data": {
+    "name": "dataset"
+  },
+  "spacing": 8,
+  "hconcat": [
+    {
+      "width": 220,
+      "title": {
+        "text": "AC vs BU",
+        "anchor": "start",
+        "fontSize": 11
+      },
+      "encoding": {
+        "y": {
+          "field": "Line",
+          "type": "nominal",
+          "sort": null,
+          "title": null
+        }
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "fill": "#FFFFFF",
+            "stroke": "#404040",
+            "strokeWidth": 1,
+            "yOffset": 4,
+            "height": 12
+          },
+          "encoding": {
+            "x": {
+              "field": "Budget",
+              "type": "quantitative",
+              "title": null,
+              "axis": {
+                "format": "~s"
+              }
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "bar",
+            "fill": "#404040",
+            "height": 12
+          },
+          "encoding": {
+            "x": {
+              "field": "Actual",
+              "type": "quantitative"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "width": 160,
+      "title": {
+        "text": "ΔBU",
+        "anchor": "start",
+        "fontSize": 11
+      },
+      "encoding": {
+        "y": {
+          "field": "Line",
+          "type": "nominal",
+          "sort": null,
+          "axis": null
+        }
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "bar",
+            "height": 12
+          },
+          "encoding": {
+            "x": {
+              "field": "Variance",
+              "type": "quantitative",
+              "title": null,
+              "axis": {
+                "format": "~s"
+              }
+            },
+            "color": {
+              "condition": {
+                "test": "datum.Variance >= 0",
+                "value": "#0F766E"
+              },
+              "value": "#C2410C"
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": {
+              "expr": "datum.Variance < 0 ? 'right' : 'left'"
+            },
+            "dx": {
+              "expr": "datum.Variance < 0 ? -3 : 3"
+            },
+            "fontSize": 9,
+            "color": "#525252"
+          },
+          "encoding": {
+            "x": {
+              "field": "Variance",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "Variance",
+              "type": "quantitative",
+              "format": "+,.2~s"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "grid": false,
+      "labelFontSize": 9
+    }
+  }
+}

@@ -1,0 +1,18 @@
+# fabric-cicd parameter.yml (pbi-kit) — per-environment values for sales-target.
+# deploy.py --env Test|Prod picks the column. Placeholders only: real share paths go here, secrets never
+# (they live in the GitHub environments Test/Prod).
+# The regex matches the TMDL `expression InboxFolder = "..."` line, so it works whatever value is committed.
+
+find_replace:
+  # The branch inbox (NA / EU / Pacific Excel files + Targets + Reference). On the Service it is a
+  # gateway-visible share per stage, so Test reads a copy of the inbox and Prod reads the live one.
+  - find_value: 'expression InboxFolder = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "\\\\fileserver\\pbi-test\\sales-target\\inbox"
+      Prod: "\\\\fileserver\\pbi\\sales-target\\inbox"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+# SalesTarget.Report is bound byPath to SalesTarget.SemanticModel; fabric-cicd rebinds it to the model it just
+# published in the same workspace, so no semantic_model_binding is needed.

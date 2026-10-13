@@ -1,0 +1,14 @@
+table 'Review Period'
+	lineageTag: 7a37983f-5a64-5538-a0a8-22a78ab79f2a
+
+	column 'Review Days'
+		dataType: int64
+		lineageTag: 32d1bdd4-ac97-51b2-b73e-ef9f6bfa9eeb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Review Days]
+		formatString: 0
+
+	partition 'Review Period' = calculated
+		mode: import
+		source = SELECTCOLUMNS ( GENERATESERIES ( 1, 28, 1 ), "Review Days", [Value] )

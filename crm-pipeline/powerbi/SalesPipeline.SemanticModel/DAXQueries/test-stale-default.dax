@@ -1,0 +1,3 @@
+// sql/90_tests.sql: P90 of engage-to-close is 104 days, the default of Stale Days.
+EVALUATE
+ROW ( "P90 Cycle Days", [P90 Cycle Days], "Stale Days", [Stale Days] )

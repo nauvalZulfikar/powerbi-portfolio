@@ -1,0 +1,15 @@
+// Q4 2017 vs Q3 2017 won revenue, split into volume, mix and price per product. Check must be 0 on every row.
+// Expected (DuckDB, src/build_preview.py bridge()): total change -179,759 = volume -144,724 + mix -53,584 + price +18,549.
+//   GTX Pro  PQ 1,096,599  Q4 958,491  volume -53,216  mix -72,941  price -11,951
+//   GTX Plus Pro  PQ 775,606  Q4 795,530  volume -37,639  mix +37,639  price +19,924
+// Not run yet: Power BI Desktop is not available on the build machine.
+EVALUATE
+CALCULATETABLE (
+    ADDCOLUMNS (
+        VALUES ( Product[Product] ),
+        "Won PQ", [Won Revenue PQ], "Won", [Won Revenue], "Volume", [Volume Effect],
+        "Mix", [Mix Effect], "Price", [Price Effect], "Check", [Bridge Check]
+    ),
+    'Date'[Quarter] = "Q4 2017"
+)
+ORDER BY [Volume]

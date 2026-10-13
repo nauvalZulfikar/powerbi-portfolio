@@ -1,0 +1,28 @@
+perspective 'People Cost'
+
+	perspectiveTable Headcount
+		includeAll
+
+	perspectiveTable GL
+		includeAll
+
+	perspectiveTable Date
+		includeAll
+
+	perspectiveTable Entity
+		includeAll
+
+	perspectiveTable Department
+		includeAll
+
+	perspectiveTable Account
+		includeAll
+
+	perspectiveTable 'P&L Line'
+		includeAll
+
+	perspectiveTable 'Line Account'
+		includeAll
+
+	perspectiveTable _Measures
+		includeAll

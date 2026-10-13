@@ -1,0 +1,46 @@
+table 'Cycle Band'
+	lineageTag: caaa3d98-9bed-5ada-a678-fbadeb6fba2f
+
+	column 'Cycle Band'
+		dataType: string
+		isKey
+		lineageTag: 7f8cc0aa-c758-55ff-a4d3-e333eb339477
+		summarizeBy: none
+		sourceColumn: cycle_band
+		sortByColumn: 'Cycle Sort'
+
+	column 'Cycle Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 50531f2c-9908-5d7b-80ee-e104810bcba1
+		summarizeBy: none
+		sourceColumn: cycle_sort
+
+	column 'Low Days'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 73dd4361-470f-5ded-a5be-bbfceb05a8ef
+		summarizeBy: none
+		sourceColumn: low_days
+
+	column 'High Days'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 22b69bf4-f918-5beb-b217-f96bd4acacf3
+		summarizeBy: none
+		sourceColumn: high_days
+
+	partition 'Cycle Band' = m
+		mode: dual
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "dim_cycle_band"]}[Data],
+				    Typed = Table.TransformColumnTypes(Data, {{"cycle_band", type text}, {"cycle_sort", Int64.Type}, {"low_days", Int64.Type}, {"high_days", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

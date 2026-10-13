@@ -1,0 +1,9 @@
+// FY2013 operating profit, actual vs budget. Assert from DuckDB (mart.fact_gl x bridge, line S4) = README headline table.
+EVALUATE
+CALCULATETABLE (
+    ROW (
+        "Operating Profit", [Operating Profit],
+        "Operating Profit Budget", [Operating Profit Budget]
+    ),
+    'Date'[Year] = 2013
+)

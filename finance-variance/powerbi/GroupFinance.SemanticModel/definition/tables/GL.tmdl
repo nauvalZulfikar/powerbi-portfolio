@@ -1,0 +1,150 @@
+table GL
+	lineageTag: bb3cba00-6245-56e5-80bf-c5c6c988059b
+
+	column Period
+		dataType: dateTime
+		isHidden
+		isAvailableInMdx: false
+		formatString: dd mmm yyyy
+		lineageTag: 5773a083-0a8b-5c3c-bd29-04835ef4d798
+		summarizeBy: none
+		sourceColumn: period
+
+	column 'Posting Date'
+		dataType: dateTime
+		isHidden
+		isAvailableInMdx: false
+		formatString: dd mmm yyyy
+		lineageTag: 6e6ed282-8a26-52bf-9a7e-518ae47e6628
+		summarizeBy: none
+		sourceColumn: posting_date
+
+	column 'Entity Key'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		formatString: 0
+		lineageTag: 9036222f-5ada-570a-a7bf-6e2c0e41c57f
+		summarizeBy: none
+		sourceColumn: entity_key
+
+	column 'Department Key'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		formatString: 0
+		lineageTag: 79ffdaa9-3062-5369-acd2-6425ee645912
+		summarizeBy: none
+		sourceColumn: department_key
+
+	column 'Account Key'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		formatString: 0
+		lineageTag: 85fe227e-c3a4-5e27-bd10-59bfdab6c1ef
+		summarizeBy: none
+		sourceColumn: account_key
+
+	column Scenario
+		dataType: string
+		lineageTag: 4cbd3d49-9135-5c99-a939-8b037e90d0d1
+		summarizeBy: none
+		sourceColumn: scenario
+
+	column 'Budget Source'
+		dataType: string
+		lineageTag: aa7db870-04c3-5373-9680-392d0c21d56e
+		summarizeBy: none
+		sourceColumn: budget_source
+
+	column 'Is Elimination'
+		dataType: boolean
+		lineageTag: aafb8a27-bd3a-5ae9-b6ae-b47a12f7a75c
+		summarizeBy: none
+		sourceColumn: is_elimination
+
+	column Currency
+		dataType: string
+		lineageTag: ebef803e-d9e6-56f7-8283-a5ea61878362
+		summarizeBy: none
+		sourceColumn: currency_code
+
+	column 'Translation Rate'
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		formatString: 0.0000
+		lineageTag: 4b871293-09a6-5342-b9f7-95317ca81a04
+		summarizeBy: none
+		sourceColumn: fx_rate
+
+	column 'Plan Rate'
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		formatString: 0.0000
+		lineageTag: 8b6269d1-fc07-5112-a436-8410ebd10639
+		summarizeBy: none
+		sourceColumn: budget_rate
+
+	column 'Amount USD'
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 08a4d560-caf3-56be-b4b5-64bd87d2f68e
+		summarizeBy: sum
+		sourceColumn: amount_usd
+
+	column 'Amount USD at Budget Rate'
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 65578446-82ed-581c-aaa5-c61b0968b1db
+		summarizeBy: sum
+		sourceColumn: amount_usd_budget_rate
+
+	refreshPolicy
+		policyType: basic
+		rollingWindowGranularity: year
+		rollingWindowPeriods: 5
+		incrementalGranularity: month
+		incrementalPeriods: 2
+		pollingExpression =
+				let
+				    Data = if SourceMode = "Lakehouse"
+				        then Sql.Database(SqlEndpoint, LakehouseDb){[Schema = "dbo", Item = "fact_gl"]}[Data]
+				        else Parquet.Document(File.Contents(DataFolder & "fact_gl.parquet")),
+				    InRange = Table.SelectRows(Data, each DateTime.From([period]) >= RangeStart and DateTime.From([period]) < RangeEnd),
+				    LastChange = List.Max(InRange[posting_date])
+				in
+				    LastChange
+		sourceExpression =
+				let
+				    Data = if SourceMode = "Lakehouse"
+				        then Sql.Database(SqlEndpoint, LakehouseDb){[Schema = "dbo", Item = "fact_gl"]}[Data]
+				        else Parquet.Document(File.Contents(DataFolder & "fact_gl.parquet")),
+				    #"Keep reported periods" = Table.SelectRows(Data, each [period] >= #date(2011, 1, 1) and [period] <= #date(2013, 12, 1)),
+				    InRange = Table.SelectRows(#"Keep reported periods", each DateTime.From([period]) >= RangeStart and DateTime.From([period]) < RangeEnd),
+				    #"Choose columns" = Table.SelectColumns(InRange, {"period", "posting_date", "entity_key", "department_key", "account_key", "scenario", "budget_source", "is_elimination", "currency_code", "fx_rate", "budget_rate", "amount_usd", "amount_usd_budget_rate"}),
+				    Typed = Table.TransformColumnTypes(#"Choose columns", {{"period", type date}, {"posting_date", type date}, {"entity_key", Int64.Type}, {"department_key", Int64.Type}, {"account_key", Int64.Type}, {"scenario", type text}, {"budget_source", type text}, {"is_elimination", type logical}, {"currency_code", type text}, {"fx_rate", type number}, {"budget_rate", type number}, {"amount_usd", type number}, {"amount_usd_budget_rate", type number}})
+				in
+				    Typed
+
+	partition GL = m
+		mode: import
+		source =
+				let
+				    Data = if SourceMode = "Lakehouse"
+				        then Sql.Database(SqlEndpoint, LakehouseDb){[Schema = "dbo", Item = "fact_gl"]}[Data]
+				        else Parquet.Document(File.Contents(DataFolder & "fact_gl.parquet")),
+				    #"Keep reported periods" = Table.SelectRows(Data, each [period] >= #date(2011, 1, 1) and [period] <= #date(2013, 12, 1)),
+				    InRange = Table.SelectRows(#"Keep reported periods", each DateTime.From([period]) >= RangeStart and DateTime.From([period]) < RangeEnd),
+				    #"Choose columns" = Table.SelectColumns(InRange, {"period", "posting_date", "entity_key", "department_key", "account_key", "scenario", "budget_source", "is_elimination", "currency_code", "fx_rate", "budget_rate", "amount_usd", "amount_usd_budget_rate"}),
+				    Typed = Table.TransformColumnTypes(#"Choose columns", {{"period", type date}, {"posting_date", type date}, {"entity_key", Int64.Type}, {"department_key", Int64.Type}, {"account_key", Int64.Type}, {"scenario", type text}, {"budget_source", type text}, {"is_elimination", type logical}, {"currency_code", type text}, {"fx_rate", type number}, {"budget_rate", type number}, {"amount_usd", type number}, {"amount_usd_budget_rate", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

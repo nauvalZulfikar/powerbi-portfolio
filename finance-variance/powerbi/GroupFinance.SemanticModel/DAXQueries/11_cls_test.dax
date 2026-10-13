@@ -1,0 +1,8 @@
+// Object-level security test for role "External Auditor" (GL[Budget Source] and 'Budget Drivers' hidden).
+// Run in Desktop: Modeling > View as > External Auditor, then run both queries in DAX query view.
+// Expected (NOT run: needs Power BI Desktop on Windows):
+//   query 1 returns the budget by scenario as usual;
+//   query 2 fails with "The column 'Budget Source' in table 'GL' cannot be found or may not be used in this expression."
+EVALUATE SUMMARIZECOLUMNS ( GL[Scenario], "Amount", SUM ( GL[Amount USD] ) )
+
+EVALUATE SUMMARIZECOLUMNS ( GL[Budget Source], "Budget", [Budget] )

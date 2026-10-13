@@ -1,0 +1,50 @@
+table 'Time Intelligence'
+	lineageTag: 32601bdd-516e-532a-b286-09c5b48c578b
+
+	calculationGroup
+		precedence: 20
+
+		calculationItem Current = SELECTEDMEASURE ()
+			ordinal: 0
+
+		calculationItem MTD = CALCULATE ( SELECTEDMEASURE (), DATESMTD ( 'Gregorian' ) )
+			ordinal: 1
+
+		calculationItem QTD = CALCULATE ( SELECTEDMEASURE (), DATESQTD ( 'Gregorian' ) )
+			ordinal: 2
+
+		calculationItem YTD = CALCULATE ( SELECTEDMEASURE (), DATESYTD ( 'Gregorian' ) )
+			ordinal: 3
+
+		calculationItem 'Prior Month' = Kpi.PriorMonth ( SELECTEDMEASURE (), 'Gregorian' )
+			ordinal: 4
+
+		calculationItem 'MoM %' =
+				VAR _pm = Kpi.PriorMonth ( SELECTEDMEASURE (), 'Gregorian' )
+				RETURN DIVIDE ( SELECTEDMEASURE () - _pm, _pm )
+			ordinal: 5
+			formatStringDefinition = "+0.0%;-0.0%;0.0%"
+
+		calculationItem 'Prior Year' = Kpi.PriorYear ( SELECTEDMEASURE (), 'Gregorian' )
+			ordinal: 6
+
+		calculationItem 'YoY %' =
+				VAR _py = Kpi.PriorYear ( SELECTEDMEASURE (), 'Gregorian' )
+				RETURN DIVIDE ( SELECTEDMEASURE () - _py, _py )
+			ordinal: 7
+			formatStringDefinition = "+0.0%;-0.0%;0.0%"
+
+	column Period
+		dataType: string
+		lineageTag: a3eba54d-ea0d-50cd-b384-c2578268a2f0
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+	column Ordinal
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 481f23f8-06f6-55de-bf06-04023015fec4
+		summarizeBy: sum
+		sourceColumn: Ordinal

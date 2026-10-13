@@ -1,0 +1,159 @@
+table Opportunities
+	lineageTag: bb85bd7f-c77e-5121-84bf-59358de849f2
+
+	column 'Opportunity ID'
+		dataType: string
+		isKey
+		lineageTag: bcbe04f9-eb24-5f02-ab3b-dc7f1322a275
+		summarizeBy: none
+		sourceColumn: opportunity_id
+
+	column 'Owner ID'
+		dataType: string
+		isHidden
+		lineageTag: 513ba684-8518-58d3-8141-b16918cdeefd
+		summarizeBy: none
+		sourceColumn: owner_id
+
+	column 'Account ID'
+		dataType: string
+		isHidden
+		lineageTag: 47689459-6573-5e6f-9929-8c4641d19b2c
+		summarizeBy: none
+		sourceColumn: account_id
+
+	column 'Product ID'
+		dataType: string
+		isHidden
+		lineageTag: 829ad5c5-d670-5777-bce3-30c5745363d5
+		summarizeBy: none
+		sourceColumn: product_id
+
+	column 'Stage Key'
+		dataType: string
+		isHidden
+		lineageTag: 5fd38909-aa77-5865-a08b-ace1f36ded43
+		summarizeBy: none
+		sourceColumn: stage_key
+
+	column 'Created Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: 244b0b98-f275-5cda-b31d-8128b6a32443
+		summarizeBy: none
+		sourceColumn: created_date
+
+	column 'Engaged Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: 9a83f2cc-fc59-5b6a-956f-556ffeaba982
+		summarizeBy: none
+		sourceColumn: engaged_date
+
+	column 'Closed Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: 92f983fa-6b9c-5f10-96ba-186b6dec34fb
+		summarizeBy: none
+		sourceColumn: closed_date
+
+	column 'Close Value'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 89cac340-9501-5def-969a-b5ce987398b2
+		summarizeBy: none
+		sourceColumn: close_value
+
+	column 'List Price'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 54a35572-170c-52fd-8524-e081eee6206e
+		summarizeBy: none
+		sourceColumn: list_price
+
+	column 'Open Value'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 9faf9271-e889-5ba6-b203-a513520f3461
+		summarizeBy: none
+		sourceColumn: open_value
+
+	column 'Realisation vs List'
+		dataType: double
+		formatString: 0%
+		lineageTag: 8db688ee-a400-5169-a345-e48beef92888
+		summarizeBy: none
+		sourceColumn: price_realisation
+
+	column 'Cycle Days'
+		dataType: int64
+		formatString: 0
+		lineageTag: 30d84f5a-c720-5efa-8164-6547ac4be23d
+		summarizeBy: none
+		sourceColumn: cycle_days
+
+	column 'Cycle Band'
+		dataType: string
+		isHidden
+		lineageTag: b16be4f4-de5f-5332-a876-d12de6ad09f1
+		summarizeBy: none
+		sourceColumn: cycle_band
+
+	column 'Age Days'
+		dataType: int64
+		formatString: 0
+		lineageTag: 20352e18-ed73-5361-b9bb-f3114e023057
+		summarizeBy: none
+		sourceColumn: age_days
+
+	column 'Age Band'
+		dataType: string
+		isHidden
+		lineageTag: c6c97e0c-f6c2-5aea-b639-7e59c571ef04
+		summarizeBy: none
+		sourceColumn: age_band
+
+	column 'Has Account'
+		dataType: boolean
+		lineageTag: 58acee27-613a-5b6f-a8b3-3120270d2f35
+		summarizeBy: none
+		sourceColumn: has_account
+
+	refreshPolicy
+		policyType: basic
+		mode: hybrid
+		rollingWindowGranularity: year
+		rollingWindowPeriods: 3
+		incrementalGranularity: month
+		incrementalPeriods: 15
+		pollingExpression =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "fact_opportunity"]}[Data],
+				    InRange = Table.SelectRows(Data, each DateTime.From([created_date]) >= RangeStart and DateTime.From([created_date]) < RangeEnd),
+				    LastChange = List.Max(InRange[modified_at])
+				in
+				    LastChange
+		sourceExpression =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "fact_opportunity"]}[Data],
+				    Kept = Table.RemoveColumns(Data, {"modified_at"}),
+				    Typed = Table.TransformColumnTypes(Kept, {{"opportunity_id", type text}, {"owner_id", type text}, {"account_id", type text}, {"product_id", type text}, {"stage_key", type text}, {"created_date", type date}, {"engaged_date", type date}, {"closed_date", type date}, {"close_value", type number}, {"list_price", type number}, {"open_value", type number}, {"price_realisation", type number}, {"cycle_days", Int64.Type}, {"cycle_band", type text}, {"age_days", Int64.Type}, {"age_band", type text}, {"has_account", type logical}}),
+				    InRange = Table.SelectRows(Typed, each DateTime.From([created_date]) >= RangeStart and DateTime.From([created_date]) < RangeEnd)
+				in
+				    InRange
+
+	partition Opportunities = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "fact_opportunity"]}[Data],
+				    Kept = Table.RemoveColumns(Data, {"modified_at"}),
+				    Typed = Table.TransformColumnTypes(Kept, {{"opportunity_id", type text}, {"owner_id", type text}, {"account_id", type text}, {"product_id", type text}, {"stage_key", type text}, {"created_date", type date}, {"engaged_date", type date}, {"closed_date", type date}, {"close_value", type number}, {"list_price", type number}, {"open_value", type number}, {"price_realisation", type number}, {"cycle_days", Int64.Type}, {"cycle_band", type text}, {"age_days", Int64.Type}, {"age_band", type text}, {"has_account", type logical}}),
+				    InRange = Table.SelectRows(Typed, each DateTime.From([created_date]) >= RangeStart and DateTime.From([created_date]) < RangeEnd)
+				in
+				    InRange
+
+	annotation PBI_ResultType = Table

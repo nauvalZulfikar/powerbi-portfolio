@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "grp_status_help",
+  "position": {
+    "x": 1152,
+    "y": 216,
+    "z": 2900,
+    "width": 424,
+    "height": 332
+  },
+  "visualGroup": {
+    "displayName": "Status help panel",
+    "groupMode": "ScaleMode"
+  },
+  "isHidden": true
+}

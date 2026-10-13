@@ -1,0 +1,48 @@
+=== inventory-restock — clean clone @ 604151d, 2026-10-09 19:01:53
+data/ in clone: []  (gitignored → absent, as on a runner)
+
+### ci: build_report.py (data-free)
+198 warnings across 10 codes. Full detail: --verbose table, --json, or -o FILE.
+
+Valid (198 warnings, 114 info)
+ 
+→ exit 0
+
+### ci: report diff vs committed
+→ exit 0
+
+### ci: BPA powerbi/StockRestock.SemanticModel
+INFO  REMOVE_ROLES_WITH_NO_MEMBERS                            ModelRole              Role[Store Staff]
+
+BPA powerbi/StockRestock.SemanticModel/definition: 75 rules, 364 violations — error 0, warning 165, info 199; 0 skipped
+✓ no violations with severity >= 3
+→ exit 0
+
+### ci: TOM powerbi/StockRestock.SemanticModel
+✓ model.Validate(): no errors
+✓ round-trip serialize/deserialize OK
+→ exit 0
+
+### ci: DAX offline
+ok   10 Headline numbers.dax [assert]
+5/5 passed, 1 with assert file; asserts NOT executed (offline)
+→ exit 0
+
+### ci: pbir validate --all powerbi/StockRestock.Report
+Valid (198 warnings, 114 info)
+→ exit 0
+
+### data job (opt-in) — not run here: needs src/pipeline.py to download the source data
+
+### proof it needs data: build_model.py in the clone
+_duckdb.IOException: IO Error: Cannot open database "/tmp/build" in read-only mode: database does not exist
+→ exit 1
+  (expected non-zero: this is why build_model.py + the model stale check live in the data job)
+
+git status after ci steps (should be clean apart from gitignored output):
+=== inventory-restock ci job verdict: PASS
+
+### data job, model half, on the working copy (local warehouse already built; pipeline.py NOT rerun, no download)
+build_model.py → exit 0
+
+model stale check → exit 0

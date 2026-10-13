@@ -1,0 +1,64 @@
+table _Measures
+	lineageTag: 72e1416c-6e7c-5bd4-8018-9a2440e1490c
+
+	/// Units sold on the till rows; answered from the hidden Daily Sales aggregation when the query fits day × store × brand, otherwise sent to PostgreSQL.
+	measure 'Detail Units' = SUM ( 'Daily Sales Detail'[Units] )
+		formatString: #,0
+		displayFolder: Composite
+		lineageTag: b4427763-0da1-5f66-b01e-4aec77075248
+
+	/// Sales dollars on the till rows (aggregation hit or DirectQuery).
+	measure 'Detail Dollars' = SUM ( 'Daily Sales Detail'[Dollars] )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Composite
+		lineageTag: 954569d1-c846-58d2-b464-3e9b9e382760
+
+	/// Number of till rows (aggregation hit through the count mapping, or DirectQuery).
+	measure 'Detail Rows' = COUNTROWS ( 'Daily Sales Detail' )
+		formatString: #,0
+		displayFolder: Composite
+		lineageTag: 101fdbd8-da5d-5d52-b883-6a185386fb04
+
+	/// Units on hand at the 31 Dec 2016 count, from the Import Stock table next to the DirectQuery facts.
+	measure 'Stock End Units' = SUM ( Stock[End Units] )
+		formatString: #,0
+		displayFolder: Composite
+		lineageTag: 4704bb5e-2c73-5285-8ff6-d6d5d725d07a
+
+	/// Till units valued at the item's unit cost. RELATED ( Item[Item Unit Cost] ) inside SUMX over the till rows fails because the DirectQuery-to-Import relationship is limited, so this iterates Item and lets context transition filter the till rows.
+	measure 'Units At Item Cost' = SUMX ( Item, Item[Item Unit Cost] * [Detail Units] )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Limited Relationship
+		lineageTag: 89430cbd-7252-55a9-89ef-5d90daaa1b6c
+
+	/// Detail Units with the Item filter moved by TREATAS (a virtual relationship) instead of the limited physical one; same numbers, the usual workaround when a relationship can't be used.
+	measure 'Detail Units Via TREATAS' =
+			CALCULATE (
+			    [Detail Units],
+			    REMOVEFILTERS ( Item ),
+			    TREATAS ( VALUES ( Item[Brand No] ), 'Daily Sales Detail'[Detail Brand] )
+			)
+		formatString: #,0
+		displayFolder: Limited Relationship
+		lineageTag: f1554155-1cec-5197-9c07-1ec4f468013e
+
+	/// Till units whose brand has no Item row. A limited relationship adds no blank Item row, so these units would drop out of every visual grouped by Item; 0 here because the database has no orphan brands.
+	measure 'Units Without Item' =
+			CALCULATE ( [Detail Units], REMOVEFILTERS ( Item ) )
+			    - CALCULATE ( SUMX ( VALUES ( Item[Brand No] ), [Detail Units] ), REMOVEFILTERS ( Item ) )
+		formatString: #,0
+		displayFolder: Limited Relationship
+		lineageTag: d7b95794-146a-5f16-b3ba-beb70a105e9b
+
+	column Value
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ab4458c4-297e-5b28-8bbe-460dac6f87d0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition _Measures = calculated
+		mode: import
+		source = {1}

@@ -1,0 +1,23 @@
+table 'Funnel Step'
+	lineageTag: 6e8b4c5d-2fde-52b7-b10f-24a5f583f404
+
+	column 'Funnel Step'
+		dataType: string
+		lineageTag: 0a2cfcc7-92c7-5ca2-b92d-461762347a04
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Funnel Step]
+		sortByColumn: 'Funnel Order'
+
+	column 'Funnel Order'
+		dataType: int64
+		lineageTag: 71c2cb73-367f-5fb9-a8df-149e91ace993
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Funnel Order]
+		isHidden
+		formatString: 0
+
+	partition 'Funnel Step' = calculated
+		mode: import
+		source = DATATABLE ( "Funnel Step", STRING, "Funnel Order", INTEGER, { { "PO raised", 1 }, { "Invoiced", 2 }, { "Matches receipts", 3 }, { "Approved", 4 }, { "Paid", 5 } } )

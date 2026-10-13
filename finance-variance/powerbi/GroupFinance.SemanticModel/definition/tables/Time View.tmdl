@@ -1,0 +1,53 @@
+table 'Time View'
+	lineageTag: 8f740767-36ad-507c-8920-6c6e00e63b50
+
+	calculationGroup
+		precedence: 10
+
+		calculationItem Period = SELECTEDMEASURE ()
+			ordinal: 0
+
+		calculationItem QTD = CALCULATE ( SELECTEDMEASURE (), DATESQTD ( 'Gregorian' ) )
+			ordinal: 1
+
+		calculationItem YTD = CALCULATE ( SELECTEDMEASURE (), DATESYTD ( 'Gregorian' ) )
+			ordinal: 2
+
+		calculationItem 'Full year' = CALCULATE ( SELECTEDMEASURE (), PARALLELPERIOD ( 'Gregorian', 0, YEAR ) )
+			ordinal: 3
+
+		calculationItem 'Prior year' = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, YEAR ) )
+			ordinal: 4
+
+		calculationItem 'YoY %' =
+				VAR _py = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, YEAR ) )
+				RETURN DIVIDE ( SELECTEDMEASURE () - _py, ABS ( _py ) )
+			ordinal: 5
+			formatStringDefinition = "+0.0%;-0.0%;0.0%"
+
+		calculationItem 'Prior quarter' = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, QUARTER ) )
+			ordinal: 6
+
+		calculationItem 'Prior month' = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, MONTH ) )
+			ordinal: 7
+
+		calculationItem 'MoM %' =
+				VAR _pm = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, MONTH ) )
+				RETURN DIVIDE ( SELECTEDMEASURE () - _pm, ABS ( _pm ) )
+			ordinal: 8
+			formatStringDefinition = "+0.0%;-0.0%;0.0%"
+
+	column 'Time View'
+		dataType: string
+		lineageTag: b5d59240-2ee7-5a82-9ed4-84f61e860586
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+	column Ordinal
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 43f6400a-2a8d-59c1-aef1-f0981352ba58
+		summarizeBy: sum
+		sourceColumn: Ordinal

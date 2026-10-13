@@ -1,0 +1,16 @@
+[37m[1m[info]   18:29:07 - Parameter file validation passed[0m
+deploy powerbi → Test (DRY RUN)
+items in scope (SemanticModel, Report): 2
+  Report         'StockRestock'                       StockRestock.Report
+  SemanticModel  'StockRestock'                       StockRestock.SemanticModel
+  find_replace[0] 'expression DataFolder = "([^"]*)"' → '\\\\fileserver\\pbi-test\\inventory-restock\\marts\\': StockRestock.SemanticModel/definition/expressions.tmdl
+  find_replace[1] 'expression RawFolder = "([^"]*)"' → '\\\\fileserver\\pbi-test\\inventory-restock\\raw\\': StockRestock.SemanticModel/definition/expressions.tmdl
+fabric-cicd parameter validation: OK
+[37m[1m[info]   18:29:07 - Parameter file validation passed[0m
+deploy powerbi → Prod (DRY RUN)
+items in scope (SemanticModel, Report): 2
+  Report         'StockRestock'                       StockRestock.Report
+  SemanticModel  'StockRestock'                       StockRestock.SemanticModel
+  find_replace[0] 'expression DataFolder = "([^"]*)"' → '\\\\fileserver\\pbi\\inventory-restock\\marts\\': StockRestock.SemanticModel/definition/expressions.tmdl
+  find_replace[1] 'expression RawFolder = "([^"]*)"' → '\\\\fileserver\\pbi\\inventory-restock\\raw\\': StockRestock.SemanticModel/definition/expressions.tmdl
+fabric-cicd parameter validation: OK

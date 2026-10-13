@@ -1,0 +1,210 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "table_clv",
+  "position": {
+    "x": 1152,
+    "y": 564,
+    "z": 2700,
+    "width": 424,
+    "height": 316,
+    "tabOrder": 2700
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "objects": {
+      "grid": [
+        {
+          "properties": {
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "6L"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Table: Lifetime value by reseller type'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Lifetime value by reseller type'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Sales/res. = FY2013 net sales per reseller · Life = 1 ÷ churn FY2012→FY2013 · CLV GM is negative: standard cost exceeds the reseller price in this sample'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Resellers"
+                    }
+                  },
+                  "Property": "Business Type"
+                }
+              },
+              "queryRef": "Resellers.Business Type",
+              "nativeQueryRef": "Business Type",
+              "displayName": "Type"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Annual Churn Rate"
+                }
+              },
+              "queryRef": "_Measures.Annual Churn Rate",
+              "nativeQueryRef": "Annual Churn Rate",
+              "displayName": "Churn"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Avg Reseller Lifetime"
+                }
+              },
+              "queryRef": "_Measures.Avg Reseller Lifetime",
+              "nativeQueryRef": "Avg Reseller Lifetime",
+              "displayName": "Life (yr)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Sales per Reseller FY2013"
+                }
+              },
+              "queryRef": "_Measures.Sales per Reseller FY2013",
+              "nativeQueryRef": "Sales per Reseller FY2013",
+              "displayName": "Sales/res."
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Reseller CLV on Sales"
+                }
+              },
+              "queryRef": "_Measures.Reseller CLV on Sales",
+              "nativeQueryRef": "Reseller CLV on Sales",
+              "displayName": "CLV sales"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Reseller CLV"
+                }
+              },
+              "queryRef": "_Measures.Reseller CLV",
+              "nativeQueryRef": "Reseller CLV",
+              "displayName": "CLV GM"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

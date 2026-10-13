@@ -1,0 +1,45 @@
+table Metric
+	lineageTag: 0bdb08f3-d82f-5074-9743-8009a78ab9d8
+
+	column Metric
+		dataType: string
+		lineageTag: 7843386a-179b-548e-ae50-ed34b620038e
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Metric Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Metric Fields'
+
+	column 'Metric Fields'
+		dataType: string
+		isHidden
+		lineageTag: 177961b0-e1f1-55e8-97b9-543c1fe955d7
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Metric Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	column 'Metric Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 71f67300-e70b-5f70-ae58-accfaa846c05
+		summarizeBy: none
+		sourceColumn: [Value3]
+
+	partition Metric = calculated
+		mode: import
+		source =
+				{
+				    ( "January Sales", NAMEOF ( [January Sales] ), 0 ),
+				    ( "Order Value", NAMEOF ( [Order Value] ), 1 ),
+				    ( "Excess Stock Value", NAMEOF ( [Excess Stock Value] ), 2 ),
+				    ( "Stock Value", NAMEOF ( [Stock Value] ), 3 ),
+				    ( "Out of Stock Lines", NAMEOF ( [Out of Stock Lines] ), 4 )
+				}

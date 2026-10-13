@@ -1,0 +1,206 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "table_ownership",
+  "position": {
+    "x": 256,
+    "y": 216,
+    "z": 1900,
+    "width": 760,
+    "height": 332,
+    "tabOrder": 1100
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "objects": {
+      "grid": [
+        {
+          "properties": {
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "6L"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Ownership & minority interest. Net income per entity; group share = net income × effective ownership'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Ownership & minority interest'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Net income per entity; group share = net income × effective ownership'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Entity"
+                    }
+                  },
+                  "Property": "Entity"
+                }
+              },
+              "queryRef": "Entity.Entity",
+              "nativeQueryRef": "Entity"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Entity"
+                    }
+                  },
+                  "Property": "Currency Group"
+                }
+              },
+              "queryRef": "Entity.Currency Group",
+              "nativeQueryRef": "Currency Group"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Entity"
+                    }
+                  },
+                  "Property": "Effective Ownership"
+                }
+              },
+              "queryRef": "Entity.Effective Ownership",
+              "nativeQueryRef": "Effective Ownership"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Entity"
+                    }
+                  },
+                  "Property": "Consolidated From"
+                }
+              },
+              "queryRef": "Entity.Consolidated From",
+              "nativeQueryRef": "Consolidated From"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Entity"
+                    }
+                  },
+                  "Property": "Has Budget"
+                }
+              },
+              "queryRef": "Entity.Has Budget",
+              "nativeQueryRef": "Has Budget"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Net Income"
+                }
+              },
+              "queryRef": "_Measures.Net Income",
+              "nativeQueryRef": "Net Income"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Group Share"
+                }
+              },
+              "queryRef": "_Measures.Group Share",
+              "nativeQueryRef": "Group Share"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Non-Controlling Interest"
+                }
+              },
+              "queryRef": "_Measures.Non-Controlling Interest",
+              "nativeQueryRef": "Non-Controlling Interest"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

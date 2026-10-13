@@ -1,0 +1,109 @@
+table Date
+	lineageTag: 9ed54db2-5962-594e-b83a-fd5a5f685ffb
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: dd mmm yyyy
+		lineageTag: b45bd43d-f8d1-5465-9738-e7a3b3231b61
+		summarizeBy: none
+		sourceColumn: date
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 847c73cb-3890-5ebd-9ebe-7904e22f5864
+		summarizeBy: none
+		sourceColumn: year
+
+	column Quarter
+		dataType: string
+		lineageTag: 542165e6-9891-5bcc-aebc-b8d92a538302
+		summarizeBy: none
+		sourceColumn: quarter
+		sortByColumn: 'Quarter Sort'
+
+	column 'Quarter Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ef9b78aa-d97a-5684-bb07-82638392680b
+		summarizeBy: none
+		sourceColumn: quarter_sort
+
+	column Month
+		dataType: string
+		lineageTag: 09d59318-841a-5973-8707-43f42e367cff
+		summarizeBy: none
+		sourceColumn: month
+		sortByColumn: 'Month Sort'
+
+	column 'Month Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e98ab99c-c6ed-5b47-a5d5-c7df49708fe8
+		summarizeBy: none
+		sourceColumn: month_sort
+
+	column 'Month Start'
+		dataType: dateTime
+		formatString: mmm yyyy
+		lineageTag: ac1b629b-c38e-5d57-b98a-68fd4653bc65
+		summarizeBy: none
+		sourceColumn: month_start
+
+	column 'Week Start'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: b464e4bd-90ca-53f2-bf4d-2602ecdd47a0
+		summarizeBy: none
+		sourceColumn: week_start
+
+	hierarchy Calendar
+		lineageTag: 5269cecd-2fb1-53d5-ab6b-d2d290992c36
+
+		level Year
+			lineageTag: 221fe9a5-11c8-5443-b111-c25dd02105db
+			column: Year
+
+		level Quarter
+			lineageTag: d2488cec-9049-54ca-af18-50cec44d43e7
+			column: Quarter
+
+		level Month
+			lineageTag: 88f42a2e-dc15-51e1-8ad8-739d1bb5e7f9
+			column: Month
+
+		level Date
+			lineageTag: 065d1f6e-b9c8-5316-9eef-2e8a13a90ce0
+			column: Date
+
+	calendar Gregorian
+
+		calendarColumnGroup = year
+			primaryColumn: Year
+
+		calendarColumnGroup = quarter
+			primaryColumn: 'Quarter Sort'
+			associatedColumn: Quarter
+
+		calendarColumnGroup = month
+			primaryColumn: 'Month Sort'
+			associatedColumn: Month
+
+		calendarColumnGroup = date
+			primaryColumn: Date
+
+	partition Date = m
+		mode: dual
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "dim_date"]}[Data],
+				    Typed = Table.TransformColumnTypes(Data, {{"date", type date}, {"year", Int64.Type}, {"quarter", type text}, {"quarter_sort", Int64.Type}, {"month", type text}, {"month_sort", Int64.Type}, {"month_start", type date}, {"week_start", type date}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,64 @@
+perspective Sales
+
+	perspectiveTable Opportunities
+		includeAll
+
+	perspectiveTable Funnel
+		includeAll
+
+	perspectiveTable Steps
+		includeAll
+
+	perspectiveTable 'Pipeline Snapshots'
+		includeAll
+
+	perspectiveTable Date
+		includeAll
+
+	perspectiveTable Agent
+		includeAll
+
+	perspectiveTable Account
+		includeAll
+
+	perspectiveTable Product
+		includeAll
+
+	perspectiveTable Stage
+		includeAll
+
+	perspectiveTable 'Cycle Band'
+		includeAll
+
+	perspectiveTable 'Age Band'
+		includeAll
+
+	perspectiveTable 'Date Basis'
+		includeAll
+
+	perspectiveTable 'Time Intelligence'
+		includeAll
+
+	perspectiveTable 'Analyze By'
+		includeAll
+
+	perspectiveTable Metric
+		includeAll
+
+	perspectiveTable 'Stage Flow'
+		includeAll
+
+	perspectiveTable 'Stale Threshold'
+		includeAll
+
+	perspectiveTable 'Stage Transitions'
+		includeAll
+
+	perspectiveTable 'Account Segment'
+		includeAll
+
+	perspectiveTable 'Win Probability'
+		includeAll
+
+	perspectiveTable _Measures
+		includeAll

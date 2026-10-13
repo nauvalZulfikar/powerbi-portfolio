@@ -1,0 +1,23 @@
+table 'Compare To'
+	lineageTag: d9c64fb4-7c53-562a-bc94-25ad642bcfbc
+
+	column 'Compare To'
+		dataType: string
+		lineageTag: 7cb544da-2b53-57d7-94e0-9d98e405fffb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Compare To]
+		sortByColumn: 'Compare Order'
+
+	column 'Compare Order'
+		dataType: int64
+		lineageTag: 32b6806a-044d-5743-bf95-77d193c06984
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Compare Order]
+		isHidden
+		formatString: 0
+
+	partition 'Compare To' = calculated
+		mode: import
+		source = DATATABLE ( "Compare To", STRING, "Compare Order", INTEGER, { { "Budget", 1 }, { "Prior year", 2 }, { "Forecast", 3 } } )

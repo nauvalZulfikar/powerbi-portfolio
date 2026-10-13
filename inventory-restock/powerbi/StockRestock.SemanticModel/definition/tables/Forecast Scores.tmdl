@@ -1,0 +1,63 @@
+table 'Forecast Scores'
+	lineageTag: aa4edca3-e3cb-56d5-b5f1-206be453ad94
+
+	column 'Method Key'
+		dataType: string
+		isHidden
+		lineageTag: de221e75-f03c-5b7e-aaaf-e59be82ce167
+		summarizeBy: none
+		sourceColumn: method
+
+	column Method
+		dataType: string
+		lineageTag: 8d5143b0-b820-5319-9f53-594258470011
+		summarizeBy: none
+		sourceColumn: method_label
+		sortByColumn: 'Method Sort'
+
+	column 'Method Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f31d9bdf-36cc-519b-9e6b-0885bc49a4fe
+		summarizeBy: none
+		sourceColumn: method_sort
+
+	column 'WAPE Line Day'
+		dataType: double
+		formatString: 0%
+		lineageTag: 39173dc5-95e7-5e02-aff8-a2870840f699
+		summarizeBy: none
+		sourceColumn: wape_line_day
+
+	column 'WAPE Line Week'
+		dataType: double
+		formatString: 0%
+		lineageTag: f2c568d4-bfb5-58c6-bdec-0c798e2b722a
+		summarizeBy: none
+		sourceColumn: wape_line_week
+
+	column 'WAPE Chain Day'
+		dataType: double
+		formatString: 0%
+		lineageTag: 9217cc49-6776-51d1-9025-10cc492bee33
+		summarizeBy: none
+		sourceColumn: wape_chain_day
+
+	column Bias
+		dataType: double
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		lineageTag: 4295c77b-5fa4-5126-93f1-6888e68ad7fb
+		summarizeBy: none
+		sourceColumn: bias
+
+	partition 'Forecast Scores' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "forecast_scores.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"method", type text}, {"method_label", type text}, {"method_sort", Int64.Type}, {"wape_line_day", type number}, {"wape_line_week", type number}, {"wape_chain_day", type number}, {"bias", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

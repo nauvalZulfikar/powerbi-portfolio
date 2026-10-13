@@ -1,0 +1,47 @@
+table Territories
+	lineageTag: a02a281d-3315-59da-a8e5-fe48b7e5b7b4
+
+	column 'Territory Key'
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: f8bdd9a0-3fcf-5cd3-af1f-8f1d1a36db73
+		summarizeBy: none
+		sourceColumn: Territory Key
+
+	column Region
+		dataType: string
+		lineageTag: b6c85dec-1086-5231-a2b0-9dbee64121cf
+		summarizeBy: none
+		sourceColumn: Region
+
+	column Country
+		dataType: string
+		dataCategory: Country
+		lineageTag: 9849c4f8-724b-584c-aabb-8250dfb7091a
+		summarizeBy: none
+		sourceColumn: Country
+
+	column Group
+		dataType: string
+		lineageTag: 5d55cf4e-7630-5998-83f5-8bd7f4b59224
+		summarizeBy: none
+		sourceColumn: Group
+
+	column Branch
+		dataType: string
+		lineageTag: 1fc2ff7e-1899-5372-9c56-07781c4a7386
+		summarizeBy: none
+		sourceColumn: Branch
+
+	partition Territories = m
+		mode: import
+		source =
+				let
+				    Source = fnReference("Territories")
+				in
+				    Table.TransformColumnTypes(Source, {
+				        {"Territory Key", Int64.Type}, {"Region", type text}, {"Country", type text}, {"Group", type text}, {"Branch", type text}})
+
+	annotation PBI_ResultType = Table

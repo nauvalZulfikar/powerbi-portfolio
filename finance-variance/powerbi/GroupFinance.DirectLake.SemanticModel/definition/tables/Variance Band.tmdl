@@ -1,0 +1,41 @@
+table 'Variance Band'
+	lineageTag: 4e89f2db-58f4-5b0d-b4b7-e5b27c9455d3
+
+	column Band
+		dataType: string
+		lineageTag: d28f9e22-600c-5fb7-b12e-743f5a1236c3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Band]
+		sortByColumn: 'Band Order'
+
+	column 'Band Order'
+		dataType: int64
+		lineageTag: 636d9b97-8375-500b-890b-a7c3053cda2d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Band Order]
+		isHidden
+		formatString: 0
+
+	column Lower
+		dataType: double
+		lineageTag: 4acbf3f3-0da1-527b-9abc-986e681dc261
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Lower]
+		isHidden
+		formatString: +0.0%;-0.0%;0.0%
+
+	column Upper
+		dataType: double
+		lineageTag: 7f55ba5a-f703-5a2e-b703-1f0632ae338a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Upper]
+		isHidden
+		formatString: +0.0%;-0.0%;0.0%
+
+	partition 'Variance Band' = calculated
+		mode: import
+		source = DATATABLE ( "Band", STRING, "Band Order", INTEGER, "Lower", DOUBLE, "Upper", DOUBLE, { { "Big miss", 1, -1E9, -0.10 }, { "Miss", 2, -0.10, -0.02 }, { "On plan", 3, -0.02, 0.02 }, { "Beat", 4, 0.02, 1E9 } } )

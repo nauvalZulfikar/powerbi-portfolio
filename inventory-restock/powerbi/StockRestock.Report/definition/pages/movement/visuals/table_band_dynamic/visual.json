@@ -1,0 +1,164 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "table_band_dynamic",
+  "position": {
+    "x": 256,
+    "y": 564,
+    "z": 2700,
+    "width": 500,
+    "height": 316,
+    "tabOrder": 2900
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "objects": {
+      "grid": [
+        {
+          "properties": {
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "6L"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Cover bands from a table. Dynamic = counted from the Min / Max Days edges; Lines = the stored band'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Cover bands from a table'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Dynamic = counted from the Min / Max Days edges; Lines = the stored band'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Cover Band"
+                    }
+                  },
+                  "Property": "Cover Band"
+                }
+              },
+              "queryRef": "Cover Band.Cover Band",
+              "nativeQueryRef": "Cover Band"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Cover Band"
+                    }
+                  },
+                  "Property": "Min Days"
+                }
+              },
+              "queryRef": "Cover Band.Min Days",
+              "nativeQueryRef": "Min Days"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Cover Band"
+                    }
+                  },
+                  "Property": "Max Days"
+                }
+              },
+              "queryRef": "Cover Band.Max Days",
+              "nativeQueryRef": "Max Days"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Lines in Band (Dynamic)"
+                }
+              },
+              "queryRef": "_Measures.Lines in Band (Dynamic)",
+              "nativeQueryRef": "Lines in Band (Dynamic)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Lines"
+                }
+              },
+              "queryRef": "_Measures.Lines",
+              "nativeQueryRef": "Lines"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+# PBIP — Power BI Desktop local state (never commit)
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+**/.pbi/unappliedChanges.json
+*.pbix.bak
+
+# data the pipeline regenerates
+data/raw/
+data/interim/
+
+# tooling
+.venv/
+__pycache__/
+bin/
+obj/
+node_modules/
+.env
+*.local.json

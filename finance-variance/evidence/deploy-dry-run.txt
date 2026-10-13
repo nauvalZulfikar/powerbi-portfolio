@@ -1,0 +1,24 @@
+items in scope (SemanticModel, Report): 4
+  SemanticModel  'GroupFinance DL'                    GroupFinance.DirectLake.SemanticModel
+  SemanticModel  'GroupFinance (Fabric)'              GroupFinance.Fabric.SemanticModel
+  Report         'GroupFinance'                       GroupFinance.Report
+  SemanticModel  'GroupFinance'                       GroupFinance.SemanticModel
+  find_replace[0] 'expression SourceMode = "([^"]*)"' → 'Lakehouse': GroupFinance.SemanticModel/definition/expressions.tmdl
+  find_replace[1] 'expression SqlEndpoint = "([^"]*)"' → '<test-workspace>.datawarehouse.fabric.microsoft.com': GroupFinance.Fabric.SemanticModel/definition/expressions.tmdl, GroupFinance.SemanticModel/definition/expressions.tmdl
+  find_replace[2] 'expression LakehouseDb = "([^"]*)"' → 'finance_lh_test': GroupFinance.Fabric.SemanticModel/definition/expressions.tmdl, GroupFinance.SemanticModel/definition/expressions.tmdl
+  find_replace[3] 'Sql\\.Database\\("([^"]*)", "finance_lh"\\)' → '<test-workspace>.datawarehouse.fabric.microsoft.com': GroupFinance.DirectLake.SemanticModel/definition/expressions.tmdl
+  find_replace[4] 'expression RawFolder = "([^"]*)"' → '\\\\fileserver\\pbi-test\\group-finance\\raw\\': GroupFinance.SemanticModel/definition/expressions.tmdl
+  find_replace[5] 'expression ForecastFolder = "([^"]*)"' → '\\\\fileserver\\pbi-test\\group-finance\\forecast\\': GroupFinance.SemanticModel/definition/expressions.tmdl
+fabric-cicd parameter validation: OK
+items in scope (SemanticModel, Report): 4
+  SemanticModel  'GroupFinance DL'                    GroupFinance.DirectLake.SemanticModel
+  SemanticModel  'GroupFinance (Fabric)'              GroupFinance.Fabric.SemanticModel
+  Report         'GroupFinance'                       GroupFinance.Report
+  SemanticModel  'GroupFinance'                       GroupFinance.SemanticModel
+  find_replace[0] 'expression SourceMode = "([^"]*)"' → 'Lakehouse': GroupFinance.SemanticModel/definition/expressions.tmdl
+  find_replace[1] 'expression SqlEndpoint = "([^"]*)"' → '<prod-workspace>.datawarehouse.fabric.microsoft.com': GroupFinance.Fabric.SemanticModel/definition/expressions.tmdl, GroupFinance.SemanticModel/definition/expressions.tmdl
+  find_replace[2] 'expression LakehouseDb = "([^"]*)"' → 'finance_lh': GroupFinance.Fabric.SemanticModel/definition/expressions.tmdl, GroupFinance.SemanticModel/definition/expressions.tmdl
+  find_replace[3] 'Sql\\.Database\\("([^"]*)", "finance_lh"\\)' → '<prod-workspace>.datawarehouse.fabric.microsoft.com': GroupFinance.DirectLake.SemanticModel/definition/expressions.tmdl
+  find_replace[4] 'expression RawFolder = "([^"]*)"' → '\\\\fileserver\\pbi\\group-finance\\raw\\': GroupFinance.SemanticModel/definition/expressions.tmdl
+  find_replace[5] 'expression ForecastFolder = "([^"]*)"' → '\\\\fileserver\\pbi\\group-finance\\forecast\\': GroupFinance.SemanticModel/definition/expressions.tmdl
+fabric-cicd parameter validation: OK

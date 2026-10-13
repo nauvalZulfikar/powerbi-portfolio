@@ -1,0 +1,12 @@
+// actual - budget = FX effect + operational variance (same identity as SQL test "actual - budget = FX effect +
+// operational variance" on mart.variance_cube). FY2013 operating profit: -1.13M = -69K FX + -1.06M operational.
+EVALUATE
+CALCULATETABLE (
+    ROW (
+        "FX Effect", [Operating Profit FX Effect],
+        "Operational Variance", [Operating Profit Operational Variance],
+        "Gap", [Operating Profit] - [Operating Profit Budget]
+            - [Operating Profit FX Effect] - [Operating Profit Operational Variance]
+    ),
+    'Date'[Year] = 2013
+)

@@ -1,0 +1,96 @@
+table 'GL Journal Agg'
+	isHidden
+	lineageTag: e48ba05e-30a1-5841-b026-fc826cfd1af3
+
+	column 'Agg Period'
+		dataType: dateTime
+		isHidden
+		isAvailableInMdx: false
+		formatString: dd mmm yyyy
+		lineageTag: f0d4a37b-1dcd-5bbc-8596-061d1da393cc
+		summarizeBy: none
+		sourceColumn: period
+
+		alternateOf
+			summarization: groupBy
+			baseColumn: 'GL Journal'.Period
+
+	column 'Agg Entity Key'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		formatString: 0
+		lineageTag: 46447b31-84cb-52ad-bd69-cb3058f3b697
+		summarizeBy: none
+		sourceColumn: entity_key
+
+		alternateOf
+			summarization: groupBy
+			baseColumn: 'GL Journal'.'Entity Key'
+
+	column 'Agg Department Key'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		formatString: 0
+		lineageTag: bbb87221-08ff-50df-974f-4bb6758122db
+		summarizeBy: none
+		sourceColumn: department_key
+
+		alternateOf
+			summarization: groupBy
+			baseColumn: 'GL Journal'.'Department Key'
+
+	column 'Agg Account Key'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		formatString: 0
+		lineageTag: b120d538-8283-536c-b0a6-5b94bbfd94a5
+		summarizeBy: none
+		sourceColumn: account_key
+
+		alternateOf
+			summarization: groupBy
+			baseColumn: 'GL Journal'.'Account Key'
+
+	column 'Agg Amount USD'
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: b8f8df72-252d-57ae-b7ef-fce5acf1dab3
+		summarizeBy: none
+		sourceColumn: amount_usd
+
+		alternateOf
+			summarization: sum
+			baseColumn: 'GL Journal'.'Amount USD'
+
+	column 'Agg Lines'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		formatString: 0
+		lineageTag: d00e580a-d640-5d79-a15e-ddc7b6fa8de1
+		summarizeBy: none
+		sourceColumn: lines
+
+		alternateOf
+			summarization: count
+			baseTable: 'GL Journal'
+
+	partition 'GL Journal Agg' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "gl_journal"]}[Data],
+				    Grouped = Table.Group(Data, {"period", "entity_key", "department_key", "account_key"}, {
+				        {"amount_usd", each List.Sum([amount_usd]), type number},
+				        {"lines", each Table.RowCount(_), Int64.Type}}),
+				    Typed = Table.TransformColumnTypes(Grouped, {{"period", type date}, {"entity_key", Int64.Type}, {"department_key", Int64.Type}, {"account_key", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

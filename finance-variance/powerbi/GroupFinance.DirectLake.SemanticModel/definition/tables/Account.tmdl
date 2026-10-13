@@ -1,0 +1,74 @@
+table Account
+	lineageTag: f4b458a0-0c92-5533-91d8-4b25822ea5cb
+
+	column 'Account Key'
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: d28f4264-2932-5a7d-9e09-2e506cbbe42b
+		summarizeBy: none
+		sourceColumn: account_key
+
+	column 'Account Code'
+		dataType: int64
+		formatString: 0
+		lineageTag: 1f8a2603-11f0-52f8-9a7d-95c18a31cc76
+		summarizeBy: none
+		sourceColumn: account_code
+
+	column Account
+		dataType: string
+		lineageTag: 3c710fd6-f89b-550b-9826-4ecc01a6a416
+		summarizeBy: none
+		sourceColumn: account
+
+	column 'PnL Sign'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		formatString: 0
+		lineageTag: cd01a873-b5a5-5084-9e29-83f4976bf3a5
+		summarizeBy: none
+		sourceColumn: pnl_sign
+
+	column 'Detail Line Id'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: a4a9eea4-7221-54f8-9f3f-9d47bf9f10b0
+		summarizeBy: none
+		sourceColumn: line_id
+
+	column 'Detail Line'
+		dataType: string
+		lineageTag: 20cdb99a-b68f-5971-b3ba-1d9beff79373
+		summarizeBy: none
+		sourceColumn: detail_line
+		sortByColumn: 'Detail Line Sort'
+
+	column 'Detail Line Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6853a428-a532-5a9d-8736-e65c8220b259
+		summarizeBy: none
+		sourceColumn: detail_line_sort
+
+	hierarchy 'P&L Drill'
+		lineageTag: 27ddde8c-2a1c-5da1-ad22-1abeb07f6018
+
+		level 'Detail Line'
+			lineageTag: b6b1ad07-1ed7-5bcf-80e1-242b6f15448a
+			column: 'Detail Line'
+
+		level Account
+			lineageTag: 9ea92a57-8db2-5402-a32d-39457c451584
+			column: Account
+
+	partition Account = entity
+		mode: directLake
+		source
+			entityName: dim_account
+			schemaName: dbo
+			expressionSource: DatabaseQuery

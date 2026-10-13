@@ -1,0 +1,36 @@
+table 'Manager Access'
+	lineageTag: 932f15db-9913-580a-aafb-992125c36f87
+	isHidden
+
+	column 'User Email'
+		dataType: string
+		isHidden
+		lineageTag: 3be78e4c-5ba4-5350-8f24-69e7646b38c3
+		summarizeBy: none
+		sourceColumn: user_email
+
+	column Region
+		dataType: string
+		isHidden
+		lineageTag: fd03e37f-db4c-5b60-95a9-2a77965aaee7
+		summarizeBy: none
+		sourceColumn: regional_office
+
+	column Manager
+		dataType: string
+		isHidden
+		lineageTag: 1b9a3adb-7d45-5ac0-bea4-03b9727784d4
+		summarizeBy: none
+		sourceColumn: manager
+
+	partition 'Manager Access' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "manager_access.parquet")),
+				    Data = Source,
+				    Typed = Table.TransformColumnTypes(Data, {{"user_email", type text}, {"regional_office", type text}, {"manager", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

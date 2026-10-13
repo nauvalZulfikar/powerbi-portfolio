@@ -1,0 +1,182 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "matrix_parent",
+  "position": {
+    "x": 1138,
+    "y": 564,
+    "z": 2600,
+    "width": 438,
+    "height": 316,
+    "tabOrder": 900
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "objects": {
+      "grid": [
+        {
+          "properties": {
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "5L"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Share of parent: region → manager → agent'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'ISINSCOPE picks the level: each row is a share of the row above. Expand a region to drill'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Share of parent: region → manager → agent. ISINSCOPE picks the level: each row is a share of the row above. Expand a region to drill'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Agent"
+                    }
+                  },
+                  "Property": "Region"
+                }
+              },
+              "queryRef": "Agent.Region",
+              "nativeQueryRef": "Region"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Agent"
+                    }
+                  },
+                  "Property": "Manager"
+                }
+              },
+              "queryRef": "Agent.Manager",
+              "nativeQueryRef": "Manager"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Agent"
+                    }
+                  },
+                  "Property": "Sales Agent"
+                }
+              },
+              "queryRef": "Agent.Sales Agent",
+              "nativeQueryRef": "Sales Agent"
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Won Revenue"
+                }
+              },
+              "queryRef": "_Measures.Won Revenue",
+              "nativeQueryRef": "Won Revenue"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Share of Parent"
+                }
+              },
+              "queryRef": "_Measures.Share of Parent",
+              "nativeQueryRef": "Share of Parent"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Win Rate"
+                }
+              },
+              "queryRef": "_Measures.Win Rate",
+              "nativeQueryRef": "Win Rate"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

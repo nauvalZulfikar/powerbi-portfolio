@@ -1,0 +1,5 @@
+role 'Europe Finance'
+	modelPermission: read
+
+	tablePermission Entity = Entity[Region] = "European Operations"
+

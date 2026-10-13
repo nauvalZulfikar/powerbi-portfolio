@@ -1,0 +1,5 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {"type": "SemanticModel", "displayName": "StockRestock"},
+  "config": {"version": "2.0", "logicalId": "8b2e4d71-5c90-4f3a-9e16-2a7d0c5b83f4"}
+}

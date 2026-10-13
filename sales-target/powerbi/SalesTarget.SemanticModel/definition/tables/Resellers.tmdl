@@ -1,0 +1,148 @@
+table Resellers
+	lineageTag: 6cbbd4b0-95e9-5267-a7ad-f28e822b5493
+
+	column 'Reseller Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9bf5e70b-4949-5cf8-86ca-4bd926315bbf
+		summarizeBy: none
+		sourceColumn: Reseller Key
+
+	column 'Reseller Code'
+		dataType: string
+		isKey
+		lineageTag: 52bbf4b4-547c-53d0-a169-afc6df7a3668
+		summarizeBy: none
+		sourceColumn: Reseller Code
+
+	column Reseller
+		dataType: string
+		lineageTag: 1fd2f10a-bcb7-5f31-b1ad-c35b78090121
+		summarizeBy: none
+		sourceColumn: Reseller
+
+	column 'Business Type'
+		dataType: string
+		lineageTag: b5e0637e-d0d2-5dc3-9c46-ac0da5ae359e
+		summarizeBy: none
+		sourceColumn: Business Type
+
+	column City
+		dataType: string
+		dataCategory: City
+		lineageTag: 4563b6d3-629b-56b7-a1f1-dcdb055ffa1a
+		summarizeBy: none
+		sourceColumn: City
+
+	column Country
+		dataType: string
+		dataCategory: Country
+		lineageTag: a68b6333-d202-5895-bc36-7ae16e70779a
+		summarizeBy: none
+		sourceColumn: Country
+
+	column Location =
+			Resellers[City] & ", " & Resellers[Country]
+		dataType: string
+		dataCategory: Place
+		lineageTag: 62cadb1a-7e75-528f-a086-c451d8c3e843
+		summarizeBy: none
+
+	column 'Sales Trend' =
+			VAR _cur = CALCULATE ( [Net Sales], 'Date'[Fiscal Year] = "FY2013" )
+			VAR _prev = CALCULATE ( [Net Sales], 'Date'[Fiscal Year] = "FY2012" )
+			RETURN SWITCH ( TRUE (), ISBLANK ( _cur ) && ISBLANK ( _prev ), "No sales FY2012-13",
+			    _cur < _prev, "Declining", "Growing or new" )
+		dataType: string
+		lineageTag: a451b16e-4aea-5bbc-a543-fb1243879d8f
+		summarizeBy: none
+
+	column 'Recency Days' =
+			VAR _mine = CALCULATE ( MAX ( Sales[Order Date] ) )
+			RETURN IF ( NOT ISBLANK ( _mine ), DATEDIFF ( _mine, CALCULATE ( MAX ( Sales[Order Date] ), ALL ( Sales ) ), DAY ) )
+		dataType: int64
+		formatString: 0
+		lineageTag: 3972ab28-371f-59fa-9a85-361b439439b7
+		summarizeBy: none
+
+	column Frequency =
+			CALCULATE ( DISTINCTCOUNT ( Sales[Order Number] ) )
+		dataType: int64
+		formatString: 0
+		lineageTag: f9c09809-f9f0-5ebc-a362-ed259fb64c95
+		summarizeBy: none
+
+	column Monetary =
+			CALCULATE ( SUM ( Sales[Amount] ) )
+		dataType: decimal
+		isHidden
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 8eedd41c-a067-5b00-990e-0a22dc1a37af
+		summarizeBy: none
+
+	column 'R Score' =
+			VAR _v = Resellers[Recency Days]
+			VAR _n = COUNTROWS ( FILTER ( ALL ( Resellers[Reseller Code], Resellers[Recency Days] ), NOT ISBLANK ( Resellers[Recency Days] ) ) )
+			VAR _better = COUNTROWS ( FILTER ( ALL ( Resellers[Reseller Code], Resellers[Recency Days] ), NOT ISBLANK ( Resellers[Recency Days] ) && Resellers[Recency Days] < _v ) )
+			RETURN IF ( NOT ISBLANK ( _v ), 5 - INT ( 5 * DIVIDE ( _better, _n ) ) )
+		dataType: int64
+		formatString: 0
+		lineageTag: 811b6256-810a-5f1f-bc86-1153b0259de4
+		summarizeBy: none
+
+	column 'F Score' =
+			VAR _v = Resellers[Frequency]
+			VAR _n = COUNTROWS ( FILTER ( ALL ( Resellers[Reseller Code], Resellers[Frequency] ), NOT ISBLANK ( Resellers[Frequency] ) ) )
+			VAR _below = COUNTROWS ( FILTER ( ALL ( Resellers[Reseller Code], Resellers[Frequency] ), NOT ISBLANK ( Resellers[Frequency] ) && Resellers[Frequency] < _v ) )
+			RETURN IF ( NOT ISBLANK ( _v ), 1 + INT ( 5 * DIVIDE ( _below, _n ) ) )
+		dataType: int64
+		formatString: 0
+		lineageTag: adf2ef1d-baef-52e1-ad44-b1a32d2b85a3
+		summarizeBy: none
+
+	column 'M Score' =
+			VAR _v = Resellers[Monetary]
+			VAR _n = COUNTROWS ( FILTER ( ALL ( Resellers[Reseller Code], Resellers[Monetary] ), NOT ISBLANK ( Resellers[Monetary] ) ) )
+			VAR _below = COUNTROWS ( FILTER ( ALL ( Resellers[Reseller Code], Resellers[Monetary] ), NOT ISBLANK ( Resellers[Monetary] ) && Resellers[Monetary] < _v ) )
+			RETURN IF ( NOT ISBLANK ( _v ), 1 + INT ( 5 * DIVIDE ( _below, _n ) ) )
+		dataType: int64
+		formatString: 0
+		lineageTag: 5532c134-3f22-576d-b5e1-be4b007761f0
+		summarizeBy: none
+
+	column 'RFM Segment' =
+			VAR _r = Resellers[R Score]
+			VAR _f = Resellers[F Score]
+			RETURN IF ( ISBLANK ( _r ), "No orders", SWITCH ( TRUE (), _r >= 4 && _f >= 4, "Champions", _r >= 3 && _f >= 3, "Loyal", _r >= 4, "Promising", _f >= 3, "At risk", _r = 1, "Lost", TRUE (), "Needs attention" ) )
+		dataType: string
+		lineageTag: 40e33437-d477-506f-84a7-e6df541b7f65
+		summarizeBy: none
+		sortByColumn: 'RFM Segment Order'
+
+	column 'RFM Segment Order' =
+			SWITCH ( Resellers[RFM Segment], "Champions", 1, "Loyal", 2, "Promising", 3, "Needs attention", 4, "At risk", 5, "Lost", 6, "No orders", 7 )
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d9fec2c2-adec-5797-9e08-699cb384ffc4
+		summarizeBy: none
+
+	column 'RFM Action' =
+			SWITCH ( Resellers[RFM Segment], "Champions", "Thank them: early access to new models, ask for a referral", "Loyal", "Upsell accessories and clothing on the next call", "Promising", "Recent but few orders: follow up for the second order this month", "At risk", "Used to buy often, quiet now: call this week", "Lost", "Win-back offer or take off the call list", "Needs attention", "Check in this month before they drift", "Prospect: no orders yet" )
+		dataType: string
+		lineageTag: 7fe100a3-5467-5c97-8ad9-e16791c52ec7
+		summarizeBy: none
+
+	partition Resellers = m
+		mode: import
+		source =
+				// Two resellers share a name, so the code is the key. City and country come from DimGeography (for the map).
+				let
+				    Source = fnReference("Resellers")
+				in
+				    Table.TransformColumnTypes(Source, {
+				        {"Reseller Key", Int64.Type}, {"Reseller Code", type text}, {"Reseller", type text}, {"Business Type", type text},
+				        {"City", type text}, {"Country", type text}})
+
+	annotation PBI_ResultType = Table

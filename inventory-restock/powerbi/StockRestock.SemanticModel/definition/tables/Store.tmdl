@@ -1,0 +1,76 @@
+table Store
+	lineageTag: 69ccb380-cdf3-5607-9d0e-5606893caefc
+
+	column 'Store No'
+		dataType: int64
+		isKey
+		formatString: 0
+		lineageTag: 35930489-7bcd-5b03-9632-04b67cca0f2f
+		summarizeBy: none
+		sourceColumn: store
+
+	column City
+		dataType: string
+		dataCategory: City
+		lineageTag: cf4350f8-ee71-5215-bc26-7630b3011dbd
+		summarizeBy: none
+		sourceColumn: city
+
+	column 'Store Name'
+		dataType: string
+		lineageTag: aeb6ed3c-7859-5639-ac2b-40d8ea492af1
+		summarizeBy: none
+		sourceColumn: store_label
+		sortByColumn: 'Store No'
+
+	column 'Opened 2016'
+		dataType: boolean
+		lineageTag: 5967ae49-03fb-55b9-a8b3-122093e429cd
+		summarizeBy: none
+		sourceColumn: opened_2016
+
+	column 'Closed 2016'
+		dataType: boolean
+		lineageTag: e43a006c-3392-5156-99c0-978f9bacbf42
+		summarizeBy: none
+		sourceColumn: closed_2016
+
+	column 'Store Size' =
+			SWITCH (
+			    TRUE (),
+			    Store[Store No] IN { 1, 10, 15, 21, 23, 32, 33, 34, 38, 41, 44, 49, 50, 55, 59, 60, 61, 66, 67, 68, 69, 71, 73, 74, 76, 79, 81 }, "Large",
+			    Store[Store No] IN { 2, 4, 6, 7, 8, 9, 11, 14, 19, 20, 22, 25, 27, 30, 39, 42, 48, 51, 53, 54, 56, 64, 70, 72, 75, 77, 78 }, "Medium",
+			    Store[Store No] IN { 3, 5, 12, 13, 16, 17, 18, 24, 26, 28, 29, 31, 35, 36, 37, 40, 43, 45, 46, 47, 52, 57, 58, 62, 63, 65 }, "Small",
+			    "Other"
+			)
+		dataType: string
+		lineageTag: 1da5ea95-ea12-5cf4-9782-f1a4ba159898
+		summarizeBy: none
+
+		extendedProperty GroupingMetadata =
+				{
+				  "version": 0,
+				  "groupedColumns": [
+				    {
+				      "Column": {
+				        "Expression": {
+				          "SourceRef": {
+				            "Entity": "Store"
+				          }
+				        },
+				        "Property": "Store No"
+				      }
+				    }
+				  ]
+				}
+
+	partition Store = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_store.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"store", Int64.Type}, {"city", type text}, {"store_label", type text}, {"opened_2016", type logical}, {"closed_2016", type logical}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

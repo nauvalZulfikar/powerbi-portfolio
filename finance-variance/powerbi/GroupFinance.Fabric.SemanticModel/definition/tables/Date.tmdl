@@ -1,0 +1,128 @@
+table Date
+	lineageTag: 6b6df529-fad6-5f60-ad48-891594398156
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: dd mmm yyyy
+		lineageTag: 98facd65-ec87-5fcf-bb26-a57c8cccc4da
+		summarizeBy: none
+		sourceColumn: date
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: fd6890a2-659b-521d-bf66-ce05bfe5f89e
+		summarizeBy: none
+		sourceColumn: year
+
+	column Quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: fc4f7b35-83be-53c3-a2d5-5631d966fcc1
+		summarizeBy: none
+		sourceColumn: quarter
+
+	column 'Month Number'
+		dataType: int64
+		formatString: 0
+		lineageTag: d0e661ce-cae9-50ee-b177-d2d995bfb762
+		summarizeBy: none
+		sourceColumn: month_no
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: 33eebfb7-e229-5d60-bc41-0f82d761b935
+		summarizeBy: none
+		sourceColumn: month_name
+		sortByColumn: 'Month Number'
+
+	column 'Month Start'
+		dataType: dateTime
+		formatString: mmm yyyy
+		lineageTag: 00a67230-9e2b-5992-8454-4c4e06fdb255
+		summarizeBy: none
+		sourceColumn: month_start
+
+	column 'Year Quarter'
+		dataType: string
+		lineageTag: a8c8d8be-2b6a-5458-88fa-ceb81394ea2a
+		summarizeBy: none
+		sourceColumn: year_quarter
+		sortByColumn: 'Year Quarter Sort'
+
+	column 'Year Quarter Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 2791d765-94a3-5fa7-b56e-ddea980051e1
+		summarizeBy: none
+		sourceColumn: year_quarter_sort
+
+	column 'Month Year'
+		dataType: string
+		lineageTag: 0da50bf1-1b91-5cd4-8dd9-5af0ca4ecdb6
+		summarizeBy: none
+		sourceColumn: month_year
+		sortByColumn: 'Month Year Sort'
+
+	column 'Month Year Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 2b71d65b-4e89-5d6b-ab6d-2d14b1bb9f69
+		summarizeBy: none
+		sourceColumn: month_year_sort
+
+	hierarchy 'Fiscal Calendar'
+		lineageTag: fd82707b-f956-5b7b-a0f7-4cfade00b55f
+
+		level Year
+			lineageTag: 4156ec0f-27ca-55b0-8226-704cb4e1010a
+			column: Year
+
+		level 'Year Quarter'
+			lineageTag: 75bfa382-40fb-5a51-8fe6-ca490d6a7655
+			column: 'Year Quarter'
+
+		level 'Month Year'
+			lineageTag: ccc8da0f-6166-5493-a76b-663f96e00aa2
+			column: 'Month Year'
+
+	calendar Gregorian
+
+		calendarColumnGroup = year
+			primaryColumn: Year
+
+		calendarColumnGroup = quarter
+			primaryColumn: 'Year Quarter Sort'
+			associatedColumn: 'Year Quarter'
+
+		calendarColumnGroup = quarterOfYear
+			primaryColumn: Quarter
+
+		calendarColumnGroup = month
+			primaryColumn: 'Month Year Sort'
+			associatedColumn: 'Month Year'
+			associatedColumn: 'Month Start'
+
+		calendarColumnGroup = monthOfYear
+			primaryColumn: 'Month Number'
+			associatedColumn: 'Month Name'
+
+		calendarColumnGroup = date
+			primaryColumn: Date
+
+	partition Date = m
+		mode: dual
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "dim_date"]}[Data],
+				    #"Choose columns" = Table.SelectColumns(Data, {"date", "year", "quarter", "month_no", "month_name", "month_start", "year_quarter", "year_quarter_sort", "month_year", "month_year_sort"}),
+				    Typed = Table.TransformColumnTypes(#"Choose columns", {{"date", type date}, {"year", Int64.Type}, {"quarter", Int64.Type}, {"month_no", Int64.Type}, {"month_name", type text}, {"month_start", type date}, {"year_quarter", type text}, {"year_quarter_sort", Int64.Type}, {"month_year", type text}, {"month_year_sort", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

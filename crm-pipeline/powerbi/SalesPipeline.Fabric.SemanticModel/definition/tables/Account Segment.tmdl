@@ -1,0 +1,42 @@
+table 'Account Segment'
+	lineageTag: a87273cc-598a-56f4-823b-6939bb74db1b
+
+	column Segment
+		dataType: string
+		lineageTag: 60872ea6-5cb6-5c11-bb0d-c27ea65c3091
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Segment]
+		isKey
+		sortByColumn: 'Segment Order'
+
+	column Low
+		dataType: double
+		lineageTag: 67ee4fab-a325-5345-a543-d77d5c60566e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Low]
+		isHidden
+		formatString: \$#,0;(\$#,0);\$0
+
+	column High
+		dataType: double
+		lineageTag: 5839ec69-9d51-5757-bdac-409c3ae25e7a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [High]
+		isHidden
+		formatString: \$#,0;(\$#,0);\$0
+
+	column 'Segment Order'
+		dataType: int64
+		lineageTag: 22f909fa-ac7d-5322-a310-751d97dbb93d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Segment Order]
+		isHidden
+		formatString: 0
+
+	partition 'Account Segment' = calculated
+		mode: import
+		source = DATATABLE ( "Segment", STRING, "Low", DOUBLE, "High", DOUBLE, "Segment Order", INTEGER, { { "Under $50k", 0, 50000, 1 }, { "$50k–100k", 50000, 100000, 2 }, { "$100k–150k", 100000, 150000, 3 }, { "$150k+", 150000, 1e12, 4 } } )

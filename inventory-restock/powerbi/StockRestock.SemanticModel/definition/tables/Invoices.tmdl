@@ -1,0 +1,97 @@
+table Invoices
+	lineageTag: 797ec4d6-40a7-5a93-9803-b5d24125f2e1
+
+	column 'PO Number'
+		dataType: int64
+		isKey
+		formatString: 0
+		lineageTag: 5c35b3dc-5b41-5644-8275-2eb25353dd14
+		summarizeBy: none
+		sourceColumn: po_number
+
+	column 'Invoice Vendor'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5e880a08-1346-5397-9c7e-29cc45a10dae
+		summarizeBy: none
+		sourceColumn: vendor_no
+
+	column 'PO Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: 0846da99-4471-5b1d-9d70-c2f9bb496435
+		summarizeBy: none
+		sourceColumn: po_date
+
+	column 'Invoice Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: 88791502-53df-509a-8506-6fb62c669ed2
+		summarizeBy: none
+		sourceColumn: invoice_date
+
+	column 'Pay Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: fa3a6fd9-4217-5163-818d-159e690f6339
+		summarizeBy: none
+		sourceColumn: pay_date
+
+	column 'Invoice Units'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 5793c2a3-a0b0-5507-bbc9-8d0e1dbcaef7
+		summarizeBy: none
+		sourceColumn: units
+
+	column 'Invoice Dollars'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: ab37515f-69b3-5f71-9be1-db87a2857dae
+		summarizeBy: none
+		sourceColumn: dollars
+
+	column 'Invoice Freight'
+		dataType: double
+		formatString: \$#,0.00
+		lineageTag: 4c0ad1aa-0233-5dad-9441-c6abf8a4424a
+		summarizeBy: none
+		sourceColumn: freight
+
+	column 'Invoice Freight Pct'
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 375977d9-d055-574c-ac4b-56addaff3f8a
+		summarizeBy: none
+		sourceColumn: freight_pct
+
+	column 'Days To Pay'
+		dataType: int64
+		formatString: 0
+		lineageTag: b72bee2d-087e-568e-9c33-f6f23b5ab9b8
+		summarizeBy: none
+		sourceColumn: days_to_pay
+
+	column Approved
+		dataType: boolean
+		lineageTag: cb6909d1-8769-5232-9c8b-204c79e939a3
+		summarizeBy: none
+		sourceColumn: approved
+
+	column 'PO Matches Receipts'
+		dataType: boolean
+		lineageTag: 00cf13d1-9900-51c5-8dc2-e73bef707f6f
+		summarizeBy: none
+		sourceColumn: po_matches_receipts
+
+	partition Invoices = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_po.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"po_number", Int64.Type}, {"vendor_no", Int64.Type}, {"po_date", type date}, {"invoice_date", type date}, {"pay_date", type date}, {"units", Int64.Type}, {"dollars", type number}, {"freight", type number}, {"freight_pct", type number}, {"days_to_pay", Int64.Type}, {"approved", type logical}, {"po_matches_receipts", type logical}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

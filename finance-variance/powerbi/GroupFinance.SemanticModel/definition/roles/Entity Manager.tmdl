@@ -1,0 +1,8 @@
+role 'Entity Manager'
+	modelPermission: read
+
+	tablePermission Entity = VAR _u = USERPRINCIPALNAME () RETURN NOT ISEMPTY ( FILTER ( 'Entity Access', 'Entity Access'[User Email] = _u && PATHCONTAINS ( Entity[Entity Path], 'Entity Access'[Entity Key] & "" ) ) )
+
+
+	tablePermission 'Entity Access' = 'Entity Access'[User Email] = USERPRINCIPALNAME ()
+

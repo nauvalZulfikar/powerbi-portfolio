@@ -1,0 +1,10 @@
+// Model documentation: every measure with its home table, folder and description.
+EVALUATE
+SELECTCOLUMNS (
+    INFO.VIEW.MEASURES (),
+    "Table", [Table],
+    "Measure", [Name],
+    "Folder", [DisplayFolder],
+    "Description", [Description]
+)
+ORDER BY [Table], [Folder], [Measure]

@@ -1,0 +1,44 @@
+table 'Reseller Size Bands'
+	lineageTag: 4d8d9c98-0387-5c10-800b-1034a8bf019c
+
+	column Band
+		dataType: string
+		lineageTag: ba9dc7e2-251b-547a-88b2-d267bf7ca76a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Band]
+		sortByColumn: 'Band Order'
+
+	column 'Band Order'
+		dataType: int64
+		lineageTag: 5d3f4b2b-fef3-5ced-80d8-caa2ede570ad
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Band Order]
+		isHidden
+		formatString: 0
+
+	column 'Band Min'
+		dataType: decimal
+		lineageTag: 06ba084d-245d-5050-884a-45b898d301bd
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Band Min]
+		isHidden
+		formatString: \$#,0;(\$#,0);\$0
+
+	column 'Band Max'
+		dataType: decimal
+		lineageTag: 2e7c4078-a1bc-5eab-ae60-1dba887cfb4f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Band Max]
+		isHidden
+		formatString: \$#,0;(\$#,0);\$0
+
+	partition 'Reseller Size Bands' = calculated
+		mode: import
+		source =
+				DATATABLE ( "Band", STRING, "Band Order", INTEGER, "Band Min", CURRENCY, "Band Max", CURRENCY,
+				    { { "Under $50K", 1, 0, 50000 }, { "$50K-250K", 2, 50000, 250000 },
+				      { "$250K-1M", 3, 250000, 1000000 }, { "Over $1M", 4, 1000000, 1000000000000 } } )

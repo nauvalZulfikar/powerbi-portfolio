@@ -1,0 +1,20 @@
+role 'Branch Europe'
+	modelPermission: read
+
+	tablePermission Reps = LOOKUPVALUE ( Territories[Branch], Territories[Territory Key], Reps[Territory Key] ) = "EU"
+
+
+	tablePermission Territories = Territories[Branch] = "EU"
+
+
+	tablePermission 'Cleaning Log'
+		metadataPermission: none
+
+	tablePermission 'Reseller Cohort'
+		metadataPermission: none
+
+	tablePermission 'RFM Transition'
+		metadataPermission: none
+
+	tablePermission 'Subcategory Pairs'
+		metadataPermission: none

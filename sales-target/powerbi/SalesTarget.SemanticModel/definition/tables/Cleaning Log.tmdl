@@ -1,0 +1,78 @@
+table 'Cleaning Log'
+	lineageTag: 05f0f80e-bd1f-5e99-8712-e40d2fc2d7a2
+
+	/// Every row read from the branch files.
+	measure 'Source Rows' = SUM ( 'Cleaning Log'[Rows] )
+		formatString: #,0
+		displayFolder: Data quality
+		lineageTag: 7a76564b-0e97-5041-a6e3-92c0bc0fc024
+
+	/// Rows that passed every rule and reached Sales.
+	measure 'Rows Loaded' = CALCULATE ( SUM ( 'Cleaning Log'[Rows] ), 'Cleaning Log'[Outcome] = "Loaded" )
+		formatString: #,0
+		displayFolder: Data quality
+		lineageTag: 28e73630-8fdd-5ef2-bab9-c932caeda54c
+
+	/// Rows a cleaning rule kept out of Sales.
+	measure 'Rows Set Aside' = [Source Rows] - [Rows Loaded]
+		formatString: #,0
+		displayFolder: Data quality
+		lineageTag: 06d1d24c-9030-5549-8f7f-e88779959acd
+
+	/// Amount on the order lines set aside; subtotal rows are not sales, so they don't count.
+	measure 'Amount Set Aside' = CALCULATE ( SUM ( 'Cleaning Log'[Amount] ), NOT 'Cleaning Log'[Outcome] IN { "Loaded", "Subtotal row" } )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Data quality
+		lineageTag: 33403f84-41ab-5c63-83d0-c9836f0fc5fd
+
+	/// Rows loaded ÷ source rows.
+	measure 'Load Rate' = DIVIDE ( [Rows Loaded], [Source Rows] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Data quality
+		lineageTag: d82842b3-17bd-55a1-a33c-b636c4e648c6
+
+	column Branch
+		dataType: string
+		lineageTag: 034c2507-bce4-52db-bedf-61488a3e6a99
+		summarizeBy: none
+		sourceColumn: Branch
+
+	column File
+		dataType: string
+		lineageTag: a7d5f233-dc88-59bb-a198-b7d0f2f10a58
+		summarizeBy: none
+		sourceColumn: File
+
+	column Outcome
+		dataType: string
+		lineageTag: 27b76504-70ea-55a8-ab4e-8267d6db1c23
+		summarizeBy: none
+		sourceColumn: Outcome
+
+	column Rows
+		dataType: int64
+		formatString: #,0
+		lineageTag: 89af2d01-959c-5857-9e6a-179e061cc062
+		summarizeBy: none
+		sourceColumn: Rows
+
+	column Amount
+		dataType: decimal
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 926ce98e-5c05-50e6-8c4d-6e0d9bea54c7
+		summarizeBy: none
+		sourceColumn: Amount
+
+	partition 'Cleaning Log' = m
+		mode: import
+		source =
+				// What happened to every source row, per file: loaded, or which rule set it aside.
+				let
+				    Tagged = Table.AddColumn(#"Sales Staging", "Outcome", each if [Issue] = null then "Loaded" else [Issue], type text),
+				    Grouped = Table.Group(Tagged, {"Branch", "File", "Outcome"}, {
+				        {"Rows", each Table.RowCount(_), Int64.Type},
+				        {"Amount", each List.Sum([Amount]), Currency.Type}})
+				in
+				    Table.Sort(Grouped, {{"Branch", Order.Ascending}, {"File", Order.Ascending}, {"Outcome", Order.Ascending}})
+
+	annotation PBI_ResultType = Table

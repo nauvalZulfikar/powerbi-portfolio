@@ -1,0 +1,10 @@
+[project]
+name = "finance-variance"
+version = "0.1.0"
+description = "Group finance actual-vs-budget: DuckDB SQL consolidation + Power BI (TMDL/PBIR)"
+requires-python = ">=3.12"
+dependencies = [
+    "duckdb>=1.5.5",
+    "pillow>=12.3.0",
+    "plotly>=7.0.0",
+]

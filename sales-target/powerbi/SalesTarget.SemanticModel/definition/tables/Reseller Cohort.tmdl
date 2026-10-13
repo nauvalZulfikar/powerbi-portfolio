@@ -1,0 +1,59 @@
+table 'Reseller Cohort'
+	lineageTag: 2b1556fc-8eda-5cba-957a-416384369799
+
+	column Cohort
+		dataType: string
+		lineageTag: 21fcb7a5-fe80-53c6-a11b-62d2cf1c3477
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Cohort]
+		sortByColumn: 'Cohort Order'
+
+	column 'Cohort Order'
+		dataType: int64
+		lineageTag: 70849345-8c0c-531d-aef1-95570a2471b6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Cohort Order]
+		isHidden
+		formatString: 0
+
+	column 'Quarter N'
+		dataType: int64
+		lineageTag: a97efd05-d30a-5321-9f9a-a1625c48a806
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Quarter N]
+		formatString: 0
+
+	column 'Cohort Active'
+		dataType: int64
+		lineageTag: 05fe6669-4d47-5e01-b0b6-a875cb319a20
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Cohort Active]
+		isHidden
+		formatString: 0
+
+	column 'Cohort Size'
+		dataType: int64
+		lineageTag: 92245f24-c145-5148-a2c0-679d94d9aa9f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Cohort Size]
+		isHidden
+		formatString: 0
+
+	partition 'Reseller Cohort' = calculated
+		mode: import
+		source =
+				VAR _act = SELECTCOLUMNS ( SUMMARIZE ( Sales, Sales[Reseller Code], 'Date'[Fiscal Quarter Number] ),
+				    "Code", Sales[Reseller Code], "Idx", INT ( 'Date'[Fiscal Quarter Number] / 10 ) * 4 + MOD ( 'Date'[Fiscal Quarter Number], 10 ) )
+				VAR _first = ADDCOLUMNS ( _act, "First", VAR _c = [Code] RETURN MINX ( FILTER ( _act, [Code] = _c ), [Idx] ) )
+				VAR _cells = GROUPBY ( _first, [First], [Idx], "@n", SUMX ( CURRENTGROUP (), 1 ) )
+				RETURN SELECTCOLUMNS ( _cells,
+				    "Cohort", "FY" & INT ( ( [First] - 1 ) / 4 ) & " Q" & ( MOD ( [First] - 1, 4 ) + 1 ),
+				    "Cohort Order", [First],
+				    "Quarter N", [Idx] - [First],
+				    "Cohort Active", [@n],
+				    "Cohort Size", VAR _f = [First] RETURN MAXX ( FILTER ( _cells, [First] = _f && [Idx] = _f ), [@n] ) )

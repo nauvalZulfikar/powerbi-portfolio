@@ -1,0 +1,129 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmarksMetadata/1.0.0/schema.json",
+  "items": [
+    {
+      "name": "grp_restock",
+      "displayName": "Restock list",
+      "children": [
+        "restock_order",
+        "restock_excess"
+      ]
+    },
+    {
+      "name": "grp_health",
+      "displayName": "Health view",
+      "children": [
+        "health_pack",
+        "health_abc"
+      ]
+    },
+    {
+      "name": "help_overview"
+    },
+    {
+      "name": "nohelp_overview"
+    },
+    {
+      "name": "reset_overview"
+    },
+    {
+      "name": "help_restock"
+    },
+    {
+      "name": "nohelp_restock"
+    },
+    {
+      "name": "reset_restock"
+    },
+    {
+      "name": "help_health"
+    },
+    {
+      "name": "nohelp_health"
+    },
+    {
+      "name": "reset_health"
+    },
+    {
+      "name": "help_demand"
+    },
+    {
+      "name": "nohelp_demand"
+    },
+    {
+      "name": "reset_demand"
+    },
+    {
+      "name": "help_trends"
+    },
+    {
+      "name": "nohelp_trends"
+    },
+    {
+      "name": "reset_trends"
+    },
+    {
+      "name": "help_vendors"
+    },
+    {
+      "name": "nohelp_vendors"
+    },
+    {
+      "name": "reset_vendors"
+    },
+    {
+      "name": "help_stores"
+    },
+    {
+      "name": "nohelp_stores"
+    },
+    {
+      "name": "reset_stores"
+    },
+    {
+      "name": "help_assortment"
+    },
+    {
+      "name": "nohelp_assortment"
+    },
+    {
+      "name": "reset_assortment"
+    },
+    {
+      "name": "help_movement"
+    },
+    {
+      "name": "nohelp_movement"
+    },
+    {
+      "name": "reset_movement"
+    },
+    {
+      "name": "help_diagnose"
+    },
+    {
+      "name": "nohelp_diagnose"
+    },
+    {
+      "name": "reset_diagnose"
+    },
+    {
+      "name": "help_item_detail"
+    },
+    {
+      "name": "nohelp_item_detail"
+    },
+    {
+      "name": "reset_item_detail"
+    },
+    {
+      "name": "help_vendor_detail"
+    },
+    {
+      "name": "nohelp_vendor_detail"
+    },
+    {
+      "name": "reset_vendor_detail"
+    }
+  ]
+}

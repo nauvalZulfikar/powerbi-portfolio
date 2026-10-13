@@ -1,0 +1,43 @@
+table 'ABC Class'
+	lineageTag: 7dd1e8f9-0330-5881-8d95-ad7b3f930513
+
+	column Class
+		dataType: string
+		lineageTag: eb02b490-4650-584e-ac91-1ff986074d21
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Class]
+		sortByColumn: 'Class Order'
+
+	column 'Class Order'
+		dataType: int64
+		lineageTag: df4c1e00-ba6e-5b09-84ee-4eb21f9df31f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Class Order]
+		isHidden
+		formatString: 0
+
+	column 'Share From'
+		dataType: double
+		lineageTag: 45d34bc3-b952-54e0-af39-b578d2743e23
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Share From]
+		isHidden
+		formatString: 0%
+
+	column 'Share To'
+		dataType: double
+		lineageTag: 106e4859-16fb-59f1-8edc-295b11974568
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Share To]
+		isHidden
+		formatString: 0%
+
+	partition 'ABC Class' = calculated
+		mode: import
+		source =
+				DATATABLE ( "Class", STRING, "Class Order", INTEGER, "Share From", DOUBLE, "Share To", DOUBLE,
+				    { { "A", 1, 0.0, 0.7 }, { "B", 2, 0.7, 0.9 }, { "C", 3, 0.9, 1.0 } } )

@@ -1,0 +1,31 @@
+{
+ "rows": 1,
+ "checks": [
+  {
+   "column": "[Deals]",
+   "equals": 8800
+  },
+  {
+   "column": "[Won Deals]",
+   "equals": 4238
+  },
+  {
+   "column": "[Lost Deals]",
+   "equals": 2473
+  },
+  {
+   "column": "[Open Deals]",
+   "equals": 2089
+  },
+  {
+   "column": "[Won Revenue]",
+   "equals": 10005534,
+   "tolerance": 0.5
+  },
+  {
+   "column": "[Win Rate]",
+   "equals": 0.6315,
+   "tolerance": 0.0001
+  }
+ ]
+}

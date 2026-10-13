@@ -1,0 +1,85 @@
+{
+  "rows": 5,
+  "checks": [
+    {
+      "column": "[Check]",
+      "row": 0,
+      "equals": "Net Sales"
+    },
+    {
+      "column": "[Actual]",
+      "row": 0,
+      "equals": 80450596.52,
+      "tolerance": 0.01
+    },
+    {
+      "column": "[Result]",
+      "row": 0,
+      "equals": "PASS"
+    },
+    {
+      "column": "[Check]",
+      "row": 1,
+      "equals": "Orders"
+    },
+    {
+      "column": "[Actual]",
+      "row": 1,
+      "equals": 3796,
+      "tolerance": 0
+    },
+    {
+      "column": "[Result]",
+      "row": 1,
+      "equals": "PASS"
+    },
+    {
+      "column": "[Check]",
+      "row": 2,
+      "equals": "Target"
+    },
+    {
+      "column": "[Actual]",
+      "row": 2,
+      "equals": 92110869.57,
+      "tolerance": 0.01
+    },
+    {
+      "column": "[Result]",
+      "row": 2,
+      "equals": "PASS"
+    },
+    {
+      "column": "[Check]",
+      "row": 3,
+      "equals": "Attainment"
+    },
+    {
+      "column": "[Actual]",
+      "row": 3,
+      "equals": 0.87341,
+      "tolerance": 0.0001
+    },
+    {
+      "column": "[Result]",
+      "row": 3,
+      "equals": "PASS"
+    },
+    {
+      "column": "[Check]",
+      "row": 4,
+      "equals": "Reps On Target"
+    },
+    {
+      "column": "[Actual]",
+      "row": 4,
+      "equals": 0,
+      "tolerance": 0
+    },
+    {
+      "column": "[Result]",
+      "row": 4,
+      "equals": "PASS"
+    }
+  ]
+}

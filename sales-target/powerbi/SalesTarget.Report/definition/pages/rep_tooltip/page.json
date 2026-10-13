@@ -1,0 +1,50 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "rep_tooltip",
+  "displayName": "Rep tooltip",
+  "displayOption": "ActualSize",
+  "width": 320,
+  "height": 240,
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "tooltip_rep",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Reps"
+              }
+            },
+            "Property": "Rep"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "Drillthrough"
+      }
+    ]
+  },
+  "pageBinding": {
+    "name": "tooltip_binding",
+    "type": "Tooltip",
+    "parameters": [
+      {
+        "name": "tooltip_rep_param",
+        "boundFilter": "tooltip_rep",
+        "fieldExpr": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Reps"
+              }
+            },
+            "Property": "Rep"
+          }
+        }
+      }
+    ]
+  },
+  "visibility": "HiddenInViewMode",
+  "type": "Tooltip",
+  "objects": {}
+}

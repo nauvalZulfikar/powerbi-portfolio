@@ -1,0 +1,36 @@
+/// Actual minus comparison; blank only when both sides are blank.
+function 'Fin.Variance' = ( actual : NUMERIC, comparison : NUMERIC ) => IF ( NOT ISBLANK ( actual ) || NOT ISBLANK ( comparison ), actual - comparison )
+	lineageTag: 38d44b93-5755-5bdc-a7be-5f78e277a198
+
+/// Variance as a share of the absolute comparison, so a cost line reads the same way as income.
+function 'Fin.VariancePct' = ( variance : NUMERIC, comparison : NUMERIC ) => DIVIDE ( variance, ABS ( comparison ) )
+	lineageTag: 688ed758-ebfc-5ca5-87aa-af600c5cc336
+
+/// Teal when favourable, orange when not, for conditional formatting.
+function 'Fin.VarianceColor' = ( variance : NUMERIC ) => IF ( variance >= 0, "#0F766E", "#C2410C" )
+	lineageTag: 3b61937c-3210-547d-bfe7-236867a55843
+
+/// Evaluates a measure on one P&L line, kept inside the lines already filtered (subtotals reach every account under them).
+function 'Fin.OnLine' = ( value : SCALAR NUMERIC EXPR, lineId : STRING ) => CALCULATE ( value, KEEPFILTERS ( 'P&L Line'[Line ID] = lineId ) )
+	lineageTag: 9eb64fa8-549a-5d02-ad94-6af22ff6c6d3
+
+/// A measure one year back on the calendar passed in.
+function 'Fin.PriorYear' = ( value : SCALAR NUMERIC EXPR, cal : CALENDARREF ) => CALCULATE ( value, DATEADD ( cal, -1, YEAR ) )
+	lineageTag: bedbfc9c-8f2e-5327-91cf-1d23bea8c1f0
+
+/// An amount as short text in millions, e.g. $13.8m.
+function 'Fin.Millions' = ( amount : NUMERIC ) => FORMAT ( amount / 1e6, "$#,0.0" ) & "m"
+	lineageTag: bb751040-30f2-57c4-b519-d791df9e94d4
+
+/// An inline SVG bar centred on zero: right and teal when favourable, left and orange when not.
+function 'Svg.VarianceBar' =
+		( variance : NUMERIC, maxAbs : NUMERIC ) =>
+			VAR _w = ROUND ( DIVIDE ( ABS ( variance ), maxAbs ) * 58, 1 )
+			VAR _x = IF ( variance >= 0, 60, 60 - _w )
+			VAR _c = IF ( variance >= 0, "%230F766E", "%23C2410C" )
+			RETURN
+				IF ( NOT ISBLANK ( variance ),
+					"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='16'>"
+						& "<rect x='" & _x & "' y='3' width='" & _w & "' height='10' rx='2' fill='" & _c & "'/>"
+						& "<line x1='60' y1='0' x2='60' y2='16' stroke='%238C959F'/></svg>" )
+	lineageTag: 263ab949-ea72-59ed-8d51-80cabfe10387

@@ -1,0 +1,10 @@
+// Report query: what the overview's region bars show, as a table.
+// Target uses the rep's home region (the Quota measure's TREATAS branch).
+EVALUATE
+SUMMARIZECOLUMNS (
+    Territories[Region],
+    "Net Sales", [Net Sales],
+    "Target", [Target],
+    "Attainment", [Attainment]
+)
+ORDER BY [Net Sales] DESC

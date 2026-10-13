@@ -1,0 +1,83 @@
+table Item
+	lineageTag: 46a29635-b304-5b47-bba1-9aef04a4a499
+
+	column 'Brand No'
+		dataType: int64
+		isKey
+		formatString: 0
+		lineageTag: 36201c78-9848-5096-8dc8-26d7950fa553
+		summarizeBy: none
+		sourceColumn: brand
+
+	column Item
+		dataType: string
+		lineageTag: 9900ce9f-e489-5b13-ab6f-60a2df251d8a
+		summarizeBy: none
+		sourceColumn: description
+
+	column Size
+		dataType: string
+		lineageTag: 0fdc3a21-415c-57ac-9dda-20121c3e68d5
+		summarizeBy: none
+		sourceColumn: size
+
+	column 'Volume ml'
+		dataType: string
+		lineageTag: fd6c8d51-96fa-5915-85cc-60efbb34fb74
+		summarizeBy: none
+		sourceColumn: volume_ml
+
+	column Category
+		dataType: string
+		lineageTag: ae428921-93c2-54e5-98bf-245336e0a747
+		summarizeBy: none
+		sourceColumn: category
+
+	column 'Vendor No'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d8bbf1a7-4898-5b80-befa-0bdba92674f5
+		summarizeBy: none
+		sourceColumn: vendor_no
+
+	column 'Retail Price'
+		dataType: double
+		formatString: \$#,0.00
+		lineageTag: 7843b0f9-3235-5771-abe5-1a4d692a3b0e
+		summarizeBy: none
+		sourceColumn: retail_price
+
+	column 'Item Unit Cost'
+		dataType: double
+		formatString: \$#,0.00
+		lineageTag: a61dc039-61f2-5fe0-8239-ba9b067234f8
+		summarizeBy: none
+		sourceColumn: unit_cost
+
+	column 'Item Sales 2016'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 94850701-9e5b-5767-98cc-482f82cb2db2
+		summarizeBy: none
+		sourceColumn: sales_value_2016
+
+	column 'Item ABC'
+		dataType: string
+		isHidden
+		lineageTag: 608bc353-b8e9-5865-aa9c-85d4f0cf171e
+		summarizeBy: none
+		sourceColumn: abc
+
+	partition Item = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database(PgServer, PgDatabase),
+				    Data = Source{[Schema = "inventory", Item = "dim_item"]}[Data],
+				    Selected = Table.SelectColumns(Data, {"brand", "description", "size", "volume_ml", "category", "vendor_no", "retail_price", "unit_cost", "sales_value_2016", "abc"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"brand", Int64.Type}, {"description", type text}, {"size", type text}, {"volume_ml", type text}, {"category", type text}, {"vendor_no", Int64.Type}, {"retail_price", type number}, {"unit_cost", type number}, {"sales_value_2016", type number}, {"abc", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

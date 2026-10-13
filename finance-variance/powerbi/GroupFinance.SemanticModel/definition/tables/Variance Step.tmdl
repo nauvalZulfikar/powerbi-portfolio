@@ -1,0 +1,39 @@
+table 'Variance Step'
+	lineageTag: 74673a1d-0ab3-5e45-bb27-b0edc7154f3d
+
+	column 'Step ID'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: e712642f-0164-537a-8d35-50564b1fd74c
+		summarizeBy: none
+		sourceColumn: step_id
+
+	column Step
+		dataType: string
+		lineageTag: 5cbeb47d-2424-5861-a60f-3235fb1689b6
+		summarizeBy: none
+		sourceColumn: step
+		sortByColumn: 'Step Sort'
+
+	column 'Step Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 25cef009-4b36-55e0-9132-34f059ef3449
+		summarizeBy: none
+		sourceColumn: step_sort
+
+	partition 'Variance Step' = m
+		mode: import
+		source =
+				let
+				    Data = if SourceMode = "Lakehouse"
+				        then Sql.Database(SqlEndpoint, LakehouseDb){[Schema = "dbo", Item = "dim_variance_step"]}[Data]
+				        else Parquet.Document(File.Contents(DataFolder & "dim_variance_step.parquet")),
+				    #"Choose columns" = Table.SelectColumns(Data, {"step_id", "step", "step_sort"}),
+				    Typed = Table.TransformColumnTypes(#"Choose columns", {{"step_id", type text}, {"step", type text}, {"step_sort", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

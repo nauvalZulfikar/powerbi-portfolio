@@ -1,0 +1,233 @@
+expression InboxFolder = "C:\SalesInbox" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: 8cf10dae-a96c-5571-82a5-c5cadc8ef04d
+
+	annotation PBI_ResultType = Text
+
+expression FiscalYearStart =
+		// First month of the fiscal year (7 = July, as in AdventureWorks). Date reads it for every fiscal column,
+		// so a client on an April year changes one parameter instead of editing the Date query.
+		7 meta [IsParameterQuery = true, Type = "Number", IsParameterQueryRequired = true]
+	lineageTag: 020012d2-ebf3-5ddc-990b-583fb5b1f39d
+
+	annotation PBI_ResultType = Number
+
+expression fnKey =
+		// Normalises free text before a lookup: trim, collapse repeated spaces, upper-case.
+		// "  Linda  Mitchell " and "LINDA MITCHELL" both become "LINDA MITCHELL".
+		(value as nullable text) as nullable text =>
+		    if value = null then null
+		    else Text.Upper(Text.Combine(List.Select(Text.Split(Text.Trim(value), " "), each _ <> ""), " "))
+	lineageTag: 18159900-ec3d-5d71-8520-d982b388341d
+
+	annotation PBI_ResultType = Function
+
+expression fnReference =
+		// One sheet of Reference.xlsx, headers promoted.
+		(sheet as text) as table =>
+		    let
+		        Book = Excel.Workbook(File.Contents(InboxFolder & "\reference\Reference.xlsx"), true, true)
+		    in
+		        Book{[Item = sheet, Kind = "Sheet"]}[Data]
+	lineageTag: 1d9199d7-634a-542d-80aa-579fda65c6d6
+
+	annotation PBI_ResultType = Function
+
+expression fnReadNorthAmerica =
+		// North America: one workbook per year, one sheet per month.
+		// Title block on rows 1-3, header on row 4, a "Month total" row at the bottom, a Notes sheet,
+		// and sometimes a pasted copy of a month ("Mar 2012 (2)"). The order date is typed only on the
+		// first line of each order, so it is filled down within the sheet before anything else.
+		(content as binary) as table =>
+		    let
+		        Book = Excel.Workbook(content, null, true),
+		        Months = Table.SelectRows(Book, each [Kind] = "Sheet" and [Name] <> "Notes"),
+		        Read = Table.AddColumn(Months, "Rows", each
+		            let
+		                Body = Table.PromoteHeaders(Table.Skip([Data], 3), [PromoteAllScalars = true]),
+		                Filled = Table.FillDown(Body, {"Order Date"}),
+		                Numbered = Table.AddIndexColumn(Filled, "Row", 5, 1, Int64.Type)
+		            in
+		                Numbered),
+		        Expanded = Table.ExpandTableColumn(Table.SelectColumns(Read, {"Name", "Rows"}), "Rows",
+		            {"Order #", "Line", "Order Date", "Ship Date", "Customer No", "Sales Rep", "Territory", "Product Code", "Qty", "Unit Price", "Discount", "Line Total", "Row"},
+		            {"Order Number", "Order Line", "Order Date", "Ship Date", "Reseller Code", "Rep Name", "Territory", "Product Code", "Quantity", "Unit Price", "Discount", "Amount", "Row"}),
+		        Dated = Table.TransformColumns(Expanded, {{"Order Date", each try Date.From(_) otherwise null},
+		            {"Ship Date", each try Date.From(_) otherwise null}}),
+		        Tagged = Table.AddColumn(Dated, "Sheet Issue", each
+		            if Text.EndsWith([Name], ")") then "Duplicate sheet"
+		            else if [Order Number] = "Month total" then "Subtotal row"
+		            else null, type nullable text)
+		    in
+		        Table.RenameColumns(Tagged, {{"Name", "Sheet"}})
+	lineageTag: 1aa7719d-950d-52bc-8550-cbf1a4be589d
+
+	annotation PBI_ResultType = Function
+
+expression fnReadEurope =
+		// Europe: one workbook per quarter, German number and date formats kept as text,
+		// rep as "LASTNAME, First", item as "code name", blank spacer rows and a Total row.
+		// The ship date sits in the last column ("Shipped"). The header "Net " carries a trailing space; one quarter has an extra Comment column (ignored).
+		(content as binary) as table =>
+		    let
+		        Sheet = Excel.Workbook(content, true, true){[Item = "Sales", Kind = "Sheet"]}[Data],
+		        Numbered = Table.AddIndexColumn(Sheet, "Row", 2, 1, Int64.Type),
+		        Picked = Table.SelectColumns(Numbered,
+		            {"Order", "Pos", "Date", "Customer", "Sales rep", "Country", "Item", "Qty", "Price", "Disc", "Net ", "Shipped", "Row"}),
+		        Renamed = Table.RenameColumns(Picked, {
+		            {"Order", "Order Number"}, {"Pos", "Order Line"}, {"Date", "Order Date"}, {"Customer", "Reseller Code"},
+		            {"Sales rep", "Rep Name"}, {"Country", "Territory"}, {"Item", "Product Code"}, {"Qty", "Quantity"},
+		            {"Price", "Unit Price"}, {"Disc", "Discount"}, {"Net ", "Amount"}, {"Shipped", "Ship Date"}}),
+		        Converted = Table.TransformColumns(Renamed, {
+		            {"Order Date", each try Date.FromText(_, [Format = "dd.MM.yyyy"]) otherwise null},
+		            {"Ship Date", each try Date.FromText(_, [Format = "dd.MM.yyyy"]) otherwise null},
+		            {"Unit Price", each try Number.FromText(_, "de-DE") otherwise null},
+		            {"Amount", each try Number.FromText(_, "de-DE") otherwise null},
+		            {"Product Code", each if _ = null then null else Text.BeforeDelimiter(_, " ")}}),
+		        Tagged = Table.AddColumn(Converted, "Sheet Issue", each
+		            if [Order Number] = "Total" then "Subtotal row" else null, type nullable text)
+		    in
+		        Table.AddColumn(Tagged, "Sheet", each "Sales", type text)
+	lineageTag: e2af5bb6-9797-5dd7-837b-b0accfedf995
+
+	annotation PBI_ResultType = Function
+
+expression fnReadPacific =
+		// Pacific: a system export. Order and line share one cell ("SO51721/3"), dates are Excel
+		// serial numbers, reps are Windows logins, and the last row is a TOTAL.
+		(content as binary) as table =>
+		    let
+		        Sheet = Excel.Workbook(content, true, true){[Item = "Export", Kind = "Sheet"]}[Data],
+		        Numbered = Table.AddIndexColumn(Sheet, "Row", 2, 1, Int64.Type),
+		        Split = Table.SplitColumn(Numbered, "Order/Line",
+		            Splitter.SplitTextByDelimiter("/", QuoteStyle.None), {"Order Number", "Order Line"}),
+		        Picked = Table.SelectColumns(Split,
+		            {"Order Number", "Order Line", "Date", "Ship Date", "Customer", "Territory", "Rep", "SKU", "Qty", "Unit Price", "Discount", "Amount", "Row"}),
+		        Renamed = Table.RenameColumns(Picked, {
+		            {"Date", "Order Date"}, {"Customer", "Reseller Code"}, {"Rep", "Rep Name"}, {"SKU", "Product Code"}, {"Qty", "Quantity"}}),
+		        Dated = Table.TransformColumns(Renamed, {{"Order Date", each try Date.From(_) otherwise null},
+		            {"Ship Date", each try Date.From(_) otherwise null}}),
+		        Tagged = Table.AddColumn(Dated, "Sheet Issue", each
+		            if [Order Number] = "TOTAL" then "Subtotal row" else null, type nullable text)
+		    in
+		        Table.AddColumn(Tagged, "Sheet", each "Export", type text)
+	lineageTag: 97afeedc-0501-5ddb-b980-02d4c3d60865
+
+	annotation PBI_ResultType = Function
+
+expression 'NA Rows' =
+		// North America branch: every workbook in sales\North America\ read with fnReadNorthAmerica, tagged with branch and file name.
+		// Folding: none. Folder.Files and Excel.Workbook are not foldable sources, so every step here runs in the
+		// mashup engine; filtering the folder listing first keeps the engine from opening files it will throw away.
+		let
+		    Files = Folder.Files(InboxFolder & "\sales\North America"),
+		    Workbooks = Table.SelectRows(Files, each [Extension] = ".xlsx" and not Text.StartsWith([Name], "~$")),
+		    Read = Table.AddColumn(Workbooks, "Rows", each fnReadNorthAmerica([Content])),
+		    Expanded = Table.ExpandTableColumn(Table.SelectColumns(Read, {"Name", "Rows"}), "Rows",
+		        {"Sheet", "Row", "Order Number", "Order Line", "Order Date", "Ship Date", "Reseller Code", "Rep Name", "Territory",
+		         "Product Code", "Quantity", "Unit Price", "Discount", "Amount", "Sheet Issue"}),
+		    Tagged = Table.AddColumn(Expanded, "Branch", each "North America", type text)
+		in
+		    Table.RenameColumns(Tagged, {{"Name", "File"}})
+	lineageTag: db19eaa2-5c81-520f-a766-d0088f404741
+
+	annotation PBI_ResultType = Table
+
+expression 'EU Rows' =
+		// Europe branch: every workbook in sales\Europe\ read with fnReadEurope, tagged with branch and file name.
+		// Folding: none. Folder.Files and Excel.Workbook are not foldable sources, so every step here runs in the
+		// mashup engine; filtering the folder listing first keeps the engine from opening files it will throw away.
+		let
+		    Files = Folder.Files(InboxFolder & "\sales\Europe"),
+		    Workbooks = Table.SelectRows(Files, each [Extension] = ".xlsx" and not Text.StartsWith([Name], "~$")),
+		    Read = Table.AddColumn(Workbooks, "Rows", each fnReadEurope([Content])),
+		    Expanded = Table.ExpandTableColumn(Table.SelectColumns(Read, {"Name", "Rows"}), "Rows",
+		        {"Sheet", "Row", "Order Number", "Order Line", "Order Date", "Ship Date", "Reseller Code", "Rep Name", "Territory",
+		         "Product Code", "Quantity", "Unit Price", "Discount", "Amount", "Sheet Issue"}),
+		    Tagged = Table.AddColumn(Expanded, "Branch", each "Europe", type text)
+		in
+		    Table.RenameColumns(Tagged, {{"Name", "File"}})
+	lineageTag: be1a9240-4256-5bb7-8fbb-13806c9bc42c
+
+	annotation PBI_ResultType = Table
+
+expression 'Pacific Rows' =
+		// Pacific branch: every workbook in sales\Pacific\ read with fnReadPacific, tagged with branch and file name.
+		// Folding: none. Folder.Files and Excel.Workbook are not foldable sources, so every step here runs in the
+		// mashup engine; filtering the folder listing first keeps the engine from opening files it will throw away.
+		let
+		    Files = Folder.Files(InboxFolder & "\sales\Pacific"),
+		    Workbooks = Table.SelectRows(Files, each [Extension] = ".xlsx" and not Text.StartsWith([Name], "~$")),
+		    Read = Table.AddColumn(Workbooks, "Rows", each fnReadPacific([Content])),
+		    Expanded = Table.ExpandTableColumn(Table.SelectColumns(Read, {"Name", "Rows"}), "Rows",
+		        {"Sheet", "Row", "Order Number", "Order Line", "Order Date", "Ship Date", "Reseller Code", "Rep Name", "Territory",
+		         "Product Code", "Quantity", "Unit Price", "Discount", "Amount", "Sheet Issue"}),
+		    Tagged = Table.AddColumn(Expanded, "Branch", each "Pacific", type text)
+		in
+		    Table.RenameColumns(Tagged, {{"Name", "File"}})
+	lineageTag: 360f0f0e-828e-534b-9597-3875150f1b7e
+
+	annotation PBI_ResultType = Table
+
+expression 'Sales Staging' =
+		// Every row of every branch file in one schema, with the reason it can't be loaded (Issue).
+		// Not loaded to the model: "Sales" keeps the clean rows, "Cleaning Log" counts the rest.
+		// Folding: no step folds. Every source is an Excel file (Folder.Files + Excel.Workbook), which has no query
+		// engine to push work to, so the order of steps is chosen for the mashup engine instead: cheap per-row
+		// conversions first, Table.Buffer on the small lookups (Aliases, Products) so each is read once, and one
+		// buffered, sorted copy for the duplicate check. Were the branches a SQL source, the type conversions and
+		// the joins would fold and the Table.Buffer calls would have to go, since a buffer stops folding.
+		let
+		    // One query per branch (NA Rows / EU Rows / Pacific Rows), appended with an explicit Table.Combine:
+		    // a branch that changes its layout breaks only its own query and the rest still refresh.
+		    Combined = Table.Combine({#"NA Rows", #"EU Rows", #"Pacific Rows"}),
+		    // Values typed by hand in Excel arrive as text ("3", " 12"); anything that won't convert becomes null.
+		    Typed = Table.TransformColumns(Combined, {
+		        {"Order Line", each try Int64.From(_) otherwise null, Int64.Type},
+		        {"Quantity", each try Number.From(_) otherwise null, type nullable number},
+		        {"Unit Price", each try Number.From(_) otherwise null, type nullable number},
+		        {"Discount", each try Number.From(_) otherwise null, type nullable number},
+		        {"Amount", each try Number.From(_) otherwise null, type nullable number}}),
+		    Blank = Table.AddColumn(Typed, "Is Blank", each [Order Number] = null or Text.Trim(Text.From([Order Number])) = "", type logical),
+		    // Reps are matched through the alias list, so nicknames, "LAST, First" and logins all resolve.
+		    Aliases = Table.Buffer(Table.TransformColumns(fnReference("Aliases"), {{"Alias", fnKey}})),
+		    RepJoined = Table.NestedJoin(Table.AddColumn(Blank, "Rep Lookup", each fnKey([Rep Name])), "Rep Lookup",
+		        Aliases, "Alias", "Alias Match", JoinKind.LeftOuter),
+		    WithRep = Table.ExpandTableColumn(RepJoined, "Alias Match", {"Rep Key"}),
+		    Products = Table.Buffer(Table.SelectColumns(fnReference("Products"), {"Product Code"})),
+		    ProductJoined = Table.NestedJoin(WithRep, "Product Code", Table.RenameColumns(Products, {{"Product Code", "Known Product"}}),
+		        "Known Product", "Product Match", JoinKind.LeftOuter),
+		    WithProduct = Table.AddColumn(ProductJoined, "Product Known", each not Table.IsEmpty([Product Match]), type logical),
+		    FirstIssue = Table.AddColumn(WithProduct, "Row Issue", each
+		        if [Sheet Issue] <> null then [Sheet Issue]
+		        else if [Is Blank] then "Blank row"
+		        else if [Order Date] = null or [Amount] = null or [Quantity] = null or [Order Line] = null then "Bad value"
+		        else if [Rep Key] = null then "Unknown rep"
+		        else if not [Product Known] then "Unknown product"
+		        else null, type nullable text),
+		    // A line sent twice (the Pacific resend overlaps July-August 2013): the first file by name wins.
+		    Ordered = Table.Buffer(Table.AddIndexColumn(
+		        Table.Sort(FirstIssue, {{"Branch", Order.Ascending}, {"File", Order.Ascending}, {"Sheet", Order.Ascending}, {"Row", Order.Ascending}}),
+		        "Seq", 1, 1, Int64.Type)),
+		    Firsts = Table.Group(Table.SelectRows(Ordered, each [Row Issue] = null), {"Order Number", "Order Line"},
+		        {{"First Seq", each List.Min([Seq]), Int64.Type}}),
+		    Marked = Table.ExpandTableColumn(
+		        Table.NestedJoin(Ordered, {"Order Number", "Order Line"}, Firsts, {"Order Number", "Order Line"}, "First", JoinKind.LeftOuter),
+		        "First", {"First Seq"}),
+		    WithIssue = Table.AddColumn(Marked, "Issue", each
+		        if [Row Issue] <> null then [Row Issue]
+		        else if [Seq] <> [First Seq] then "Duplicate line"
+		        else null, type nullable text),
+		    Result = Table.SelectColumns(WithIssue,
+		        {"Branch", "File", "Sheet", "Row", "Order Number", "Order Line", "Order Date", "Ship Date", "Reseller Code", "Rep Name", "Rep Key",
+		         "Territory", "Product Code", "Quantity", "Unit Price", "Discount", "Amount", "Issue"}),
+		    Final = Table.TransformColumnTypes(Result, {
+		        {"Branch", type text}, {"File", type text}, {"Sheet", type text}, {"Order Number", type text},
+		        {"Order Date", type date}, {"Ship Date", type nullable date}, {"Reseller Code", type text}, {"Rep Name", type text}, {"Rep Key", Int64.Type},
+		        {"Territory", type text}, {"Product Code", type text}, {"Issue", type nullable text}})
+		in
+		    Final
+	lineageTag: e95537cb-aad1-55a8-a79b-2d23b2d8c76f
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation

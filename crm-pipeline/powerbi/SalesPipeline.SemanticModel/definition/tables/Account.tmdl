@@ -1,0 +1,112 @@
+table Account
+	lineageTag: 27a5c1b7-6f39-5796-8b94-3d8895cf08ea
+
+	column 'Account ID'
+		dataType: string
+		isKey
+		isHidden
+		lineageTag: f7693a61-9526-5e27-a54a-64eb294730cc
+		summarizeBy: none
+		sourceColumn: account_id
+
+	column Account
+		dataType: string
+		lineageTag: 4fc13c49-d78f-5a25-9f73-c812c5417a0d
+		summarizeBy: none
+		sourceColumn: account
+
+	column Sector
+		dataType: string
+		lineageTag: 3e5cf83d-4572-519f-99ad-0e544f91edf5
+		summarizeBy: none
+		sourceColumn: sector
+
+	column Country
+		dataType: string
+		dataCategory: Country
+		lineageTag: 5eb48d80-e0be-5768-afe0-545367eb3602
+		summarizeBy: none
+		sourceColumn: country
+
+	column 'Parent Company'
+		dataType: string
+		lineageTag: 0fb115e1-93f7-54e3-baac-10a8c30945b2
+		summarizeBy: none
+		sourceColumn: parent_company
+
+	column 'Is Subsidiary'
+		dataType: boolean
+		lineageTag: 4b3bfb2b-b969-594d-bc3c-7ff87b2654af
+		summarizeBy: none
+		sourceColumn: is_subsidiary
+
+	column Employees
+		dataType: int64
+		formatString: #,0
+		lineageTag: 656ddb5f-42fe-57c5-8aca-c20c62d68067
+		summarizeBy: none
+		sourceColumn: employees
+
+	column 'Annual Revenue'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 3e5a79ab-af22-548d-aa19-9f220adf6a10
+		summarizeBy: none
+		sourceColumn: annual_revenue
+
+	column 'Founded Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: af1a4a70-3ec4-5300-ab4f-08f9859a389f
+		summarizeBy: none
+		sourceColumn: founded_year
+
+	column 'Size Band'
+		dataType: string
+		lineageTag: 759e62c7-22fd-516a-9e43-ecbe2475ad92
+		summarizeBy: none
+		sourceColumn: size_band
+		sortByColumn: 'Size Sort'
+
+	column 'Size Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8117eb73-20c7-5c29-8b18-6f5ff705330d
+		summarizeBy: none
+		sourceColumn: size_sort
+
+	column 'Lifetime Won Revenue' = CALCULATE ( [Won Revenue] )
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 75572499-e9e2-53a9-b227-fdd78c527b71
+		summarizeBy: none
+
+	column 'Deal Count' = COUNTROWS ( RELATEDTABLE ( Opportunities ) )
+		dataType: int64
+		formatString: #,0
+		lineageTag: beffd655-19a2-5295-bc7d-0b4c49b324ff
+		summarizeBy: none
+
+	column 'Static ABC' =
+			VAR _rev = Account[Lifetime Won Revenue]
+			VAR _total = SUMX ( FILTER ( Account, Account[Account ID] <> "0" ), Account[Lifetime Won Revenue] )
+			VAR _cum = SUMX ( FILTER ( Account, Account[Account ID] <> "0" && Account[Lifetime Won Revenue] >= _rev ), Account[Lifetime Won Revenue] )
+			VAR _share = DIVIDE ( _cum, _total )
+			RETURN
+			    SWITCH ( TRUE (), Account[Account ID] = "0", "n/a", _rev = 0, "C", _share <= 0.8, "A", _share <= 0.95, "B", "C" )
+		dataType: string
+		lineageTag: 324f4dde-5bd4-5cef-8291-d2c97bd8a1e2
+		summarizeBy: none
+
+	partition Account = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_account.parquet")),
+				    Data = Source,
+				    Typed = Table.TransformColumnTypes(Data, {{"account_id", type text}, {"account", type text}, {"sector", type text}, {"country", type text}, {"parent_company", type text}, {"is_subsidiary", type logical}, {"employees", Int64.Type}, {"annual_revenue", type number}, {"founded_year", Int64.Type}, {"size_band", type text}, {"size_sort", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

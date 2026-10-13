@@ -1,0 +1,102 @@
+table Vendor
+	lineageTag: 5b10ccaf-9438-5b39-a1fc-501ca005fbb7
+
+	column 'Vendor No'
+		dataType: int64
+		isKey
+		formatString: 0
+		lineageTag: 4662e929-461b-50b0-bec1-9421c9d3a27f
+		summarizeBy: none
+		sourceColumn: vendor_no
+
+	column Vendor
+		dataType: string
+		lineageTag: 592d0a35-1f09-57fc-beeb-c6c03cd19793
+		summarizeBy: none
+		sourceColumn: vendor
+
+	column Shipments
+		dataType: int64
+		formatString: #,0
+		lineageTag: 030564ed-7c4b-5472-b74c-207ccdb33c46
+		summarizeBy: none
+		sourceColumn: shipments
+
+	column 'Avg Lead Days'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: f91e6e69-8af4-5a71-afe0-2edbc557158d
+		summarizeBy: none
+		sourceColumn: lead_days
+
+	column 'Lead Days SD'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 52b1f598-d0e8-533e-ae5f-fb146dc838c8
+		summarizeBy: none
+		sourceColumn: lead_sd
+
+	column 'Lead Days P90'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 64f2b9af-8e3f-5e61-a541-527f033247c7
+		summarizeBy: none
+		sourceColumn: lead_p90
+
+	column 'Lead Time Estimated'
+		dataType: boolean
+		lineageTag: 8a789b4b-7e9d-5197-8fe5-0ef15fb4112c
+		summarizeBy: none
+		sourceColumn: lead_estimated
+
+	column 'Invoiced POs'
+		dataType: int64
+		formatString: #,0
+		lineageTag: a1cdc74f-74ca-53a9-9612-a4cb31578eb6
+		summarizeBy: none
+		sourceColumn: purchase_orders
+
+	column 'Invoiced Spend'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: e4955d63-29f2-5da8-a36a-6dba3b80e5e5
+		summarizeBy: none
+		sourceColumn: spend
+
+	column 'Invoiced Freight'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 8605cd00-0cbb-556a-ab1c-64a9e5fa7e43
+		summarizeBy: none
+		sourceColumn: freight
+
+	column 'Freight Pct'
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 8def6f76-3c8b-5f42-87c1-99eef36388f3
+		summarizeBy: none
+		sourceColumn: freight_pct
+
+	column 'Avg Days To Pay'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 30f13501-b2d0-5452-9f8b-25e53912bcb0
+		summarizeBy: none
+		sourceColumn: days_to_pay
+
+	column 'Lines Stocked' = COUNTROWS ( RELATEDTABLE ( Stock ) )
+		dataType: int64
+		formatString: #,0
+		lineageTag: 7f8d8582-a311-5928-99bd-999a5b311c04
+		summarizeBy: none
+
+	partition Vendor = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_vendor.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"vendor_no", Int64.Type}, {"vendor", type text}, {"shipments", Int64.Type}, {"lead_days", type number}, {"lead_sd", type number}, {"lead_p90", type number}, {"lead_estimated", type logical}, {"purchase_orders", Int64.Type}, {"spend", type number}, {"freight", type number}, {"freight_pct", type number}, {"days_to_pay", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

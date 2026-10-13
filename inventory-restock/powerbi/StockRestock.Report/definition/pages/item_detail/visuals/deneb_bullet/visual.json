@@ -1,0 +1,164 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "deneb_bullet",
+  "position": {
+    "x": 256,
+    "y": 216,
+    "z": 2500,
+    "width": 880,
+    "height": 332,
+    "tabOrder": 1900
+  },
+  "visual": {
+    "visualType": "deneb7E15AEF80B9E4D4F8E12924291ECE89A",
+    "objects": {
+      "vega": [
+        {
+          "properties": {
+            "jsonSpec": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\",\n  \"description\": \"Bullet per store for one item (Item Detail drillthrough): grey = order-up-to level, green = units on hand, orange tick = reorder point. Top 15 stores by order-up-to level.\",\n  \"data\": {\"name\": \"dataset\"},\n  \"transform\": [\n    {\"window\": [{\"op\": \"row_number\", \"as\": \"rank\"}], \"sort\": [{\"field\": \"Order Up To Units\", \"order\": \"descending\"}]},\n    {\"filter\": \"datum.rank <= 15\"}\n  ],\n  \"encoding\": {\n    \"y\": {\"field\": \"Store Name\", \"type\": \"nominal\", \"title\": null,\n          \"sort\": {\"field\": \"Order Up To Units\", \"order\": \"descending\"}},\n    \"tooltip\": [\n      {\"field\": \"Store Name\", \"type\": \"nominal\"},\n      {\"field\": \"Units On Hand\", \"type\": \"quantitative\", \"format\": \",.0f\"},\n      {\"field\": \"Reorder Point Units\", \"type\": \"quantitative\", \"format\": \",.0f\"},\n      {\"field\": \"Order Up To Units\", \"type\": \"quantitative\", \"format\": \",.0f\"}\n    ]\n  },\n  \"layer\": [\n    {\"mark\": {\"type\": \"bar\", \"color\": \"#E6E4DD\", \"height\": {\"band\": 0.8}},\n     \"encoding\": {\"x\": {\"field\": \"Order Up To Units\", \"type\": \"quantitative\", \"title\": \"Units\"}}},\n    {\"mark\": {\"type\": \"bar\", \"color\": \"#2f7d62\", \"height\": {\"band\": 0.4}},\n     \"encoding\": {\"x\": {\"field\": \"Units On Hand\", \"type\": \"quantitative\"}}},\n    {\"mark\": {\"type\": \"tick\", \"color\": \"#C2410C\", \"thickness\": 3, \"size\": 18},\n     \"encoding\": {\"x\": {\"field\": \"Reorder Point Units\", \"type\": \"quantitative\"}}}\n  ],\n  \"config\": {\"view\": {\"stroke\": null}, \"axis\": {\"labelColor\": \"#52514e\", \"titleColor\": \"#52514e\", \"gridColor\": \"#ECEBE6\",\n             \"domainColor\": \"#E6E4DD\", \"labelFont\": \"Segoe UI\", \"labelFontSize\": 10}}\n}\n'"
+                }
+              }
+            },
+            "provider": {
+              "expr": {
+                "Literal": {
+                  "Value": "'vegaLite'"
+                }
+              }
+            },
+            "renderMode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'svg'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'For this item, how does each store''s stock compare with its reorder point and order-up-to level?'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'On hand vs reorder point vs order-up-to, by store'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Deneb bullet (Vega-Lite): green = on hand, grey = order-up-to, orange tick = reorder point; top 15 stores'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "dataset": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Store"
+                    }
+                  },
+                  "Property": "Store Name"
+                }
+              },
+              "queryRef": "Store.Store Name",
+              "nativeQueryRef": "Store Name"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Units On Hand"
+                }
+              },
+              "queryRef": "_Measures.Units On Hand",
+              "nativeQueryRef": "Units On Hand"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Reorder Point Units"
+                }
+              },
+              "queryRef": "_Measures.Reorder Point Units",
+              "nativeQueryRef": "Reorder Point Units"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Order Up To Units"
+                }
+              },
+              "queryRef": "_Measures.Order Up To Units",
+              "nativeQueryRef": "Order Up To Units"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

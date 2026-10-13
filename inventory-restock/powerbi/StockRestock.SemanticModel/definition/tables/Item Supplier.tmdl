@@ -1,0 +1,63 @@
+table 'Item Supplier'
+	lineageTag: 1140f547-059f-585a-b80a-839c27b33f40
+
+	column 'Supplier Brand'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0a9b1e5c-66a6-5c8a-a4d4-699457aa7359
+		summarizeBy: none
+		sourceColumn: brand
+
+	column 'Supplier Vendor'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b8da0688-4c6c-5e46-b284-e18b7e3df1d5
+		summarizeBy: none
+		sourceColumn: vendor_no
+
+	column 'Supplier Lines'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 15a8947d-a305-5694-98bc-98be59460454
+		summarizeBy: none
+		sourceColumn: lines
+
+	column 'Supplier Units'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 3f415e31-7d1d-588d-9b76-1065481cb51a
+		summarizeBy: none
+		sourceColumn: units
+
+	column 'Supplier Dollars'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 411423fa-cca8-5275-8d02-61b4da9c8fb8
+		summarizeBy: none
+		sourceColumn: dollars
+
+	column 'Vendors For Item'
+		dataType: int64
+		formatString: 0
+		lineageTag: a3d685b4-a523-52db-b9e0-ce31cbe18416
+		summarizeBy: none
+		sourceColumn: vendors_for_item
+
+	column 'Multi Sourced'
+		dataType: boolean
+		lineageTag: 6984e818-be34-5731-89c7-079f05eef3d0
+		summarizeBy: none
+		sourceColumn: multi_sourced
+
+	partition 'Item Supplier' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "item_supplier.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"brand", Int64.Type}, {"vendor_no", Int64.Type}, {"lines", Int64.Type}, {"units", Int64.Type}, {"dollars", type number}, {"vendors_for_item", Int64.Type}, {"multi_sourced", type logical}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

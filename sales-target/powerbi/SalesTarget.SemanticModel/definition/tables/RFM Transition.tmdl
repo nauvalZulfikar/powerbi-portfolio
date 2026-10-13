@@ -1,0 +1,79 @@
+table 'RFM Transition'
+	lineageTag: 7a464647-ea45-535f-9fec-1efcf66bd778
+
+	column 'From Segment'
+		dataType: string
+		lineageTag: 460087b5-2a86-5c96-a2e2-313a03f33e81
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [From Segment]
+		sortByColumn: 'From Order'
+
+	column 'From Order'
+		dataType: int64
+		lineageTag: 7f38cd9a-3dee-5d33-a7cc-c63392114f89
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [From Order]
+		isHidden
+		formatString: 0
+
+	column 'To Segment'
+		dataType: string
+		lineageTag: e5b97f5d-c392-5c30-8830-d9b7ec625510
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [To Segment]
+		sortByColumn: 'To Order'
+
+	column 'To Order'
+		dataType: int64
+		lineageTag: 5750aab8-0a9f-588a-90a1-9cbbefd01dae
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [To Order]
+		isHidden
+		formatString: 0
+
+	column 'Reseller Count'
+		dataType: int64
+		lineageTag: 46de1a6c-edd8-5f85-8554-523466d1324f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Reseller Count]
+		isHidden
+		formatString: 0
+
+	partition 'RFM Transition' = calculated
+		mode: import
+		source =
+				VAR _a1 = ADDCOLUMNS ( VALUES ( Resellers[Reseller Code] ),
+				    "@last1", CALCULATE ( MAX ( Sales[Order Date] ), Sales[Order Date] <= DATE ( 2012, 6, 30 ) ),
+				    "@freq1", CALCULATE ( DISTINCTCOUNT ( Sales[Order Number] ), Sales[Order Date] <= DATE ( 2012, 6, 30 ) ) )
+				VAR _b1 = FILTER ( _a1, NOT ISBLANK ( [@last1] ) )
+				VAR _n1 = COUNTROWS ( _b1 )
+				VAR _s1 = ADDCOLUMNS ( _a1, "@seg1",
+				    VAR _l = [@last1]
+				    VAR _q = [@freq1]
+				    VAR _r = 5 - INT ( 5 * DIVIDE ( COUNTROWS ( FILTER ( _b1, [@last1] > _l ) ), _n1 ) )
+				    VAR _f = 1 + INT ( 5 * DIVIDE ( COUNTROWS ( FILTER ( _b1, [@freq1] < _q ) ), _n1 ) )
+				    RETURN IF ( ISBLANK ( _l ), "No orders", SWITCH ( TRUE (), _r >= 4 && _f >= 4, "Champions", _r >= 3 && _f >= 3, "Loyal", _r >= 4, "Promising", _f >= 3, "At risk", _r = 1, "Lost", TRUE (), "Needs attention" ) ) )
+				VAR _a2 = ADDCOLUMNS ( VALUES ( Resellers[Reseller Code] ),
+				    "@last2", CALCULATE ( MAX ( Sales[Order Date] ), Sales[Order Date] <= DATE ( 2013, 6, 30 ) ),
+				    "@freq2", CALCULATE ( DISTINCTCOUNT ( Sales[Order Number] ), Sales[Order Date] <= DATE ( 2013, 6, 30 ) ) )
+				VAR _b2 = FILTER ( _a2, NOT ISBLANK ( [@last2] ) )
+				VAR _n2 = COUNTROWS ( _b2 )
+				VAR _s2 = ADDCOLUMNS ( _a2, "@seg2",
+				    VAR _l = [@last2]
+				    VAR _q = [@freq2]
+				    VAR _r = 5 - INT ( 5 * DIVIDE ( COUNTROWS ( FILTER ( _b2, [@last2] > _l ) ), _n2 ) )
+				    VAR _f = 1 + INT ( 5 * DIVIDE ( COUNTROWS ( FILTER ( _b2, [@freq2] < _q ) ), _n2 ) )
+				    RETURN IF ( ISBLANK ( _l ), "No orders", SWITCH ( TRUE (), _r >= 4 && _f >= 4, "Champions", _r >= 3 && _f >= 3, "Loyal", _r >= 4, "Promising", _f >= 3, "At risk", _r = 1, "Lost", TRUE (), "Needs attention" ) ) )
+				VAR _j = ADDCOLUMNS ( SELECTCOLUMNS ( _s1, "Code", Resellers[Reseller Code], "From Segment", [@seg1] ),
+				    "To Segment", VAR _k = [Code] RETURN MAXX ( FILTER ( _s2, Resellers[Reseller Code] = _k ), [@seg2] ) )
+				VAR _g = GROUPBY ( FILTER ( _j, [To Segment] <> "No orders" ), [From Segment], [To Segment],
+				    "@n", SUMX ( CURRENTGROUP (), 1 ) )
+				RETURN SELECTCOLUMNS ( _g,
+				    "From Segment", [From Segment], "From Order", SWITCH ( [From Segment], "Champions", 1, "Loyal", 2, "Promising", 3, "Needs attention", 4, "At risk", 5, "Lost", 6, "No orders", 7 ),
+				    "To Segment", [To Segment], "To Order", SWITCH ( [To Segment], "Champions", 1, "Loyal", 2, "Promising", 3, "Needs attention", 4, "At risk", 5, "Lost", 6, "No orders", 7 ),
+				    "Reseller Count", [@n] )

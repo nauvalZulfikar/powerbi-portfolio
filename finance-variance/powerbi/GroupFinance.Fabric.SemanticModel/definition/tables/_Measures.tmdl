@@ -1,0 +1,755 @@
+table _Measures
+	lineageTag: 49a38c3e-3ff6-5970-a636-1f89f880a249
+
+	/// Actual P&L in USD at the monthly average rate. Signed: income +, cost −.
+	measure Actual = CALCULATE ( SUM ( GL[Amount USD] ), GL[Scenario] = "Actual" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Ledger
+		lineageTag: 2ff640f2-dc7c-53ff-878e-35c38e150985
+
+	/// Budget in USD at the budget rate (prior-December average).
+	measure Budget = CALCULATE ( SUM ( GL[Amount USD] ), GL[Scenario] = "Budget" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Ledger
+		lineageTag: 34848d9e-b8fc-5e30-999d-0934b206ce9b
+
+	/// Actuals one year back on the Gregorian calendar.
+	measure 'Prior Year' = Fin.PriorYear ( [Actual], 'Gregorian' )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Ledger
+		lineageTag: 0b53ce0c-efba-5335-8568-be2383f70f90
+
+	/// FY2013 reforecast submitted by the entities (SYNTHETIC). Forecast has no relationship to P&L Line; TREATAS maps the detail lines in context.
+	measure 'Forecast Amount' = CALCULATE ( SUM ( Forecast[Amount USD] ), TREATAS ( VALUES ( Account[Detail Line Id] ), Forecast[Line ID] ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Ledger
+		lineageTag: a7241200-c15a-5e8b-9d14-22294c601ac1
+
+	/// Actuals translated at the budget rate — strips currency movement out.
+	measure 'Actual at Budget Rate' = CALCULATE ( SUM ( GL[Amount USD at Budget Rate] ), GL[Scenario] = "Actual" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Ledger
+		lineageTag: 36b64ca8-6dd7-5ec0-99c6-5c16d470671d
+
+	/// Full-year outlook: actuals up to the As Of month, budget for the months after it.
+	measure Outlook =
+			VAR _asof = SELECTEDVALUE ( 'As Of Month'[As Of Month], MAX ( 'As Of Month'[As Of Month] ) )
+			RETURN
+			    SUMX (
+			        VALUES ( 'Date'[Month Start] ),
+			        IF ( 'Date'[Month Start] <= _asof, [Actual], [Budget] )
+			    )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Ledger
+		lineageTag: aecb25c5-c261-5e52-b176-86386531b212
+
+	/// Budget, prior year or forecast, per the Compare To slicer.
+	measure Comparison =
+			SWITCH ( SELECTEDVALUE ( 'Compare To'[Compare To], "Budget" ),
+			    "Prior year", [Prior Year],
+			    "Forecast", [Forecast Amount],
+			    [Budget]
+			)
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Variance
+		lineageTag: cd81e78b-d384-52a6-a87b-acc4c3ae847a
+
+	/// Actual − comparison. Positive is always favourable (more income or less cost).
+	measure Variance = Fin.Variance ( [Actual], [Comparison] )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Variance
+		lineageTag: 4c23733e-a5a4-520d-bd54-c6b3fe95483c
+
+	/// Variance as a share of the absolute comparison.
+	measure 'Variance %' = Fin.VariancePct ( [Variance], [Comparison] )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Variance
+		lineageTag: 5774467b-de07-510f-948b-88b5ed58195e
+
+	/// Actual − budget, whatever the Compare To slicer says.
+	measure 'Budget Variance' = Fin.Variance ( [Actual], [Budget] )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Variance
+		lineageTag: 4682837b-3ddc-52e3-a2f1-0bda14bfaa4a
+
+	/// Part of the budget variance caused by exchange rates: actual at actual rate − actual at budget rate.
+	measure 'FX Effect' = [Actual] - [Actual at Budget Rate]
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Variance
+		lineageTag: fcbf9d40-4999-56ff-ac16-aa3bb6bb2e5c
+
+	/// Budget variance at constant (budget) rates — what management controls.
+	measure 'Operational Variance' = [Actual at Budget Rate] - [Budget]
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Variance
+		lineageTag: f29c7a33-71af-5cc8-85f8-ab83f7e4ecc3
+
+	/// Full-year outlook − full-year budget.
+	measure 'Outlook vs Budget' = [Outlook] - [Budget]
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Variance
+		lineageTag: ffdc5db5-5ac9-53b3-9d68-e09d802a8c97
+
+	/// Green when favourable, orange when not.
+	measure 'Variance Color' = Fin.VarianceColor ( [Variance] )
+		displayFolder: Variance
+		lineageTag: 049d7f4a-e22d-5924-a6ef-51552159a083
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Waterfall: budget operating profit, then the FX effect, then each line's operational variance.
+	measure 'Bridge Amount' =
+			VAR _s = SELECTEDVALUE ( 'Variance Step'[Step ID] )
+			RETURN
+			    SWITCH ( _s,
+			        "BUD", Fin.OnLine ( [Budget], "S4" ),
+			        "FX", Fin.OnLine ( [FX Effect], "S4" ),
+			        CALCULATE ( [Operational Variance], 'P&L Line'[Line ID] = _s )
+			    )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Variance
+		lineageTag: ee6ff5ff-e29d-5655-a0de-1891f9ecfdc8
+
+	/// Actual net sales (P&L line S1).
+	measure 'Net Sales' = Fin.OnLine ( [Actual], "S1" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Key Lines
+		lineageTag: 66548340-7893-5035-a026-7f3883bf08fa
+
+	/// Net sales variance against the selected comparison.
+	measure 'Net Sales Variance' = Fin.OnLine ( [Variance], "S1" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Key Lines
+		lineageTag: fa78de5c-7690-51cd-8516-fecbc767da6f
+
+	/// Gross margin as a share of net sales.
+	measure 'Gross Margin %' = DIVIDE ( Fin.OnLine ( [Actual], "S2" ), [Net Sales] )
+		formatString: 0.0%
+		displayFolder: Key Lines
+		lineageTag: 1fef8d3e-1edf-5858-8e1a-ddc3c2564897
+
+	/// Actual operating expenses, signed negative (P&L line S3).
+	measure 'Operating Expenses' = Fin.OnLine ( [Actual], "S3" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Key Lines
+		lineageTag: 4b0205c5-192e-5fd8-8bf3-1d323988fa93
+
+	/// Operating expense variance; positive means under spend.
+	measure 'Operating Expenses Variance' = Fin.OnLine ( [Variance], "S3" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Key Lines
+		lineageTag: 2dc592c2-370a-56c6-a176-1df46d5d0b64
+
+	/// Actual operating profit (P&L line S4); carries a KPI against the comparison.
+	measure 'Operating Profit' = Fin.OnLine ( [Actual], "S4" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Key Lines
+		lineageTag: e11a4afe-87fe-5a8d-9256-25abc0338964
+		kpi
+			statusGraphic: Three Circles Colored
+			targetExpression = [Operating Profit Comparison]
+			statusExpression =
+					VAR _a = [Operating Profit]
+					VAR _t = [Operating Profit Comparison]
+					RETURN IF ( NOT ISBLANK ( _t ), IF ( _a >= _t, 1, IF ( _a >= _t - ABS ( _t ) * 0.05, 0, -1 ) ) )
+
+	/// Operating profit for the selected comparison.
+	measure 'Operating Profit Comparison' = Fin.OnLine ( [Comparison], "S4" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Key Lines
+		lineageTag: 1c3786f2-1fd9-530e-8eea-c529f83440f7
+
+	/// Operating profit variance; its format string switches between $M and $K with the size of the number.
+	measure 'Operating Profit Variance' = Fin.OnLine ( [Variance], "S4" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Key Lines
+		lineageTag: 39878455-996c-57ff-8653-4dd04ee38a60
+		formatStringDefinition = IF ( ABS ( SELECTEDMEASURE () ) >= 1e6, "\$#,0.0,,\M;(\$#,0.0,,\M);\$0", "\$#,0.0,\K;(\$#,0.0,\K);\$0" )
+
+	/// Operating profit variance as a share of the comparison.
+	measure 'Operating Profit Variance %' = Fin.OnLine ( [Variance %], "S4" )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Key Lines
+		lineageTag: e58197d4-66bf-59bc-8c79-5397b6e008f0
+
+	/// Budgeted operating profit.
+	measure 'Operating Profit Budget' = Fin.OnLine ( [Budget], "S4" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Key Lines
+		lineageTag: 10eb9407-baac-54b9-a2d1-721b4b398efb
+
+	/// Outlook operating profit (actuals to date, budget after).
+	measure 'Operating Profit Outlook' = Fin.OnLine ( [Outlook], "S4" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Key Lines
+		lineageTag: 9ca2ea19-4820-5fea-87ab-278d95a47305
+
+	/// Part of the operating profit variance caused by exchange rates.
+	measure 'Operating Profit FX Effect' = Fin.OnLine ( [FX Effect], "S4" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Key Lines
+		lineageTag: 03ca3899-d5f3-5df3-8b00-9b0a6818c364
+
+	/// Operating profit variance at constant budget rates.
+	measure 'Operating Profit Operational Variance' = Fin.OnLine ( [Operational Variance], "S4" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Key Lines
+		lineageTag: 0ef1ffc2-2847-5149-b9de-0c3b7fea3a12
+
+	/// Operating profit in the entities' FY2013 reforecast (SYNTHETIC).
+	measure 'Operating Profit Forecast' = Fin.OnLine ( [Forecast Amount], "S4" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Key Lines
+		lineageTag: 864bc78b-cbcd-5c36-9d58-ca6a7924e3f1
+
+	/// Actual operating profit − reforecast; positive = beat the forecast.
+	measure 'Operating Profit vs Forecast' = Fin.Variance ( [Operating Profit], [Operating Profit Forecast] )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Key Lines
+		lineageTag: 96d640dc-593e-5498-b43a-8a719cc02c8f
+
+	/// Entities with a reforecast file in the forecast folder.
+	measure 'Entities Submitted' = DISTINCTCOUNT ( Forecast[Entity Key] ) + 0
+		formatString: #,0
+		displayFolder: Key Lines
+		lineageTag: d51c01b4-4de3-5c15-acd7-6991d7335ba8
+
+	/// Entities whose reforecast arrived after the 10 January deadline.
+	measure 'Late Submissions' = CALCULATE ( DISTINCTCOUNT ( Forecast[Entity Key] ), Forecast[Is Late Submission] = TRUE () ) + 0
+		formatString: #,0
+		displayFolder: Key Lines
+		lineageTag: b2dc3f63-f857-50cd-8476-603f04002600
+
+	/// Operating expenses as a positive amount.
+	measure 'Opex Spend' = - [Operating Expenses]
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Key Lines
+		lineageTag: 2770ba26-a4fa-552c-9508-b4255007faeb
+
+	/// Operating profit as a share of net sales.
+	measure 'Operating Margin %' = DIVIDE ( [Operating Profit], [Net Sales] )
+		formatString: 0.0%
+		displayFolder: Key Lines
+		lineageTag: 3a64354c-36d5-59ba-aaed-55c5518fb6d1
+
+	/// Actual net income (P&L line S6).
+	measure 'Net Income' = Fin.OnLine ( [Actual], "S6" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Key Lines
+		lineageTag: 6b9d2fef-e6ab-5526-8f33-7ff5a16676a7
+
+	/// Rank of each entity by variance; 1 is the worst miss (RANK window function, dense).
+	measure 'Entity Variance Rank' = IF ( HASONEVALUE ( Entity[Entity] ), RANK ( DENSE, ALLSELECTED ( Entity[Entity] ), ORDERBY ( [Variance], ASC ) ) )
+		formatString: #,0
+		displayFolder: Ranking
+		lineageTag: 4eca3950-deb5-5177-a788-48a301670025
+
+	/// Rank of each account by variance; 1 is the worst miss (RANKX, dense).
+	measure 'Account Variance Rank' = IF ( HASONEVALUE ( Account[Account] ), RANKX ( ALLSELECTED ( Account[Account] ), [Variance], , ASC, DENSE ) )
+		formatString: #,0
+		displayFolder: Ranking
+		lineageTag: 6952f5ff-ea70-5cff-a5d8-44fb0195168c
+
+	/// Inline SVG variance bar per entity, scaled to the largest entity.
+	measure 'Entity Variance Bar' = Svg.VarianceBar ( [Variance], MAXX ( ALLSELECTED ( Entity[Entity] ), ABS ( [Variance] ) ) )
+		dataCategory: ImageUrl
+		displayFolder: Ranking
+		lineageTag: bd837774-a2c3-56e2-bed1-b244b911c7ac
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Inline SVG variance bar per account, scaled to the largest account.
+	measure 'Account Variance Bar' = Svg.VarianceBar ( [Variance], MAXX ( ALLSELECTED ( Account[Account] ), ABS ( [Variance] ) ) )
+		dataCategory: ImageUrl
+		displayFolder: Ranking
+		lineageTag: 20a7253c-bbd7-52ab-919c-3d2bdf08e0e0
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Actual × each entity's effective ownership (Australia = 75% × 50%).
+	measure 'Group Share' = SUMX ( FILTER ( GL, GL[Scenario] = "Actual" ), GL[Amount USD] * RELATED ( Entity[Effective Ownership] ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Consolidation
+		lineageTag: 338a38d3-38f8-5e66-991c-c5576fa7217d
+
+	/// Share of results that belongs to minority shareholders.
+	measure 'Non-Controlling Interest' = [Actual] - [Group Share]
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Consolidation
+		lineageTag: f322bb6b-637c-5062-add1-119554eb6e40
+
+	/// Intercompany sales removed on consolidation (offset in cost of sales).
+	measure 'Intercompany Eliminated' = - CALCULATE ( [Actual], GL[Is Elimination] = TRUE (), 'P&L Line'[Line ID] = "L02" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Consolidation
+		lineageTag: ea763d3a-815a-57f4-88a2-8c8c54549e8b
+
+	/// Local currency per USD, monthly average.
+	measure 'Avg FX Rate' = AVERAGE ( 'FX Rates'[Average Rate] )
+		formatString: 0.0000
+		displayFolder: FX
+		lineageTag: 6e87d2ad-27c6-5ef3-aba8-ecc92c992280
+
+	/// Local currency per USD used in the budget.
+	measure 'Budget FX Rate' = AVERAGE ( 'FX Rates'[Budget Rate] )
+		formatString: 0.0000
+		displayFolder: FX
+		lineageTag: 1a514cbb-90d6-5622-bd87-d23a41564338
+
+	/// Change of the local currency against USD vs the budget rate (+ = local currency stronger).
+	measure 'FX Move vs Budget %' = DIVIDE ( [Budget FX Rate], [Avg FX Rate] ) - 1
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: FX
+		lineageTag: 1ec3cc21-fc52-5788-acbd-b1cd2b062614
+
+	/// Average EUR per USD.
+	measure 'EUR per USD' = CALCULATE ( [Avg FX Rate], 'FX Rates'[Rate Currency] = "EUR" )
+		formatString: 0.0000
+		displayFolder: FX
+		lineageTag: 3cb083ad-35de-523e-a76d-8658ea2dd386
+
+	/// Average CAD per USD.
+	measure 'CAD per USD' = CALCULATE ( [Avg FX Rate], 'FX Rates'[Rate Currency] = "CAD" )
+		formatString: 0.0000
+		displayFolder: FX
+		lineageTag: ad08118f-54a8-5b2c-8bcf-4ef1b4f855b3
+
+	/// Average AUD per USD.
+	measure 'AUD per USD' = CALCULATE ( [Avg FX Rate], 'FX Rates'[Rate Currency] = "AUD" )
+		formatString: 0.0000
+		displayFolder: FX
+		lineageTag: 2d793080-a63b-51f3-b42f-07db2417f6ca
+
+	/// What-if: move of every non-USD currency against USD.
+	measure 'FX Shock Value' = SELECTEDVALUE ( 'FX Shock'[FX Shock], 0 )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: FX
+		lineageTag: c20e6899-98cf-50f9-a1f0-1266cff58d44
+
+	/// Actuals booked by entities whose currency is not USD.
+	measure 'Foreign Currency Actual' = CALCULATE ( [Actual], GL[Currency] <> "USD" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: FX
+		lineageTag: e682963f-1083-564c-8cf1-f2f3972e229a
+
+	/// Actuals if every foreign currency moved by the FX Shock value.
+	measure 'Actual at FX Shock' = [Actual] + [FX Shock Value] * [Foreign Currency Actual]
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: FX
+		lineageTag: 3204611d-d165-52a1-a705-5e257bbf01eb
+
+	/// Change in actuals caused by the FX Shock what-if.
+	measure 'FX Shock Impact' = [Actual at FX Shock] - [Actual]
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: FX
+		lineageTag: 64d58383-35cf-5795-a578-d21ea0f586f4
+
+	/// Operating profit under the FX Shock what-if.
+	measure 'Operating Profit at FX Shock' = Fin.OnLine ( [Actual at FX Shock], "S4" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: FX
+		lineageTag: d53d44e6-00e3-5062-843e-907240acc39c
+
+	/// Average month-end heads over the selected months.
+	measure 'Avg Headcount' = AVERAGEX ( VALUES ( 'Date'[Month Start] ), CALCULATE ( SUM ( Headcount[Heads] ) ) )
+		formatString: #,0
+		displayFolder: Headcount
+		lineageTag: 5671aa08-0ffc-55ce-8759-239188dcc008
+
+	/// Operating expenses per average head.
+	measure 'Cost per Head' = DIVIDE ( - [Operating Expenses], [Avg Headcount] )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Headcount
+		lineageTag: 56df003c-993b-5060-9334-be933cb57798
+
+	/// Salaries and benefits per average head.
+	measure 'Salary per Head' = DIVIDE ( - Fin.OnLine ( [Actual], "L05" ), [Avg Headcount] )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Headcount
+		lineageTag: 3ca46abb-28ef-5afe-b12c-96827ea04e10
+
+	/// Net sales per average head.
+	measure 'Sales per Head' = DIVIDE ( [Net Sales], [Avg Headcount] )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Headcount
+		lineageTag: fe9bf5b0-4b52-5d93-bed1-9ab3799158d4
+
+	/// Average headcount one year back on the Gregorian calendar.
+	measure 'Headcount PY' = Fin.PriorYear ( [Avg Headcount], 'Gregorian' )
+		formatString: #,0
+		displayFolder: Headcount
+		lineageTag: 47f0254e-70a6-5dec-8e67-c54d58129589
+
+	/// Month-end heads in the last month of the selection that has a count (semi-additive).
+	measure 'Heads Closing' = CALCULATE ( SUM ( Headcount[Heads] ), LASTNONBLANK ( 'Date'[Month Start], CALCULATE ( SUM ( Headcount[Heads] ) ) ) )
+		formatString: #,0
+		displayFolder: Headcount
+		lineageTag: 90031160-34c3-50d1-a36b-bf20922ca28a
+
+	/// Year-end planned heads (SYNTHETIC plan) for the latest year selected; the plan is per region, reached through a many-to-many relationship.
+	measure 'Heads Plan' =
+			VAR _y = MAX ( 'Date'[Year] )
+			RETURN CALCULATE ( SUM ( 'Headcount Plan'[Planned Heads] ), 'Headcount Plan'[Fiscal Year] = _y )
+		formatString: #,0
+		displayFolder: Headcount
+		lineageTag: ec3e6872-307b-5b43-a575-fe286da003b1
+
+	/// Closing heads − planned heads; positive = more staff than planned.
+	measure 'Heads vs Plan' = IF ( NOT ISBLANK ( [Heads Plan] ), [Heads Closing] - [Heads Plan] )
+		formatString: +#,0;-#,0;0
+		displayFolder: Headcount
+		lineageTag: aaf7eb1b-09cf-5909-a322-249566f4884e
+
+	/// Entities whose operating profit is below budget in the selection.
+	measure 'Entities Behind Budget' = COUNTROWS ( FILTER ( VALUES ( Entity[Entity] ), Fin.OnLine ( [Budget Variance], "S4" ) < 0 ) ) + 0
+		formatString: #,0
+		displayFolder: Variance
+		lineageTag: df79cdb5-58ba-5bd4-83b9-200ebd9f4e92
+
+	/// Entities with a budgeted operating profit in the selection.
+	measure 'Entities with Budget' = COUNTROWS ( FILTER ( VALUES ( Entity[Entity] ), NOT ISBLANK ( [Operating Profit Budget] ) ) ) + 0
+		formatString: #,0
+		displayFolder: Variance
+		lineageTag: 43be1878-c03a-5101-9edc-145cf7176359
+
+	/// Distinct GL accounts with an actual posting in the selection.
+	measure 'Accounts Posted' = CALCULATE ( DISTINCTCOUNT ( GL[Account Key] ), GL[Scenario] = "Actual" ) + 0
+		formatString: #,0
+		displayFolder: Ledger
+		lineageTag: de4a31a6-a7b1-5c9b-84b6-0e4de3b07b6e
+
+	/// On track / Watch (behind by under 5%) / Off track (behind by 5% or more).
+	measure 'Variance Status' =
+			VAR _p = [Operating Profit Variance %]
+			RETURN
+			    SWITCH ( TRUE (),
+			        ISBLANK ( _p ), BLANK (),
+			        _p < -0.05, "Off track",
+			        _p < 0, "Watch",
+			        "On track"
+			    )
+		displayFolder: Variance
+		lineageTag: b8fc96bd-5449-5f4c-99ab-3e98117f9f31
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// The department's share of group operating expenses (other filters kept).
+	measure 'Share of Group Opex' = DIVIDE ( [Opex Spend], CALCULATE ( [Opex Spend], REMOVEFILTERS ( Department ) ) )
+		formatString: 0.0%
+		displayFolder: Key Lines
+		lineageTag: 9c63e263-da1b-5ad5-8358-68b35f9ed96e
+
+	/// The entity's share of its region's operating profit variance (ALLEXCEPT keeps only the region filter on Entity).
+	measure 'Share of Region Variance' = DIVIDE ( [Operating Profit Variance], CALCULATE ( [Operating Profit Variance], ALLEXCEPT ( Entity, Entity[Region] ) ) )
+		formatString: 0.0%
+		displayFolder: Variance
+		lineageTag: a1506ea5-68da-5b5a-81dd-f3cae0c7d715
+
+	/// Sum of the variance of accounts that missed; accounts ahead do not offset it.
+	measure 'Overrun Only' = CALCULATE ( [Variance], FILTER ( VALUES ( Account[Account] ), [Variance] < 0 ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Variance
+		lineageTag: d30e8a74-b181-5301-9a95-e254a8443476
+
+	/// Overrun Only on the operating profit line: the operating accounts that missed, with no offset from those ahead.
+	measure 'Operating Overrun Only' = Fin.OnLine ( [Overrun Only], "S4" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Variance
+		lineageTag: dad51d69-f3ab-5aad-b48f-1c62464ebc01
+
+	/// Actuals by the date the journal was posted (inactive GL[Posting Date] relationship) instead of the period it belongs to.
+	measure 'Actual by Posting Date' = CALCULATE ( [Actual], USERELATIONSHIP ( GL[Posting Date], 'Date'[Date] ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Ledger
+		lineageTag: 16b034ca-adf3-5df7-b7b9-63c26e0ee22e
+
+	/// Actual by period − actual by posting date: amounts booked into a month but posted in the next or previous one.
+	measure 'Cut-off Drift' = [Actual] - [Actual by Posting Date]
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Ledger
+		lineageTag: f95302fb-531b-5741-b8e0-5ffcc403c853
+
+	/// Posted amount in USD from the journal lines (GL Journal).
+	measure 'Journal Amount' = SUM ( 'GL Journal'[Amount USD] )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Ledger
+		lineageTag: 85cfd9d4-80e4-53a8-8543-f06820769e17
+
+	/// Number of journal postings.
+	measure 'Journal Lines' = COUNTROWS ( 'GL Journal' )
+		formatString: #,0
+		displayFolder: Ledger
+		lineageTag: 76ce6faf-da96-5fc2-8b1e-e826de55ef60
+
+	/// Operating expenses over the 12 months ending at the last date in context.
+	measure 'Opex Rolling 12M' = CALCULATE ( [Opex Spend], DATESINPERIOD ( 'Date'[Date], MAX ( 'Date'[Date] ), -12, MONTH ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Key Lines
+		lineageTag: 55c3c42e-32ee-56a9-be56-3945d816dcab
+
+	/// Budget growth assumption for the P&L line and year in context; Budget Drivers has no relationships, TREATAS maps line and year.
+	measure 'Driver Growth' =
+			CALCULATE (
+			    AVERAGE ( 'Budget Drivers'[Growth] ),
+			    TREATAS ( VALUES ( 'P&L Line'[Line ID] ), 'Budget Drivers'[Line ID] ),
+			    TREATAS ( VALUES ( 'Date'[Year] ), 'Budget Drivers'[Fiscal Year] )
+			)
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Variance
+		lineageTag: f2801af6-28d0-52e0-a95e-13b7cacd0895
+
+	/// Operating profit of the previous month on the axis (OFFSET, no time intelligence).
+	measure 'Operating Profit PM' = IF ( ISINSCOPE ( 'Date'[Month Start] ), CALCULATE ( [Operating Profit], OFFSET ( -1, ALLSELECTED ( 'Date'[Month Start] ), ORDERBY ( 'Date'[Month Start] ) ) ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Key Lines
+		lineageTag: a6ab96a2-ecaf-5778-b8b5-d050253995a3
+
+	/// Variance accumulated from the first month on the axis (WINDOW).
+	measure 'Variance Running Total' = IF ( ISINSCOPE ( 'Date'[Month Start] ), CALCULATE ( [Variance], WINDOW ( 1, ABS, 0, REL, ALLSELECTED ( 'Date'[Month Start] ), ORDERBY ( 'Date'[Month Start] ) ) ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Variance
+		lineageTag: 0047334c-5e82-57ec-a01d-9e8827c32ec6
+
+	/// The entity with the largest operating profit shortfall in the selection (INDEX).
+	measure 'Biggest Miss Entity' =
+			VAR _row = INDEX ( 1, FILTER ( ALLSELECTED ( Entity[Entity] ), [Operating Profit Variance] < 0 ), ORDERBY ( [Operating Profit Variance], ASC ) )
+			RETURN MAXX ( _row, Entity[Entity] )
+		displayFolder: Ranking
+		lineageTag: d3d45d53-2c79-529f-b1f7-a69a40e993a0
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// The operating profit series picked in the Metric field parameter (by its order column).
+	measure 'Metric Value' =
+			SWITCH ( SELECTEDVALUE ( Metric[Metric Order], 0 ),
+			    0, [Operating Profit],
+			    1, [Operating Profit Comparison],
+			    2, [Operating Profit Outlook],
+			    3, [Operating Profit Variance],
+			    4, [Operating Profit FX Effect],
+			    5, [Operating Profit Operational Variance],
+			    6, [Operating Profit PM]
+			)
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Key Lines
+		lineageTag: c1dc51de-59e8-535b-96bc-13dc70147d83
+
+	/// How far the operating expense accounts overran the comparison, as a positive amount; accounts under it add nothing.
+	measure 'Opex Overrun' = Fin.OnLine ( SUMX ( VALUES ( Account[Account] ), VAR _v = [Variance] RETURN IF ( _v < 0, - _v ) ), "S3" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Analysis
+		lineageTag: 53362804-ee29-585a-878d-5339aff86ada
+
+	/// Pareto: this account's overrun plus every larger one, as a share of the total opex overrun (accounts visible in the visual).
+	measure 'Overrun Cumulative %' =
+			VAR _cur = [Opex Overrun]
+			VAR _tbl = ADDCOLUMNS ( ALLSELECTED ( Account[Account] ), "@o", [Opex Overrun] )
+			VAR _all = SUMX ( _tbl, [@o] )
+			RETURN IF ( _cur > 0, DIVIDE ( SUMX ( FILTER ( _tbl, [@o] >= _cur ), [@o] ), _all ) )
+		formatString: 0.0%
+		displayFolder: Analysis
+		lineageTag: 77d60a6b-7626-5792-9795-6fce5e81041d
+
+	/// How many of the largest overrunning accounts it takes to reach 80% of the opex overrun.
+	measure 'Accounts to 80% Overrun' =
+			VAR _tbl = FILTER ( ADDCOLUMNS ( ALLSELECTED ( Account[Account] ), "@o", [Opex Overrun] ), [@o] > 0 )
+			VAR _all = SUMX ( _tbl, [@o] )
+			VAR _cum = ADDCOLUMNS ( _tbl, "@before", VAR _x = [@o] RETURN SUMX ( FILTER ( _tbl, [@o] > _x ), [@o] ) )
+			RETURN COUNTROWS ( FILTER ( _cum, DIVIDE ( [@before], _all ) < 0.8 ) ) + 0
+		formatString: #,0
+		displayFolder: Analysis
+		lineageTag: fe65a04b-6a3b-5539-b28e-bbdfbfef8644
+
+	/// Operating expense accounts that overran the comparison.
+	measure 'Overrunning Accounts' = COUNTROWS ( FILTER ( ALLSELECTED ( Account[Account] ), [Opex Overrun] > 0 ) ) + 0
+		formatString: #,0
+		displayFolder: Analysis
+		lineageTag: 5d3aee90-132f-5ed6-b395-4a3c932fa9b9
+
+	/// Dynamic title for the Pareto chart.
+	measure 'Pareto Title' = [Accounts to 80% Overrun] & " of " & [Overrunning Accounts] & " accounts = 80% of the " & Fin.Millions ( [Opex Overrun] ) & " opex overrun"
+		displayFolder: Analysis
+		lineageTag: 6d053e45-28de-5787-9ecc-549e6884829e
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// ABC class of the account by opex spend within the current slicers: A = top 70% of spend, B = next 20%, C = the rest.
+	measure 'Spend Class' =
+			VAR _cur = [Opex Spend]
+			VAR _tbl = ADDCOLUMNS ( ALLSELECTED ( Account[Account] ), "@s", [Opex Spend] )
+			VAR _all = SUMX ( FILTER ( _tbl, [@s] > 0 ), [@s] )
+			VAR _before = SUMX ( FILTER ( _tbl, [@s] > _cur ), [@s] )
+			VAR _p = DIVIDE ( _before, _all )
+			RETURN IF ( _cur > 0, SWITCH ( TRUE (), _p < 0.7, "A", _p < 0.9, "B", "C" ) )
+		displayFolder: Analysis
+		lineageTag: d74d81ea-441e-5e67-bdd2-1b47bb8370a6
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Entities whose operating profit variance % falls inside the band on the row (Variance Band table, disconnected).
+	measure 'Entities in Band' =
+			VAR _lo = MIN ( 'Variance Band'[Lower] )
+			VAR _hi = MAX ( 'Variance Band'[Upper] )
+			RETURN
+			    COUNTROWS ( FILTER ( VALUES ( Entity[Entity] ),
+			        VAR _p = [Operating Profit Variance %] RETURN NOT ISBLANK ( _p ) && _p >= _lo && _p < _hi ) ) + 0
+		formatString: #,0
+		displayFolder: Analysis
+		lineageTag: 0e0630c1-c975-59e3-a2a6-2ee24ea58769
+
+	/// 95th percentile (PERCENTILEX.INC) of |variance %| over all account × entity × month cells in the slicers / page filter.
+	measure 'Variance P95' =
+			VAR _grid = CALCULATETABLE (
+			    ADDCOLUMNS ( SUMMARIZE ( GL, Account[Account], Entity[Entity], 'Date'[Month Start] ), "@p", ABS ( [Variance %] ) ),
+			    ALLSELECTED ()
+			)
+			RETURN PERCENTILEX.INC ( FILTER ( _grid, NOT ISBLANK ( [@p] ) ), [@p], 0.95 )
+		formatString: 0.0%
+		displayFolder: Analysis
+		lineageTag: ce79ccf5-cc24-52e1-b0e3-10ceb8685cbb
+
+	/// 1 when |variance %| of the cell is above [Variance P95] (account × entity × month grain).
+	measure 'Is Variance Outlier' =
+			VAR _p = ABS ( [Variance %] )
+			RETURN IF ( NOT ISBLANK ( _p ), IF ( _p > [Variance P95], 1, 0 ) )
+		formatString: #,0
+		displayFolder: Analysis
+		lineageTag: 447b7df7-5801-507b-8a54-f36771c2d838
+
+	/// How many account × entity × month cells under the current row are above [Variance P95]; works at any grain.
+	measure 'Outlier Cells' =
+			VAR _p95 = [Variance P95]
+			RETURN COUNTROWS (
+			    FILTER (
+			        ADDCOLUMNS ( SUMMARIZE ( GL, Account[Account], Entity[Entity], 'Date'[Month Start] ), "@p", ABS ( [Variance %] ) ),
+			        NOT ISBLANK ( [@p] ) && [@p] > _p95
+			    )
+			)
+		formatString: #,0
+		displayFolder: Analysis
+		lineageTag: e7a5eea1-47c9-5ad3-9009-19202a2b6b8a
+
+	/// Operating expenses in the outlook (actuals to the As Of month, budget after), positive.
+	measure 'Opex Outlook' = - Fin.OnLine ( [Outlook], "S3" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Analysis
+		lineageTag: 9ecf5257-c798-5bde-b8bc-2edc9af31573
+
+	/// Opex actuals to the As Of month + a LINESTX straight line fitted on the 12 months up to it, for the months after.
+	measure 'Opex Trend Forecast' =
+			VAR _asof = SELECTEDVALUE ( 'As Of Month'[As Of Month], MAX ( 'As Of Month'[As Of Month] ) )
+			VAR _hist = CALCULATETABLE (
+			    ADDCOLUMNS ( VALUES ( 'Date'[Month Start] ),
+			        "@x", YEAR ( 'Date'[Month Start] ) * 12 + MONTH ( 'Date'[Month Start] ), "@y", [Opex Spend] ),
+			    REMOVEFILTERS ( 'Date' ), DATESINPERIOD ( 'Date'[Date], EOMONTH ( _asof, 0 ), -12, MONTH )
+			)
+			VAR _fit = LINESTX ( FILTER ( _hist, NOT ISBLANK ( [@y] ) ), [@y], [@x] )
+			VAR _a = MAXX ( _fit, [Intercept] )
+			VAR _b = MAXX ( _fit, [Slope1] )
+			VAR _after = FILTER ( VALUES ( 'Date'[Month Start] ), 'Date'[Month Start] > _asof )
+			VAR _actual = CALCULATE ( [Opex Spend], KEEPFILTERS ( 'Date'[Month Start] <= _asof ) )
+			RETURN _actual + SUMX ( _after, _a + _b * ( YEAR ( 'Date'[Month Start] ) * 12 + MONTH ( 'Date'[Month Start] ) ) )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Analysis
+		lineageTag: d3fb7471-a495-54d2-bab3-5821c92ec7a8
+
+	/// Variance % with ▲ (favourable) or ▼ (unfavourable), so the sign never depends on colour alone.
+	measure 'Variance Arrow' =
+			VAR _v = [Variance]
+			VAR _p = [Variance %]
+			RETURN
+			    IF ( NOT ISBLANK ( _v ),
+			        IF ( _v >= 0, "▲ ", "▼ " ) & IF ( ISBLANK ( _p ), FORMAT ( _v, "$#,0" ), FORMAT ( _p, "+0.0%;-0.0%;0.0%" ) ) )
+		displayFolder: Report UI
+		lineageTag: 2e2a0424-3a4a-54d1-a015-7b2b08c75491
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Alt text (screen readers) for operating profit visuals; follows the slicers.
+	measure 'Alt Text Operating Profit' =
+			VAR _v = [Operating Profit Variance]
+			VAR _cmp = LOWER ( SELECTEDVALUE ( 'Compare To'[Compare To], "Budget" ) )
+			RETURN "Operating profit " & Fin.Millions ( [Operating Profit] ) & ", " & Fin.Millions ( ABS ( _v ) )
+			    & IF ( _v >= 0, " ahead of ", " behind " ) & _cmp & "."
+		displayFolder: Report UI
+		lineageTag: 0cefa456-7367-50e0-b7bf-146525b3d42e
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Alt text for the entity variance visuals.
+	measure 'Alt Text Biggest Miss' =
+			"Operating variance by entity: " & [Entities Behind Budget] & " of " & [Entities with Budget]
+			    & " budgeted entities behind budget"
+			    & IF ( NOT ISBLANK ( [Biggest Miss Entity] ), ", biggest miss " & [Biggest Miss Entity] ) & "."
+		displayFolder: Report UI
+		lineageTag: c8a55b78-2b77-5ce4-98a6-28690888c9fd
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Alt text for the operating expense visuals.
+	measure 'Alt Text Opex' =
+			VAR _v = [Operating Expenses Variance]
+			RETURN "Operating expenses " & Fin.Millions ( [Opex Spend] )
+			    & IF ( _v >= 0, ", under budget by ", ", over budget by " ) & Fin.Millions ( ABS ( _v ) ) & "."
+		displayFolder: Report UI
+		lineageTag: c0bc7708-08bd-54f6-93d9-567ebce6fe3e
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Conditional-formatting background: light red when the row holds at least one P95 outlier cell ([Outlier Cells] > 0).
+	measure 'Outlier Fill' = IF ( [Outlier Cells] > 0, "#FBE3DF" )
+		displayFolder: Report UI
+		lineageTag: 6277c04d-377a-5607-9ad9-f3ceb340bb6f
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Shades subtotal rows in the P&L matrix.
+	measure 'Line Row Fill' = IF ( SELECTEDVALUE ( 'P&L Line'[Line Kind] ) IN { "subtotal", "total" }, "#EAF0EE" )
+		displayFolder: Report UI
+		lineageTag: d39c05fd-af49-5951-89f8-bb508d6a181c
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Header text: the selected months and the comparison.
+	measure 'Period Label' = FORMAT ( MIN ( 'Date'[Date] ), "mmm yyyy" ) & " – " & FORMAT ( MAX ( 'Date'[Date] ), "mmm yyyy" ) & "  ·  vs " & LOWER ( SELECTEDVALUE ( 'Compare To'[Compare To], "Budget" ) )
+		displayFolder: Report UI
+		lineageTag: 9336df11-27ab-561c-b936-f3c0b0cf42cd
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Explains the outlook cut-off month.
+	measure 'As Of Label' = "Outlook = actuals to " & FORMAT ( SELECTEDVALUE ( 'As Of Month'[As Of Month], MAX ( 'As Of Month'[As Of Month] ) ), "mmm yyyy" ) & ", budget after"
+		displayFolder: Report UI
+		lineageTag: 26fa4d43-8fb5-5e1b-a77d-a147aa13ca6a
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// One-sentence dynamic insight for the overview page.
+	measure 'Headline Insight' =
+			VAR _v = [Operating Profit Variance]
+			VAR _s = [Net Sales Variance]
+			VAR _o = [Operating Expenses Variance]
+			VAR _cmp = LOWER ( SELECTEDVALUE ( 'Compare To'[Compare To], "Budget" ) )
+			RETURN
+			    "Operating profit " & Fin.Millions ( [Operating Profit] )
+			        & ", " & Fin.Millions ( ABS ( _v ) ) & IF ( _v >= 0, " ahead of ", " behind " ) & _cmp & ". "
+			        & "Net sales " & IF ( _s >= 0, "beat it by ", "missed it by " ) & Fin.Millions ( ABS ( _s ) )
+			        & ", operating expenses " & IF ( _o >= 0, "came in " & Fin.Millions ( _o ) & " under", "overran by " & Fin.Millions ( - _o ) ) & "."
+			        & IF ( NOT ISBLANK ( [Biggest Miss Entity] ), " Biggest miss: " & [Biggest Miss Entity] & "." )
+		displayFolder: Report UI
+		lineageTag: 7e741cf5-0e9f-5ccc-9f5b-1473131b4e9e
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	column Value
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5ab246f0-0176-5f56-9b11-f15d8d4e0958
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition _Measures = calculated
+		mode: import
+		source = {1}

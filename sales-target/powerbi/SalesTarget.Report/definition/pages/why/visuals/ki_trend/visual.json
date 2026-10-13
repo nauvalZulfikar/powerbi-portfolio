@@ -1,0 +1,126 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "ki_trend",
+  "position": {
+    "x": 256,
+    "y": 564,
+    "z": 2000,
+    "width": 880,
+    "height": 316,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "keyDriversVisual",
+    "objects": {},
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Key influencers: Key influencers: which resellers buy less than last year'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Key influencers: which resellers buy less than last year'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Target: Resellers[Sales Trend] (FY2013 vs FY2012) = Declining · explained by business type and country'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Target": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Resellers"
+                    }
+                  },
+                  "Property": "Sales Trend"
+                }
+              },
+              "queryRef": "Resellers.Sales Trend",
+              "nativeQueryRef": "Sales Trend"
+            }
+          ]
+        },
+        "ExplainBy": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Resellers"
+                    }
+                  },
+                  "Property": "Business Type"
+                }
+              },
+              "queryRef": "Resellers.Business Type",
+              "nativeQueryRef": "Business Type"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Resellers"
+                    }
+                  },
+                  "Property": "Country"
+                }
+              },
+              "queryRef": "Resellers.Country",
+              "nativeQueryRef": "Country"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

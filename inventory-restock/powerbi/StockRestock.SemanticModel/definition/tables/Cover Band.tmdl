@@ -1,0 +1,43 @@
+table 'Cover Band'
+	lineageTag: 6bb54639-206a-5ab0-9eb6-e7782b221d4e
+
+	column 'Cover Band'
+		dataType: string
+		isKey
+		lineageTag: 04dd8480-4095-5559-9339-b9231ae374a9
+		summarizeBy: none
+		sourceColumn: cover_band
+		sortByColumn: 'Cover Sort'
+
+	column 'Cover Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 611c6ee7-e223-5135-a8eb-f62ec74ceb45
+		summarizeBy: none
+		sourceColumn: cover_sort
+
+	column 'Min Days'
+		dataType: int64
+		formatString: 0
+		lineageTag: 156b4e2d-fbc9-5ec7-98e2-176160794e35
+		summarizeBy: none
+		sourceColumn: min_days
+
+	column 'Max Days'
+		dataType: int64
+		formatString: 0
+		lineageTag: e2d5195f-6064-569d-8c29-55a2c6733256
+		summarizeBy: none
+		sourceColumn: max_days
+
+	partition 'Cover Band' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_cover_band.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"cover_band", type text}, {"cover_sort", Int64.Type}, {"min_days", Int64.Type}, {"max_days", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

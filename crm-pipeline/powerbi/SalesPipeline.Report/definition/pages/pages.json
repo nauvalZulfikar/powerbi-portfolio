@@ -1,0 +1,19 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.1.0/schema.json",
+  "pageOrder": [
+    "overview",
+    "funnel",
+    "pipeline",
+    "team",
+    "products",
+    "account_value",
+    "sync",
+    "trends",
+    "drivers",
+    "diagnosis",
+    "about",
+    "deal_detail",
+    "agent_tooltip"
+  ],
+  "activePageName": "overview"
+}

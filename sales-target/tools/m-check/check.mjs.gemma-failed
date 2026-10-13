@@ -1,0 +1,49 @@
+import pq from "@microsoft/powerquery-parser";
+import * as fs from "node:fs";
+import * as path from "node:path";
+
+async function checkFile(filePath) {
+    try {
+        const fileContent = await fs.promises.readFile(filePath, "utf8");
+        const r = await pq.TaskUtils.tryLexParse(pq.DefaultSettings, fileContent);
+        const ok = pq.TaskUtils.isParseStageOk(r);
+
+        if (ok) {
+            console.log(`ok ${path.basename(filePath, ".pq")}`);
+        } else {
+            const pos = r.error.innerError?.foundToken?.token?.positionStart ?? r.error.innerError?.positionStart;
+            const line = pos?.lineNumber + 1 || 0;
+            const col = pos?.lineCodeUnit + 1 || 0;
+            const message = r.error.message;
+            console.log(`FAIL ${path.basename(filePath, ".pq")}:${line}:${col} ${message}`);
+        }
+    } catch (error) {
+        console.error(`Error processing ${filePath}:`, error);
+    }
+}
+
+async function main() {
+    const folderPath = process.argv[2];
+    const files = fs.readdirSync(folderPath).filter(file => file.endsWith(".pq"));
+    files.sort();
+
+    let errors = 0;
+    let numQueries = files.length;
+
+    for (const file of files) {
+        const filePath = path.join(folderPath, file);
+        try {
+            await checkFile(filePath);
+        } catch (err) {
+            errors++;
+        }
+    }
+
+    if (errors > 0) {
+        process.exit(1);
+    } else {
+        process.exit(0);
+    }
+}
+
+main();

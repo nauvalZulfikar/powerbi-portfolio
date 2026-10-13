@@ -1,0 +1,236 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "table_basket",
+  "position": {
+    "x": 924,
+    "y": 896,
+    "z": 2900,
+    "width": 652,
+    "height": 316,
+    "tabOrder": 2900
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "objects": {
+      "grid": [
+        {
+          "properties": {
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "6L"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Table: Bought together: subcategory pairs in one order'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Bought together: subcategory pairs in one order'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Lift above 1 = bought together more often than chance · pairs in at least 30 orders'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Subcategory Pairs"
+                    }
+                  },
+                  "Property": "Subcategory A"
+                }
+              },
+              "queryRef": "Subcategory Pairs.Subcategory A",
+              "nativeQueryRef": "Subcategory A"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Subcategory Pairs"
+                    }
+                  },
+                  "Property": "Subcategory B"
+                }
+              },
+              "queryRef": "Subcategory Pairs.Subcategory B",
+              "nativeQueryRef": "Subcategory B"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Subcategory Pairs"
+                    }
+                  },
+                  "Property": "Orders Together"
+                }
+              },
+              "queryRef": "Subcategory Pairs.Orders Together",
+              "nativeQueryRef": "Orders Together"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Subcategory Pairs"
+                    }
+                  },
+                  "Property": "Support"
+                }
+              },
+              "queryRef": "Subcategory Pairs.Support",
+              "nativeQueryRef": "Support"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Subcategory Pairs"
+                    }
+                  },
+                  "Property": "Confidence A to B"
+                }
+              },
+              "queryRef": "Subcategory Pairs.Confidence A to B",
+              "nativeQueryRef": "Confidence A to B"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Subcategory Pairs"
+                    }
+                  },
+                  "Property": "Confidence B to A"
+                }
+              },
+              "queryRef": "Subcategory Pairs.Confidence B to A",
+              "nativeQueryRef": "Confidence B to A"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Subcategory Pairs"
+                    }
+                  },
+                  "Property": "Lift"
+                }
+              },
+              "queryRef": "Subcategory Pairs.Lift",
+              "nativeQueryRef": "Lift"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Subcategory Pairs"
+                  }
+                },
+                "Property": "Lift"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    }
+  }
+}

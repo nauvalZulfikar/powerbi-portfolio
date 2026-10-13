@@ -1,0 +1,55 @@
+table Stage
+	lineageTag: f1bb2d05-0c0a-5dcd-9a33-1cc2bfb757fe
+
+	column 'Stage Key'
+		dataType: string
+		isKey
+		isHidden
+		lineageTag: 6a9181ff-fc67-5142-8776-71076b6be0ba
+		summarizeBy: none
+		sourceColumn: stage_key
+
+	column Stage
+		dataType: string
+		lineageTag: 41eca551-fe88-5042-aeb2-7d6e5c7223cf
+		summarizeBy: none
+		sourceColumn: stage
+		sortByColumn: 'Stage Sort'
+
+	column 'Stage Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 184fdbad-fff2-5fc1-ac04-1fcd81e42a81
+		summarizeBy: none
+		sourceColumn: stage_sort
+
+	column 'Is Open'
+		dataType: boolean
+		lineageTag: 06511089-0538-5acc-a0ea-6cbcd0c4fbca
+		summarizeBy: none
+		sourceColumn: is_open
+
+	column 'Is Closed'
+		dataType: boolean
+		lineageTag: 1ae91dd0-a765-5a51-9fc2-ce44828fd895
+		summarizeBy: none
+		sourceColumn: is_closed
+
+	column 'Is Won'
+		dataType: boolean
+		lineageTag: 3d6b4909-376d-5e8c-9d11-5c34bf62e62f
+		summarizeBy: none
+		sourceColumn: is_won
+
+	partition Stage = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_stage.parquet")),
+				    Data = Source,
+				    Typed = Table.TransformColumnTypes(Data, {{"stage_key", type text}, {"stage", type text}, {"stage_sort", Int64.Type}, {"is_open", type logical}, {"is_closed", type logical}, {"is_won", type logical}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

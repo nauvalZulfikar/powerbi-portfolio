@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "grp_open",
+  "position": {
+    "x": 912,
+    "y": 604,
+    "z": 3500,
+    "width": 664,
+    "height": 276,
+    "tabOrder": 1800
+  },
+  "visualGroup": {
+    "displayName": "All-open table",
+    "groupMode": "ScaleMode"
+  },
+  "isHidden": true
+}

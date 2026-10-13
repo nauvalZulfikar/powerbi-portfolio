@@ -1,0 +1,83 @@
+expression DataFolder = "/path/to/powerbi-portfolio/crm-pipeline/data/marts/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 856f2375-744b-57c8-8901-f486e5942af4
+
+	annotation PBI_ResultType = Text
+
+expression RawFolder = "/path/to/powerbi-portfolio/crm-pipeline/data/raw/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 84c863bb-74a2-5436-8dba-934e2100bcd2
+
+	annotation PBI_ResultType = Text
+
+expression RangeStart = #datetime(2016, 10, 1, 0, 0, 0) meta [IsParameterQuery=true, Type="DateTime", IsParameterQueryRequired=true]
+	lineageTag: b01a45cb-3a2b-5c16-aa65-9e01b997449f
+
+	annotation PBI_ResultType = DateTime
+
+expression RangeEnd = #datetime(2018, 1, 1, 0, 0, 0) meta [IsParameterQuery=true, Type="DateTime", IsParameterQueryRequired=true]
+	lineageTag: a3895e1a-cf50-5cad-b587-0f5cbbc57d9b
+
+	annotation PBI_ResultType = DateTime
+
+expression raw_pipeline =
+		let
+		    Source = Csv.Document(File.Contents(RawFolder & "sales_pipeline.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+		    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+		    KeptColumns = Table.SelectColumns(PromotedHeaders, {"opportunity_id", "sales_agent", "product", "account",
+		        "deal_stage", "engage_date", "close_date", "close_value"}),
+		    DroppedBlankRows = Table.SelectRows(KeptColumns, each [deal_stage] <> null and [deal_stage] <> ""),
+		    Typed = Table.TransformColumnTypes(DroppedBlankRows, {{"engage_date", type date}, {"close_date", type date},
+		        {"close_value", type number}}, "en-US"),
+		    ErrorsReplaced = Table.ReplaceErrorValues(Typed, {{"close_value", null}}),
+		    RemovedErrorRows = Table.RemoveRowsWithErrors(ErrorsReplaced, {"engage_date", "close_date"}),
+		    FixedTypos = Table.ReplaceValue(RemovedErrorRows, "GTXPro", "GTX Pro", Replacer.ReplaceValue, {"product"}),
+		    FilledAccount = Table.ReplaceValue(FixedTypos, each [account], each if [account] = null or [account] = ""
+		        then "(no account)" else [account], Replacer.ReplaceValue, {"account"})
+		in
+		    FilledAccount
+	lineageTag: b4ea9d3f-b5b8-5618-838c-b06496e5e32a
+
+	annotation PBI_ResultType = Table
+
+expression raw_pipeline_errors =
+		let
+		    Source = Csv.Document(File.Contents(RawFolder & "sales_pipeline.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+		    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+		    Typed = Table.TransformColumnTypes(PromotedHeaders, {{"engage_date", type date}, {"close_date", type date},
+		        {"close_value", type number}}, "en-US"),
+		    KeptErrors = Table.SelectRowsWithErrors(Typed, {"engage_date", "close_date", "close_value"})
+		in
+		    KeptErrors
+	lineageTag: d76746e8-6334-5236-9509-c8e43fcd0fd3
+
+	annotation PBI_ResultType = Table
+
+expression raw_accounts =
+		let
+		    Source = Csv.Document(File.Contents(RawFolder & "accounts.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+		    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+		    Typed = Table.TransformColumnTypes(PromotedHeaders, {{"year_established", Int64.Type}, {"revenue", type number},
+		        {"employees", Int64.Type}}, "en-US"),
+		    ErrorsReplaced = Table.ReplaceErrorValues(Typed, {{"revenue", null}, {"employees", null}}),
+		    FixedSector = Table.ReplaceValue(ErrorsReplaced, "technolgy", "technology", Replacer.ReplaceValue, {"sector"}),
+		    FixedCountry = Table.ReplaceValue(FixedSector, "Philipines", "Philippines", Replacer.ReplaceValue, {"office_location"})
+		in
+		    FixedCountry
+	lineageTag: ee21e217-84cc-54ae-ba9b-abb9adc54c0d
+
+	annotation PBI_ResultType = Table
+
+expression raw_teams =
+		let
+		    Source = Csv.Document(File.Contents(RawFolder & "sales_teams.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+		    PromotedHeaders = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+		    TrimmedHeaders = Table.TransformColumnNames(PromotedHeaders, Text.Trim),
+		    Cleaned = Table.TransformColumns(TrimmedHeaders, {{"sales_agent", each Text.Clean(Text.Trim(_)), type text},
+		        {"manager", each Text.Clean(Text.Trim(_)), type text}, {"regional_office", each Text.Clean(Text.Trim(_)), type text}}),
+		    Renamed = Table.RenameColumns(Cleaned, {{"sales_agent", "Sales Agent"}, {"manager", "Manager"}, {"regional_office", "Region"}}),
+		    Typed = Table.TransformColumnTypes(Renamed, {{"Sales Agent", type text}, {"Manager", type text}, {"Region", type text}}),
+		    RemovedDuplicates = Table.Distinct(Typed, {"Sales Agent"})
+		in
+		    RemovedDuplicates
+	lineageTag: d1ceea45-9d11-5139-9a85-0e0377bdf416
+
+	annotation PBI_ResultType = Table

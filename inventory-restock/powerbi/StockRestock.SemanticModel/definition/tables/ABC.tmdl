@@ -1,0 +1,35 @@
+table ABC
+	lineageTag: e07d4af8-55e0-55c7-8dd2-67b26b6ef246
+
+	column 'ABC Key'
+		dataType: string
+		isKey
+		lineageTag: 4379ccaf-e153-5682-a715-7e320f94981a
+		summarizeBy: none
+		sourceColumn: abc
+
+	column 'ABC Class'
+		dataType: string
+		lineageTag: 35fe9ded-f659-5190-8103-32a71b1123e1
+		summarizeBy: none
+		sourceColumn: abc_label
+		sortByColumn: 'ABC Sort'
+
+	column 'ABC Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 874d522f-26ac-5cc7-9460-6a99b9081d69
+		summarizeBy: none
+		sourceColumn: abc_sort
+
+	partition ABC = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_abc.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"abc", type text}, {"abc_label", type text}, {"abc_sort", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

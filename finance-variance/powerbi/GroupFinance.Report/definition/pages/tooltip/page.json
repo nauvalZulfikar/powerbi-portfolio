@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "tooltip",
+  "displayName": "Variance tooltip",
+  "displayOption": "FitToPage",
+  "width": 320,
+  "height": 240,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#FFFFFF'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0.0D"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "pageBinding": {
+    "name": "tt_variance",
+    "type": "Tooltip"
+  },
+  "type": "Tooltip",
+  "visibility": "HiddenInViewMode"
+}

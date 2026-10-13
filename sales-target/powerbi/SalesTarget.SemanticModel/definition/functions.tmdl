@@ -1,0 +1,29 @@
+/// Actual ÷ target. Blank when there is no target.
+function 'Sales.Attainment' = ( actual : NUMERIC, target : NUMERIC ) => DIVIDE ( actual, target )
+	lineageTag: e1bdf725-70f7-5753-9c78-fb242ed9559c
+
+/// Actual − target. Blank when there is no target.
+function 'Sales.Gap' = ( actual : NUMERIC, target : NUMERIC ) => IF ( NOT ISBLANK ( target ), actual - target )
+	lineageTag: bd4246d5-68ac-537c-ab6d-dad248d66117
+
+/// On target from 100%, at risk from 90%, behind below that.
+function 'Sales.Status' =
+		( attainment : NUMERIC ) =>
+			SWITCH ( TRUE (),
+				ISBLANK ( attainment ), BLANK (),
+				attainment >= 1, "On target",
+				attainment >= 0.9, "At risk",
+				"Behind" )
+	lineageTag: 6763c547-780a-5643-93b2-9b2403b60cbd
+
+/// Hex colour for a status, for conditional formatting.
+function 'Sales.StatusColor' = ( status : STRING ) => SWITCH ( status, "On target", "#1B7F4B", "At risk", "#A35F00", "Behind", "#B42318", "#6B7280" )
+	lineageTag: b1f2ae69-f3dc-52d4-8bb3-2c55eb2b2fea
+
+/// A measure as a share of the same measure with the filters on one table or column removed.
+function 'Sales.ShareOf' = ( value : SCALAR NUMERIC EXPR, scope : ANYREF ) => DIVIDE ( value, CALCULATE ( value, REMOVEFILTERS ( scope ) ) )
+	lineageTag: c0421cbf-dbaf-5ed2-ae04-64f92cb2e64f
+
+/// A measure one year back on the calendar passed in (Gregorian or Fiscal).
+function 'Sales.PriorYear' = ( value : SCALAR NUMERIC EXPR, cal : CALENDARREF ) => CALCULATE ( value, DATEADD ( cal, -1, YEAR ) )
+	lineageTag: 8e36a4a8-4d1e-5bda-bfb5-665a578ce499

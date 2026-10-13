@@ -1,0 +1,79 @@
+table 'Stage Transitions'
+	lineageTag: 003c895e-2268-5349-84ec-a79e9cbdd0ff
+
+	column 'Transition Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: 79f53957-40c9-53f1-a1e7-cb165f70c68a
+		summarizeBy: none
+		sourceColumn: snapshot_date
+
+	column 'Opportunity ID'
+		dataType: string
+		isHidden
+		lineageTag: 59177543-f709-5525-a93f-9bf71c43951b
+		summarizeBy: none
+		sourceColumn: opportunity_id
+
+	column 'Owner ID'
+		dataType: string
+		isHidden
+		lineageTag: 618e5956-1882-5b67-a39a-e6185b2ace6f
+		summarizeBy: none
+		sourceColumn: owner_id
+
+	column 'Account ID'
+		dataType: string
+		isHidden
+		lineageTag: 65bf0eb3-2ad0-5f3e-a3da-d180c516f1e7
+		summarizeBy: none
+		sourceColumn: account_id
+
+	column 'Product ID'
+		dataType: string
+		isHidden
+		lineageTag: 52be8b6c-075f-5989-90f2-6abc2a1ac262
+		summarizeBy: none
+		sourceColumn: product_id
+
+	column 'From Stage'
+		dataType: string
+		lineageTag: 32a7c60b-4569-555b-8f95-f9c8781575fa
+		summarizeBy: none
+		sourceColumn: from_stage
+		sortByColumn: 'From Sort'
+
+	column 'From Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: cadd005e-ac09-544b-a848-c156eacb6cb3
+		summarizeBy: none
+		sourceColumn: from_sort
+
+	column 'To Stage'
+		dataType: string
+		lineageTag: 2b220d7b-87ab-50ee-949f-4ae476c7697b
+		summarizeBy: none
+		sourceColumn: to_stage
+		sortByColumn: 'To Sort'
+
+	column 'To Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 537d8e86-c7a3-572c-a54c-2ad9187dbed4
+		summarizeBy: none
+		sourceColumn: to_sort
+
+	partition 'Stage Transitions' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_stage_transition.parquet")),
+				    Data = Source,
+				    Typed = Table.TransformColumnTypes(Data, {{"snapshot_date", type date}, {"opportunity_id", type text}, {"owner_id", type text}, {"account_id", type text}, {"product_id", type text}, {"from_stage", type text}, {"from_sort", Int64.Type}, {"to_stage", type text}, {"to_sort", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

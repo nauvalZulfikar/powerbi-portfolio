@@ -1,0 +1,10 @@
+// Revenue Trend Forecast (LINESTX over the ten months Mar-Dec 2017 that have won revenue).
+// Expected (DuckDB least squares): slope ~ +$400 per month, Dec 2017 ~ 1,002,355, Mar 2018 ~ 1,003,555.
+// The trend is flat: ten points of one year are no basis for seasonality, so Jan-Mar 2018 is a projection only.
+// P90 Cycle Days should return 104, the default of Stale Days.
+EVALUATE
+SUMMARIZECOLUMNS ( 'Date'[Month Start], "Won", [Won Revenue], "Trend", [Revenue Trend Forecast] )
+ORDER BY 'Date'[Month Start]
+
+EVALUATE
+ROW ( "P90 Cycle Days", [P90 Cycle Days], "Stale Days", [Stale Days] )

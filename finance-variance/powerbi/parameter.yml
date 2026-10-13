@@ -1,0 +1,51 @@
+# fabric-cicd parameter.yml — per-environment values for GroupFinance (from tools/pbi-kit/deploy/parameter.example.yml).
+# Keys under replace_value = --env (Test / Prod). No secrets here: workspace ids and the service principal live in
+# GitHub environment variables/secrets. Placeholders (<...>) are replaced once the Fabric workspaces exist.
+find_replace:
+  # Import model: read the Lakehouse SQL endpoint instead of local Parquet once it runs in the Service
+  - find_value: 'expression SourceMode = "([^"]*)"'
+    is_regex: "true"
+    replace_value: {Test: "Lakehouse", Prod: "Lakehouse"}
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+  # SQL endpoint of the finance Lakehouse (GroupFinance + GroupFinance.Fabric)
+  - find_value: 'expression SqlEndpoint = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "<test-workspace>.datawarehouse.fabric.microsoft.com"
+      Prod: "<prod-workspace>.datawarehouse.fabric.microsoft.com"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+  - find_value: 'expression LakehouseDb = "([^"]*)"'
+    is_regex: "true"
+    replace_value: {Test: "finance_lh_test", Prod: "finance_lh"}
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+  # Direct Lake variant: its one shared expression names endpoint + lakehouse inline
+  - find_value: 'Sql\.Database\("([^"]*)", "finance_lh"\)'
+    is_regex: "true"
+    replace_value:
+      Test: "<test-workspace>.datawarehouse.fabric.microsoft.com"
+      Prod: "<prod-workspace>.datawarehouse.fabric.microsoft.com"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+  # The two Power Query file sources (FX CSV, reforecast folder) stay files: a gateway-visible share per env
+  - find_value: 'expression RawFolder = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "\\\\fileserver\\pbi-test\\group-finance\\raw\\"
+      Prod: "\\\\fileserver\\pbi\\group-finance\\raw\\"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+  - find_value: 'expression ForecastFolder = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "\\\\fileserver\\pbi-test\\group-finance\\forecast\\"
+      Prod: "\\\\fileserver\\pbi\\group-finance\\forecast\\"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"

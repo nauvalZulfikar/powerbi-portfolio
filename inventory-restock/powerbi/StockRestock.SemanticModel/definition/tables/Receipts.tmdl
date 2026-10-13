@@ -1,0 +1,64 @@
+table Receipts
+	lineageTag: b3243827-3f97-5bd8-8a24-600e9739a2f5
+
+	column 'Receipt Month'
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy
+		lineageTag: 6d9f9b22-9a19-5cbf-9d53-8d40d4818ab3
+		summarizeBy: none
+		sourceColumn: month_start
+
+	column 'Receipt Store'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 90567dc4-6c8c-50a2-b5f3-452eae2c67f7
+		summarizeBy: none
+		sourceColumn: store
+
+	column 'Receipt Vendor'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e50efd71-997a-58fc-8fb9-0452fdd15958
+		summarizeBy: none
+		sourceColumn: vendor_no
+
+	column 'Receipt Category'
+		dataType: string
+		lineageTag: 76bf1628-5b1a-51a4-b525-ac52c94cbaca
+		summarizeBy: none
+		sourceColumn: category
+
+	column 'Received Units'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 7275bc56-f625-51ba-80d7-efcf9a4318a1
+		summarizeBy: none
+		sourceColumn: units
+
+	column 'Received Dollars'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: b343f305-2606-5ca8-9579-f79c66ddd298
+		summarizeBy: none
+		sourceColumn: dollars
+
+	column 'Receipt Lines'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 08635c88-8908-547e-872a-20c42b5d3e39
+		summarizeBy: none
+		sourceColumn: lines
+
+	partition Receipts = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_receipts.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"month_start", type date}, {"store", Int64.Type}, {"vendor_no", Int64.Type}, {"category", type text}, {"units", Int64.Type}, {"dollars", type number}, {"lines", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,45 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+ref table Date
+ref table Entity
+ref table Department
+ref table Account
+ref table 'P&L Line'
+ref table 'Line Account'
+ref table GL
+ref table 'GL Journal'
+ref table Headcount
+ref table 'FX Rates'
+ref table 'Budget Drivers'
+ref table 'Entity Access'
+ref table 'Variance Step'
+ref table Forecast
+ref table 'Headcount Plan'
+ref table 'Compare To'
+ref table 'As Of Month'
+ref table 'Variance Band'
+ref table 'FX Shock'
+ref table 'Analyze By'
+ref table Metric
+ref table 'Time View'
+ref table _Measures
+
+ref role 'Entity Manager'
+ref role 'Europe Finance'
+ref role 'External Auditor'
+
+ref perspective 'Variance Analysis'
+ref perspective 'Treasury & FX'
+ref perspective 'People Cost'
+
+ref cultureInfo en-US
+ref cultureInfo id-ID

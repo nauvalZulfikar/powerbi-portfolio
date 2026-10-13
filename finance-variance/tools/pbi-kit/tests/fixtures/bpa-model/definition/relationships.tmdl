@@ -1,0 +1,3 @@
+relationship sales_customer
+	fromColumn: Sales.'Customer Key'
+	toColumn: Customer.'Customer Key'

@@ -1,0 +1,14 @@
+table 'Target Stretch'
+	lineageTag: e1528b8f-2752-52cd-9257-7719666aee1b
+
+	column 'Target Stretch'
+		dataType: double
+		lineageTag: 93ade730-d2ca-5258-bbf6-73085bdea5f5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Target Stretch]
+		formatString: 0%
+
+	partition 'Target Stretch' = calculated
+		mode: import
+		source = SELECTCOLUMNS ( GENERATESERIES ( 0, 0.25, 0.05 ), "Target Stretch", [Value] )

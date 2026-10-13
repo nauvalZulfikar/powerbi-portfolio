@@ -1,0 +1,8 @@
+role 'Store Manager'
+	modelPermission: read
+
+	tablePermission Store = VAR _u = USERPRINCIPALNAME () RETURN NOT ISEMPTY ( FILTER ( 'Store Access', 'Store Access'[User Email] = _u && 'Store Access'[City] = Store[City] && ( 'Store Access'[Store No] = "" || 'Store Access'[Store No] = FORMAT ( Store[Store No], "0" ) ) ) )
+
+
+	tablePermission 'Store Access' = 'Store Access'[User Email] = USERPRINCIPALNAME ()
+

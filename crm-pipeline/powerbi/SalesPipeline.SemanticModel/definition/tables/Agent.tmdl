@@ -1,0 +1,67 @@
+table Agent
+	lineageTag: 8e1b54ff-243b-557d-863e-1cccf1a74f29
+
+	column 'Owner ID'
+		dataType: string
+		isKey
+		isHidden
+		lineageTag: e13b7e0d-7ee0-5d85-bacb-f637ddadba78
+		summarizeBy: none
+		sourceColumn: owner_id
+
+	column 'Sales Agent'
+		dataType: string
+		lineageTag: f13629e1-2111-5a4e-ab54-e7f8e953aa63
+		summarizeBy: none
+		sourceColumn: agent
+
+	column Manager
+		dataType: string
+		lineageTag: f60679c3-0955-56d5-a054-107967c9a691
+		summarizeBy: none
+		sourceColumn: manager
+
+	column Region
+		dataType: string
+		lineageTag: deda82d5-e32e-50ea-befe-54f950723027
+		summarizeBy: none
+		sourceColumn: regional_office
+
+	column Email
+		dataType: string
+		lineageTag: 98474d07-af3d-5685-8cdf-8feefee4c2c7
+		summarizeBy: none
+		sourceColumn: email
+
+	column 'Has Deals'
+		dataType: boolean
+		lineageTag: 84e823f5-d82e-5a5f-9ffd-1f3014e7ac52
+		summarizeBy: none
+		sourceColumn: has_deals
+
+	hierarchy 'Sales Team'
+		lineageTag: 44f46dcb-27b9-54d2-a316-1365fa037109
+
+		level Region
+			lineageTag: f69bbaad-5db6-5ab5-9d21-583a94d7bb1c
+			column: Region
+
+		level Manager
+			lineageTag: 60abcfb4-171f-5774-9982-160cb681d0bf
+			column: Manager
+
+		level 'Sales Agent'
+			lineageTag: c6983b66-10a4-5a74-8da1-a53411b8ff80
+			column: 'Sales Agent'
+
+	partition Agent = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_agent.parquet")),
+				    Data = Source,
+				    Typed = Table.TransformColumnTypes(Data, {{"owner_id", type text}, {"agent", type text}, {"manager", type text}, {"regional_office", type text}, {"email", type text}, {"has_deals", type logical}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

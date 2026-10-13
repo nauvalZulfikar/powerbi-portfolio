@@ -1,0 +1,49 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json",
+  "name": "reset_vendors",
+  "displayName": "Reset · Vendors & Lead Time",
+  "explorationState": {
+    "version": "1.3",
+    "activeSection": "vendors",
+    "sections": {
+      "vendors": {
+        "visualContainers": {
+          "slicer_city": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          },
+          "slicer_vendor": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          },
+          "slicer_category": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          },
+          "slicer_abc": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          }
+        }
+      }
+    }
+  },
+  "options": {
+    "suppressDisplay": true,
+    "applyOnlyToTargetVisuals": true,
+    "targetVisualNames": [
+      "slicer_city",
+      "slicer_vendor",
+      "slicer_category",
+      "slicer_abc"
+    ]
+  }
+}

@@ -1,0 +1,124 @@
+table 'Sync Runs'
+	lineageTag: 21907b03-60c5-555e-b562-881ed02f97df
+
+	column 'Run ID'
+		dataType: string
+		lineageTag: b4fffc4f-8cf9-511c-935b-8e6a060486db
+		summarizeBy: none
+		sourceColumn: run_id
+
+	column 'Sync Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: a0c28724-8ea5-5835-a171-81cbad95def1
+		summarizeBy: none
+		sourceColumn: as_of
+
+	column Mode
+		dataType: string
+		lineageTag: 39b88856-aefd-5156-a492-27db27a9538d
+		summarizeBy: none
+		sourceColumn: mode
+
+	column 'Started At'
+		dataType: dateTime
+		formatString: dd mmm yyyy hh:nn
+		lineageTag: ba01f2ad-a0db-5e3a-ac1b-ee81e6db6636
+		summarizeBy: none
+		sourceColumn: started_at
+
+	column 'Run Seconds'
+		dataType: double
+		formatString: 0.0
+		lineageTag: 1af4c07c-acf7-55d4-bd97-c195dc00c0d1
+		summarizeBy: none
+		sourceColumn: seconds
+
+	column Requests
+		dataType: int64
+		formatString: 0
+		lineageTag: 8b61ea63-62af-558d-a791-e29d80b1964b
+		summarizeBy: none
+		sourceColumn: requests
+
+	column Retries
+		dataType: int64
+		formatString: 0
+		lineageTag: f4ac0d96-fa45-5260-b9b8-c4d6406bc7a1
+		summarizeBy: none
+		sourceColumn: retries
+
+	column 'Rate Limited 429'
+		dataType: int64
+		formatString: 0
+		lineageTag: 4223b304-6a2d-5cbf-874a-bf868badf69a
+		summarizeBy: none
+		sourceColumn: rate_limited
+
+	column 'Server Errors 5xx'
+		dataType: int64
+		formatString: 0
+		lineageTag: d984f6aa-9d25-5eaf-aaca-6dc51eecf2dc
+		summarizeBy: none
+		sourceColumn: server_errors
+
+	column Owners
+		dataType: int64
+		formatString: 0
+		lineageTag: f8273824-0ada-592e-9805-51d877feb70e
+		summarizeBy: none
+		sourceColumn: owners
+
+	column Companies
+		dataType: int64
+		formatString: 0
+		lineageTag: bba8f91c-1711-59d2-9ce3-30f9c6855f1c
+		summarizeBy: none
+		sourceColumn: companies
+
+	column Products
+		dataType: int64
+		formatString: 0
+		lineageTag: 6591d19b-18b1-5a96-8b0f-b1b0ab49d2ea
+		summarizeBy: none
+		sourceColumn: products
+
+	column 'Deals Seen'
+		dataType: int64
+		formatString: #,0
+		lineageTag: f3a7cf4e-599e-5454-87e2-a540e354c9f5
+		summarizeBy: none
+		sourceColumn: deals_seen
+
+	column 'Versions Added'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 1ea34fa5-d611-59c3-ab77-de72ba1ef1c7
+		summarizeBy: none
+		sourceColumn: deal_versions_added
+
+	column 'Watermark Before'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: ae389805-4257-5861-b8bc-a14535915301
+		summarizeBy: none
+		sourceColumn: watermark_before
+
+	column 'Watermark After'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: 49153a4f-33f6-5be4-9be8-608d3b9b5537
+		summarizeBy: none
+		sourceColumn: watermark_after
+
+	partition 'Sync Runs' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "sync_runs.parquet")),
+				    Data = Source,
+				    Typed = Table.TransformColumnTypes(Data, {{"run_id", type text}, {"as_of", type date}, {"mode", type text}, {"started_at", type datetime}, {"seconds", type number}, {"requests", Int64.Type}, {"retries", Int64.Type}, {"rate_limited", Int64.Type}, {"server_errors", Int64.Type}, {"owners", Int64.Type}, {"companies", Int64.Type}, {"products", Int64.Type}, {"deals_seen", Int64.Type}, {"deal_versions_added", Int64.Type}, {"watermark_before", type datetime}, {"watermark_after", type datetime}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

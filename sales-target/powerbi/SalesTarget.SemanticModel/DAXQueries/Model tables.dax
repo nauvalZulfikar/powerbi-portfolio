@@ -1,0 +1,9 @@
+// Model documentation: tables, how many measures each hosts, and their data category.
+EVALUATE
+VAR _measures = SELECTCOLUMNS ( INFO.VIEW.MEASURES (), "Home", [Table] )
+RETURN
+    ADDCOLUMNS (
+        SELECTCOLUMNS ( INFO.VIEW.TABLES (), "Table", [Name], "Category", [DataCategory], "Hidden", [IsHidden] ),
+        "Measures", VAR _t = [Table] RETURN COUNTROWS ( FILTER ( _measures, [Home] = _t ) ) + 0
+    )
+ORDER BY [Measures] DESC, [Table]

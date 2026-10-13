@@ -1,0 +1,47 @@
+table 'Forecast Metric'
+	lineageTag: b81bc2af-ff97-5b62-ae71-cbfd8730e041
+
+	column 'Forecast Method'
+		dataType: string
+		lineageTag: 2279974b-2ccc-5e0f-aed5-e74a1031afa5
+		summarizeBy: none
+		sourceColumn: Forecast Method
+		sortByColumn: 'Method Order'
+
+	column 'Method Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 83185878-aec7-5568-9fc7-e23c8ca286d0
+		summarizeBy: none
+		sourceColumn: Method Order
+
+	column Metric
+		dataType: string
+		lineageTag: 9de6b0cf-ae9a-5959-b3c6-e3e3505303f3
+		summarizeBy: none
+		sourceColumn: Metric
+
+	column 'Metric Value'
+		dataType: double
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		lineageTag: 063273d4-78f8-5a08-83e7-8971a3e43b1b
+		summarizeBy: none
+		sourceColumn: Metric Value
+
+	partition 'Forecast Metric' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "forecast_scores.parquet")),
+				    #"Selected columns" = Table.SelectColumns(Source, {"method_label", "method_sort", "wape_line_day", "wape_line_week", "wape_chain_day", "bias"}),
+				    #"Renamed columns" = Table.RenameColumns(#"Selected columns", {
+				        {"method_label", "Forecast Method"}, {"method_sort", "Method Order"}, {"wape_line_day", "WAPE Line Day"},
+				        {"wape_line_week", "WAPE Line Week"}, {"wape_chain_day", "WAPE Chain Day"}, {"bias", "Bias"}}),
+				    // Unpivot: four metric columns become rows, so one chart can split by metric or by method
+				    #"Unpivoted metrics" = Table.UnpivotOtherColumns(#"Renamed columns", {"Forecast Method", "Method Order"}, "Metric", "Metric Value"),
+				    #"Changed types" = Table.TransformColumnTypes(#"Unpivoted metrics", {{"Method Order", Int64.Type}, {"Metric Value", type number}})
+				in
+				    #"Changed types"
+
+	annotation PBI_ResultType = Table

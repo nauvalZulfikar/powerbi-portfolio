@@ -1,0 +1,1029 @@
+table _Measures
+	lineageTag: 72e1416c-6e7c-5bd4-8018-9a2440e1490c
+
+	/// Store × item lines in the current filter.
+	measure Lines = COUNTROWS ( Stock )
+		formatString: #,0
+		displayFolder: Stock
+		lineageTag: 5ee10794-ca45-5e15-a830-a78d451efa9c
+
+	/// Units on the shelf at 31 Dec 2016.
+	measure 'Units On Hand' = SUM ( Stock[End Units] )
+		formatString: #,0
+		displayFolder: Stock
+		lineageTag: 584e44df-4e43-58a1-b805-0cda25958719
+
+	/// Units on hand × latest 2016 unit cost.
+	measure 'Stock Value' = SUM ( Stock[Stock Cost] )
+		displayFolder: Stock
+		lineageTag: fa695661-69d3-5a35-9935-51db388b56e2
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// Units on hand × shelf price.
+	measure 'Stock Retail Value' = SUM ( Stock[Stock Retail] )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Stock
+		lineageTag: e4fe44e7-121c-5ab8-8194-50d56fbbb142
+
+	/// Implied from the stock identity: begin + received − end. Includes shrinkage.
+	measure 'Units Sold 2016' = SUM ( Stock[Sold Units] )
+		formatString: #,0
+		displayFolder: Stock
+		lineageTag: 02b04a73-e7af-5927-b232-e3a59780f07e
+
+	/// Units sold 2016 × unit cost.
+	measure 'COGS 2016' = SUMX ( Stock, Stock[Sold Units] * Stock[Unit Cost] )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Stock
+		lineageTag: 1b7dfb1c-b3a4-5f5c-ade2-9bddd80a2a79
+
+	/// COGS 2016 ÷ year-end stock value.
+	measure 'Stock Turns' = Kpi.Rate ( [COGS 2016], [Stock Value] )
+		formatString: 0.0
+		displayFolder: Stock
+		lineageTag: 32e57a84-4e2c-57a1-980d-db0711b2f357
+
+	/// Units on hand ÷ forecast daily demand.
+	measure 'Days of Cover' = Stock.CoverDays ( [Units On Hand], SUM ( Stock[Daily Forecast] ) )
+		formatString: #,0
+		displayFolder: Stock
+		lineageTag: 2b89ec7b-1753-59b2-8900-83b8bd6d4261
+
+	/// Lines with nothing on the shelf at the year-end count.
+	measure 'Out of Stock Lines' = CALCULATE ( [Lines], Stock[Stock Status] = "Out of stock" )
+		formatString: #,0
+		displayFolder: Stock
+		lineageTag: d9f553fd-1e31-5944-b880-4488d7df01ff
+
+	/// Lines with forecast demand (not dead or inactive).
+	measure 'Selling Lines' = CALCULATE ( [Lines], Stock[Daily Forecast] > 0 )
+		formatString: #,0
+		displayFolder: Stock
+		lineageTag: 52075984-aabd-5be9-931e-6d39f0bf7ddd
+
+	/// Out-of-stock lines ÷ lines with demand.
+	measure 'Out of Stock Rate' = Kpi.Rate ( [Out of Stock Lines], [Selling Lines] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Stock
+		lineageTag: 192fdafe-ce1b-5239-8c55-c24df75020d8
+
+	/// Stock value of lines with more than 180 days of cover.
+	measure 'Overstock Value' = CALCULATE ( [Stock Value], Stock[Stock Status] = "Overstock" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Stock
+		lineageTag: 2e050190-f613-5248-a959-bc3f025b69a9
+
+	/// Stock value of lines that sold nothing in 2016.
+	measure 'Dead Stock Value' = CALCULATE ( [Stock Value], Stock[Stock Status] = "Dead stock" )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Stock
+		lineageTag: 3e7f8df6-d73d-5693-9ee1-9a1670d78825
+
+	/// Cost of units beyond 180 days of cover, plus all dead stock: cash that could be freed.
+	measure 'Excess Stock Value' = SUMX ( Stock, IF ( Stock[Daily Forecast] > 0, MAX ( 0, Stock[End Units] - 180 * Stock[Daily Forecast] ), Stock[End Units] ) * Stock[Unit Cost] )
+		displayFolder: Stock
+		lineageTag: 06d2f91a-67af-5caf-aca4-75f1415be8c2
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// Chance of not running out during one lead time. Default 95%.
+	measure 'Service Level Selected' = SELECTEDVALUE ( 'Service Level'[Service Level], 0.95 )
+		formatString: 0%
+		displayFolder: Restock
+		lineageTag: 14ca2869-dd26-57cf-8cdb-100d380eb1c2
+
+	/// Standard normal z for the selected service level.
+	measure 'Service Z' = NORM.S.INV ( [Service Level Selected] )
+		formatString: 0.000
+		displayFolder: Restock
+		lineageTag: dc2ac35b-afd2-582a-b02c-d19832ebbc04
+
+	/// Days between order runs. Default 7.
+	measure 'Review Days Selected' = SELECTEDVALUE ( 'Review Period'[Review Days], 7 )
+		formatString: 0
+		displayFolder: Restock
+		lineageTag: 23324496-ed3c-573a-ad1b-630d5e35daa3
+
+	/// Lines at or below their reorder point.
+	measure 'Lines To Order' =
+			VAR _z = [Service Z]
+			VAR _r = [Review Days Selected]
+			RETURN
+			    SUMX (
+			        Stock,
+			        VAR _d = Stock[Daily Forecast]
+			        VAR _l = Stock[Lead Days]
+			        VAR _ss = Stock.SafetyStock ( _z, _d, _l, Stock[Daily SD], Stock[Lead SD] )
+			        VAR _due = _d > 0 && Stock[End Units] <= Stock.ReorderPoint ( _d, _l, _ss )
+			        RETURN IF ( _due, 1 )
+			    )
+		formatString: #,0
+		displayFolder: Restock
+		lineageTag: 0b3d5e59-03f5-57f0-85f7-13a669843dcb
+
+	/// Units that bring every due line back up to its order-up-to level.
+	measure 'Units To Order' =
+			VAR _z = [Service Z]
+			VAR _r = [Review Days Selected]
+			RETURN
+			    SUMX (
+			        Stock,
+			        VAR _d = Stock[Daily Forecast]
+			        VAR _l = Stock[Lead Days]
+			        VAR _ss = Stock.SafetyStock ( _z, _d, _l, Stock[Daily SD], Stock[Lead SD] )
+			        VAR _due = _d > 0 && Stock[End Units] <= Stock.ReorderPoint ( _d, _l, _ss )
+			        RETURN IF ( _due, Stock.OrderQty ( _d, _l, _r, _ss, Stock[End Units] ) )
+			    )
+		formatString: #,0
+		displayFolder: Restock
+		lineageTag: aafa1891-fe65-5d30-ab36-53cc4ab89c38
+
+	/// Units to order × unit cost.
+	measure 'Order Value' =
+			VAR _z = [Service Z]
+			VAR _r = [Review Days Selected]
+			RETURN
+			    SUMX (
+			        Stock,
+			        VAR _d = Stock[Daily Forecast]
+			        VAR _l = Stock[Lead Days]
+			        VAR _ss = Stock.SafetyStock ( _z, _d, _l, Stock[Daily SD], Stock[Lead SD] )
+			        VAR _due = _d > 0 && Stock[End Units] <= Stock.ReorderPoint ( _d, _l, _ss )
+			        RETURN IF ( _due, Stock.OrderQty ( _d, _l, _r, _ss, Stock[End Units] ) * Stock[Unit Cost] )
+			    )
+		displayFolder: Restock
+		lineageTag: 8cfbe9f2-f9cd-50ac-a7e1-9e8a46367f2e
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// Buffer for demand and lead-time variation at the selected service level.
+	measure 'Safety Stock Units' =
+			VAR _z = [Service Z]
+			VAR _r = [Review Days Selected]
+			RETURN
+			    SUMX (
+			        Stock,
+			        VAR _d = Stock[Daily Forecast]
+			        VAR _l = Stock[Lead Days]
+			        VAR _ss = Stock.SafetyStock ( _z, _d, _l, Stock[Daily SD], Stock[Lead SD] )
+			        VAR _due = _d > 0 && Stock[End Units] <= Stock.ReorderPoint ( _d, _l, _ss )
+			        RETURN _ss
+			    )
+		formatString: #,0
+		displayFolder: Restock
+		lineageTag: c0363eab-67cd-50cb-bfc0-654c381653ef
+
+	/// Safety stock units × unit cost.
+	measure 'Safety Stock Value' =
+			VAR _z = [Service Z]
+			VAR _r = [Review Days Selected]
+			RETURN
+			    SUMX (
+			        Stock,
+			        VAR _d = Stock[Daily Forecast]
+			        VAR _l = Stock[Lead Days]
+			        VAR _ss = Stock.SafetyStock ( _z, _d, _l, Stock[Daily SD], Stock[Lead SD] )
+			        VAR _due = _d > 0 && Stock[End Units] <= Stock.ReorderPoint ( _d, _l, _ss )
+			        RETURN _ss * Stock[Unit Cost]
+			    )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Restock
+		lineageTag: 1b03918a-4d0c-52d6-8182-47b1e895b067
+
+	/// Expected daily demand: 2016 rate × January season factor.
+	measure 'Forecast Units per Day' = SUM ( Stock[Daily Forecast] )
+		formatString: #,0
+		displayFolder: Restock
+		lineageTag: bd8fa24e-e0b7-53ae-b96c-69f6914489d0
+
+	/// Units sold in January 2016 (the only complete month in the sales file).
+	measure 'January Units Sold' = SUM ( 'Daily Sales'[Units Sold] )
+		formatString: #,0
+		displayFolder: Demand
+		lineageTag: 8fcac1a1-2cf1-505a-af3d-bc905d0bf11c
+
+	/// Till receipts in January 2016.
+	measure 'January Sales' = SUM ( 'Daily Sales'[Sales Dollars] )
+		displayFolder: Demand
+		lineageTag: ed2163ad-bab7-5727-8c8e-e5755c3fc1b6
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// January sales ÷ January units.
+	measure 'Avg Selling Price' = Kpi.Rate ( [January Sales], [January Units Sold] )
+		formatString: \$#,0.00
+		displayFolder: Demand
+		lineageTag: 2f202fb0-4160-5eb7-8edb-9bd6a510f1df
+
+	/// Average day's units ÷ average day. 1.00 = a normal day.
+	measure 'Day Index' = AVERAGE ( 'Weekday Profile'[Weekday Index] )
+		formatString: 0.00
+		displayFolder: Demand
+		lineageTag: 70f1d6e3-54a0-58d1-bc8b-c3663f17b58b
+
+	/// Actual or forecast units for the whole chain (backtest week: 25–31 Jan).
+	measure 'Chain Units' = SUM ( 'Forecast Daily'[Series Units] )
+		formatString: #,0
+		displayFolder: Demand
+		lineageTag: 21dc9a2d-8170-506c-858f-472da6764149
+
+	/// Units the chain sold each day of January 2016.
+	measure 'Actual Chain Units' = CALCULATE ( [Chain Units], 'Forecast Daily'[Series] = "Actual" )
+		formatString: #,0
+		displayFolder: Demand
+		lineageTag: 897e3848-1272-57c6-9e89-92c13ef7a859
+
+	/// The method the restock list uses.
+	measure 'Forecast Restock Method' = CALCULATE ( [Chain Units], 'Forecast Daily'[Series] = "Annual rate × season × weekday" )
+		formatString: #,0
+		displayFolder: Demand
+		lineageTag: c25687da-9eb5-5ada-8243-dfe57e61d566
+
+	/// Jan 1–24 average × weekday index.
+	measure 'Forecast Avg Weekday' = CALCULATE ( [Chain Units], 'Forecast Daily'[Series] = "Average × weekday" )
+		formatString: #,0
+		displayFolder: Demand
+		lineageTag: ef5dde65-7ff1-5c40-bc38-c46a5a8a12ee
+
+	/// The units sold on the same weekday one week earlier.
+	measure 'Forecast Last Week' = CALCULATE ( [Chain Units], 'Forecast Daily'[Series] = "Same day last week" )
+		formatString: #,0
+		displayFolder: Demand
+		lineageTag: ddf26c30-105a-5df9-b52c-b8c45f011dff
+
+	/// WAPE per store × item × week. Lower is better.
+	measure 'Line Week Error' = MIN ( 'Forecast Scores'[WAPE Line Week] )
+		formatString: 0%
+		displayFolder: Demand
+		lineageTag: 64bfd980-7c39-54b2-b5ba-439de1178caf
+
+	/// WAPE of the chain's daily total. Lower is better.
+	measure 'Chain Day Error' = MIN ( 'Forecast Scores'[WAPE Chain Day] )
+		formatString: 0%
+		displayFolder: Demand
+		lineageTag: 6eca62f9-898a-5026-9c53-a25b587b3f1e
+
+	/// Forecast ÷ actual − 1. Negative = under-forecast, which means stock-outs.
+	measure 'Forecast Bias' = MIN ( 'Forecast Scores'[Bias] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Demand
+		lineageTag: 2c07cb4f-4364-5e2e-bbeb-3e6e87292867
+
+	/// Invoiced purchase orders.
+	measure 'Purchase Orders' = COUNTROWS ( Invoices )
+		formatString: #,0
+		displayFolder: Purchasing
+		lineageTag: aeebd1a0-2319-55dd-93c7-14a27f12c3a8
+
+	/// Invoiced dollars, freight excluded.
+	measure 'Purchase Spend' = SUM ( Invoices[Invoice Dollars] )
+		displayFolder: Purchasing
+		lineageTag: ba34542b-e915-5d10-a5d6-b03d9bb25e7c
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// Freight charged on the invoices.
+	measure 'Freight Cost' = SUM ( Invoices[Invoice Freight] )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Purchasing
+		lineageTag: fe350aa8-e1df-5cf3-a705-75d272435d3d
+
+	/// Freight ÷ purchase spend.
+	measure 'Freight Share' = Kpi.Rate ( [Freight Cost], [Purchase Spend] )
+		formatString: 0.00%
+		displayFolder: Purchasing
+		lineageTag: 0efb68be-99a3-5dfa-abdd-a0a21d914b0a
+
+	/// Average days from invoice to payment.
+	measure 'Payment Days' = AVERAGE ( Invoices[Days To Pay] )
+		formatString: #,0.0
+		displayFolder: Purchasing
+		lineageTag: 79280dd8-5f4c-548f-aa72-33c17741e382
+
+	/// Invoiced POs whose number never appears on a receiving line.
+	measure 'Unmatched POs' = CALCULATE ( [Purchase Orders], Invoices[PO Matches Receipts] = FALSE () )
+		formatString: #,0
+		displayFolder: Purchasing
+		lineageTag: 623e6401-6915-5a32-9f22-c772e6db9a3d
+
+	/// Receiving lines at cost.
+	measure 'Received Value' = SUM ( Receipts[Received Dollars] )
+		displayFolder: Purchasing
+		lineageTag: 732eded4-0cf0-5b94-87e3-d08a0f9e386f
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// Units on the receiving lines.
+	measure 'Received Qty' = SUM ( Receipts[Received Units] )
+		formatString: #,0
+		displayFolder: Purchasing
+		lineageTag: 45f04987-0942-52fe-8fce-eebd3b643aac
+
+	/// Average PO-to-receipt days over vendors with measured shipments.
+	measure 'Lead Time' = CALCULATE ( AVERAGE ( Vendor[Avg Lead Days] ), Vendor[Lead Time Estimated] = FALSE () )
+		formatString: #,0.0
+		displayFolder: Purchasing
+		lineageTag: 3ed515e9-6784-5cdf-9206-eb1e69edee87
+
+	/// Received value one month back on the Gregorian calendar.
+	measure 'Received Value Prior Month' = Kpi.PriorMonth ( [Received Value], 'Gregorian' )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Purchasing
+		lineageTag: a73bc60c-d0e6-51bd-9505-0947f27765f9
+
+	/// Change in received value against the prior month.
+	measure 'Received Value MoM' = Kpi.Change ( [Received Value], [Received Value Prior Month] )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Purchasing
+		lineageTag: aabc319e-93d6-5f3f-9750-a2a0a99d576d
+
+	/// Vendors the item was bought from in 2016 (through the Item Supplier bridge).
+	measure 'Vendors per Item' = DISTINCTCOUNT ( 'Item Supplier'[Supplier Vendor] )
+		formatString: #,0
+		displayFolder: Sourcing
+		lineageTag: 14ed52cc-7e5d-5a29-a5f9-6a360c7d24bf
+
+	/// Items a vendor delivered at least once in 2016.
+	measure 'Items Supplied' = DISTINCTCOUNT ( 'Item Supplier'[Supplier Brand] )
+		formatString: #,0
+		displayFolder: Sourcing
+		lineageTag: e65cc0cf-bb81-5043-8b93-e8671e1bf5fc
+
+	/// Items bought from more than one vendor in 2016.
+	measure 'Multi-Sourced Items' = CALCULATE ( DISTINCTCOUNT ( 'Item Supplier'[Supplier Brand] ), 'Item Supplier'[Multi Sourced] = TRUE () )
+		formatString: #,0
+		displayFolder: Sourcing
+		lineageTag: 1ad66bdc-c6e5-5e5c-9e46-1a2843c68694
+
+	/// 2016 purchase dollars on items that more than one vendor supplied.
+	measure 'Multi-Sourced Spend' = CALCULATE ( SUM ( 'Item Supplier'[Supplier Dollars] ), 'Item Supplier'[Multi Sourced] = TRUE () )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Sourcing
+		lineageTag: d32498b3-4b49-5bc4-ad75-e45afcda1a5a
+
+	/// 2016 purchase units on items that more than one vendor supplied.
+	measure 'Multi-Sourced Units' = CALCULATE ( SUM ( 'Item Supplier'[Supplier Units] ), 'Item Supplier'[Multi Sourced] = TRUE () )
+		formatString: #,0
+		displayFolder: Sourcing
+		lineageTag: 62b467fe-0bc6-583c-ab8e-09429f09ddd6
+
+	/// Year-end stock value of every item the vendor supplied in 2016, even when the latest order went to another vendor.
+	measure 'Stock of Supplied Items' =
+			CALCULATE (
+			    [Stock Value],
+			    CROSSFILTER ( 'Item Supplier'[Supplier Brand], Item[Brand No], Both ),
+			    CROSSFILTER ( Stock[Stock Vendor], Vendor[Vendor No], None )
+			)
+		displayFolder: Sourcing
+		lineageTag: b21abb39-7b86-5b2b-a7d4-dd040e898768
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// This row's share of the stock value across all stores.
+	measure 'Share of Stock Value' = Kpi.ShareOf ( [Stock Value], Store )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Stock
+		lineageTag: 1fa9a0b0-c292-53da-b9ad-e93808a943c8
+
+	/// The order at the Dec 2017 shelf price merged in from the price list (the 2016 price where an item is not listed): what the restocked units sell for. The 2017 purchase price equals the 2016 unit cost on every line, so only the shelf price moves.
+	measure 'Order Shelf Value 2017' =
+			VAR _z = [Service Z]
+			VAR _r = [Review Days Selected]
+			RETURN
+			    SUMX (
+			        Stock,
+			        VAR _d = Stock[Daily Forecast]
+			        VAR _l = Stock[Lead Days]
+			        VAR _ss = Stock.SafetyStock ( _z, _d, _l, Stock[Daily SD], Stock[Lead SD] )
+			        VAR _due = _d > 0 && Stock[End Units] <= Stock.ReorderPoint ( _d, _l, _ss )
+			        RETURN IF ( _due, Stock.OrderQty ( _d, _l, _r, _ss, Stock[End Units] ) * COALESCE ( RELATED ( Item[List Price 2017] ), Stock[Unit Price] ) )
+			    )
+		displayFolder: Restock
+		lineageTag: 94e1b673-3aa9-57fb-954f-d20735dbb771
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// Items the vendor lists on the Dec 2017 price list (Vendor Catalog, grouped in Power Query).
+	measure 'Listed Items' = SUM ( 'Vendor Catalog'[Catalog Items] )
+		formatString: #,0
+		displayFolder: Sourcing
+		lineageTag: a494061c-079b-5cab-af11-f6f23685b823
+
+	/// One forecast metric for one method, from the unpivoted Forecast Metric table.
+	measure 'Metric Score' = SUM ( 'Forecast Metric'[Metric Value] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Demand
+		lineageTag: ab1b1aaa-a69b-52ad-8828-ce0897431893
+
+	/// Semi-additive: counted units on the last count date in the filter (31 Dec 2016 unless a date is picked), from Stock Counts. Follows Store, City, Category and date; not Vendor or ABC class, which only filter Stock.
+	measure 'Units On Hand (Closing)' =
+			CALCULATE (
+			    SUM ( 'Stock Counts'[Counted Units] ),
+			    LASTNONBLANK ( 'Date'[Date], CALCULATE ( SUM ( 'Stock Counts'[Counted Units] ) ) )
+			)
+		formatString: #,0
+		displayFolder: Stock
+		lineageTag: bc85b80a-faa2-55ec-aee6-bd395ab24c5b
+
+	/// Semi-additive: counted units on the first count date in the filter (1 Jan 2016).
+	measure 'Opening Units' =
+			CALCULATE (
+			    SUM ( 'Stock Counts'[Counted Units] ),
+			    FIRSTNONBLANK ( 'Date'[Date], CALCULATE ( SUM ( 'Stock Counts'[Counted Units] ) ) )
+			)
+		formatString: #,0
+		displayFolder: Stock
+		lineageTag: 0953cddc-ab18-5bd1-9b04-11f58a7ee6ac
+
+	/// Lines with fewer units than their safety stock; comparing two columns of the same row needs FILTER.
+	measure 'Lines Below Safety' = CALCULATE ( [Lines], FILTER ( Stock, Stock[End Units] < Stock[Safety Units] ) )
+		formatString: #,0
+		displayFolder: Stock
+		lineageTag: fb96f64d-07b1-5b77-9b3d-89fea008bd32
+
+	/// Out-of-stock lines in class A. KEEPFILTERS keeps the ABC slicer: with B picked the result is blank, not the A count.
+	measure 'Out of Stock Lines A' = CALCULATE ( [Out of Stock Lines], KEEPFILTERS ( ABC[ABC Key] = "A" ) )
+		formatString: #,0
+		displayFolder: Stock
+		lineageTag: 6a9c820a-da10-5643-8676-90f0589fae87
+
+	/// Stock value of the whole category the row belongs to: ALLEXCEPT drops every Item filter except Category.
+	measure 'Category Stock Value' = CALCULATE ( [Stock Value], ALLEXCEPT ( Item, Item[Category] ) )
+		displayFolder: Stock
+		lineageTag: c5816899-e4cc-5b5c-b387-9d9ec529ee56
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// Stores whose out-of-stock rate is above 25%: the measure runs once per store through context transition.
+	measure 'Stores Above 25% OOS' = COUNTROWS ( FILTER ( VALUES ( Store[Store No] ), [Out of Stock Rate] > 0.25 ) )
+		formatString: #,0
+		displayFolder: Stock
+		lineageTag: 4a696640-4f35-5cb1-a5d0-071a86f7d6a6
+
+	/// Stock value of the store × item lines that sold in January. 'Daily Sales' as a filter is its expanded table, so its Store and Item columns travel to Stock through the relationships.
+	measure 'Stock Value of Jan Sellers' = CALCULATE ( [Stock Value], 'Daily Sales' )
+		displayFolder: Stock
+		lineageTag: 72d12a61-d566-563b-bd45-46aa5f93a2e6
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// Selling lines with more days of cover than the (synthetic) target for their category and ABC class. Category Target meets Item through a limited many-to-many relationship, so RELATED can't reach it: each target row filters Item by context transition instead.
+	measure 'Lines Over Target Cover' =
+			SUMX (
+			    'Category Target',
+			    VAR _abc = 'Category Target'[Target ABC]
+			    VAR _days = 'Category Target'[Target Cover Days]
+			    RETURN
+			        CALCULATE (
+			            COUNTROWS ( FILTER ( Stock, Stock[Daily Forecast] > 0 && Stock[Cover Days] > _days ) ),
+			            KEEPFILTERS ( Stock[Stock ABC] = _abc )
+			        )
+			)
+		formatString: #,0
+		displayFolder: Stock
+		lineageTag: e404bf66-b714-50c7-9fa6-c4f0b95bbfaf
+
+	/// Selling lines whose cover is shorter than their vendor's 90th-percentile lead time (RELATED from Stock to Vendor).
+	measure 'Lines Under P90 Lead' = SUMX ( Stock, IF ( Stock[Daily Forecast] > 0 && Stock[Cover Days] < RELATED ( Vendor[Lead Days P90] ), 1 ) )
+		formatString: #,0
+		displayFolder: Sourcing
+		lineageTag: 9528a950-1618-5dd2-9b72-765dbadc7b1a
+
+	/// Order value for lines already out of stock. KEEPFILTERS adds to the Status filter instead of replacing it.
+	measure 'Urgent Order Value' = CALCULATE ( [Order Value], KEEPFILTERS ( Status[Status] IN { "Out of stock" } ) )
+		displayFolder: Restock
+		lineageTag: ec95f25d-c1a7-574d-8d6c-0ec4ddfeedf0
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// This vendor's share of the order across the vendors in the current selection (ALLSELECTED on Vendor).
+	measure 'Share of Selected Order' = DIVIDE ( [Order Value], CALCULATE ( [Order Value], ALLSELECTED ( Vendor ) ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Restock
+		lineageTag: d1dcf966-650d-59d4-93f6-1f7120efbf3d
+
+	/// This row's share of the order total the visual shows: ALLSELECTED () keeps the slicers, drops the row.
+	measure '% of Visible Order' = DIVIDE ( [Order Value], CALCULATE ( [Order Value], ALLSELECTED () ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Restock
+		lineageTag: 63aca21f-dbec-52f0-b895-a1215519ab77
+
+	/// Vendors with more than $10K to order: a temporary table of vendor × order value.
+	measure 'Vendors To Call' = COUNTROWS ( FILTER ( ADDCOLUMNS ( VALUES ( Vendor[Vendor] ), "@ord", [Order Value] ), [@ord] > 10000 ) )
+		formatString: #,0
+		displayFolder: Restock
+		lineageTag: 2edea7b4-403c-5a85-b335-933c0dcea16a
+
+	/// The store with the biggest order in the city on the row: INDEX 1 within a PARTITIONBY City window.
+	measure 'Top Order Store in City' =
+			IF (
+			    HASONEVALUE ( Store[City] ),
+			    MAXX (
+			        INDEX ( 1, SUMMARIZE ( ALLSELECTED ( Store ), Store[City], Store[Store Name] ),
+			                ORDERBY ( [Order Value], DESC ), LAST, PARTITIONBY ( Store[City] ) ),
+			        Store[Store Name]
+			    )
+			)
+		displayFolder: Restock
+		lineageTag: f28ad0c2-7fc2-5720-8aa8-e19d49b5b918
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// This row's share of the purchase spend the visual shows: ALLSELECTED () keeps the slicers, drops the row.
+	measure '% of Visible Spend' = DIVIDE ( [Purchase Spend], CALCULATE ( [Purchase Spend], ALLSELECTED () ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Purchasing
+		lineageTag: 2d99a0a8-8b0c-5586-8d4d-c769843e1d8b
+
+	/// Invoice dollars by payment date (USERELATIONSHIP on the inactive Pay Date).
+	measure 'Paid Dollars' = CALCULATE ( SUM ( Invoices[Invoice Dollars] ), USERELATIONSHIP ( Invoices[Pay Date], 'Date'[Date] ) )
+		displayFolder: Purchasing
+		lineageTag: 2ead06d6-70b6-5423-b502-bf2f727339a7
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// Invoice dollars by invoice date (USERELATIONSHIP on the inactive Invoice Date).
+	measure 'Invoiced by Invoice Date' = CALCULATE ( SUM ( Invoices[Invoice Dollars] ), USERELATIONSHIP ( Invoices[Invoice Date], 'Date'[Date] ) )
+		displayFolder: Purchasing
+		lineageTag: d871c587-95c8-52e3-9155-3a480de7740f
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// Average monthly received value over the last three months with receipts (DATESINPERIOD).
+	measure 'Received Value 3M Avg' =
+			VAR _win = DATESINPERIOD ( 'Date'[Date], MAX ( 'Date'[Date] ), -3, MONTH )
+			RETURN
+			    DIVIDE ( CALCULATE ( [Received Value], _win ), CALCULATE ( DISTINCTCOUNT ( Receipts[Receipt Month] ), _win ) )
+		displayFolder: Purchasing
+		lineageTag: 21f1a613-71d1-5041-b276-0488c886d1a2
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// Received value one month back with OFFSET over the months in the visual, no time-intelligence function.
+	measure 'Received Value Prev (OFFSET)' =
+			CALCULATE (
+			    [Received Value],
+			    OFFSET ( -1, ALLSELECTED ( 'Date'[Month Start] ), ORDERBY ( 'Date'[Month Start] ) )
+			)
+		displayFolder: Purchasing
+		lineageTag: b98ad3a1-b299-5814-960c-84a39c7dc721
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// Three-month moving average with WINDOW: this month and the two before, blank where nothing was received and above the month level (the Calendar hierarchy drills Year → Quarter → Month Start).
+	measure 'Received Value 3M (WINDOW)' =
+			IF (
+			    ISINSCOPE ( 'Date'[Month Start] ) && NOT ISBLANK ( [Received Value] ),
+			    AVERAGEX (
+			        WINDOW ( -2, REL, 0, REL, ALLSELECTED ( 'Date'[Month Start] ), ORDERBY ( 'Date'[Month Start] ) ),
+			        [Received Value]
+			    )
+			)
+		displayFolder: Purchasing
+		lineageTag: 9a9fdf05-68e8-5dfd-96b5-dc7e6e198ac2
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// Rank of the vendor by received value within its receipt category (RANK with PARTITIONBY).
+	measure 'Vendor Rank in Category' =
+			IF (
+			    HASONEVALUE ( Vendor[Vendor] ) && HASONEVALUE ( Receipts[Receipt Category] ),
+			    RANK ( DENSE, SUMMARIZE ( ALLSELECTED ( Receipts ), Vendor[Vendor], Receipts[Receipt Category] ),
+			           ORDERBY ( [Received Value], DESC ), LAST, PARTITIONBY ( Receipts[Receipt Category] ) )
+			)
+		formatString: #,0
+		displayFolder: Purchasing
+		lineageTag: 702ff461-274c-5625-9657-06eb79bd95cc
+
+	/// Average daily units over the seven days ending on the row's date.
+	measure 'January Units 7D Avg' = AVERAGEX ( DATESINPERIOD ( 'Date'[Date], MAX ( 'Date'[Date] ), -7, DAY ), [January Units Sold] )
+		formatString: #,0
+		displayFolder: Demand
+		lineageTag: c3cedcd1-467f-5627-bbb8-6337882713bc
+
+	/// January units per weekday of the disconnected Weekday Profile table, joined at query time with TREATAS.
+	measure 'January Units by Weekday' = CALCULATE ( [January Units Sold], TREATAS ( VALUES ( 'Weekday Profile'[Day] ), 'Date'[Weekday] ) )
+		formatString: #,0
+		displayFolder: Demand
+		lineageTag: 15f2ef45-c4ad-573f-94d5-0579a107591f
+
+	/// Stock bridge at 2016 unit cost: opening stock + received − sold = closing stock value (waterfall on Bridge Step). Sold is implied by the stock identity, so the bridge closes exactly.
+	measure 'Bridge Value' =
+			VAR _cost = SWITCH (
+			    SELECTEDVALUE ( 'Bridge Step'[Step] ),
+			    "Opening stock", SUMX ( Stock, Stock[Begin Units] * Stock[Unit Cost] ),
+			    "Received", SUMX ( Stock, Stock[Received Units] * Stock[Unit Cost] ),
+			    "Sold", - SUMX ( Stock, Stock[Sold Units] * Stock[Unit Cost] )
+			)
+			RETURN _cost
+		displayFolder: Stock
+		lineageTag: a101d383-7ea1-5688-8863-16c342f8b447
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// Sort number of the row's stock status: 1 out of stock, 2 reorder now, 3 healthy, 4 overstock, 5 dead stock, 6 inactive. Drives the Status colours and icons in the tables.
+	measure 'Status Code' = MIN ( Status[Status Sort] )
+		formatString: 0
+		displayFolder: Stock
+		lineageTag: d5dcfd3f-e5e2-567a-b4ab-3b04befa15f5
+
+	/// Demand over the lead time + safety stock, at the selected service level.
+	measure 'Reorder Point Units' =
+			VAR _z = [Service Z]
+			VAR _r = [Review Days Selected]
+			RETURN
+			    SUMX (
+			        Stock,
+			        VAR _d = Stock[Daily Forecast]
+			        VAR _l = Stock[Lead Days]
+			        VAR _ss = Stock.SafetyStock ( _z, _d, _l, Stock[Daily SD], Stock[Lead SD] )
+			        VAR _due = _d > 0 && Stock[End Units] <= Stock.ReorderPoint ( _d, _l, _ss )
+			        RETURN Stock.ReorderPoint ( _d, _l, _ss )
+			    )
+		formatString: #,0
+		displayFolder: Restock
+		lineageTag: 29496fab-0214-5720-8a76-4e5c8889efec
+
+	/// Demand over lead time + review period + safety stock: what a due line is topped up to.
+	measure 'Order Up To Units' =
+			VAR _z = [Service Z]
+			VAR _r = [Review Days Selected]
+			RETURN
+			    SUMX (
+			        Stock,
+			        VAR _d = Stock[Daily Forecast]
+			        VAR _l = Stock[Lead Days]
+			        VAR _ss = Stock.SafetyStock ( _z, _d, _l, Stock[Daily SD], Stock[Lead SD] )
+			        VAR _due = _d > 0 && Stock[End Units] <= Stock.ReorderPoint ( _d, _l, _ss )
+			        RETURN _d * ( _l + _r ) + _ss
+			    )
+		formatString: #,0
+		displayFolder: Restock
+		lineageTag: f8b8e68a-abb2-5935-b124-ae3c20507077
+
+	/// Shipments received (PO × store × receiving date).
+	measure 'Vendor Shipments' = SUM ( Shipments[Shipment Count] )
+		formatString: #,0
+		displayFolder: Purchasing
+		lineageTag: c6db3aa5-eda7-55f4-8d15-9d5022520d00
+
+	/// 2016 sales value of the lines in the filter: implied units sold × shelf price.
+	measure 'Sales 2016' = SUM ( Stock[Sales Value] )
+		displayFolder: Assortment
+		lineageTag: a3156c3d-82f3-5d56-b749-66cbd34f646b
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// Pareto: share of 2016 sales taken by this item and every item that sold more, within the current slicers. REMOVEFILTERS on Item[Item] drops the row and a Top N filter on the axis but keeps every other slicer.
+	measure 'Cumulative Sales Share' =
+			VAR _s = [Sales 2016]
+			VAR _items =
+			    CALCULATETABLE (
+			        ADDCOLUMNS ( VALUES ( Item[Item] ), "@s", [Sales 2016] ),
+			        REMOVEFILTERS ( Item[Item] )
+			    )
+			RETURN
+			    IF (
+			        HASONEVALUE ( Item[Item] ) && NOT ISBLANK ( _s ),
+			        DIVIDE ( SUMX ( FILTER ( _items, [@s] >= _s ), [@s] ), SUMX ( _items, [@s] ) )
+			    )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Assortment
+		lineageTag: 2d5dbd47-6814-5af2-9135-7a781214e671
+
+	/// Constant 80% reference line for the Pareto chart.
+	measure 'Pareto 80% Line' = 0.8
+		formatString: 0%
+		displayFolder: Assortment
+		lineageTag: 81d5e649-6564-58fc-8c22-6ec924de3544
+
+	/// ABC class recomputed on the brands inside the current slicers (cumulative 2016 sales ≤ 80% A, ≤ 95% B, else C), against the static class in the data, which is ranked chain-wide.
+	measure 'ABC Dynamic' =
+			VAR _s = [Sales 2016]
+			VAR _brands =
+			    CALCULATETABLE (
+			        ADDCOLUMNS ( VALUES ( Item[Brand No] ), "@s", [Sales 2016] ),
+			        REMOVEFILTERS ( Item[Brand No], Item[Item], Item[Size] )
+			    )
+			VAR _cum = DIVIDE ( SUMX ( FILTER ( _brands, [@s] >= _s ), [@s] ), SUMX ( _brands, [@s] ) )
+			RETURN
+			    IF (
+			        HASONEVALUE ( Item[Brand No] ) && NOT ISBLANK ( _s ),
+			        SWITCH ( TRUE (), _cum <= 0.80, "A", _cum <= 0.95, "B", "C" )
+			    )
+		displayFolder: Assortment
+		lineageTag: f878d0c8-6a8a-50d2-85fb-8af3c470f687
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// The item's chain-wide ABC class as stored in the data.
+	measure 'ABC Static' = SELECTEDVALUE ( Item[Item ABC] )
+		displayFolder: Assortment
+		lineageTag: 8fe67ba1-be10-53f3-9fe9-5530bf769289
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Lines whose days of cover fall inside the band's Min Days / Max Days edges (a table, not hard-coded text). No demand = no cover at all. Matches the Stock Cover Band column (a pipeline test checks the edges).
+	measure 'Lines in Band (Dynamic)' =
+			VAR _lo = SELECTEDVALUE ( 'Cover Band'[Min Days] )
+			VAR _hi = SELECTEDVALUE ( 'Cover Band'[Max Days] )
+			RETURN
+			    IF (
+			        HASONEVALUE ( 'Cover Band'[Cover Band] ),
+			        CALCULATE (
+			            [Lines],
+			            REMOVEFILTERS ( 'Cover Band' ),
+			            FILTER (
+			                VALUES ( Stock[Cover Days] ),
+			                IF (
+			                    ISBLANK ( _hi ),
+			                    ISBLANK ( Stock[Cover Days] ),
+			                    NOT ISBLANK ( Stock[Cover Days] ) && Stock[Cover Days] > _lo && Stock[Cover Days] <= _hi
+			                )
+			            )
+			        )
+			    )
+		formatString: #,0
+		displayFolder: Assortment
+		lineageTag: bfc967f5-84d7-5766-b45f-3ca3f6cec134
+
+	/// Out-of-stock rate of lines first listed in 2016 (in the closing count, not the opening one).
+	measure 'New Line OOS Rate' = CALCULATE ( [Out of Stock Rate], Stock[New Line 2016] = TRUE () )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Assortment
+		lineageTag: c15288c8-1bf6-585d-bcc6-b776accf8748
+
+	/// Out-of-stock rate of lines that were already in the opening count.
+	measure 'Carried Line OOS Rate' = CALCULATE ( [Out of Stock Rate], Stock[Line Origin] = "Carried over" )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Assortment
+		lineageTag: 1f7ce2d7-350a-5236-8d45-26e00a0545ee
+
+	/// Lines with stock on the shelf, no January 2016 sales and no receipt in the last 120 days of 2016 (or none at all).
+	measure 'Lines Going Dormant' =
+			COUNTROWS (
+			    FILTER (
+			        Stock,
+			        Stock[End Units] > 0 && Stock[Jan Units] = 0
+			            && ( ISBLANK ( Stock[Last Receipt] ) || Stock[Last Receipt] < DATE ( 2016, 12, 31 ) - 120 )
+			    )
+			)
+		formatString: #,0
+		displayFolder: Assortment
+		lineageTag: 3b6e99a0-0765-5f98-8d2b-20d771fc79fe
+
+	/// Stock value of the lines going dormant.
+	measure 'Dormant Stock Value' =
+			SUMX (
+			    FILTER (
+			        Stock,
+			        Stock[End Units] > 0 && Stock[Jan Units] = 0
+			            && ( ISBLANK ( Stock[Last Receipt] ) || Stock[Last Receipt] < DATE ( 2016, 12, 31 ) - 120 )
+			    ),
+			    Stock[Stock Cost]
+			)
+		displayFolder: Assortment
+		lineageTag: 4ec2b05c-a210-5159-952a-64de5c46e3bb
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// Closing − opening units, at 2016 unit cost.
+	measure 'Stock Value Change' = SUMX ( Stock, ( Stock[End Units] - Stock[Begin Units] ) * Stock[Unit Cost] )
+		displayFolder: Movement
+		lineageTag: af84b12f-2db2-5563-bd9f-7b1f2d2134d2
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// This row's share of the stock value change across the visible rows.
+	measure 'Stock Value Change %' = DIVIDE ( [Stock Value Change], CALCULATE ( [Stock Value Change], ALLSELECTED ( Item[Category] ) ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Movement
+		lineageTag: 640ef862-12f8-5f29-95db-fd2a2af09c3e
+
+	/// Purchase orders still in the funnel at each step: raised → invoiced → invoice units and vendor match the receipts → approved → paid. Each step keeps the conditions of the steps before it. Every PO on a receiving line has an invoice in this data (a pipeline test checks it), so PO raised = Invoiced.
+	measure 'Funnel POs' =
+			VAR _inv = COUNTROWS ( Invoices )
+			VAR _match = CALCULATE ( COUNTROWS ( Invoices ), Invoices[PO Matches Receipts] = TRUE () )
+			VAR _appr = CALCULATE ( COUNTROWS ( Invoices ), Invoices[PO Matches Receipts] = TRUE (), Invoices[Approved] = TRUE () )
+			VAR _paid = CALCULATE ( COUNTROWS ( Invoices ), Invoices[PO Matches Receipts] = TRUE (), Invoices[Approved] = TRUE (),
+			    NOT ISBLANK ( Invoices[Pay Date] ) )
+			RETURN
+			    SWITCH (
+			        SELECTEDVALUE ( 'Funnel Step'[Funnel Step] ),
+			        "PO raised", _inv,
+			        "Invoiced", _inv,
+			        "Matches receipts", _match,
+			        "Approved", _appr,
+			        "Paid", _paid
+			    )
+		formatString: #,0
+		displayFolder: Movement
+		lineageTag: ecf00205-f249-51aa-8dab-bf985cbb4629
+
+	/// 95th percentile of days of cover among the selling lines (PERCENTILEX.INC); per category on a category row.
+	measure 'Cover P95 by Category' = PERCENTILEX.INC ( FILTER ( Stock, NOT ISBLANK ( Stock[Cover Days] ) ), Stock[Cover Days], 0.95 )
+		formatString: #,0
+		displayFolder: Movement
+		lineageTag: 2cac52bc-fedf-5087-8e12-b37b8009ed87
+
+	/// Lines with more days of cover than the P95 of their category (P95 taken over the selected stores, all items in the category).
+	measure 'Outlier Lines' =
+			SUMX (
+			    VALUES ( Item[Category] ),
+			    VAR _cat = Item[Category]
+			    VAR _p95 = CALCULATE ( [Cover P95 by Category], ALLSELECTED ( Store ), ALLSELECTED ( Item ), Item[Category] = _cat )
+			    RETURN CALCULATE ( COUNTROWS ( FILTER ( Stock, Stock[Cover Days] > _p95 ) ) )
+			)
+		formatString: #,0
+		displayFolder: Movement
+		lineageTag: 54ac1a85-fafd-5ac7-ae99-3202f61e34d7
+
+	/// Stock value of the cover outliers (cover above the category P95).
+	measure 'Outlier Stock Value' =
+			SUMX (
+			    VALUES ( Item[Category] ),
+			    VAR _cat = Item[Category]
+			    VAR _p95 = CALCULATE ( [Cover P95 by Category], ALLSELECTED ( Store ), ALLSELECTED ( Item ), Item[Category] = _cat )
+			    RETURN CALCULATE ( SUMX ( FILTER ( Stock, Stock[Cover Days] > _p95 ), Stock[Stock Cost] ) )
+			)
+		displayFolder: Movement
+		lineageTag: 1be06095-03f5-5c25-a7e0-eb2d35afe43a
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.00,,""M"";($#,0.00,,""M"")",
+				        _v >= 1e4, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+	/// One-sentence summary that follows the slicers.
+	measure Headline =
+			VAR _v = [Order Value]
+			VAR _x = [Excess Stock Value]
+			RETURN
+			    FORMAT ( [Lines To Order], "#,0" ) & " lines need an order now: " & FORMAT ( [Units To Order], "#,0" )
+			        & " units, " & FORMAT ( _v / 1e6, "$#,0.0" ) & "m" & " at cost, for a " & FORMAT ( [Service Level Selected], "0%" )
+			        & " service level. Meanwhile " & FORMAT ( _x / 1e6, "$#,0.0" ) & "m" & " sits in stock beyond 180 days of cover or never sells."
+		displayFolder: Narrative
+		lineageTag: f3605fe9-8932-538a-85eb-adabaf3a78d0
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// The Diagnose story in one paragraph: out-of-stock rate, then the gap between class A and class C lines against the gap between short and long vendor lead times (split at the median lead time of the selling lines).
+	measure Diagnosis =
+			VAR _all = [Out of Stock Rate]
+			VAR _a = CALCULATE ( [Out of Stock Rate], ABC[ABC Key] = "A" )
+			VAR _c = CALCULATE ( [Out of Stock Rate], ABC[ABC Key] = "C" )
+			VAR _med = PERCENTILEX.INC ( FILTER ( Stock, Stock[Daily Forecast] > 0 ), Stock[Lead Days], 0.5 )
+			VAR _short = CALCULATE ( [Out of Stock Rate], Stock[Lead Days] <= _med )
+			VAR _long = CALCULATE ( [Out of Stock Rate], Stock[Lead Days] > _med )
+			VAR _abcGap = _c - _a
+			VAR _leadGap = _long - _short
+			RETURN
+			    FORMAT ( _all, "0%" ) & " of the lines with demand were empty at the year-end count. Class C lines "
+			        & "ran out " & FORMAT ( _c, "0%" ) & " of the time against " & FORMAT ( _a, "0%" ) & " for class A ("
+			        & FORMAT ( _abcGap * 100, "0" ) & " points), while vendors slower than the median lead time of "
+			        & FORMAT ( _med, "0.0" ) & " days add " & FORMAT ( _leadGap * 100, "0" ) & " points ("
+			        & FORMAT ( _long, "0%" ) & " vs " & FORMAT ( _short, "0%" ) & "). "
+			        & IF ( ABS ( _abcGap ) > 2 * ABS ( _leadGap ), "The stock-outs follow the item class, not the lead time: "
+			            & "look at the C items in the tree, then drill through to one of them.",
+			            "Item class and lead time both matter here: check the vendors in the tree." )
+		displayFolder: Narrative
+		lineageTag: 37c614c4-fadd-5c8d-a009-e189af617fc4
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	column Value
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ab4458c4-297e-5b28-8bbe-460dac6f87d0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition _Measures = calculated
+		mode: import
+		source = {1}

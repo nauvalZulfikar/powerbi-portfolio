@@ -1,0 +1,46 @@
+perspective 'Variance Analysis'
+
+	perspectiveTable GL
+		includeAll
+
+	perspectiveTable Forecast
+		includeAll
+
+	perspectiveTable Date
+		includeAll
+
+	perspectiveTable Entity
+		includeAll
+
+	perspectiveTable Department
+		includeAll
+
+	perspectiveTable Account
+		includeAll
+
+	perspectiveTable 'P&L Line'
+		includeAll
+
+	perspectiveTable 'Line Account'
+		includeAll
+
+	perspectiveTable 'Compare To'
+		includeAll
+
+	perspectiveTable 'As Of Month'
+		includeAll
+
+	perspectiveTable 'Variance Band'
+		includeAll
+
+	perspectiveTable 'Analyze By'
+		includeAll
+
+	perspectiveTable 'Time View'
+		includeAll
+
+	perspectiveTable 'Variance Step'
+		includeAll
+
+	perspectiveTable _Measures
+		includeAll

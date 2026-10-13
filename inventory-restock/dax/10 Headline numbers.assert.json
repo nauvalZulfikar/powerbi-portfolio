@@ -1,0 +1,10 @@
+{
+  "rows": 1,
+  "checks": [
+    {"column": "[Stock Value]", "equals": 55429569.00, "tolerance": 1},
+    {"column": "[Out of Stock Lines]", "equals": 52481},
+    {"column": "[Order Value]", "equals": 3996717.32, "tolerance": 1},
+    {"column": "[Lines To Order]", "equals": 66990},
+    {"column": "[Units To Order]", "equals": 414281}
+  ]
+}

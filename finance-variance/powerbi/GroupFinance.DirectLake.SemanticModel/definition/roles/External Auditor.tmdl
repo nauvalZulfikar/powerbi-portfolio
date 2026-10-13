@@ -1,0 +1,12 @@
+role 'External Auditor'
+	modelPermission: read
+
+	tablePermission GL
+
+		columnPermission 'Budget Source' = none
+
+	tablePermission 'Budget Drivers'
+		metadataPermission: none
+
+	tablePermission 'Entity Access'
+		metadataPermission: none

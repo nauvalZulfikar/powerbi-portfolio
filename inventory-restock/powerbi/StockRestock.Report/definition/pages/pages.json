@@ -1,0 +1,20 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.1.0/schema.json",
+  "pageOrder": [
+    "overview",
+    "restock",
+    "health",
+    "demand",
+    "trends",
+    "vendors",
+    "stores",
+    "assortment",
+    "movement",
+    "diagnose",
+    "item_detail",
+    "vendor_detail",
+    "vendor_tip",
+    "line_tip"
+  ],
+  "activePageName": "overview"
+}

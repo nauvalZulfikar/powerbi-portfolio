@@ -1,0 +1,5 @@
+role 'Hornsey District'
+	modelPermission: read
+
+	tablePermission Store = Store[City] = "Hornsey"
+

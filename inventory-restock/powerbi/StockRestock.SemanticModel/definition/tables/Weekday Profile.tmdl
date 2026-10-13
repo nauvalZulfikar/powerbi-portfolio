@@ -1,0 +1,42 @@
+table 'Weekday Profile'
+	lineageTag: c4cc7399-dad7-5850-b31b-e4ab409bee69
+
+	column Day
+		dataType: string
+		lineageTag: 235f7315-b87e-578e-8799-19ef81c3a799
+		summarizeBy: none
+		sourceColumn: weekday
+		sortByColumn: 'Weekday Sort'
+
+	column 'Weekday Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5af64c2a-62a7-5537-a328-e745001bdc3c
+		summarizeBy: none
+		sourceColumn: weekday_sort
+
+	column 'Weekday Index'
+		dataType: double
+		formatString: 0.00
+		lineageTag: dcb01105-afbb-5acd-bc31-bf997753d135
+		summarizeBy: none
+		sourceColumn: weekday_index
+
+	column 'January Units'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 93c332c2-944a-54fa-8780-5a6efb8ce846
+		summarizeBy: none
+		sourceColumn: jan_units
+
+	partition 'Weekday Profile' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "weekday_profile.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"weekday", type text}, {"weekday_sort", Int64.Type}, {"weekday_index", type number}, {"jan_units", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

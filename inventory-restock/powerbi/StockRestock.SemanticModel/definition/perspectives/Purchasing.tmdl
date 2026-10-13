@@ -1,0 +1,28 @@
+perspective Purchasing
+
+	perspectiveTable Invoices
+		includeAll
+
+	perspectiveTable Receipts
+		includeAll
+
+	perspectiveTable Vendor
+		includeAll
+
+	perspectiveTable 'Item Supplier'
+		includeAll
+
+	perspectiveTable Item
+		includeAll
+
+	perspectiveTable Store
+		includeAll
+
+	perspectiveTable Date
+		includeAll
+
+	perspectiveTable 'Time Intelligence'
+		includeAll
+
+	perspectiveTable _Measures
+		includeAll

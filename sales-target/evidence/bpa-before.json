@@ -1,0 +1,2215 @@
+{
+  "model": "powerbi/SalesTarget.SemanticModel/definition",
+  "rules": 74,
+  "violations": [
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Discount]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Target Stretch\u0027[Target Stretch]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027ABC Class\u0027[Share From]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027ABC Class\u0027[Share To]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Subcategory Pairs\u0027[Support]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Subcategory Pairs\u0027[Confidence A to B]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Subcategory Pairs\u0027[Confidence B to A]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Subcategory Pairs\u0027[Lift]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Order Line]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Reseller Code]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Rep Key]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Territory Key]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Product Code]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Unit Price]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Targets\u0027[Rep Key]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Targets\u0027[Date]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Targets\u0027[Quarter]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Targets\u0027[Daily Quota]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Reps\u0027[Rep Key]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Reps\u0027[Login]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Reps\u0027[Territory Key]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Reps\u0027[Manager Key]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Reps\u0027[Email]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Territories\u0027[Territory Key]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Products\u0027[Standard Cost]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Resellers\u0027[Reseller Key]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Fiscal Month Number]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Category Plan\u0027[Plan Amount]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Reps\u0027[Manager Path]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Resellers\u0027[Monetary]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027ABC Class\u0027[Share From]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027ABC Class\u0027[Share To]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Reseller Size Bands\u0027[Band Min]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Reseller Size Bands\u0027[Band Max]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Reseller Cohort\u0027[Cohort Active]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Reseller Cohort\u0027[Cohort Size]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027RFM Transition\u0027[Reseller Count]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027_Measures\u0027[Value]"
+    },
+    {
+      "RuleId": "MINIMIZE_POWER_QUERY_TRANSFORMATIONS",
+      "Rule": "[Performance] Minimize Power Query transformations",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "Partition",
+      "Object": "\u0027Sales\u0027.Partitions[Sales]"
+    },
+    {
+      "RuleId": "MINIMIZE_POWER_QUERY_TRANSFORMATIONS",
+      "Rule": "[Performance] Minimize Power Query transformations",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "Partition",
+      "Object": "\u0027Targets\u0027.Partitions[Targets]"
+    },
+    {
+      "RuleId": "MINIMIZE_POWER_QUERY_TRANSFORMATIONS",
+      "Rule": "[Performance] Minimize Power Query transformations",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "Partition",
+      "Object": "\u0027Reps\u0027.Partitions[Reps]"
+    },
+    {
+      "RuleId": "MINIMIZE_POWER_QUERY_TRANSFORMATIONS",
+      "Rule": "[Performance] Minimize Power Query transformations",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "Partition",
+      "Object": "\u0027Date\u0027.Partitions[Date]"
+    },
+    {
+      "RuleId": "MINIMIZE_POWER_QUERY_TRANSFORMATIONS",
+      "Rule": "[Performance] Minimize Power Query transformations",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "Partition",
+      "Object": "\u0027Category Plan\u0027.Partitions[Category Plan]"
+    },
+    {
+      "RuleId": "MINIMIZE_POWER_QUERY_TRANSFORMATIONS",
+      "Rule": "[Performance] Minimize Power Query transformations",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "Partition",
+      "Object": "\u0027Cleaning Log\u0027.Partitions[Cleaning Log]"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Target Stretch\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027ABC Class\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Reseller Size Bands\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Reseller Cohort\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027RFM Transition\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Subcategory Pairs\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Analyze By\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Metric\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027_Measures\u0027"
+    },
+    {
+      "RuleId": "REMOVE_REDUNDANT_COLUMNS_IN_RELATED_TABLES",
+      "Rule": "[Performance] Remove redundant columns in related tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Branch]"
+    },
+    {
+      "RuleId": "REMOVE_REDUNDANT_COLUMNS_IN_RELATED_TABLES",
+      "Rule": "[Performance] Remove redundant columns in related tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Targets\u0027[Quarter]"
+    },
+    {
+      "RuleId": "REDUCE_NUMBER_OF_CALCULATED_COLUMNS",
+      "Rule": "[Performance] Reduce number of calculated columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "Model",
+      "Object": "Model"
+    },
+    {
+      "RuleId": "CHECK_IF_BI-DIRECTIONAL_AND_MANY-TO-MANY_RELATIONSHIPS_ARE_VALID",
+      "Rule": "[Performance] Check if bi-directional and many-to-many relationships are valid",
+      "Severity": 1,
+      "Category": "Performance",
+      "Scope": "Relationship",
+      "Object": "\u0027Category Plan\u0027[Category] \u2192 \u0027Products\u0027[Category]"
+    },
+    {
+      "RuleId": "CHECK_IF_BI-DIRECTIONAL_AND_MANY-TO-MANY_RELATIONSHIPS_ARE_VALID",
+      "Rule": "[Performance] Check if bi-directional and many-to-many relationships are valid",
+      "Severity": 1,
+      "Category": "Performance",
+      "Scope": "Relationship",
+      "Object": "\u0027Category Plan\u0027[Fiscal Quarter] \u2192 \u0027Date\u0027[Fiscal Quarter]"
+    },
+    {
+      "RuleId": "DAX_COLUMNS_FULLY_QUALIFIED",
+      "Rule": "[DAX Expressions] Column references should be fully qualified",
+      "Severity": 3,
+      "Category": "DAX Expressions",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Projected FY Attainment]"
+    },
+    {
+      "RuleId": "USE_THE_DIVIDE_FUNCTION_FOR_DIVISION",
+      "Rule": "[DAX Expressions] Use the DIVIDE function for division",
+      "Severity": 2,
+      "Category": "DAX Expressions",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Sales Linear Trend]"
+    },
+    {
+      "RuleId": "USE_THE_DIVIDE_FUNCTION_FOR_DIVISION",
+      "Rule": "[DAX Expressions] Use the DIVIDE function for division",
+      "Severity": 2,
+      "Category": "DAX Expressions",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Projected FY Attainment]"
+    },
+    {
+      "RuleId": "USE_THE_DIVIDE_FUNCTION_FOR_DIVISION",
+      "Rule": "[DAX Expressions] Use the DIVIDE function for division",
+      "Severity": 2,
+      "Category": "DAX Expressions",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Headline]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Order Line]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Unit Price]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Targets\u0027[Quarter]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Reps\u0027[Login]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Resellers\u0027[Reseller Key]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Fiscal Month Number]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Analyze By\u0027[Analyze By Fields]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Metric\u0027[Metric Fields]"
+    },
+    {
+      "RuleId": "REMOVE_ROLES_WITH_NO_MEMBERS",
+      "Rule": "[Maintenance] Remove roles with no members",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "ModelRole",
+      "Object": "Role[Sales Manager]"
+    },
+    {
+      "RuleId": "REMOVE_ROLES_WITH_NO_MEMBERS",
+      "Rule": "[Maintenance] Remove roles with no members",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "ModelRole",
+      "Object": "Role[Data Steward]"
+    },
+    {
+      "RuleId": "REMOVE_ROLES_WITH_NO_MEMBERS",
+      "Rule": "[Maintenance] Remove roles with no members",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "ModelRole",
+      "Object": "Role[Branch Europe]"
+    },
+    {
+      "RuleId": "REMOVE_ROLES_WITH_NO_MEMBERS",
+      "Rule": "[Maintenance] Remove roles with no members",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "ModelRole",
+      "Object": "Role[Branch North America]"
+    },
+    {
+      "RuleId": "REMOVE_ROLES_WITH_NO_MEMBERS",
+      "Rule": "[Maintenance] Remove roles with no members",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "ModelRole",
+      "Object": "Role[Branch Pacific]"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Cleaning Log\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Target Stretch\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027ABC Class\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Reseller Size Bands\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Reseller Cohort\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027RFM Transition\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Subcategory Pairs\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Analyze By\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Metric\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027_Measures\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Sales\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Targets\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Reps\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Territories\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Products\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Resellers\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Date\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Category Plan\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Cleaning Log\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Order Number]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Order Date]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Ship Date]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Quantity]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Discount]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Amount]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Branch]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Reps\u0027[Rep]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Reps\u0027[Title]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Territories\u0027[Region]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Territories\u0027[Country]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Territories\u0027[Group]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Territories\u0027[Branch]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Products\u0027[Product Code]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Products\u0027[Product]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Products\u0027[Subcategory]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Products\u0027[Category]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Resellers\u0027[Reseller Code]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Resellers\u0027[Reseller]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Resellers\u0027[Business Type]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Resellers\u0027[City]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Resellers\u0027[Country]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Date]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Year]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Quarter]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Month]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Month Start]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Month Name]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Fiscal Year]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Fiscal Quarter]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Category Plan\u0027[Fiscal Quarter]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Category Plan\u0027[Category]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Category Plan\u0027[Mix Basis]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Cleaning Log\u0027[Branch]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Cleaning Log\u0027[File]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Cleaning Log\u0027[Outcome]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Cleaning Log\u0027[Rows]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Cleaning Log\u0027[Amount]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Time Intelligence\u0027[Period]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Reps\u0027[Org Level 1]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Reps\u0027[Org Level 2]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Reps\u0027[Org Level 3]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Reps\u0027[Home Region]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Resellers\u0027[Location]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Resellers\u0027[Sales Trend]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Resellers\u0027[Recency Days]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Resellers\u0027[Frequency]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Resellers\u0027[R Score]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Resellers\u0027[F Score]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Resellers\u0027[M Score]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Resellers\u0027[RFM Segment]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Resellers\u0027[RFM Action]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Target Stretch\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027ABC Class\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Reseller Size Bands\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Reseller Cohort\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027RFM Transition\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Subcategory Pairs\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Analyze By\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Metric\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027_Measures\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Target Stretch\u0027[Target Stretch]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027ABC Class\u0027[Class]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Reseller Size Bands\u0027[Band]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Reseller Cohort\u0027[Cohort]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Reseller Cohort\u0027[Quarter N]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027RFM Transition\u0027[From Segment]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027RFM Transition\u0027[To Segment]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Subcategory Pairs\u0027[Subcategory A]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Subcategory Pairs\u0027[Subcategory B]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Subcategory Pairs\u0027[Orders Together]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Subcategory Pairs\u0027[Support]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Subcategory Pairs\u0027[Confidence A to B]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Subcategory Pairs\u0027[Confidence B to A]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Subcategory Pairs\u0027[Lift]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Analyze By\u0027[Analyze By]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Metric\u0027[Metric]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculationGroup",
+      "Object": "\u0027Time Intelligence\u0027"
+    },
+    {
+      "RuleId": "DATECOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Date\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Order Date]"
+    },
+    {
+      "RuleId": "DATECOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Date\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Ship Date]"
+    },
+    {
+      "RuleId": "DATECOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Date\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Targets\u0027[Date]"
+    },
+    {
+      "RuleId": "DATECOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Date\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Date]"
+    },
+    {
+      "RuleId": "MONTHCOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Month\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Month Start]"
+    },
+    {
+      "RuleId": "PROVIDE_FORMAT_STRING_FOR_MEASURES",
+      "Rule": "[Formatting] Provide format string for measures",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Status]"
+    },
+    {
+      "RuleId": "PROVIDE_FORMAT_STRING_FOR_MEASURES",
+      "Rule": "[Formatting] Provide format string for measures",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Status Color]"
+    },
+    {
+      "RuleId": "PROVIDE_FORMAT_STRING_FOR_MEASURES",
+      "Rule": "[Formatting] Provide format string for measures",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Status Label]"
+    },
+    {
+      "RuleId": "PROVIDE_FORMAT_STRING_FOR_MEASURES",
+      "Rule": "[Formatting] Provide format string for measures",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Top Rep]"
+    },
+    {
+      "RuleId": "PROVIDE_FORMAT_STRING_FOR_MEASURES",
+      "Rule": "[Formatting] Provide format string for measures",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Top Rep in Region]"
+    },
+    {
+      "RuleId": "PROVIDE_FORMAT_STRING_FOR_MEASURES",
+      "Rule": "[Formatting] Provide format string for measures",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Pareto Text]"
+    },
+    {
+      "RuleId": "PROVIDE_FORMAT_STRING_FOR_MEASURES",
+      "Rule": "[Formatting] Provide format string for measures",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Reseller ABC Class]"
+    },
+    {
+      "RuleId": "PROVIDE_FORMAT_STRING_FOR_MEASURES",
+      "Rule": "[Formatting] Provide format string for measures",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Period Counted]"
+    },
+    {
+      "RuleId": "PROVIDE_FORMAT_STRING_FOR_MEASURES",
+      "Rule": "[Formatting] Provide format string for measures",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Churn Status]"
+    },
+    {
+      "RuleId": "PROVIDE_FORMAT_STRING_FOR_MEASURES",
+      "Rule": "[Formatting] Provide format string for measures",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Retention Color]"
+    },
+    {
+      "RuleId": "PROVIDE_FORMAT_STRING_FOR_MEASURES",
+      "Rule": "[Formatting] Provide format string for measures",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Transition Color]"
+    },
+    {
+      "RuleId": "PROVIDE_FORMAT_STRING_FOR_MEASURES",
+      "Rule": "[Formatting] Provide format string for measures",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Order Outlier]"
+    },
+    {
+      "RuleId": "PROVIDE_FORMAT_STRING_FOR_MEASURES",
+      "Rule": "[Formatting] Provide format string for measures",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Headline]"
+    },
+    {
+      "RuleId": "NUMERIC_COLUMN_SUMMARIZE_BY",
+      "Rule": "[Formatting] Do not summarize numeric columns",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Quantity]"
+    },
+    {
+      "RuleId": "NUMERIC_COLUMN_SUMMARIZE_BY",
+      "Rule": "[Formatting] Do not summarize numeric columns",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Amount]"
+    },
+    {
+      "RuleId": "NUMERIC_COLUMN_SUMMARIZE_BY",
+      "Rule": "[Formatting] Do not summarize numeric columns",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Cleaning Log\u0027[Rows]"
+    },
+    {
+      "RuleId": "NUMERIC_COLUMN_SUMMARIZE_BY",
+      "Rule": "[Formatting] Do not summarize numeric columns",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Cleaning Log\u0027[Amount]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027Cleaning Log\u0027[Load Rate]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Sales YoY %]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Sales Share]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Share of Visible Total]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Gross Margin %]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Stretch %]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Attainment]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Attainment R12M]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Attainment Prev FQ]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Rep Share of Team]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Category Attainment]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Attainment FYTD]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Product Cum Share]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Product Share for 80% of Sales]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Reseller Cum Share]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Annual Churn Rate]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Cohort Retention %]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Transition Share]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Projected FY Attainment]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Net Sales]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Sales PY]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Last Sale Date]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Net Sales by Ship Date]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Avg Days to Ship]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Sales R12M]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Sales 3M Avg]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Avg Monthly Sales]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Gross Margin]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Quota]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Target]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Gap to Target]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Status]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Status Color]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Status Label]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Target at 90%]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Target R12M]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Sales from At-Risk Reps]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Top Rep]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Top Rep in Region]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Category Target]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Sales FYTD]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Target FYTD]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Sales FYTD PY]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Sales Running FY]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Pareto Text]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Reseller ABC Class]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Sales in Class]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Sales in Band]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Period Counted]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Churn Status]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Avg Reseller Lifetime]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Retention Color]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Transition Color]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Order Amount Z]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Order Outlier]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Sales Linear Trend]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Headline]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Order Date]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Ship Date]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Reseller Code]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Product Code]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Targets\u0027[Date]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Products\u0027[Product Code]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Products\u0027[Category]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Resellers\u0027[Reseller Code]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Date]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Fiscal Quarter]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Category Plan\u0027[Fiscal Quarter]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Category Plan\u0027[Category]"
+    },
+    {
+      "RuleId": "HIDE_FOREIGN_KEYS",
+      "Rule": "[Formatting] Hide foreign keys",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Order Date]"
+    },
+    {
+      "RuleId": "HIDE_FOREIGN_KEYS",
+      "Rule": "[Formatting] Hide foreign keys",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Ship Date]"
+    },
+    {
+      "RuleId": "HIDE_FOREIGN_KEYS",
+      "Rule": "[Formatting] Hide foreign keys",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Products\u0027[Product Code]"
+    },
+    {
+      "RuleId": "HIDE_FOREIGN_KEYS",
+      "Rule": "[Formatting] Hide foreign keys",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Products\u0027[Category]"
+    },
+    {
+      "RuleId": "HIDE_FOREIGN_KEYS",
+      "Rule": "[Formatting] Hide foreign keys",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Resellers\u0027[Reseller Code]"
+    },
+    {
+      "RuleId": "HIDE_FOREIGN_KEYS",
+      "Rule": "[Formatting] Hide foreign keys",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Date]"
+    },
+    {
+      "RuleId": "HIDE_FOREIGN_KEYS",
+      "Rule": "[Formatting] Hide foreign keys",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Fiscal Quarter]"
+    },
+    {
+      "RuleId": "HIDE_FOREIGN_KEYS",
+      "Rule": "[Formatting] Hide foreign keys",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Category Plan\u0027[Fiscal Quarter]"
+    },
+    {
+      "RuleId": "HIDE_FOREIGN_KEYS",
+      "Rule": "[Formatting] Hide foreign keys",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Category Plan\u0027[Category]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Quantity]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sales\u0027[Amount]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Cleaning Log\u0027[Rows]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Cleaning Log\u0027[Amount]"
+    }
+  ],
+  "skipped": []
+}

@@ -1,0 +1,2 @@
+EVALUATE
+ROW ( "x", COUNTROWS ( 'Ghost' ) , "y", 'Ghost'[Id] )

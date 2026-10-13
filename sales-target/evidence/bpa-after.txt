@@ -1,0 +1,217 @@
+WARN  AVOID_FLOATING_POINT_DATA_TYPES                         CalculatedTableColumn  'ABC Class'[Share From]
+WARN  AVOID_FLOATING_POINT_DATA_TYPES                         CalculatedTableColumn  'ABC Class'[Share To]
+WARN  AVOID_FLOATING_POINT_DATA_TYPES                         DataColumn             'Sales'[Discount]
+WARN  AVOID_FLOATING_POINT_DATA_TYPES                         CalculatedTableColumn  'Subcategory Pairs'[Confidence A to B]
+WARN  AVOID_FLOATING_POINT_DATA_TYPES                         CalculatedTableColumn  'Subcategory Pairs'[Confidence B to A]
+WARN  AVOID_FLOATING_POINT_DATA_TYPES                         CalculatedTableColumn  'Subcategory Pairs'[Lift]
+WARN  AVOID_FLOATING_POINT_DATA_TYPES                         CalculatedTableColumn  'Subcategory Pairs'[Support]
+WARN  AVOID_FLOATING_POINT_DATA_TYPES                         CalculatedTableColumn  'Target Stretch'[Target Stretch]
+WARN  HIDE_FACT_TABLE_COLUMNS                                 DataColumn             'Cleaning Log'[Amount]
+WARN  HIDE_FACT_TABLE_COLUMNS                                 DataColumn             'Cleaning Log'[Rows]
+WARN  HIDE_FACT_TABLE_COLUMNS                                 DataColumn             'Sales'[Amount]
+WARN  HIDE_FACT_TABLE_COLUMNS                                 DataColumn             'Sales'[Quantity]
+WARN  HIDE_FOREIGN_KEYS                                       DataColumn             'Category Plan'[Category]
+WARN  HIDE_FOREIGN_KEYS                                       DataColumn             'Category Plan'[Fiscal Quarter]
+WARN  HIDE_FOREIGN_KEYS                                       DataColumn             'Date'[Date]
+WARN  HIDE_FOREIGN_KEYS                                       DataColumn             'Date'[Fiscal Quarter]
+WARN  HIDE_FOREIGN_KEYS                                       DataColumn             'Products'[Category]
+WARN  HIDE_FOREIGN_KEYS                                       DataColumn             'Products'[Product Code]
+WARN  HIDE_FOREIGN_KEYS                                       DataColumn             'Resellers'[Reseller Code]
+WARN  HIDE_FOREIGN_KEYS                                       DataColumn             'Sales'[Order Date]
+WARN  HIDE_FOREIGN_KEYS                                       DataColumn             'Sales'[Ship Date]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             CalculatedTableColumn  '_Measures'[Value]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             CalculatedTableColumn  'ABC Class'[Share From]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             CalculatedTableColumn  'ABC Class'[Share To]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Category Plan'[Plan Amount]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Date'[Fiscal Month Number]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Products'[Standard Cost]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Reps'[Email]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Reps'[Login]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Reps'[Manager Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             CalculatedColumn       'Reps'[Manager Path]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Reps'[Rep Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Reps'[Territory Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             CalculatedTableColumn  'Reseller Cohort'[Cohort Active]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             CalculatedTableColumn  'Reseller Cohort'[Cohort Size]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             CalculatedTableColumn  'Reseller Size Bands'[Band Max]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             CalculatedTableColumn  'Reseller Size Bands'[Band Min]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             CalculatedColumn       'Resellers'[Monetary]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Resellers'[Reseller Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             CalculatedTableColumn  'RFM Transition'[Reseller Count]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Sales'[Order Line]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Sales'[Product Code]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Sales'[Rep Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Sales'[Reseller Code]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Sales'[Territory Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Sales'[Unit Price]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Targets'[Daily Quota]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Targets'[Date]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Targets'[Quarter]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Targets'[Rep Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Territories'[Territory Key]
+WARN  MINIMIZE_POWER_QUERY_TRANSFORMATIONS                    Partition              'Category Plan'.Partitions[Category Plan]
+WARN  MINIMIZE_POWER_QUERY_TRANSFORMATIONS                    Partition              'Cleaning Log'.Partitions[Cleaning Log]
+WARN  MINIMIZE_POWER_QUERY_TRANSFORMATIONS                    Partition              'Date'.Partitions[Date]
+WARN  MINIMIZE_POWER_QUERY_TRANSFORMATIONS                    Partition              'Reps'.Partitions[Reps]
+WARN  MINIMIZE_POWER_QUERY_TRANSFORMATIONS                    Partition              'Sales'.Partitions[Sales]
+WARN  MINIMIZE_POWER_QUERY_TRANSFORMATIONS                    Partition              'Targets'.Partitions[Targets]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Attainment FYTD]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Attainment Prev FQ]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Attainment R12M]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Attainment]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Category Attainment]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Cohort Retention %]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Product Cum Share]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Product Share for 80% of Sales]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Projected FY Attainment]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Reseller Cum Share]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Stretch %]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Transition Share]
+WARN  REDUCE_NUMBER_OF_CALCULATED_COLUMNS                     Model                  Model
+WARN  REDUCE_USAGE_OF_CALCULATED_TABLES                       CalculatedTable        '_Measures'
+WARN  REDUCE_USAGE_OF_CALCULATED_TABLES                       CalculatedTable        'ABC Class'
+WARN  REDUCE_USAGE_OF_CALCULATED_TABLES                       CalculatedTable        'Analyze By'
+WARN  REDUCE_USAGE_OF_CALCULATED_TABLES                       CalculatedTable        'Metric'
+WARN  REDUCE_USAGE_OF_CALCULATED_TABLES                       CalculatedTable        'Reseller Cohort'
+WARN  REDUCE_USAGE_OF_CALCULATED_TABLES                       CalculatedTable        'Reseller Size Bands'
+WARN  REDUCE_USAGE_OF_CALCULATED_TABLES                       CalculatedTable        'RFM Transition'
+WARN  REDUCE_USAGE_OF_CALCULATED_TABLES                       CalculatedTable        'Subcategory Pairs'
+WARN  REDUCE_USAGE_OF_CALCULATED_TABLES                       CalculatedTable        'Target Stretch'
+WARN  REMOVE_REDUNDANT_COLUMNS_IN_RELATED_TABLES              DataColumn             'Sales'[Branch]
+WARN  REMOVE_REDUNDANT_COLUMNS_IN_RELATED_TABLES              DataColumn             'Targets'[Quarter]
+WARN  UNNECESSARY_COLUMNS                                     CalculatedTableColumn  '_Measures'[Value]
+WARN  UNNECESSARY_COLUMNS                                     CalculatedTableColumn  'Analyze By'[Analyze By Fields]
+WARN  UNNECESSARY_COLUMNS                                     DataColumn             'Date'[Fiscal Month Number]
+WARN  UNNECESSARY_COLUMNS                                     CalculatedTableColumn  'Metric'[Metric Fields]
+WARN  UNNECESSARY_COLUMNS                                     DataColumn             'Reps'[Login]
+WARN  UNNECESSARY_COLUMNS                                     DataColumn             'Resellers'[Reseller Key]
+WARN  UNNECESSARY_COLUMNS                                     DataColumn             'Sales'[Order Line]
+WARN  UNNECESSARY_COLUMNS                                     DataColumn             'Sales'[Unit Price]
+WARN  UNNECESSARY_COLUMNS                                     DataColumn             'Targets'[Quarter]
+WARN  USE_THE_DIVIDE_FUNCTION_FOR_DIVISION                    Measure                '_Measures'[Headline]
+WARN  USE_THE_DIVIDE_FUNCTION_FOR_DIVISION                    Measure                '_Measures'[Projected FY Attainment]
+WARN  USE_THE_DIVIDE_FUNCTION_FOR_DIVISION                    Measure                '_Measures'[Sales Linear Trend]
+INFO  CHECK_IF_BI-DIRECTIONAL_AND_MANY-TO-MANY_RELATIONSHIPS_ARE_VALID Relationship           'Category Plan'[Category] → 'Products'[Category]
+INFO  CHECK_IF_BI-DIRECTIONAL_AND_MANY-TO-MANY_RELATIONSHIPS_ARE_VALID Relationship           'Category Plan'[Fiscal Quarter] → 'Date'[Fiscal Quarter]
+INFO  DATECOLUMN_FORMATSTRING                                 DataColumn             'Date'[Date]
+INFO  DATECOLUMN_FORMATSTRING                                 DataColumn             'Sales'[Order Date]
+INFO  DATECOLUMN_FORMATSTRING                                 DataColumn             'Sales'[Ship Date]
+INFO  DATECOLUMN_FORMATSTRING                                 DataColumn             'Targets'[Date]
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        CalculatedTable        '_Measures'
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        CalculatedTable        'ABC Class'
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        CalculatedTable        'Analyze By'
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        Table                  'Cleaning Log'
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        CalculatedTable        'Metric'
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        CalculatedTable        'Reseller Cohort'
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        CalculatedTable        'Reseller Size Bands'
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        CalculatedTable        'RFM Transition'
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        CalculatedTable        'Subcategory Pairs'
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        CalculatedTable        'Target Stretch'
+INFO  MONTHCOLUMN_FORMATSTRING                                DataColumn             'Date'[Month Start]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTable        '_Measures'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTable        'ABC Class'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'ABC Class'[Class]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTable        'Analyze By'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'Analyze By'[Analyze By]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Category Plan'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Category Plan'[Category]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Category Plan'[Fiscal Quarter]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Category Plan'[Mix Basis]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Cleaning Log'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Cleaning Log'[Amount]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Cleaning Log'[Branch]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Cleaning Log'[File]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Cleaning Log'[Outcome]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Cleaning Log'[Rows]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Date'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Date'[Date]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Date'[Fiscal Quarter]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Date'[Fiscal Year]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Date'[Month Name]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Date'[Month Start]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Date'[Month]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Date'[Quarter]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Date'[Year]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTable        'Metric'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'Metric'[Metric]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Products'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Products'[Category]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Products'[Product Code]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Products'[Product]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Products'[Subcategory]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Reps'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedColumn       'Reps'[Home Region]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedColumn       'Reps'[Org Level 1]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedColumn       'Reps'[Org Level 2]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedColumn       'Reps'[Org Level 3]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Reps'[Rep]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Reps'[Title]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTable        'Reseller Cohort'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'Reseller Cohort'[Cohort]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'Reseller Cohort'[Quarter N]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTable        'Reseller Size Bands'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'Reseller Size Bands'[Band]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Resellers'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Resellers'[Business Type]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Resellers'[City]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Resellers'[Country]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedColumn       'Resellers'[F Score]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedColumn       'Resellers'[Frequency]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedColumn       'Resellers'[Location]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedColumn       'Resellers'[M Score]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedColumn       'Resellers'[R Score]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedColumn       'Resellers'[Recency Days]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Resellers'[Reseller Code]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Resellers'[Reseller]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedColumn       'Resellers'[RFM Action]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedColumn       'Resellers'[RFM Segment]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedColumn       'Resellers'[Sales Trend]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTable        'RFM Transition'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'RFM Transition'[From Segment]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'RFM Transition'[To Segment]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Sales'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Sales'[Amount]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Sales'[Branch]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Sales'[Discount]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Sales'[Order Date]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Sales'[Order Number]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Sales'[Quantity]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Sales'[Ship Date]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTable        'Subcategory Pairs'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'Subcategory Pairs'[Confidence A to B]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'Subcategory Pairs'[Confidence B to A]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'Subcategory Pairs'[Lift]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'Subcategory Pairs'[Orders Together]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'Subcategory Pairs'[Subcategory A]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'Subcategory Pairs'[Subcategory B]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'Subcategory Pairs'[Support]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTable        'Target Stretch'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'Target Stretch'[Target Stretch]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Targets'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Territories'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Territories'[Branch]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Territories'[Country]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Territories'[Group]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Territories'[Region]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculationGroup       'Time Intelligence'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Time Intelligence'[Period]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Category Plan'[Category]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Category Plan'[Fiscal Quarter]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Date'[Date]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Date'[Fiscal Quarter]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Products'[Category]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Products'[Product Code]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Resellers'[Reseller Code]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Sales'[Order Date]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Sales'[Product Code]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Sales'[Reseller Code]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Sales'[Ship Date]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Targets'[Date]
+INFO  REMOVE_ROLES_WITH_NO_MEMBERS                            ModelRole              Role[Branch Europe]
+INFO  REMOVE_ROLES_WITH_NO_MEMBERS                            ModelRole              Role[Branch North America]
+INFO  REMOVE_ROLES_WITH_NO_MEMBERS                            ModelRole              Role[Branch Pacific]
+INFO  REMOVE_ROLES_WITH_NO_MEMBERS                            ModelRole              Role[Data Steward]
+INFO  REMOVE_ROLES_WITH_NO_MEMBERS                            ModelRole              Role[Sales Manager]
+
+BPA powerbi/SalesTarget.SemanticModel/definition: 75 rules, 214 violations — error 0, warning 93, info 121; 0 skipped
+✓ no violations with severity >= 3

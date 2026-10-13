@@ -1,0 +1,96 @@
+table Entity
+	lineageTag: 0604dcae-be99-55d3-a881-2fb4b55fdf91
+
+	column 'Entity Key'
+		dataType: int64
+		isKey
+		formatString: 0
+		lineageTag: 5d815498-62b0-5d8c-ad13-92dcec356c5a
+		summarizeBy: none
+		sourceColumn: entity_key
+
+	column Entity
+		dataType: string
+		lineageTag: 70fc6ded-7851-50fd-9ee1-069c1f1877e5
+		summarizeBy: none
+		sourceColumn: entity
+		sortByColumn: 'Entity Sort'
+
+	column Region
+		dataType: string
+		lineageTag: bcbc273a-1491-51c1-a6ef-84e8990ccd50
+		summarizeBy: none
+		sourceColumn: region
+
+	column Unit
+		dataType: string
+		lineageTag: 1bb9a0bf-a4ff-54be-a543-2f00c60b2bf3
+		summarizeBy: none
+		sourceColumn: unit
+
+	column Country
+		dataType: string
+		dataCategory: Country
+		lineageTag: 51c5117a-6337-55b1-bda2-1fca1f2962a9
+		summarizeBy: none
+		sourceColumn: country
+
+	column 'Functional Currency'
+		dataType: string
+		lineageTag: 43603ee2-c965-525e-bdbd-a4333fc3a5d9
+		summarizeBy: none
+		sourceColumn: currency_code
+
+	column 'Effective Ownership'
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 5e67e0b0-4ca9-533a-a579-d5115fe1fc22
+		summarizeBy: none
+		sourceColumn: effective_ownership
+
+	column 'Entity Path'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: e4fbdda3-32e9-5a05-90f8-279b62de586f
+		summarizeBy: none
+		sourceColumn: entity_path
+
+	column 'Consolidated From'
+		dataType: dateTime
+		formatString: mmm yyyy
+		lineageTag: a60dcdea-61b4-5933-bcc4-f0a4f0a81cbc
+		summarizeBy: none
+		sourceColumn: first_period
+
+	column 'Entity Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c793d42e-7572-5344-a897-0d64775f7c91
+		summarizeBy: none
+		sourceColumn: entity_sort
+
+	hierarchy 'Entity Tree'
+		lineageTag: fe48987f-2d3e-5519-83a5-392227f37599
+
+		level Region
+			lineageTag: c044704a-b044-54dc-8ad9-a8e8987eeca2
+			column: Region
+
+		level Country
+			lineageTag: 6ad53065-b572-5925-a2e1-daafb01cc15b
+			column: Country
+
+		level Entity
+			lineageTag: e3dd046a-419b-5fd1-9eab-bfe55e643eff
+			column: Entity
+
+	partition Entity = entity
+		mode: directLake
+		source
+			entityName: dim_entity
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
+	annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["AVOID_USING_MANY-TO-MANY_RELATIONSHIPS_ON_TABLES_USED_FOR_DYNAMIC_ROW_LEVEL_SECURITY"]}

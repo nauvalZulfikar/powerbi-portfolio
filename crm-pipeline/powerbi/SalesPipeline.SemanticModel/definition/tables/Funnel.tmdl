@@ -1,0 +1,58 @@
+table Funnel
+	lineageTag: 3b4c8123-8479-599e-98f2-94944474fbdc
+
+	column 'Opportunity ID'
+		dataType: string
+		isHidden
+		lineageTag: 9c9b1b49-9b50-5ba2-b49a-281c4543366f
+		summarizeBy: none
+		sourceColumn: opportunity_id
+
+	column 'Owner ID'
+		dataType: string
+		isHidden
+		lineageTag: 94a8ec88-53e3-5bb3-a782-2bde5e5956f7
+		summarizeBy: none
+		sourceColumn: owner_id
+
+	column 'Account ID'
+		dataType: string
+		isHidden
+		lineageTag: 84592aeb-f14c-589b-8734-b48f79c1ead6
+		summarizeBy: none
+		sourceColumn: account_id
+
+	column 'Product ID'
+		dataType: string
+		isHidden
+		lineageTag: ebee2cf0-dd7a-5d06-b98a-0e244b256371
+		summarizeBy: none
+		sourceColumn: product_id
+
+	column 'Funnel Step'
+		dataType: string
+		isHidden
+		lineageTag: 316fe445-ab3b-5d10-a571-570e95739ad4
+		summarizeBy: none
+		sourceColumn: step
+		sortByColumn: 'Step Sort'
+
+	column 'Step Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 72a9ccc7-3546-5a58-82bd-fbf2d48f8e48
+		summarizeBy: none
+		sourceColumn: step_sort
+
+	partition Funnel = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_funnel.parquet")),
+				    Data = Source,
+				    Typed = Table.TransformColumnTypes(Data, {{"opportunity_id", type text}, {"owner_id", type text}, {"account_id", type text}, {"product_id", type text}, {"step", type text}, {"step_sort", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

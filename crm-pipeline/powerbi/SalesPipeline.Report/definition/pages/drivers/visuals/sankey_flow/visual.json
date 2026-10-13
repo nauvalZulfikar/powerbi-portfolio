@@ -1,0 +1,130 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "sankey_flow",
+  "position": {
+    "x": 742,
+    "y": 564,
+    "z": 2500,
+    "width": 380,
+    "height": 316,
+    "tabOrder": 800
+  },
+  "visual": {
+    "visualType": "sankey02300D1BE6F5427989F3DE31CCA9E0F32020",
+    "objects": {},
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Where deals go'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Created → engaged → won, lost or still open (Sankey custom visual)'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Where deals go. Created → engaged → won, lost or still open (Sankey custom visual)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Source": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Stage Flow"
+                    }
+                  },
+                  "Property": "From"
+                }
+              },
+              "queryRef": "Stage Flow.From",
+              "nativeQueryRef": "From"
+            }
+          ]
+        },
+        "Destination": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Stage Flow"
+                    }
+                  },
+                  "Property": "To"
+                }
+              },
+              "queryRef": "Stage Flow.To",
+              "nativeQueryRef": "To"
+            }
+          ]
+        },
+        "Weight": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Flow Deals"
+                }
+              },
+              "queryRef": "_Measures.Flow Deals",
+              "nativeQueryRef": "Flow Deals"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+table Metric
+	lineageTag: 3b477d0a-e319-5ebf-9af7-1e260aeae5b6
+
+	column Metric
+		dataType: string
+		lineageTag: 2f7a5edb-a10b-52bb-b339-8937061fd5dc
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Metric Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Metric Fields'
+
+	column 'Metric Fields'
+		dataType: string
+		isHidden
+		lineageTag: 1fb680f1-4f86-5017-ab3a-3532fb42ebcd
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Metric Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	column 'Metric Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0af311bb-63d1-5779-888c-72ef48a780a2
+		summarizeBy: none
+		sourceColumn: [Value3]
+
+	partition Metric = calculated
+		mode: import
+		source =
+				{
+				    ( "Net Sales", NAMEOF ( [Net Sales] ), 0 ),
+				    ( "Target", NAMEOF ( [Target] ), 1 ),
+				    ( "Gap to Target", NAMEOF ( [Gap to Target] ), 2 ),
+				    ( "Gross Margin", NAMEOF ( [Gross Margin] ), 3 ),
+				    ( "Orders", NAMEOF ( [Orders] ), 4 )
+				}

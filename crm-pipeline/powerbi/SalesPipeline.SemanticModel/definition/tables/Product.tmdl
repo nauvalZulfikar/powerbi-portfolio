@@ -1,0 +1,50 @@
+table Product
+	lineageTag: ce018177-a253-5a91-b1a1-4ff513b5ba12
+
+	column 'Product ID'
+		dataType: string
+		isKey
+		isHidden
+		lineageTag: 976b59a4-efdd-52a5-8072-9d22228bb6b6
+		summarizeBy: none
+		sourceColumn: product_id
+
+	column Product
+		dataType: string
+		lineageTag: 7ab62f78-70ea-55be-8a42-9b197e2808a2
+		summarizeBy: none
+		sourceColumn: product
+		sortByColumn: 'Product Sort'
+
+	column Series
+		dataType: string
+		lineageTag: dc339581-32a2-5786-a63c-36d1e5f8064d
+		summarizeBy: none
+		sourceColumn: series
+
+	column 'List Price'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: d3a64b13-1456-58a7-a0ee-1532414e24a1
+		summarizeBy: none
+		sourceColumn: list_price
+
+	column 'Product Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9f8a5145-758c-5920-96d7-96dde6ffdf39
+		summarizeBy: none
+		sourceColumn: product_sort
+
+	partition Product = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_product.parquet")),
+				    Data = Source,
+				    Typed = Table.TransformColumnTypes(Data, {{"product_id", type text}, {"product", type text}, {"series", type text}, {"list_price", type number}, {"product_sort", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

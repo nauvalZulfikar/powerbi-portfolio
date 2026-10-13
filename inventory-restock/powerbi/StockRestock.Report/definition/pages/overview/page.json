@@ -1,0 +1,89 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "overview",
+  "displayName": "Overview",
+  "displayOption": "FitToPage",
+  "width": 1600,
+  "height": 900,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "image": {
+            "image": {
+              "name": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'canvas.png'"
+                  }
+                }
+              },
+              "url": {
+                "expr": {
+                  "ResourcePackageItem": {
+                    "PackageName": "RegisteredResources",
+                    "PackageType": 1,
+                    "ItemName": "canvas.png"
+                  }
+                }
+              },
+              "scaling": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'Fit'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0.0D"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspace": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#E9E8E3'"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "bar_order_by",
+      "target": "col_status",
+      "type": "DataFilter"
+    },
+    {
+      "source": "bar_order_by",
+      "target": "card_headline",
+      "type": "NoFilter"
+    },
+    {
+      "source": "bar_excess_by",
+      "target": "col_status",
+      "type": "DataFilter"
+    },
+    {
+      "source": "bar_excess_by",
+      "target": "card_headline",
+      "type": "NoFilter"
+    }
+  ]
+}

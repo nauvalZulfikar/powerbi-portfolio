@@ -1,0 +1,45 @@
+table Metric
+	lineageTag: 0349a3f4-8c2e-5f4a-a2ac-84ada2dc5ac0
+
+	column Metric
+		dataType: string
+		lineageTag: 14afd799-9b0e-51f5-b945-309322253f36
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Metric Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Metric Fields'
+
+	column 'Metric Fields'
+		dataType: string
+		isHidden
+		lineageTag: a22678a2-1cbc-5a0b-8f6a-bb02ffac2111
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Metric Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	column 'Metric Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1cc5defc-9d96-5d76-8055-21955d91a3fa
+		summarizeBy: none
+		sourceColumn: [Value3]
+
+	partition Metric = calculated
+		mode: import
+		source =
+				{
+				    ( "Won revenue", NAMEOF ( [Won Revenue] ), 0 ),
+				    ( "Win rate", NAMEOF ( [Win Rate] ), 1 ),
+				    ( "Avg deal size", NAMEOF ( [Avg Deal Size] ), 2 ),
+				    ( "Avg cycle days", NAMEOF ( [Avg Cycle Days] ), 3 ),
+				    ( "Deals", NAMEOF ( [Deals] ), 4 )
+				}

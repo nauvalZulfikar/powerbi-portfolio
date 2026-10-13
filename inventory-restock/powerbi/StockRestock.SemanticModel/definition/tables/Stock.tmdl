@@ -1,0 +1,258 @@
+table Stock
+	lineageTag: 92303f2d-2b55-5188-b72d-e6373cbbc8c2
+
+	column 'Inventory ID'
+		dataType: string
+		isKey
+		lineageTag: 5a230575-fe15-56e5-a938-8f561d23a03f
+		summarizeBy: none
+		sourceColumn: inventory_id
+
+	column 'Stock Store'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9da17732-204f-5ad1-b0ad-7f680a464067
+		summarizeBy: none
+		sourceColumn: store
+
+	column 'Stock Brand'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0b93aee2-97ee-54ae-990e-f2a56b91fc74
+		summarizeBy: none
+		sourceColumn: brand
+
+	column 'Stock Vendor'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: bec6d7e8-03d1-51c5-be73-540cfebaa105
+		summarizeBy: none
+		sourceColumn: vendor_no
+
+	column 'Stock Category'
+		dataType: string
+		isHidden
+		lineageTag: 78ea4b8f-4e73-5704-98a0-78514db8151b
+		summarizeBy: none
+		sourceColumn: category
+
+	column 'Stock ABC'
+		dataType: string
+		isHidden
+		lineageTag: 06336dde-bef6-5683-a407-cec5479eb2d0
+		summarizeBy: none
+		sourceColumn: abc
+
+	column 'Begin Units'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 22a71895-1a23-56eb-8ce9-fd98c60146bf
+		summarizeBy: none
+		sourceColumn: begin_units
+
+	column 'Received Units'
+		dataType: int64
+		formatString: #,0
+		lineageTag: d333be4d-5ab6-57c7-8dc2-b082bb72d690
+		summarizeBy: none
+		sourceColumn: received_units
+
+	column 'End Units'
+		dataType: int64
+		formatString: #,0
+		lineageTag: bec20038-18ff-510d-a085-106dbbebaca3
+		summarizeBy: none
+		sourceColumn: end_units
+
+	column 'Sold Units'
+		dataType: int64
+		formatString: #,0
+		lineageTag: c97b10d0-1cc4-53ff-b330-0891894f0ec1
+		summarizeBy: none
+		sourceColumn: sold_units
+
+	column 'Days Active'
+		dataType: int64
+		formatString: 0
+		lineageTag: 6f484fc4-b1ab-5416-b71d-a85b11f04fd8
+		summarizeBy: none
+		sourceColumn: days_active
+
+	column 'Jan Units'
+		dataType: int64
+		formatString: #,0
+		lineageTag: cefbe49f-174b-5fcb-86f2-5e8379d94884
+		summarizeBy: none
+		sourceColumn: jan_units
+
+	column 'New Line 2016'
+		dataType: boolean
+		lineageTag: 725fad23-1a43-536b-9ec4-c2d9a88c2fc2
+		summarizeBy: none
+		sourceColumn: new_line_2016
+
+	column 'Line Origin'
+		dataType: string
+		lineageTag: 6deb6748-6a3b-5ee8-936a-01cf8845caba
+		summarizeBy: none
+		sourceColumn: line_origin
+
+	column 'Last Receipt'
+		dataType: dateTime
+		formatString: d mmm yyyy
+		lineageTag: 4a7200d6-742f-57b3-8f0c-e5e407e798f9
+		summarizeBy: none
+		sourceColumn: last_receipt
+
+	column 'Opening State'
+		dataType: string
+		lineageTag: 51dbbb06-6fcb-58dc-9c2b-df3e6c1a0ffb
+		summarizeBy: none
+		sourceColumn: opening_state
+
+	column 'Unit Cost'
+		dataType: double
+		formatString: \$#,0.00
+		lineageTag: 5e0ab2ed-19a7-571c-a2a0-0ed0efbf783a
+		summarizeBy: none
+		sourceColumn: unit_cost
+
+	column 'Unit Price'
+		dataType: double
+		formatString: \$#,0.00
+		lineageTag: 31cf8daa-c09a-576d-b9d0-aaedcd234b71
+		summarizeBy: none
+		sourceColumn: unit_price
+
+	column 'Stock Cost'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: a8aabae9-ba4f-5f03-8c9b-41fa93189241
+		summarizeBy: none
+		sourceColumn: stock_cost
+
+	column 'Stock Retail'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: e850f9d6-8396-5e40-92b5-8c7e7a9d47d0
+		summarizeBy: none
+		sourceColumn: stock_retail
+
+	column 'Sales Value'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: e6ceaa0a-463e-5212-9ebf-d9232c7f5202
+		summarizeBy: none
+		sourceColumn: sales_value
+
+	column 'Jan Factor'
+		dataType: double
+		formatString: 0.000
+		lineageTag: f718d602-7ea2-5004-9935-f8cd4526a656
+		summarizeBy: none
+		sourceColumn: jan_factor
+
+	column 'Daily Rate'
+		dataType: double
+		formatString: 0.000
+		lineageTag: 7bb63426-4e83-5d6c-8ed0-05844eb0edf0
+		summarizeBy: none
+		sourceColumn: daily_rate
+
+	column 'Daily Forecast'
+		dataType: double
+		formatString: 0.000
+		lineageTag: 3dc7ba26-faf9-5c01-b60b-fd76d40b8c55
+		summarizeBy: none
+		sourceColumn: daily_forecast
+
+	column 'Daily SD'
+		dataType: double
+		formatString: 0.000
+		lineageTag: 9a927c8e-fb0c-5048-a304-32e5e8b99a8e
+		summarizeBy: none
+		sourceColumn: daily_sd
+
+	column 'Lead Days'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 3843f64c-eef7-500b-8fdf-38f70effaa78
+		summarizeBy: none
+		sourceColumn: lead_days
+
+	column 'Lead SD'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: e31b8cf7-acca-58ea-887d-7dcc8a45db09
+		summarizeBy: none
+		sourceColumn: lead_sd
+
+	column 'Safety Units'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: c895173e-3821-55db-bb92-ff569522696a
+		summarizeBy: none
+		sourceColumn: safety_units
+
+	column 'Reorder Point'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 836d7ad3-fac3-5d3f-b9d2-aa57b24098a5
+		summarizeBy: none
+		sourceColumn: reorder_point
+
+	column 'Order Up To'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: ceb7e0e2-5830-5b3b-a5e7-8103d3c25f1f
+		summarizeBy: none
+		sourceColumn: order_up_to
+
+	column 'Cover Days'
+		dataType: double
+		formatString: #,0
+		lineageTag: 5c1a0958-91dc-5535-9871-eafa77c1afc5
+		summarizeBy: none
+		sourceColumn: cover_days
+
+	column 'Stock Cover Band'
+		dataType: string
+		isHidden
+		lineageTag: 0a4c0a28-2a21-5b21-b49f-b934890c2a49
+		summarizeBy: none
+		sourceColumn: cover_band
+
+	column 'Stock Status'
+		dataType: string
+		isHidden
+		lineageTag: 16f04474-68e4-58de-ab5d-513ea55e746f
+		summarizeBy: none
+		sourceColumn: status
+
+	column 'Order Units'
+		dataType: double
+		formatString: #,0
+		lineageTag: 6d6be580-9f99-56de-a72a-cf2e243f6966
+		summarizeBy: none
+		sourceColumn: order_units
+
+	column 'Order Cost'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 409e3ff4-07e5-566b-9427-84df4d0b7206
+		summarizeBy: none
+		sourceColumn: order_cost
+
+	partition Stock = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_stock.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"inventory_id", type text}, {"store", Int64.Type}, {"brand", Int64.Type}, {"vendor_no", Int64.Type}, {"category", type text}, {"abc", type text}, {"begin_units", Int64.Type}, {"received_units", Int64.Type}, {"end_units", Int64.Type}, {"sold_units", Int64.Type}, {"days_active", Int64.Type}, {"jan_units", Int64.Type}, {"new_line_2016", type logical}, {"line_origin", type text}, {"last_receipt", type date}, {"opening_state", type text}, {"unit_cost", type number}, {"unit_price", type number}, {"stock_cost", type number}, {"stock_retail", type number}, {"sales_value", type number}, {"jan_factor", type number}, {"daily_rate", type number}, {"daily_forecast", type number}, {"daily_sd", type number}, {"lead_days", type number}, {"lead_sd", type number}, {"safety_units", type number}, {"reorder_point", type number}, {"order_up_to", type number}, {"cover_days", type number}, {"cover_band", type text}, {"status", type text}, {"order_units", type number}, {"order_cost", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,84 @@
+table 'Pipeline Snapshots'
+	lineageTag: 4efa39ca-ce28-5a5c-a5c2-580101590d46
+
+	column 'Snapshot Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: 5c150b56-11b3-5c0f-b7ff-dab8a2267f7f
+		summarizeBy: none
+		sourceColumn: snapshot_date
+
+	column 'Opportunity ID'
+		dataType: string
+		isHidden
+		lineageTag: ff047139-3469-55b2-86f9-38f270da536c
+		summarizeBy: none
+		sourceColumn: opportunity_id
+
+	column 'Owner ID'
+		dataType: string
+		isHidden
+		lineageTag: b8dd7011-47be-5d21-aa29-794b8bfa2e2e
+		summarizeBy: none
+		sourceColumn: owner_id
+
+	column 'Account ID'
+		dataType: string
+		isHidden
+		lineageTag: 88e2d5d8-c4db-5bf0-96ff-7e78107396e3
+		summarizeBy: none
+		sourceColumn: account_id
+
+	column 'Product ID'
+		dataType: string
+		isHidden
+		lineageTag: 7699d8ac-c55c-58d9-9f48-dc7b840dad88
+		summarizeBy: none
+		sourceColumn: product_id
+
+	column 'Stage Key'
+		dataType: string
+		isHidden
+		lineageTag: 16d10541-04fc-58f9-95c2-e616fd5a998b
+		summarizeBy: none
+		sourceColumn: stage_key
+
+	column 'Snapshot Age Days'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7f1a6468-c4de-5c49-8e46-7cacc788f9cd
+		summarizeBy: none
+		sourceColumn: age_days
+
+	column 'Age Band'
+		dataType: string
+		isHidden
+		lineageTag: b5ffb6f2-6328-5904-a5d2-f38be281d261
+		summarizeBy: none
+		sourceColumn: age_band
+
+	column 'Snapshot Open Value'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 38597429-a0aa-560b-b68b-559b8cc9d1a5
+		summarizeBy: none
+		sourceColumn: open_value
+
+	column 'Snapshot Close Value'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 63ada583-3d7f-5729-9cd7-9b7ad8f661a3
+		summarizeBy: none
+		sourceColumn: close_value
+
+	partition 'Pipeline Snapshots' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "fact_pipeline_snapshot"]}[Data],
+				    Typed = Table.TransformColumnTypes(Data, {{"snapshot_date", type date}, {"opportunity_id", type text}, {"owner_id", type text}, {"account_id", type text}, {"product_id", type text}, {"stage_key", type text}, {"age_days", Int64.Type}, {"age_band", type text}, {"open_value", type number}, {"close_value", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

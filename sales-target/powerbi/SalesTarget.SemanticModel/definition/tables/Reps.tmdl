@@ -1,0 +1,120 @@
+table Reps
+	lineageTag: 28e14b3b-d38f-5931-a6da-d8919299c582
+
+	column 'Rep Key'
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 4e2592b4-dd69-5990-a30f-b62d5b3a9cda
+		summarizeBy: none
+		sourceColumn: Rep Key
+
+	column Rep
+		dataType: string
+		lineageTag: c0c83d4c-750d-5706-ac71-9be35b4156fb
+		summarizeBy: none
+		sourceColumn: Rep
+
+	column Login
+		dataType: string
+		isHidden
+		lineageTag: e6f7632a-2a21-553c-a22a-ae25c3e8cf67
+		summarizeBy: none
+		sourceColumn: Login
+
+	column Title
+		dataType: string
+		lineageTag: 168415c3-758f-5ee2-9ee7-2672b8f95e1a
+		summarizeBy: none
+		sourceColumn: Title
+
+	column 'Territory Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1b1d4db3-ddc8-5f5d-8a79-5b073e29134f
+		summarizeBy: none
+		sourceColumn: Territory Key
+
+	column 'Manager Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: af2b90c4-2753-5fc7-b7e5-b6ab2bbde01f
+		summarizeBy: none
+		sourceColumn: Manager Key
+
+	column Email
+		dataType: string
+		isHidden
+		lineageTag: 1b991b0e-27f3-5a9b-863d-001c203a3ebb
+		summarizeBy: none
+		sourceColumn: Email
+
+	column 'Manager Path' =
+			PATH ( Reps[Rep Key], Reps[Manager Key] )
+		dataType: string
+		isHidden
+		lineageTag: 591b968b-b5b5-5eb2-887f-5165b77ef260
+		summarizeBy: none
+
+	column 'Org Level 1' =
+			VAR _k = PATHITEM ( Reps[Manager Path], 1, INTEGER )
+			RETURN IF ( ISBLANK ( _k ), Reps[Rep], LOOKUPVALUE ( Reps[Rep], Reps[Rep Key], _k ) )
+		dataType: string
+		lineageTag: b081f1c4-0184-53bb-999a-9ccd0ad05ab6
+		summarizeBy: none
+
+	column 'Org Level 2' =
+			VAR _k = PATHITEM ( Reps[Manager Path], 2, INTEGER )
+			RETURN IF ( ISBLANK ( _k ), Reps[Rep], LOOKUPVALUE ( Reps[Rep], Reps[Rep Key], _k ) )
+		dataType: string
+		lineageTag: 923f1bf7-59ee-5d18-ac42-b30269161421
+		summarizeBy: none
+
+	column 'Org Level 3' =
+			VAR _k = PATHITEM ( Reps[Manager Path], 3, INTEGER )
+			RETURN IF ( ISBLANK ( _k ), Reps[Rep], LOOKUPVALUE ( Reps[Rep], Reps[Rep Key], _k ) )
+		dataType: string
+		lineageTag: 76f5726f-9cac-531f-b783-9c22b63a5b77
+		summarizeBy: none
+
+	column 'Home Region' =
+			LOOKUPVALUE ( Territories[Region], Territories[Territory Key], Reps[Territory Key] )
+		dataType: string
+		lineageTag: fe0b38cc-74cd-51e7-97c8-cdedaaef1289
+		summarizeBy: none
+
+	hierarchy Org
+		lineageTag: bfadc322-c6d0-5f9d-8c92-191f24c69650
+
+		level 'Org Level 1'
+			lineageTag: 0d7ea35f-f2be-5008-810a-c835d121cfd0
+			column: 'Org Level 1'
+
+		level 'Org Level 2'
+			lineageTag: 06c4af73-44f9-5b01-8643-2a0a191658f8
+			column: 'Org Level 2'
+
+		level 'Org Level 3'
+			lineageTag: d20da261-2806-511e-a4d9-7b92cb7665cb
+			column: 'Org Level 3'
+
+	partition Reps = m
+		mode: import
+		source =
+				// Sales people with their manager, for the org hierarchy and dynamic row-level security.
+				let
+				    Source = fnReference("Reps"),
+				    // PATH() fails on a parent that isn't in the table (the VP reports to the CEO), so those become the top.
+				    Keys = List.Buffer(Source[Rep Key]),
+				    Rooted = Table.ReplaceValue(Source, each [Manager Key], each if List.Contains(Keys, [Manager Key]) then [Manager Key] else null,
+				        Replacer.ReplaceValue, {"Manager Key"}),
+				    WithEmail = Table.AddColumn(Rooted, "Email", each Text.AfterDelimiter([Login], "\") & "@adventure-works.com", type text)
+				in
+				    Table.TransformColumnTypes(WithEmail, {
+				        {"Rep Key", Int64.Type}, {"Rep", type text}, {"Login", type text}, {"Title", type text},
+				        {"Territory Key", Int64.Type}, {"Manager Key", Int64.Type}})
+
+	annotation PBI_ResultType = Table

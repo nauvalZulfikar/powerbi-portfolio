@@ -1,0 +1,50 @@
+table 'Time Intelligence'
+	lineageTag: 233057c1-c509-5332-a050-bd31cf51e520
+
+	calculationGroup
+		precedence: 10
+
+		calculationItem Current = SELECTEDMEASURE ()
+			ordinal: 0
+
+		calculationItem 'Prior Month' = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, MONTH ) )
+			ordinal: 1
+
+		calculationItem 'MoM %' =
+				VAR _pm = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, MONTH ) )
+				RETURN DIVIDE ( SELECTEDMEASURE () - _pm, _pm )
+			ordinal: 2
+			formatStringDefinition = "+0.0%;-0.0%;0.0%"
+
+		calculationItem MTD = CALCULATE ( SELECTEDMEASURE (), DATESMTD ( 'Gregorian' ) )
+			ordinal: 3
+
+		calculationItem QTD = CALCULATE ( SELECTEDMEASURE (), DATESQTD ( 'Gregorian' ) )
+			ordinal: 4
+
+		calculationItem YTD = CALCULATE ( SELECTEDMEASURE (), DATESYTD ( 'Gregorian' ) )
+			ordinal: 5
+
+		calculationItem 'Prior Year' = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, YEAR ) )
+			ordinal: 6
+
+		calculationItem 'YoY %' =
+				VAR _py = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, YEAR ) )
+				RETURN DIVIDE ( SELECTEDMEASURE () - _py, _py )
+			ordinal: 7
+			formatStringDefinition = "+0.0%;-0.0%;0.0%"
+
+	column Period
+		dataType: string
+		lineageTag: 59d83393-eaad-5f66-9128-7ec122bc3d69
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+	column Ordinal
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 885b4edb-81ab-54f3-9bd4-67a5b76b934f
+		summarizeBy: sum
+		sourceColumn: Ordinal

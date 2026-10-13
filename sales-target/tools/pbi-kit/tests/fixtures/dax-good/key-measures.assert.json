@@ -1,0 +1,1 @@
+{"rows": 1, "checks": [{"column": "[Good]", "equals": 100, "tolerance": 0.5}, {"column": "[Rows]", "equals": 3}]}

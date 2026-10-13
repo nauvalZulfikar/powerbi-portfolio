@@ -1,0 +1,87 @@
+table 'Daily Sales'
+	lineageTag: ed7f418c-e675-558f-a554-61ed2e41d45d
+	isHidden
+
+	column 'Sales Date'
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy
+		lineageTag: ff35b41d-f8f0-5ba8-939e-7414c9e0736a
+		summarizeBy: none
+		sourceColumn: sales_date
+		alternateOf
+			summarization: groupBy
+			baseColumn: 'Daily Sales Detail'.'Detail Date'
+
+	column 'Sales Store'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f3f1680e-057d-5226-9a53-8ffb7d73943d
+		summarizeBy: none
+		sourceColumn: store
+		alternateOf
+			summarization: groupBy
+			baseColumn: 'Daily Sales Detail'.'Detail Store'
+
+	column 'Sales Brand'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: db3c41b0-6a92-56bd-80ec-64c0d62f60cd
+		summarizeBy: none
+		sourceColumn: brand
+		alternateOf
+			summarization: groupBy
+			baseColumn: 'Daily Sales Detail'.'Detail Brand'
+
+	column 'Units Sold'
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: b567171e-9872-5de9-b6b8-036e577c2922
+		summarizeBy: none
+		sourceColumn: units
+		alternateOf
+			summarization: sum
+			baseColumn: 'Daily Sales Detail'.Units
+
+	column 'Sales Dollars'
+		dataType: decimal
+		isHidden
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 65d52870-6b09-5411-ad0f-3d11c86eee43
+		summarizeBy: none
+		sourceColumn: dollars
+		alternateOf
+			summarization: sum
+			baseColumn: 'Daily Sales Detail'.Dollars
+
+	column 'Sales Rows'
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: 6dd9380f-441d-55c9-b296-8dea4fde4e65
+		summarizeBy: none
+		sourceColumn: sales_rows
+		alternateOf
+			summarization: count
+			baseTable: 'Daily Sales Detail'
+
+	partition 'Daily Sales' = m
+		mode: import
+		source =
+				let
+				    Source = PostgreSQL.Database(PgServer, PgDatabase),
+				    Data = Source{[Schema = "inventory", Item = "daily_sales_detail"]}[Data],
+				    // select first, then group: both steps fold into one SELECT ... GROUP BY on the server
+				    Selected = Table.SelectColumns(Data, {"sales_date", "store", "brand", "units", "dollars"}),
+				    Grouped = Table.Group(Selected, {"sales_date", "store", "brand"}, {
+				        {"units", each List.Sum([units]), Int64.Type},
+				        {"dollars", each List.Sum([dollars]), Currency.Type},
+				        {"sales_rows", each Table.RowCount(_), Int64.Type}}),
+				    Typed = Table.TransformColumnTypes(Grouped, {{"sales_date", type date}, {"store", Int64.Type}, {"brand", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

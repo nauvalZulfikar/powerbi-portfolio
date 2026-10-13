@@ -1,0 +1,29 @@
+table 'Stage Flow'
+	lineageTag: 518b5833-67b7-54db-93a7-68af84bed0d7
+
+	column From
+		dataType: string
+		lineageTag: 3d452cdd-5fc4-5691-b3d1-31420c8c0b72
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [From]
+
+	column To
+		dataType: string
+		lineageTag: ce6c30e9-d823-5d9a-9066-bdacf55a8e9a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [To]
+
+	column 'Flow Order'
+		dataType: int64
+		lineageTag: 4e21c92e-63f9-5e39-8808-396be831a96d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Flow Order]
+		isHidden
+		formatString: 0
+
+	partition 'Stage Flow' = calculated
+		mode: import
+		source = DATATABLE ( "From", STRING, "To", STRING, "Flow Order", INTEGER, { { "Created", "Engaged", 1 }, { "Created", "Still prospecting", 2 }, { "Engaged", "Won", 3 }, { "Engaged", "Lost", 4 }, { "Engaged", "Still engaging", 5 } } )

@@ -1,0 +1,95 @@
+table 'Snapshot Agg'
+	isHidden
+	lineageTag: 7a7a32a2-9f98-5563-88d2-1c41deb87d2e
+
+	column 'Snapshot Date'
+		dataType: dateTime
+		isHidden
+		lineageTag: 3b953cc1-7fc6-53b3-830e-bd0f211552e6
+		summarizeBy: none
+		sourceColumn: snapshot_date
+
+		alternateOf
+			summarization: groupBy
+			baseColumn: 'Pipeline Snapshots'.'Snapshot Date'
+
+	column 'Owner ID'
+		dataType: string
+		isHidden
+		lineageTag: 48ae6020-da1d-533c-b733-21d4883fca82
+		summarizeBy: none
+		sourceColumn: owner_id
+
+		alternateOf
+			summarization: groupBy
+			baseColumn: 'Pipeline Snapshots'.'Owner ID'
+
+	column 'Stage Key'
+		dataType: string
+		isHidden
+		lineageTag: 992cd57f-e2d2-591c-af02-a1c75261a0f7
+		summarizeBy: none
+		sourceColumn: stage_key
+
+		alternateOf
+			summarization: groupBy
+			baseColumn: 'Pipeline Snapshots'.'Stage Key'
+
+	column 'Age Band'
+		dataType: string
+		isHidden
+		lineageTag: b1f565b1-f964-515e-896d-a5db8704dc76
+		summarizeBy: none
+		sourceColumn: age_band
+
+		alternateOf
+			summarization: groupBy
+			baseColumn: 'Pipeline Snapshots'.'Age Band'
+
+	column 'Agg Open Value'
+		dataType: double
+		isHidden
+		lineageTag: 6b4a6569-5e15-5ad6-88b2-9f8a6ca75ecb
+		summarizeBy: none
+		sourceColumn: open_value
+
+		alternateOf
+			summarization: sum
+			baseColumn: 'Pipeline Snapshots'.'Snapshot Open Value'
+
+	column 'Agg Close Value'
+		dataType: double
+		isHidden
+		lineageTag: a11f0759-55a4-5af3-845a-0c836eb3106a
+		summarizeBy: none
+		sourceColumn: close_value
+
+		alternateOf
+			summarization: sum
+			baseColumn: 'Pipeline Snapshots'.'Snapshot Close Value'
+
+	column 'Agg Rows'
+		dataType: int64
+		isHidden
+		lineageTag: ea6e1748-5105-50eb-9407-1432a8b2bffc
+		summarizeBy: none
+		sourceColumn: rows
+
+		alternateOf
+			summarization: count
+			baseTable: 'Pipeline Snapshots'
+
+	partition 'Snapshot Agg' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "fact_pipeline_snapshot"]}[Data],
+				    Grouped = Table.Group(Data, {"snapshot_date", "owner_id", "stage_key", "age_band"}, {
+				        {"open_value", each List.Sum([open_value]), type number},
+				        {"close_value", each List.Sum([close_value]), type number},
+				        {"rows", each Table.RowCount(_), Int64.Type}})
+				in
+				    Grouped
+
+	annotation PBI_ResultType = Table

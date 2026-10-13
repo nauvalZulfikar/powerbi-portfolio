@@ -1,0 +1,47 @@
+table 'Sync Run Events'
+	lineageTag: 9cc212a0-0d4c-5435-8be3-e82872e1173c
+
+	column 'Run ID'
+		dataType: string
+		lineageTag: 97c22d1d-8688-5e96-abbe-50739ee1c3a1
+		summarizeBy: none
+		sourceColumn: Run ID
+		isHidden
+
+	column 'Sync Date'
+		dataType: dateTime
+		lineageTag: 2d43c98b-95ed-5af4-94a6-2b0589c509fc
+		summarizeBy: none
+		sourceColumn: Sync Date
+		formatString: dd mmm yyyy
+
+	column Metric
+		dataType: string
+		lineageTag: 64846e2e-3aab-5b20-a3b2-a784e941b975
+		summarizeBy: none
+		sourceColumn: Metric
+
+	column Value
+		dataType: int64
+		lineageTag: a48bf1cb-f23d-5a84-a3b9-98f5275c7f1b
+		summarizeBy: none
+		sourceColumn: Value
+		formatString: #,0
+
+	partition 'Sync Run Events' = m
+		mode: import
+		source =
+				let
+				    Source = #"Sync Runs",
+				    // Every retry follows a 429 or a 5xx, so first-try + 429 + 5xx stacks up to exactly the requests sent
+				    AddedFirstTry = Table.AddColumn(Source, "first_try", each [requests] - [retries], Int64.Type),
+				    KeptCounters = Table.SelectColumns(AddedFirstTry, {"run_id", "as_of", "first_try", "rate_limited", "server_errors"}),
+				    Unpivoted = Table.UnpivotOtherColumns(KeptCounters, {"run_id", "as_of"}, "Metric", "Value"),
+				    Labelled = Table.TransformColumns(Unpivoted, {{"Metric", each Record.FieldOrDefault([first_try = "Answered first time",
+				        rate_limited = "Rate Limited 429", server_errors = "Server Errors 5xx"], _, _), type text}}),
+				    Renamed = Table.RenameColumns(Labelled, {{"run_id", "Run ID"}, {"as_of", "Sync Date"}}),
+				    Typed = Table.TransformColumnTypes(Renamed, {{"Sync Date", type date}, {"Value", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

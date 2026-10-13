@@ -1,0 +1,28 @@
+// Test: security. The query view cannot run as a role (use Modeling > View as in Desktop for that), so
+// this checks the two things a query can: (1) the three static branch roles split the sales with nothing left
+// over or counted twice: each row is the role's filter Territories[Branch] = "<code>"; (2) which roles carry
+// table filters and which columns are hidden by object-level security (INFO functions read the model).
+EVALUATE
+VAR _branches =
+    ADDCOLUMNS (
+        VALUES ( Territories[Branch] ),
+        "Role", SWITCH ( Territories[Branch], "EU", "Branch Europe", "NA", "Branch North America",
+                         "PAC", "Branch Pacific" ),
+        "Net Sales", CALCULATE ( [Net Sales] )
+    )
+RETURN
+    UNION (
+        _branches,
+        ROW ( "Branch", "ALL", "Role", "Sum of the roles = Net Sales?",
+              "Net Sales", IF ( ABS ( SUMX ( _branches, [Net Sales] ) - [Net Sales] ) < 0.01, 1, 0 ) )
+    )
+
+EVALUATE
+VAR _roles = SELECTCOLUMNS ( INFO.ROLES (), "Role ID", [ID], "Role", [Name] )
+VAR _columns = SELECTCOLUMNS ( INFO.COLUMNS (), "Column ID", [ID], "Column", [ExplicitName] )
+RETURN
+    SELECTCOLUMNS (
+        INFO.COLUMNPERMISSIONS (),
+        "Role", VAR _r = [RoleID] RETURN MAXX ( FILTER ( _roles, [Role ID] = _r ), [Role] ),
+        "Hidden column", VAR _c = [ColumnID] RETURN MAXX ( FILTER ( _columns, [Column ID] = _c ), [Column] )
+    )

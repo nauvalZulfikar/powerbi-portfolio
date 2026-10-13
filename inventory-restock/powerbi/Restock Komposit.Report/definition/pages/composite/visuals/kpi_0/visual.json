@@ -1,0 +1,67 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "kpi_0",
+  "position": {
+    "x": 24,
+    "y": 96,
+    "z": 100,
+    "width": 376,
+    "height": 140,
+    "tabOrder": 100
+  },
+  "visual": {
+    "visualType": "card",
+    "objects": {},
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'KPI card: Detail Units.'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Detail Units"
+                }
+              },
+              "queryRef": "_Measures.Detail Units",
+              "nativeQueryRef": "Detail Units"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+// Test: key measures against totals computed from data/marts with DuckDB
+// (src/dax_queries.py writes the expected values in at build time). Every row should say PASS.
+DEFINE
+    MEASURE '_Measures'[Expected Net Sales] = 80450596.52
+    MEASURE '_Measures'[Expected Orders] = 3796
+    MEASURE '_Measures'[Expected Target] = 92110869.57
+    MEASURE '_Measures'[Expected Attainment] = DIVIDE ( [Expected Net Sales], [Expected Target] )
+    MEASURE '_Measures'[Expected Reps On Target] = 0
+    VAR _checks =
+        UNION (
+            ROW ( "Check", "Net Sales", "Actual", [Net Sales], "Expected", [Expected Net Sales] ),
+            ROW ( "Check", "Orders", "Actual", [Orders], "Expected", [Expected Orders] ),
+            ROW ( "Check", "Target", "Actual", [Target], "Expected", [Expected Target] ),
+            ROW ( "Check", "Attainment", "Actual", [Attainment], "Expected", [Expected Attainment] ),
+            ROW ( "Check", "Reps On Target", "Actual", [Reps On Target], "Expected", [Expected Reps On Target] )
+        )
+EVALUATE
+ADDCOLUMNS ( _checks, "Result", IF ( ABS ( [Actual] - [Expected] ) < 0.01, "PASS", "FAIL" ) )

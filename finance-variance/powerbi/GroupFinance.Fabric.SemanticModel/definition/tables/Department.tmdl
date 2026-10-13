@@ -1,0 +1,30 @@
+table Department
+	lineageTag: cc68c05c-c693-5deb-b10f-675b1993293b
+
+	column 'Department Key'
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 355e0c65-38c0-5a15-8121-81e5f6d95d94
+		summarizeBy: none
+		sourceColumn: department_key
+
+	column Department
+		dataType: string
+		lineageTag: ccba53eb-9b5f-5493-9c42-414ecbdc4c08
+		summarizeBy: none
+		sourceColumn: department
+
+	partition Department = m
+		mode: dual
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "dim_department"]}[Data],
+				    #"Choose columns" = Table.SelectColumns(Data, {"department_key", "department"}),
+				    Typed = Table.TransformColumnTypes(#"Choose columns", {{"department_key", Int64.Type}, {"department", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

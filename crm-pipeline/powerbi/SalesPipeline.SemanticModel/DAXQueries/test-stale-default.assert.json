@@ -1,0 +1,15 @@
+{
+ "rows": 1,
+ "checks": [
+  {
+   "column": "[P90 Cycle Days]",
+   "equals": 104,
+   "tolerance": 0.5
+  },
+  {
+   "column": "[Stale Days]",
+   "equals": 104,
+   "tolerance": 0.5
+  }
+ ]
+}

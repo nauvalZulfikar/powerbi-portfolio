@@ -1,0 +1,8 @@
+// Intercompany sales eliminated on consolidation, FY2013. The measure negates the elimination postings, so it is
+// a positive amount removed (README: "$2.52M of intercompany sales is eliminated"); DuckDB: -sum(amount_usd) on
+// line L02 where is_elimination, Actual, 2013 = 2,515,303.32.
+EVALUATE
+CALCULATETABLE (
+    ROW ( "Intercompany Eliminated", [Intercompany Eliminated] ),
+    'Date'[Year] = 2013
+)

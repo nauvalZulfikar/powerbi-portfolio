@@ -1,0 +1,29 @@
+/// Part ÷ whole; blank when the whole is empty.
+function 'Kpi.Rate' = ( part : NUMERIC, whole : NUMERIC ) => DIVIDE ( part, whole )
+	lineageTag: ad78dcf6-c4fd-542e-9214-4e81b93b6756
+
+/// A measure as a share of the same measure with the filters on one column or table removed.
+function 'Kpi.ShareOf' = ( value : SCALAR NUMERIC EXPR, scope : ANYREF ) => DIVIDE ( value, CALCULATE ( value, REMOVEFILTERS ( scope ) ) )
+	lineageTag: d1b1fd69-7a57-5a78-b93d-133718144810
+
+/// Win rate inside a segment ÷ win rate of everything else in the visual (1.0 = no difference).
+function 'Kpi.Lift' =
+		( won : NUMERIC, closed : NUMERIC, allWon : NUMERIC, allClosed : NUMERIC ) =>
+			DIVIDE ( DIVIDE ( won, closed ), DIVIDE ( allWon - won, allClosed - closed ) )
+	lineageTag: fcd5f352-c28b-5c7d-8baf-ef41aac1998d
+
+/// A measure one month back on the calendar passed in.
+function 'Kpi.PriorMonth' = ( value : SCALAR NUMERIC EXPR, cal : CALENDARREF ) => CALCULATE ( value, DATEADD ( cal, -1, MONTH ) )
+	lineageTag: 37cdb65b-723f-58aa-ae39-6f4601a7749c
+
+/// A measure one quarter back on the calendar passed in.
+function 'Kpi.PriorQuarter' = ( value : SCALAR NUMERIC EXPR, cal : CALENDARREF ) => CALCULATE ( value, DATEADD ( cal, -1, QUARTER ) )
+	lineageTag: bd3aeb4d-c819-5e49-b2ed-7988f26c1627
+
+/// A measure one year back on the calendar passed in.
+function 'Kpi.PriorYear' = ( value : SCALAR NUMERIC EXPR, cal : CALENDARREF ) => CALCULATE ( value, DATEADD ( cal, -1, YEAR ) )
+	lineageTag: c04b1793-cef1-5a76-97e1-0c48db1bb822
+
+/// An amount as text in millions, e.g. $3.5m.
+function 'Fmt.Money' = ( amount : NUMERIC ) => FORMAT ( amount / 1e6, "$#,0.0" ) & "m"
+	lineageTag: a9efcff8-b4aa-5dd4-a549-eb1ee14eacc9

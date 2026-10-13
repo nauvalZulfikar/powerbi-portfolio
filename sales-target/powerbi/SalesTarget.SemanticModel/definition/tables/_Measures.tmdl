@@ -1,0 +1,866 @@
+table _Measures
+	lineageTag: 6301deb1-86e5-53cc-8fa1-70b9cffc3388
+
+	/// Net line amount of clean order lines.
+	measure 'Net Sales' = SUM ( Sales[Amount] )
+		displayFolder: Sales
+		lineageTag: 8cef3a97-5f01-5d02-892b-bf0c5c509e89
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Distinct order numbers.
+	measure Orders = DISTINCTCOUNT ( Sales[Order Number] )
+		formatString: #,0
+		displayFolder: Sales
+		lineageTag: ab690115-c0ba-5107-b2c4-f53bdee76b98
+
+	/// Units sold.
+	measure Units = SUM ( Sales[Quantity] )
+		formatString: #,0
+		displayFolder: Sales
+		lineageTag: 0d89f2a2-5cd2-517f-97f3-3c346b6e971c
+
+	/// Sales per order.
+	measure 'Avg Order Value' = DIVIDE ( [Net Sales], [Orders] )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Sales
+		lineageTag: ed702283-d507-58f5-8284-e36f34ab79d7
+
+	/// Sales a year earlier on the Gregorian calendar (UDF Sales.PriorYear).
+	measure 'Sales PY' = Sales.PriorYear ( [Net Sales], 'Gregorian' )
+		displayFolder: Sales
+		lineageTag: ef72e660-c676-5854-9f41-17d983329b97
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Change against the same period a year earlier.
+	measure 'Sales YoY %' = DIVIDE ( [Net Sales] - [Sales PY], [Sales PY] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Sales
+		lineageTag: eee9ddc7-a4c9-52d1-81af-7d31a2dea030
+
+	/// Share of all reps' sales in the current filter (UDF Sales.ShareOf).
+	measure 'Sales Share' = Sales.ShareOf ( [Net Sales], Reps )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Sales
+		lineageTag: 7c054bdb-2f47-5999-a0dd-4f169bab6cc3
+
+	/// Date of the latest order in the data.
+	measure 'Last Sale Date' = CALCULATE ( MAX ( Sales[Order Date] ), REMOVEFILTERS () )
+		formatString: dd mmm yyyy
+		displayFolder: Sales
+		lineageTag: 975757b9-0c23-5704-bd4b-e0a407d1ce58
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Net sales dated by ship date instead of order date: activates the inactive Sales[Ship Date] relationship.
+	measure 'Net Sales by Ship Date' = CALCULATE ( [Net Sales], USERELATIONSHIP ( Sales[Ship Date], 'Date'[Date] ) )
+		displayFolder: Sales
+		lineageTag: 6318fd89-e44b-56f3-bb99-77cb970ce104
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Average days from order to shipment, per order line.
+	measure 'Avg Days to Ship' = AVERAGEX ( Sales, DATEDIFF ( Sales[Order Date], Sales[Ship Date], DAY ) )
+		formatString: #,0.0
+		displayFolder: Sales
+		lineageTag: e85eb134-a6a0-5b1e-9ac1-dc4c1762601b
+
+	/// Resellers with at least one sale in the current filter (the Sales table as a CALCULATE filter).
+	measure 'Active Resellers' = CALCULATE ( COUNTROWS ( Resellers ), Sales )
+		formatString: #,0
+		displayFolder: Sales
+		lineageTag: e33640f1-dd67-5098-b241-0b24868cc902
+
+	/// Share of the total the visual shows: ALLSELECTED keeps the slicers and drops the visual's own rows, so it works on whichever dimension Analyze By puts on the axis.
+	measure 'Share of Visible Total' = DIVIDE ( [Net Sales], CALCULATE ( [Net Sales], ALLSELECTED () ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Sales
+		lineageTag: 865bbedf-0f7c-5d2e-a3d0-0a429eed563c
+
+	/// Rolling 12 months to the last date in the filter (DATESINPERIOD).
+	measure 'Sales R12M' = CALCULATE ( [Net Sales], DATESINPERIOD ( 'Date'[Date], MAX ( 'Date'[Date] ), -12, MONTH ) )
+		displayFolder: Sales
+		lineageTag: 6b243b78-bde7-5c5a-a04f-ce7b5d4d044d
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Average of this and the two previous months on the axis (WINDOW -2 REL to 0 REL). A model measure rather than a visual calculation, so Time & Fiscal and Rep detail share it.
+	measure 'Sales 3M Avg' =
+			AVERAGEX (
+			    WINDOW ( -2, REL, 0, REL, ALLSELECTED ( 'Date'[Year Month] ), ORDERBY ( 'Date'[Year Month] ) ),
+			    [Net Sales] )
+		displayFolder: Sales
+		lineageTag: 90ac3414-3fa5-5e13-88be-a9886a0b8327
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Average net sales per month in the filter (months without sales skipped). Constant line on Time & Fiscal.
+	measure 'Avg Monthly Sales' = AVERAGEX ( VALUES ( 'Date'[Year Month] ), [Net Sales] )
+		displayFolder: Sales
+		lineageTag: 8eaab32d-ee5e-5948-b887-a97e1aa1811d
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Net sales less units × standard cost (Products[Standard Cost] through RELATED). Hidden from Sales Manager by object-level security on the cost column, so it errors in that role.
+	measure 'Gross Margin' = SUMX ( Sales, Sales[Amount] - Sales[Quantity] * RELATED ( Products[Standard Cost] ) )
+		displayFolder: Profit
+		lineageTag: 27001148-25ea-531d-8542-c83767282f51
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Gross margin ÷ net sales.
+	measure 'Gross Margin %' = DIVIDE ( [Gross Margin], [Net Sales] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Profit
+		lineageTag: 75f3095e-6251-5d01-8ccf-9588350c2257
+
+	/// Selected what-if stretch on top of quota; 0% by default.
+	measure 'Stretch %' = SELECTEDVALUE ( 'Target Stretch'[Target Stretch], 0 )
+		formatString: 0%
+		displayFolder: Target
+		lineageTag: 05c30473-b04e-51a2-82db-f4f68873d537
+
+	/// Quota up to the last sale date. Quotas are per rep, so territories use the rep's home territory and product or reseller filters return blank.
+	measure Quota =
+			VAR _last = CALCULATE ( MAX ( Sales[Order Date] ), REMOVEFILTERS () )
+			VAR _q =
+			    CALCULATE ( SUM ( Targets[Daily Quota] ), KEEPFILTERS ( 'Date'[Date] <= _last ) )
+			RETURN
+			    SWITCH ( TRUE (),
+			        ISCROSSFILTERED ( Products ) || ISCROSSFILTERED ( Resellers ), BLANK (),
+			        ISCROSSFILTERED ( Territories ),
+			            CALCULATE ( SUM ( Targets[Daily Quota] ), KEEPFILTERS ( 'Date'[Date] <= _last ),
+			                TREATAS ( VALUES ( Territories[Territory Key] ), Reps[Territory Key] ) ),
+			        _q )
+		displayFolder: Target
+		lineageTag: d8858fff-3aa6-5738-a846-127fae9939f9
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Quota × (1 + stretch).
+	measure Target = [Quota] * ( 1 + [Stretch %] )
+		displayFolder: Target
+		lineageTag: 81186f57-0653-54ea-a5e6-85fc07e8437a
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Sales − target (UDF Sales.Gap).
+	measure 'Gap to Target' = Sales.Gap ( [Net Sales], [Target] )
+		displayFolder: Target
+		lineageTag: fa00c514-8cb5-529d-a5fb-e27df1162f49
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Sales ÷ target (UDF Sales.Attainment).
+	measure Attainment = Sales.Attainment ( [Net Sales], [Target] )
+		formatString: 0%
+		displayFolder: Target
+		lineageTag: 31ac3ee8-1eb5-59fa-a462-7a8960b23277
+
+	/// On target / at risk / behind (UDF Sales.Status).
+	measure Status = Sales.Status ( [Attainment] )
+		displayFolder: Target
+		lineageTag: e7886ecd-d2dc-5ede-ba00-c84097f27a2e
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Colour for the status, used by conditional formatting.
+	measure 'Status Color' = Sales.StatusColor ( [Status] )
+		displayFolder: Target
+		lineageTag: e9caab83-1a2b-53d8-9fb2-6d5df0d85218
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Status with a symbol, so it reads without colour (▲ on target, ● at risk, ▼ behind).
+	measure 'Status Label' = SWITCH ( [Status], "On target", "▲ On target", "At risk", "● At risk", "Behind", "▼ Behind" )
+		displayFolder: Target
+		lineageTag: 306343b0-bb57-51c1-b622-0afe092d5773
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// The at-risk threshold: 90% of target. Band for the bullet chart.
+	measure 'Target at 90%' = [Target] * 0.9
+		displayFolder: Target
+		lineageTag: f89766ac-35ca-5186-9d85-ca59462a24c5
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Reps whose attainment is 100% or more.
+	measure 'Reps On Target' = COUNTROWS ( FILTER ( VALUES ( Reps[Rep Key] ), [Attainment] >= 1 ) )
+		formatString: #,0
+		displayFolder: Target
+		lineageTag: fe3c4ff4-23a0-5620-87a7-a088ba56469c
+
+	/// Reps that have a target in the current filter.
+	measure 'Reps With Target' = COUNTROWS ( FILTER ( VALUES ( Reps[Rep Key] ), NOT ISBLANK ( [Target] ) ) )
+		formatString: #,0
+		displayFolder: Target
+		lineageTag: 60da1a6c-778a-5f14-b7f2-9fc646a39a47
+
+	/// Target over the rolling 12 months (DATESINPERIOD).
+	measure 'Target R12M' = CALCULATE ( [Target], DATESINPERIOD ( 'Date'[Date], MAX ( 'Date'[Date] ), -12, MONTH ) )
+		displayFolder: Target
+		lineageTag: 961a2421-8d59-560c-89fa-7532d9c656bb
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Rolling 12-month sales ÷ rolling 12-month target.
+	measure 'Attainment R12M' = Sales.Attainment ( [Sales R12M], [Target R12M] )
+		formatString: 0%
+		displayFolder: Target
+		lineageTag: c149cdc2-80c6-599d-adaf-fd6c57674e9b
+
+	/// Attainment in the fiscal quarter before the latest one in the filter (OFFSET -1 over the fiscal quarters).
+	measure 'Attainment Prev FQ' =
+			VAR _d = MIN ( [Last Sale Date], MAX ( 'Date'[Date] ) )
+			VAR _q = LOOKUPVALUE ( 'Date'[Fiscal Quarter Number], 'Date'[Date], _d )
+			RETURN
+			    CALCULATE (
+			        CALCULATE ( [Attainment],
+			            OFFSET ( -1, ALLSELECTED ( 'Date'[Fiscal Quarter Number] ), ORDERBY ( 'Date'[Fiscal Quarter Number] ) ) ),
+			        'Date'[Fiscal Quarter Number] = _q )
+		formatString: 0%
+		displayFolder: Target
+		lineageTag: e15413de-87dd-5054-8b93-25e3528757ea
+
+	/// A rep's sales as a share of their manager's team (Org Level 1, the manager at the top of the rep's path). ALLEXCEPT keeps the team filter; VALUES puts it back when only the rep is on the rows.
+	measure 'Rep Share of Team' =
+			VAR _team = VALUES ( Reps[Org Level 1] )
+			RETURN DIVIDE ( [Net Sales], CALCULATE ( [Net Sales], ALLEXCEPT ( Reps, Reps[Org Level 1] ), _team ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Target
+		lineageTag: cdefc968-6c1b-5766-834f-73ce12135bcd
+
+	/// Net sales of the reps whose status is At risk (90–99%).
+	measure 'Sales from At-Risk Reps' = CALCULATE ( [Net Sales], FILTER ( VALUES ( Reps[Rep Key] ), [Status] = "At risk" ) )
+		displayFolder: Target
+		lineageTag: bf89f078-d4c4-59f6-9f18-47a8b72acfd8
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Reps with a target on the last day of the filter (LASTDATE): a semi-additive head count.
+	measure 'Active Reps (End of Period)' = CALCULATE ( DISTINCTCOUNT ( Targets[Rep Key] ), LASTDATE ( 'Date'[Date] ) )
+		formatString: #,0
+		displayFolder: Target
+		lineageTag: 4210a66e-e063-5d25-9372-91f4236a4081
+
+	/// Rep with the highest attainment in the current selection (INDEX 1 by attainment).
+	measure 'Top Rep' =
+			VAR _top = INDEX ( 1, ALLSELECTED ( Reps[Rep] ), ORDERBY ( [Attainment], DESC ) )
+			RETURN MAXX ( _top, Reps[Rep] )
+		displayFolder: Target
+		lineageTag: aa48e462-cd93-5571-aa4e-5c696127358f
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Best attainment among the reps of the same home region (INDEX 1, PARTITIONBY Reps[Home Region]). On a rep's row it names the leader of that rep's region; with no region in context it lists every region's leader.
+	measure 'Top Rep in Region' =
+			VAR _top =
+			    INDEX ( 1, ALLSELECTED ( Reps[Rep], Reps[Home Region] ), ORDERBY ( [Attainment], DESC ), KEEP,
+			        PARTITIONBY ( Reps[Home Region] ) )
+			RETURN CONCATENATEX ( _top, Reps[Rep], ", " )
+		displayFolder: Target
+		lineageTag: 3afe1722-5b77-5c42-8f53-53cd092caea2
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// SYNTHETIC category plan (Category Plan table). Set per category and fiscal quarter, so rep, region and reseller filters return blank, and a month shows its whole quarter.
+	measure 'Category Target' =
+			IF ( ISCROSSFILTERED ( Reps ) || ISCROSSFILTERED ( Territories ) || ISCROSSFILTERED ( Resellers ),
+			    BLANK (),
+			    SUM ( 'Category Plan'[Plan Amount] ) )
+		displayFolder: Plan
+		lineageTag: 9c3ba21d-1b9a-53b8-a827-a53cc8934542
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Sales in the planned quarters ÷ category target (synthetic plan).
+	measure 'Category Attainment' =
+			DIVIDE (
+			    CALCULATE ( [Net Sales], KEEPFILTERS ( TREATAS ( VALUES ( 'Category Plan'[Fiscal Quarter] ), 'Date'[Fiscal Quarter] ) ) ),
+			    [Category Target] )
+		formatString: 0%
+		displayFolder: Plan
+		lineageTag: eac226b3-8df1-58df-b2ad-eb69d1a7a0d8
+
+	/// Fiscal year to date (July–June), from the Fiscal calendar.
+	measure 'Sales FYTD' = CALCULATE ( [Net Sales], DATESYTD ( 'Fiscal' ) )
+		displayFolder: Fiscal
+		lineageTag: 8356bd7f-4040-5f00-bb1c-e395bef5e505
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Target, fiscal year to date.
+	measure 'Target FYTD' = CALCULATE ( [Target], DATESYTD ( 'Fiscal' ) )
+		displayFolder: Fiscal
+		lineageTag: 137f7a9c-5c31-5f9a-96a8-5384cf4fb362
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Sales FYTD ÷ target FYTD.
+	measure 'Attainment FYTD' = Sales.Attainment ( [Sales FYTD], [Target FYTD] )
+		formatString: 0%
+		displayFolder: Fiscal
+		lineageTag: 1596c2ed-3e70-56aa-beb8-c6fdf4d0763d
+
+	/// Fiscal year to date a year earlier (UDF on the Fiscal calendar).
+	measure 'Sales FYTD PY' = Sales.PriorYear ( [Sales FYTD], 'Fiscal' )
+		displayFolder: Fiscal
+		lineageTag: 08f35ba7-e293-5e5c-8753-cac9febd9895
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Running total from the first month of each fiscal year (WINDOW 1 ABS to 0 REL, PARTITIONBY fiscal year).
+	measure 'Sales Running FY' =
+			SUMX (
+			    WINDOW ( 1, ABS, 0, REL,
+			        ALLSELECTED ( 'Date'[Fiscal Year Number], 'Date'[Year Month] ),
+			        ORDERBY ( 'Date'[Year Month] ), KEEP, PARTITIONBY ( 'Date'[Fiscal Year Number] ) ),
+			    [Net Sales] )
+		displayFolder: Fiscal
+		lineageTag: a9cbc7d8-f579-532f-85fa-85995dd6adfc
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Share of net sales from this product and every product that sells more (Pareto line).
+	measure 'Product Cum Share' =
+			VAR _s = [Net Sales]
+			VAR _t = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( Products[Product Code] ), "@s", [Net Sales] ), ALLSELECTED ( Products ) )
+			RETURN IF ( NOT ISBLANK ( _s ), DIVIDE ( SUMX ( FILTER ( _t, [@s] >= _s ), [@s] ), SUMX ( _t, [@s] ) ) )
+		formatString: 0%
+		displayFolder: Pareto & ABC
+		lineageTag: 9316ec80-1a9f-5c99-818c-2ccdce4e58f4
+
+	/// Share of the products sold that together make 80% of net sales.
+	measure 'Product Share for 80% of Sales' =
+			VAR _t = FILTER ( ADDCOLUMNS ( VALUES ( Products[Product Code] ), "@s", [Net Sales] ), NOT ISBLANK ( [@s] ) )
+			VAR _total = SUMX ( _t, [@s] )
+			VAR _needed = COUNTROWS ( FILTER ( _t, VAR _v = [@s] RETURN SUMX ( FILTER ( _t, [@s] > _v ), [@s] ) < 0.8 * _total ) )
+			RETURN DIVIDE ( _needed, COUNTROWS ( _t ) )
+		formatString: 0%
+		displayFolder: Pareto & ABC
+		lineageTag: aedef2b7-afcf-5bb6-880b-be0c2060b59c
+
+	/// Title of the Pareto chart: the 80/20 split for the current selection.
+	measure 'Pareto Text' = "Pareto: " & FORMAT ( [Product Share for 80% of Sales], "0%" ) & " of the products sold make 80% of net sales"
+		displayFolder: Pareto & ABC
+		lineageTag: 459f3702-a414-5d15-9e95-59cc656b86f3
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Share of net sales from this reseller and every reseller that buys more.
+	measure 'Reseller Cum Share' =
+			VAR _s = [Net Sales]
+			VAR _t = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( Resellers[Reseller Code] ), "@s", [Net Sales] ), ALLSELECTED ( Resellers ) )
+			RETURN IF ( NOT ISBLANK ( _s ), DIVIDE ( SUMX ( FILTER ( _t, [@s] >= _s ), [@s] ), SUMX ( _t, [@s] ) ) )
+		formatString: 0%
+		displayFolder: Pareto & ABC
+		lineageTag: 1b7bb3f3-0f65-53a9-8694-b2b1e4bbbdbd
+
+	/// A: resellers that make the first 70% of net sales, B: the next 20%, C: the last 10%. Follows the slicers.
+	measure 'Reseller ABC Class' =
+			VAR _s = [Net Sales]
+			VAR _t = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( Resellers[Reseller Code] ), "@s", [Net Sales] ), ALLSELECTED ( Resellers ) )
+			VAR _before = COALESCE ( DIVIDE ( SUMX ( FILTER ( _t, [@s] > _s ), [@s] ), SUMX ( _t, [@s] ) ), 0 )
+			RETURN IF ( NOT ISBLANK ( _s ),
+			    MAXX ( FILTER ( ALL ( 'ABC Class' ), _before >= 'ABC Class'[Share From] && _before < 'ABC Class'[Share To] ),
+			        'ABC Class'[Class] ) )
+		displayFolder: Pareto & ABC
+		lineageTag: 94035cc2-c13b-5688-8d6a-c9a198e9d7c1
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Net sales of the resellers in the ABC classes picked in the slicer.
+	measure 'Sales in Class' = SUMX ( FILTER ( VALUES ( Resellers[Reseller Code] ), [Reseller ABC Class] IN VALUES ( 'ABC Class'[Class] ) ), [Net Sales] )
+		displayFolder: Pareto & ABC
+		lineageTag: 100a7a1d-e06d-5e57-886a-8d9bbc73bf7a
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Resellers in the ABC classes picked in the slicer.
+	measure 'Resellers in Class' = COUNTROWS ( FILTER ( VALUES ( Resellers[Reseller Code] ), [Reseller ABC Class] IN VALUES ( 'ABC Class'[Class] ) ) )
+		formatString: #,0
+		displayFolder: Pareto & ABC
+		lineageTag: add0dea2-4fed-5f18-8efd-3984c4e9f750
+
+	/// Resellers whose net sales in the current selection (pick a fiscal year) fall in the size band.
+	measure 'Resellers in Band' =
+			VAR _lo = MIN ( 'Reseller Size Bands'[Band Min] )
+			VAR _hi = MAX ( 'Reseller Size Bands'[Band Max] )
+			RETURN COUNTROWS ( FILTER ( VALUES ( Resellers[Reseller Code] ),
+			    VAR _v = [Net Sales] RETURN NOT ISBLANK ( _v ) && _v >= _lo && _v < _hi ) )
+		formatString: #,0
+		displayFolder: Pareto & ABC
+		lineageTag: 95663cc8-809c-5369-bde0-0ce4d9150fc3
+
+	/// Net sales of the resellers in the size band.
+	measure 'Sales in Band' =
+			VAR _lo = MIN ( 'Reseller Size Bands'[Band Min] )
+			VAR _hi = MAX ( 'Reseller Size Bands'[Band Max] )
+			RETURN SUMX ( FILTER ( VALUES ( Resellers[Reseller Code] ),
+			    VAR _v = [Net Sales] RETURN NOT ISBLANK ( _v ) && _v >= _lo && _v < _hi ), [Net Sales] )
+		displayFolder: Pareto & ABC
+		lineageTag: 458b87d0-4e68-5b9c-a946-f43037c4b04f
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Period the new / returning cards count: the date selection, or the last fiscal quarter with sales when no date is picked.
+	measure 'Period Counted' =
+			VAR _full = MIN ( 'Date'[Date] ) = CALCULATE ( MIN ( 'Date'[Date] ), REMOVEFILTERS ( 'Date' ) )
+			    && MAX ( 'Date'[Date] ) = CALCULATE ( MAX ( 'Date'[Date] ), REMOVEFILTERS ( 'Date' ) )
+			VAR _last = CALCULATE ( MAX ( Sales[Order Date] ), REMOVEFILTERS () )
+			VAR _lastq = CALCULATE ( MAX ( 'Date'[Fiscal Quarter Number] ), REMOVEFILTERS ( 'Date' ), 'Date'[Date] = _last )
+			RETURN IF ( _full, CALCULATE ( MAX ( 'Date'[Fiscal Quarter] ), REMOVEFILTERS ( 'Date' ), 'Date'[Fiscal Quarter Number] = _lastq ) & " (latest)",
+			    FORMAT ( MIN ( 'Date'[Date] ), "mmm yyyy" ) & " – " & FORMAT ( MAX ( 'Date'[Date] ), "mmm yyyy" ) )
+		displayFolder: Resellers
+		lineageTag: e5351bfa-2652-55f0-b7c9-7a5ff4f50b7f
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Resellers buying in the period counted (latest fiscal quarter with sales when no date is picked).
+	measure 'Resellers in Period' =
+			VAR _full = MIN ( 'Date'[Date] ) = CALCULATE ( MIN ( 'Date'[Date] ), REMOVEFILTERS ( 'Date' ) )
+			    && MAX ( 'Date'[Date] ) = CALCULATE ( MAX ( 'Date'[Date] ), REMOVEFILTERS ( 'Date' ) )
+			VAR _last = CALCULATE ( MAX ( Sales[Order Date] ), REMOVEFILTERS () )
+			VAR _lastq = CALCULATE ( MAX ( 'Date'[Fiscal Quarter Number] ), REMOVEFILTERS ( 'Date' ), 'Date'[Date] = _last )
+			RETURN IF ( _full,
+			    CALCULATE (
+			        [Active Resellers],
+			        REMOVEFILTERS ( 'Date' ), 'Date'[Fiscal Quarter Number] = _lastq ),
+			    [Active Resellers] )
+		formatString: #,0
+		displayFolder: Resellers
+		lineageTag: 6edfb1d7-c1e1-5e2b-a969-e6cd0e982778
+
+	/// Resellers whose first order ever falls in the period counted (latest fiscal quarter with sales when no date is picked).
+	measure 'New Resellers' =
+			VAR _full = MIN ( 'Date'[Date] ) = CALCULATE ( MIN ( 'Date'[Date] ), REMOVEFILTERS ( 'Date' ) )
+			    && MAX ( 'Date'[Date] ) = CALCULATE ( MAX ( 'Date'[Date] ), REMOVEFILTERS ( 'Date' ) )
+			VAR _last = CALCULATE ( MAX ( Sales[Order Date] ), REMOVEFILTERS () )
+			VAR _lastq = CALCULATE ( MAX ( 'Date'[Fiscal Quarter Number] ), REMOVEFILTERS ( 'Date' ), 'Date'[Date] = _last )
+			RETURN IF ( _full,
+			    CALCULATE (
+			        COUNTROWS ( FILTER ( ADDCOLUMNS ( VALUES ( Sales[Reseller Code] ),
+			            "@first", CALCULATE ( MIN ( Sales[Order Date] ), ALLEXCEPT ( Sales, Sales[Reseller Code] ) ) ),
+			            [@first] >= MIN ( 'Date'[Date] ) && [@first] <= MAX ( 'Date'[Date] ) ) ),
+			        REMOVEFILTERS ( 'Date' ), 'Date'[Fiscal Quarter Number] = _lastq ),
+			    COUNTROWS ( FILTER ( ADDCOLUMNS ( VALUES ( Sales[Reseller Code] ),
+			        "@first", CALCULATE ( MIN ( Sales[Order Date] ), ALLEXCEPT ( Sales, Sales[Reseller Code] ) ) ),
+			        [@first] >= MIN ( 'Date'[Date] ) && [@first] <= MAX ( 'Date'[Date] ) ) ) )
+		formatString: #,0
+		displayFolder: Resellers
+		lineageTag: c2991e30-ef9d-52b8-b81c-64c9b5e030dc
+
+	/// Resellers buying in the period counted who had ordered before it.
+	measure 'Returning Resellers' = [Resellers in Period] - [New Resellers]
+		formatString: #,0
+		displayFolder: Resellers
+		lineageTag: a3545ce5-4608-54fc-b10b-fcc31427bf19
+
+	/// Days from the reseller's last order (any date, for the selected rep or region) to the last sale date.
+	measure 'Days Since Last Order' =
+			VAR _mine = CALCULATE ( MAX ( Sales[Order Date] ), REMOVEFILTERS ( 'Date' ) )
+			RETURN IF ( NOT ISBLANK ( _mine ), DATEDIFF ( _mine, [Last Sale Date], DAY ) )
+		formatString: #,0
+		displayFolder: Resellers
+		lineageTag: d4b71d3a-a8a0-5d82-99e7-7656e1daf348
+
+	/// Resellers with no order in the last 180 days of data.
+	measure 'Churned Resellers' = COUNTROWS ( FILTER ( VALUES ( Resellers[Reseller Code] ), [Days Since Last Order] > 180 ) )
+		formatString: #,0
+		displayFolder: Resellers
+		lineageTag: 907354ad-c00e-5ceb-a605-22b9e581db51
+
+	/// Resellers whose last order was 91 to 180 days before the last sale date.
+	measure 'At-Risk Resellers' =
+			COUNTROWS ( FILTER ( VALUES ( Resellers[Reseller Code] ),
+			    VAR _d = [Days Since Last Order] RETURN _d > 90 && _d <= 180 ) )
+		formatString: #,0
+		displayFolder: Resellers
+		lineageTag: 0cce56e0-1a44-5075-b38e-f05fd51ee229
+
+	/// Active (ordered in the last 90 days), At risk (91–180) or Churned (over 180).
+	measure 'Churn Status' =
+			VAR _d = [Days Since Last Order]
+			RETURN SWITCH ( TRUE (), ISBLANK ( _d ), BLANK (), _d > 180, "Churned", _d > 90, "At risk", "Active" )
+		displayFolder: Resellers
+		lineageTag: daf8ad2e-bf63-5496-95c6-8cd0409b6fb5
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Share of the resellers that ordered in FY2012 and did not order in FY2013 (the last two full fiscal years).
+	measure 'Annual Churn Rate' =
+			VAR _prev = CALCULATETABLE ( VALUES ( Sales[Reseller Code] ), REMOVEFILTERS ( 'Date' ), 'Date'[Fiscal Year] = "FY2012" )
+			VAR _cur = CALCULATETABLE ( VALUES ( Sales[Reseller Code] ), REMOVEFILTERS ( 'Date' ), 'Date'[Fiscal Year] = "FY2013" )
+			RETURN DIVIDE ( COUNTROWS ( EXCEPT ( _prev, _cur ) ), COUNTROWS ( _prev ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Resellers
+		lineageTag: 83681991-4965-5d93-a597-f8c519f1a54d
+
+	/// Expected years a reseller keeps buying: 1 ÷ annual churn rate.
+	measure 'Avg Reseller Lifetime' = DIVIDE ( 1, [Annual Churn Rate] )
+		formatString: 0.0 "yrs"
+		displayFolder: Resellers
+		lineageTag: faaa980c-256a-5467-8c39-2bc14e5615d1
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Resellers with an order in FY2013.
+	measure 'Resellers FY2013' = CALCULATE ( [Active Resellers], REMOVEFILTERS ( 'Date' ), 'Date'[Fiscal Year] = "FY2013" )
+		formatString: #,0
+		displayFolder: Resellers
+		lineageTag: b231b536-4adb-524f-b7d2-1bd781ac0b83
+
+	/// FY2013 net sales per active reseller.
+	measure 'Sales per Reseller FY2013' = DIVIDE ( CALCULATE ( [Net Sales], REMOVEFILTERS ( 'Date' ), 'Date'[Fiscal Year] = "FY2013" ), [Resellers FY2013] )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Resellers
+		lineageTag: 83dc75fa-e48a-515a-b568-8fdc57280e70
+
+	/// FY2013 gross margin per active reseller.
+	measure 'Margin per Reseller FY2013' = DIVIDE ( CALCULATE ( [Gross Margin], REMOVEFILTERS ( 'Date' ), 'Date'[Fiscal Year] = "FY2013" ), [Resellers FY2013] )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Resellers
+		lineageTag: 54c735d1-2309-5966-af94-95a181e6a2c8
+
+	/// Lifetime value on gross margin: FY2013 margin per reseller × expected lifetime.
+	measure 'Reseller CLV' = [Margin per Reseller FY2013] * [Avg Reseller Lifetime]
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Resellers
+		lineageTag: 5d18023a-f192-530a-a085-c6b150a15413
+
+	/// Lifetime value on net sales: FY2013 sales per reseller × expected lifetime.
+	measure 'Reseller CLV on Sales' = [Sales per Reseller FY2013] * [Avg Reseller Lifetime]
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Resellers
+		lineageTag: 103b086f-9e30-5ae6-a63f-abdbecb69515
+
+	/// Resellers of the cohort who ordered in quarter N.
+	measure 'Cohort Resellers' = SUM ( 'Reseller Cohort'[Cohort Active] )
+		formatString: #,0
+		displayFolder: Resellers
+		lineageTag: db1871e1-5cad-53b9-adbb-404fd958a937
+
+	/// Share of the cohort that ordered again N quarters after the first order.
+	measure 'Cohort Retention %' = DIVIDE ( SUM ( 'Reseller Cohort'[Cohort Active] ), SUM ( 'Reseller Cohort'[Cohort Size] ) )
+		formatString: 0%
+		displayFolder: Resellers
+		lineageTag: 19a048aa-a0f5-5478-bc10-22404b53fd70
+
+	/// Heatmap fill for the cohort matrix.
+	measure 'Retention Color' =
+			VAR _v = [Cohort Retention %]
+			RETURN SWITCH ( TRUE (), ISBLANK ( _v ), BLANK (), _v >= 0.75, "#7FAAD3", _v >= 0.5, "#A9C8E4",
+			    _v >= 0.25, "#CFE0F0", "#EEF3F8" )
+		displayFolder: Resellers
+		lineageTag: a09b60cf-cd54-5a08-ae7f-dbd14cad23f0
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Resellers that moved from the row segment to the column segment.
+	measure 'Transition Resellers' = SUM ( 'RFM Transition'[Reseller Count] )
+		formatString: #,0
+		displayFolder: Resellers
+		lineageTag: 760bc53d-dd93-55b8-9ee5-bd1f19a899dc
+
+	/// Share of the FY2012 segment that ended FY2013 in the column segment.
+	measure 'Transition Share' =
+			DIVIDE ( [Transition Resellers],
+			    CALCULATE ( [Transition Resellers], REMOVEFILTERS ( 'RFM Transition'[To Segment], 'RFM Transition'[To Order] ) ) )
+		formatString: 0%
+		displayFolder: Resellers
+		lineageTag: 86e16f5b-640c-5e7c-9846-664d5d4f9b72
+
+	/// Heatmap fill for the transition matrix.
+	measure 'Transition Color' =
+			VAR _v = [Transition Share]
+			RETURN SWITCH ( TRUE (), ISBLANK ( _v ), BLANK (), _v >= 0.75, "#7FAAD3", _v >= 0.5, "#A9C8E4",
+			    _v >= 0.25, "#CFE0F0", "#EEF3F8" )
+		displayFolder: Resellers
+		lineageTag: c774fb5e-700f-5db6-b0c3-b04edb592419
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Standard scores of the order's net sales against every order in the selection.
+	measure 'Order Amount Z' =
+			VAR _t = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( Sales[Order Number] ), "@a", [Net Sales] ), ALLSELECTED ( Sales ) )
+			RETURN IF ( HASONEVALUE ( Sales[Order Number] ),
+			    DIVIDE ( [Net Sales] - AVERAGEX ( _t, [@a] ), STDEVX.P ( _t, [@a] ) ) )
+		formatString: 0.00
+		displayFolder: Outliers
+		lineageTag: d9994005-a53b-5cda-81d4-d55272cc558d
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// 95th percentile of order value in the selection.
+	measure 'Order P95' = PERCENTILEX.INC ( ADDCOLUMNS ( VALUES ( Sales[Order Number] ), "@a", [Net Sales] ), [@a], 0.95 )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Outliers
+		lineageTag: 257188e3-ad11-5b6e-a855-c8f6fe4061a5
+
+	/// 99th percentile of order value in the selection.
+	measure 'Order P99' = PERCENTILEX.INC ( ADDCOLUMNS ( VALUES ( Sales[Order Number] ), "@a", [Net Sales] ), [@a], 0.99 )
+		formatString: \$#,0;(\$#,0);\$0
+		displayFolder: Outliers
+		lineageTag: 3e0c2d5e-1bd9-5c88-93f0-0c80a5e1ce4a
+
+	/// Above P99 / Above P95 for a single order, against every order in the selection.
+	measure 'Order Outlier' =
+			VAR _t = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( Sales[Order Number] ), "@a", [Net Sales] ), ALLSELECTED ( Sales ) )
+			VAR _v = [Net Sales]
+			RETURN IF ( HASONEVALUE ( Sales[Order Number] ),
+			    SWITCH ( TRUE (), _v >= PERCENTILEX.INC ( _t, [@a], 0.99 ), "Above P99",
+			        _v >= PERCENTILEX.INC ( _t, [@a], 0.95 ), "Above P95" ) )
+		displayFolder: Outliers
+		lineageTag: 7ab1368d-b733-543f-96db-cc613c631992
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Least-squares line (LINESTX) through monthly net sales up to the last sale, evaluated for the month on the axis.
+	measure 'Sales Linear Trend' =
+			VAR _last = [Last Sale Date]
+			VAR _pts = FILTER (
+			    ADDCOLUMNS (
+			        CALCULATETABLE ( VALUES ( 'Date'[Year Month] ), REMOVEFILTERS ( 'Date' ), 'Date'[Date] <= _last ),
+			        "@x", INT ( 'Date'[Year Month] / 100 ) * 12 + MOD ( 'Date'[Year Month], 100 ),
+			        "@y", VAR _m = 'Date'[Year Month] RETURN CALCULATE ( [Net Sales], REMOVEFILTERS ( 'Date' ), 'Date'[Year Month] = _m ) ),
+			    NOT ISBLANK ( [@y] ) )
+			VAR _fit = LINESTX ( _pts, [@y], [@x] )
+			VAR _a = MAXX ( _fit, [Intercept] )
+			VAR _b = MAXX ( _fit, [Slope1] )
+			VAR _ym = MAX ( 'Date'[Year Month] )
+			RETURN IF ( HASONEVALUE ( 'Date'[Year Month] ), _a + _b * ( INT ( _ym / 100 ) * 12 + MOD ( _ym, 100 ) ) )
+		displayFolder: Forecast
+		lineageTag: aa75303d-5589-5608-b42f-90ec88ac891c
+
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e6, "$#,0.0,,""M"";($#,0.0,,""M"")",
+				        _v >= 1e3, "$#,0,""K"";($#,0,""K"")",
+				        "$#,0;($#,0)" )
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Current fiscal year: sales so far plus the linear trend for the months left until the last quota month (quotas run to Dec 2013), ÷ the quota for the same months.
+	measure 'Projected FY Attainment' =
+			VAR _last = [Last Sale Date]
+			VAR _pts = FILTER (
+			    ADDCOLUMNS (
+			        CALCULATETABLE ( VALUES ( 'Date'[Year Month] ), REMOVEFILTERS ( 'Date' ), 'Date'[Date] <= _last ),
+			        "@x", INT ( 'Date'[Year Month] / 100 ) * 12 + MOD ( 'Date'[Year Month], 100 ),
+			        "@y", VAR _m = 'Date'[Year Month] RETURN CALCULATE ( [Net Sales], REMOVEFILTERS ( 'Date' ), 'Date'[Year Month] = _m ) ),
+			    NOT ISBLANK ( [@y] ) )
+			VAR _fit = LINESTX ( _pts, [@y], [@x] )
+			VAR _a = MAXX ( _fit, [Intercept] )
+			VAR _b = MAXX ( _fit, [Slope1] )
+			VAR _fyStart = DATE ( YEAR ( _last ) - IF ( MONTH ( _last ) < 7, 1, 0 ), 7, 1 )
+			VAR _qEnd = CALCULATE ( MAX ( Targets[Date] ), REMOVEFILTERS () )
+			VAR _s = YEAR ( _last ) * 12 + MONTH ( _last ) + 1
+			VAR _e = YEAR ( _qEnd ) * 12 + MONTH ( _qEnd )
+			VAR _n = MAX ( 0, _e - _s + 1 )
+			// _a + _b * m summed over the months _s.._e: an arithmetic series (closed form, no row iteration)
+			VAR _future = _n * _a + _b * ( _s + _e ) * _n * 0.5
+			VAR _actual = CALCULATE ( [Net Sales], REMOVEFILTERS ( 'Date' ), 'Date'[Date] >= _fyStart && 'Date'[Date] <= _last )
+			VAR _all = CALCULATE ( SUM ( Targets[Daily Quota] ), REMOVEFILTERS ( 'Date' ), 'Date'[Date] >= _fyStart && 'Date'[Date] <= _qEnd )
+			VAR _home = CALCULATE ( SUM ( Targets[Daily Quota] ), REMOVEFILTERS ( 'Date' ), 'Date'[Date] >= _fyStart && 'Date'[Date] <= _qEnd,
+			    TREATAS ( VALUES ( Territories[Territory Key] ), Reps[Territory Key] ) )
+			VAR _quota = IF ( ISCROSSFILTERED ( Territories ), _home, _all )
+			RETURN IF ( NOT ( ISCROSSFILTERED ( Products ) || ISCROSSFILTERED ( Resellers ) ),
+			    DIVIDE ( _actual + _future, _quota * ( 1 + [Stretch %] ) ) )
+		formatString: 0%
+		displayFolder: Forecast
+		lineageTag: 1b9f625e-4a9d-5f2d-8bfe-9782e00ed1ec
+
+	/// One-sentence summary that follows the slicers.
+	measure Headline =
+			VAR _a = [Attainment]
+			VAR _p = [Projected FY Attainment]
+			VAR _proj = IF ( NOT ISBLANK ( _p ), " On the monthly trend, FY" & ( YEAR ( [Last Sale Date] ) + IF ( MONTH ( [Last Sale Date] ) >= 7, 1, 0 ) )
+			    & " ends the quota months (to Dec 2013) at " & FORMAT ( _p, "0%" ) & " of target." )
+			RETURN
+			    IF ( ISBLANK ( _a ),
+			        "Sales " & FORMAT ( [Net Sales] / 1e6, "$#,0.0" ) & "M. No target applies to this selection.",
+			        "Sales " & FORMAT ( [Net Sales] / 1e6, "$#,0.0" ) & "M against a target of "
+			            & FORMAT ( [Target] / 1e6, "$#,0.0" ) & "M: " & FORMAT ( _a, "0%" ) & ", " & LOWER ( [Status] ) & ". "
+			            & [Reps On Target] & " of " & [Reps With Target] & " reps are on target. Best attainment: "
+			            & [Top Rep] & "." & _proj )
+		displayFolder: Narrative
+		lineageTag: a4b7c582-cd0a-578e-bf10-c9917fa0fa98
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	column Value
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: cf3f0cc3-1ba5-5c02-af60-20619697a8f1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition _Measures = calculated
+		mode: import
+		source = {1}

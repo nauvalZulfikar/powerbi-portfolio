@@ -1,0 +1,109 @@
+table Date
+	lineageTag: da522404-b65f-5503-a2b2-74ac5eccae67
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: dd mmm yyyy
+		lineageTag: 6517fe92-6aae-507c-952e-94599279781b
+		summarizeBy: none
+		sourceColumn: date
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: f4285573-2aa2-5924-a91d-a15896d34967
+		summarizeBy: none
+		sourceColumn: year
+
+	column Quarter
+		dataType: string
+		lineageTag: b414e783-d75e-54c6-ae1d-367702ed1226
+		summarizeBy: none
+		sourceColumn: quarter
+		sortByColumn: 'Quarter Sort'
+
+	column 'Quarter Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ebe3991d-6302-5049-bc97-2a49a17c6da9
+		summarizeBy: none
+		sourceColumn: quarter_sort
+
+	column Month
+		dataType: string
+		lineageTag: 9b61af46-cd23-5d46-b28c-b09de0b2a905
+		summarizeBy: none
+		sourceColumn: month
+		sortByColumn: 'Month Sort'
+
+	column 'Month Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a055ef2a-0cfc-5e64-a006-b44d9d41f19e
+		summarizeBy: none
+		sourceColumn: month_sort
+
+	column 'Month Start'
+		dataType: dateTime
+		formatString: mmm yyyy
+		lineageTag: c354994c-05a7-5aa3-9858-3a40f98f7c35
+		summarizeBy: none
+		sourceColumn: month_start
+
+	column 'Week Start'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: 1672584a-a1c5-5cd6-ba1f-20512c90ac2b
+		summarizeBy: none
+		sourceColumn: week_start
+
+	hierarchy Calendar
+		lineageTag: ce304298-3c9f-5940-85be-ab831e1da6a3
+
+		level Year
+			lineageTag: 6a914e5d-743b-504a-bf4f-c3bd8a78be4e
+			column: Year
+
+		level Quarter
+			lineageTag: 4d6e0493-d505-50b1-a7e8-f5640a18ff3b
+			column: Quarter
+
+		level Month
+			lineageTag: 8580ceb3-871f-5d5b-9519-3ce5c797e69a
+			column: Month
+
+		level Date
+			lineageTag: 2082f256-1fd4-5b2c-932b-7ed02497a834
+			column: Date
+
+	calendar Gregorian
+
+		calendarColumnGroup = year
+			primaryColumn: Year
+
+		calendarColumnGroup = quarter
+			primaryColumn: 'Quarter Sort'
+			associatedColumn: Quarter
+
+		calendarColumnGroup = month
+			primaryColumn: 'Month Sort'
+			associatedColumn: Month
+
+		calendarColumnGroup = date
+			primaryColumn: Date
+
+	partition Date = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_date.parquet")),
+				    Data = Source,
+				    Typed = Table.TransformColumnTypes(Data, {{"date", type date}, {"year", Int64.Type}, {"quarter", type text}, {"quarter_sort", Int64.Type}, {"month", type text}, {"month_sort", Int64.Type}, {"month_start", type date}, {"week_start", type date}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

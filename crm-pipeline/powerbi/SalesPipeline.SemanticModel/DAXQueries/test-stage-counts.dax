@@ -1,0 +1,4 @@
+// sql/90_tests.sql: stage counts match the source.
+EVALUATE
+SUMMARIZECOLUMNS ( Stage[Stage Key], "Deals", [Deals] )
+ORDER BY Stage[Stage Key]

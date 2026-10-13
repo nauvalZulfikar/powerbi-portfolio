@@ -1,0 +1,2575 @@
+{
+  "model": "crm-pipeline/powerbi/SalesPipeline.SemanticModel/definition",
+  "rules": 74,
+  "violations": [
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Account\u0027[Annual Revenue]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Product\u0027[List Price]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Close Value]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[List Price]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Open Value]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Realisation vs List]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Snapshot Open Value]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Snapshot Close Value]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Run Seconds]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Source Reconciliation\u0027[Close Value]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Source Reconciliation\u0027[Raw Close Value]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Source Reconciliation\u0027[Value Diff]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Account\u0027[Lifetime Won Revenue]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Win Probability\u0027[Win Probability]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Account Segment\u0027[Low]"
+    },
+    {
+      "RuleId": "AVOID_FLOATING_POINT_DATA_TYPES",
+      "Rule": "[Performance] Do not use floating point data types",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Account Segment\u0027[High]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Account\u0027[Account ID]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Product\u0027[Product ID]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Agent\u0027[Owner ID]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stage\u0027[Stage Key]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Cycle Band\u0027[Low Days]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Cycle Band\u0027[High Days]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Age Band\u0027[Low Days]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Age Band\u0027[High Days]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Owner ID]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Account ID]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Product ID]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Stage Key]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Cycle Band]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Age Band]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Opportunity ID]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Owner ID]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Account ID]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Product ID]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Stage Key]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Age Band]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Funnel\u0027[Opportunity ID]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Funnel\u0027[Owner ID]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Funnel\u0027[Account ID]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Funnel\u0027[Product ID]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stage Transitions\u0027[Opportunity ID]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stage Transitions\u0027[Owner ID]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stage Transitions\u0027[Account ID]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stage Transitions\u0027[Product ID]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Manager Access\u0027[User Email]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Manager Access\u0027[Region]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Manager Access\u0027[Manager]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Source Reconciliation\u0027[Raw Deal Rows]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Source Reconciliation\u0027[Raw Close Value]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Run Events\u0027[Run ID]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Stage Flow\u0027[Flow Order]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Account Segment\u0027[Low]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Account Segment\u0027[High]"
+    },
+    {
+      "RuleId": "ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS",
+      "Rule": "[Performance] Set IsAvailableInMdx to false on non-attribute columns",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027_Measures\u0027[Value]"
+    },
+    {
+      "RuleId": "SNOWFLAKE_SCHEMA_ARCHITECTURE",
+      "Rule": "[Performance] Consider a star-schema instead of a snowflake architecture",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "Table",
+      "Object": "\u0027Opportunities\u0027"
+    },
+    {
+      "RuleId": "MINIMIZE_POWER_QUERY_TRANSFORMATIONS",
+      "Rule": "[Performance] Minimize Power Query transformations",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "Partition",
+      "Object": "\u0027Source Reconciliation\u0027.Partitions[Source Reconciliation]"
+    },
+    {
+      "RuleId": "MINIMIZE_POWER_QUERY_TRANSFORMATIONS",
+      "Rule": "[Performance] Minimize Power Query transformations",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "Partition",
+      "Object": "\u0027Agent Login Check\u0027.Partitions[Agent Login Check]"
+    },
+    {
+      "RuleId": "MINIMIZE_POWER_QUERY_TRANSFORMATIONS",
+      "Rule": "[Performance] Minimize Power Query transformations",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "Partition",
+      "Object": "\u0027Data Dictionary\u0027.Partitions[Data Dictionary]"
+    },
+    {
+      "RuleId": "MINIMIZE_POWER_QUERY_TRANSFORMATIONS",
+      "Rule": "[Performance] Minimize Power Query transformations",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "Partition",
+      "Object": "\u0027Sync Run Events\u0027.Partitions[Sync Run Events]"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Steps\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Stale Threshold\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Win Probability\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Stage Flow\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Account Segment\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Analyze By\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Metric\u0027"
+    },
+    {
+      "RuleId": "REDUCE_USAGE_OF_CALCULATED_TABLES",
+      "Rule": "[Performance] Reduce usage of calculated tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027_Measures\u0027"
+    },
+    {
+      "RuleId": "REMOVE_REDUNDANT_COLUMNS_IN_RELATED_TABLES",
+      "Rule": "[Performance] Remove redundant columns in related tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[List Price]"
+    },
+    {
+      "RuleId": "REMOVE_REDUNDANT_COLUMNS_IN_RELATED_TABLES",
+      "Rule": "[Performance] Remove redundant columns in related tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Funnel\u0027[Owner ID]"
+    },
+    {
+      "RuleId": "REMOVE_REDUNDANT_COLUMNS_IN_RELATED_TABLES",
+      "Rule": "[Performance] Remove redundant columns in related tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Funnel\u0027[Account ID]"
+    },
+    {
+      "RuleId": "REMOVE_REDUNDANT_COLUMNS_IN_RELATED_TABLES",
+      "Rule": "[Performance] Remove redundant columns in related tables",
+      "Severity": 2,
+      "Category": "Performance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Funnel\u0027[Product ID]"
+    },
+    {
+      "RuleId": "MEASURES_SHOULD_NOT_BE_DIRECT_REFERENCES_OF_OTHER_MEASURES",
+      "Rule": "[DAX Expressions] Measures should not be direct references of other measures",
+      "Severity": 2,
+      "Category": "DAX Expressions",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Won Revenue Compact]"
+    },
+    {
+      "RuleId": "FILTER_COLUMN_VALUES",
+      "Rule": "[DAX Expressions] Filter column values with proper syntax",
+      "Severity": 2,
+      "Category": "DAX Expressions",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Above-Average Deal Revenue]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Cycle Band\u0027[Low Days]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Cycle Band\u0027[High Days]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Age Band\u0027[Low Days]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Age Band\u0027[High Days]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Opportunity ID]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Funnel\u0027[Owner ID]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Funnel\u0027[Account ID]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Funnel\u0027[Product ID]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stage Transitions\u0027[Opportunity ID]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Source Reconciliation\u0027[Raw Deal Rows]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Source Reconciliation\u0027[Raw Close Value]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Stage Flow\u0027[Flow Order]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Analyze By\u0027[Analyze By Fields]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Metric\u0027[Metric Fields]"
+    },
+    {
+      "RuleId": "UNNECESSARY_COLUMNS",
+      "Rule": "[Maintenance] Remove unnecessary columns",
+      "Severity": 2,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027_Measures\u0027[Value]"
+    },
+    {
+      "RuleId": "REMOVE_ROLES_WITH_NO_MEMBERS",
+      "Rule": "[Maintenance] Remove roles with no members",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "ModelRole",
+      "Object": "Role[Sales Manager]"
+    },
+    {
+      "RuleId": "REMOVE_ROLES_WITH_NO_MEMBERS",
+      "Rule": "[Maintenance] Remove roles with no members",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "ModelRole",
+      "Object": "Role[West Region]"
+    },
+    {
+      "RuleId": "REMOVE_ROLES_WITH_NO_MEMBERS",
+      "Rule": "[Maintenance] Remove roles with no members",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "ModelRole",
+      "Object": "Role[External Partner]"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Sync Runs\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Manager Access\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Source Reconciliation\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Agent Login Check\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Data Dictionary\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Sync Run Events\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Stale Threshold\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Win Probability\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Stage Flow\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Account Segment\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Analyze By\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Metric\u0027"
+    },
+    {
+      "RuleId": "ENSURE_TABLES_HAVE_RELATIONSHIPS",
+      "Rule": "[Maintenance] Ensure tables have relationships",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027_Measures\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Date\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Account\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Product\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Agent\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Stage\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Cycle Band\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Age Band\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Opportunities\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Pipeline Snapshots\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Funnel\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Stage Transitions\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Sync Runs\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Source Reconciliation\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Agent Login Check\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Data Dictionary\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "Table",
+      "Object": "\u0027Sync Run Events\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Date]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Year]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Quarter]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Month]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Month Start]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Week Start]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Account\u0027[Account]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Account\u0027[Sector]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Account\u0027[Country]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Account\u0027[Parent Company]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Account\u0027[Is Subsidiary]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Account\u0027[Employees]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Account\u0027[Annual Revenue]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Account\u0027[Founded Year]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Account\u0027[Size Band]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Product\u0027[Product]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Product\u0027[Series]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Product\u0027[List Price]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Agent\u0027[Sales Agent]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Agent\u0027[Manager]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Agent\u0027[Region]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Agent\u0027[Email]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Agent\u0027[Has Deals]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stage\u0027[Stage]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stage\u0027[Is Open]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stage\u0027[Is Closed]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stage\u0027[Is Won]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Cycle Band\u0027[Cycle Band]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Age Band\u0027[Age Band]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Opportunity ID]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Created Date]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Engaged Date]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Closed Date]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Close Value]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[List Price]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Open Value]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Realisation vs List]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Cycle Days]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Age Days]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Has Account]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Snapshot Date]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Snapshot Age Days]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Snapshot Open Value]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Snapshot Close Value]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stage Transitions\u0027[Transition Date]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stage Transitions\u0027[From Stage]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stage Transitions\u0027[To Stage]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Run ID]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Sync Date]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Mode]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Started At]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Run Seconds]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Requests]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Retries]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Rate Limited 429]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Server Errors 5xx]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Owners]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Companies]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Products]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Deals Seen]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Versions Added]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Watermark Before]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Watermark After]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Source Reconciliation\u0027[Source]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Source Reconciliation\u0027[Stage]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Source Reconciliation\u0027[Deal Rows]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Source Reconciliation\u0027[Close Value]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Source Reconciliation\u0027[Deals Diff]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Source Reconciliation\u0027[Value Diff]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Agent Login Check\u0027[Sales Agent]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Agent Login Check\u0027[Manager]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Agent Login Check\u0027[Region]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Agent Login Check\u0027[First Name]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Agent Login Check\u0027[Last Name]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Agent Login Check\u0027[Login Email]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Agent Login Check\u0027[Model Email]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Agent Login Check\u0027[Email Matches]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Agent Login Check\u0027[Manager In RLS Table]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Data Dictionary\u0027[Source Table]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Data Dictionary\u0027[Source Field]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Data Dictionary\u0027[Description]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Data Dictionary\u0027[Model Table]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Run Events\u0027[Sync Date]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Run Events\u0027[Metric]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Run Events\u0027[Value]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date Basis\u0027[Date Basis]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "DataColumn",
+      "Object": "\u0027Time Intelligence\u0027[Period]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Account\u0027[Lifetime Won Revenue]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Account\u0027[Deal Count]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedColumn",
+      "Object": "\u0027Account\u0027[Static ABC]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Steps\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Stale Threshold\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Win Probability\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Stage Flow\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Account Segment\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Analyze By\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027Metric\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTable",
+      "Object": "\u0027_Measures\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Steps\u0027[Step]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Stale Threshold\u0027[Stale Threshold]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Win Probability\u0027[Win Probability]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Stage Flow\u0027[From]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Stage Flow\u0027[To]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Account Segment\u0027[Segment]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Analyze By\u0027[Analyze By]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Metric\u0027[Metric]"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculationGroup",
+      "Object": "\u0027Date Basis\u0027"
+    },
+    {
+      "RuleId": "OBJECTS_WITH_NO_DESCRIPTION",
+      "Rule": "[Maintenance] Visible objects with no description",
+      "Severity": 1,
+      "Category": "Maintenance",
+      "Scope": "CalculationGroup",
+      "Object": "\u0027Time Intelligence\u0027"
+    },
+    {
+      "RuleId": "DATECOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Date\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Date]"
+    },
+    {
+      "RuleId": "DATECOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Date\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Created Date]"
+    },
+    {
+      "RuleId": "DATECOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Date\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Engaged Date]"
+    },
+    {
+      "RuleId": "DATECOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Date\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Closed Date]"
+    },
+    {
+      "RuleId": "DATECOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Date\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Snapshot Date]"
+    },
+    {
+      "RuleId": "DATECOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Date\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stage Transitions\u0027[Transition Date]"
+    },
+    {
+      "RuleId": "DATECOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Date\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Sync Date]"
+    },
+    {
+      "RuleId": "DATECOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Date\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Run Events\u0027[Sync Date]"
+    },
+    {
+      "RuleId": "MONTHCOLUMN_FORMATSTRING",
+      "Rule": "[Formatting] Provide format string for \u0022Month\u0022 columns",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Month Start]"
+    },
+    {
+      "RuleId": "PROVIDE_FORMAT_STRING_FOR_MEASURES",
+      "Rule": "[Formatting] Provide format string for measures",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Account ABC]"
+    },
+    {
+      "RuleId": "PROVIDE_FORMAT_STRING_FOR_MEASURES",
+      "Rule": "[Formatting] Provide format string for measures",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Win Rate vs Region Color]"
+    },
+    {
+      "RuleId": "PROVIDE_FORMAT_STRING_FOR_MEASURES",
+      "Rule": "[Formatting] Provide format string for measures",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Best Month]"
+    },
+    {
+      "RuleId": "PROVIDE_FORMAT_STRING_FOR_MEASURES",
+      "Rule": "[Formatting] Provide format string for measures",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Headline]"
+    },
+    {
+      "RuleId": "NUMERIC_COLUMN_SUMMARIZE_BY",
+      "Rule": "[Formatting] Do not summarize numeric columns",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Close Value]"
+    },
+    {
+      "RuleId": "NUMERIC_COLUMN_SUMMARIZE_BY",
+      "Rule": "[Formatting] Do not summarize numeric columns",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Open Value]"
+    },
+    {
+      "RuleId": "NUMERIC_COLUMN_SUMMARIZE_BY",
+      "Rule": "[Formatting] Do not summarize numeric columns",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Snapshot Open Value]"
+    },
+    {
+      "RuleId": "NUMERIC_COLUMN_SUMMARIZE_BY",
+      "Rule": "[Formatting] Do not summarize numeric columns",
+      "Severity": 3,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Snapshot Close Value]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Win Rate]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Price Realisation]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Revenue Share]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Account Cumulative Share]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Share of Accounts to 80%]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Region Win Rate]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Win Rate vs Region]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Stale Share]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Forecast Win Rate]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Snapshot Stale Share]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Share of Created]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Step Conversion]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[MoM Change]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Share of Parent]"
+    },
+    {
+      "RuleId": "PERCENTAGE_FORMATTING",
+      "Rule": "[Formatting] Percentages should be formatted with thousands separators and 1 decimal",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[RLS Coverage]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Won Revenue Compact]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Avg Cycle Days]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Selected Metric]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Account ABC]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[P90 Cycle Days]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Agent Stale Z-Score]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Win Rate vs Region Color]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Stale Days]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Best Month]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Win Rate Lift]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Last Sync]"
+    },
+    {
+      "RuleId": "INTEGER_FORMATTING",
+      "Rule": "[Formatting] Whole numbers should be formatted with thousands separators and no decimals",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "Measure",
+      "Object": "\u0027_Measures\u0027[Headline]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Date\u0027[Date]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Account\u0027[Account ID]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Product\u0027[Product ID]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Agent\u0027[Owner ID]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stage\u0027[Stage Key]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Cycle Band\u0027[Cycle Band]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Age Band\u0027[Age Band]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Opportunity ID]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Owner ID]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Account ID]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Product ID]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Stage Key]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Created Date]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Engaged Date]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Closed Date]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Cycle Band]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Age Band]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Snapshot Date]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Owner ID]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Account ID]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Product ID]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Stage Key]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Age Band]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Funnel\u0027[Opportunity ID]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Funnel\u0027[Funnel Step]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stage Transitions\u0027[Transition Date]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stage Transitions\u0027[Owner ID]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stage Transitions\u0027[Account ID]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stage Transitions\u0027[Product ID]"
+    },
+    {
+      "RuleId": "RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE",
+      "Rule": "[Formatting] Relationship columns should be of integer data type",
+      "Severity": 1,
+      "Category": "Formatting",
+      "Scope": "CalculatedTableColumn",
+      "Object": "\u0027Steps\u0027[Step]"
+    },
+    {
+      "RuleId": "HIDE_FOREIGN_KEYS",
+      "Rule": "[Formatting] Hide foreign keys",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Cycle Band\u0027[Cycle Band]"
+    },
+    {
+      "RuleId": "HIDE_FOREIGN_KEYS",
+      "Rule": "[Formatting] Hide foreign keys",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Age Band\u0027[Age Band]"
+    },
+    {
+      "RuleId": "HIDE_FOREIGN_KEYS",
+      "Rule": "[Formatting] Hide foreign keys",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Opportunity ID]"
+    },
+    {
+      "RuleId": "HIDE_FOREIGN_KEYS",
+      "Rule": "[Formatting] Hide foreign keys",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Created Date]"
+    },
+    {
+      "RuleId": "HIDE_FOREIGN_KEYS",
+      "Rule": "[Formatting] Hide foreign keys",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Engaged Date]"
+    },
+    {
+      "RuleId": "HIDE_FOREIGN_KEYS",
+      "Rule": "[Formatting] Hide foreign keys",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Closed Date]"
+    },
+    {
+      "RuleId": "HIDE_FOREIGN_KEYS",
+      "Rule": "[Formatting] Hide foreign keys",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Snapshot Date]"
+    },
+    {
+      "RuleId": "HIDE_FOREIGN_KEYS",
+      "Rule": "[Formatting] Hide foreign keys",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Stage Transitions\u0027[Transition Date]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Close Value]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[List Price]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Open Value]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Opportunities\u0027[Cycle Days]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Pipeline Snapshots\u0027[Snapshot Open Value]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Requests]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Retries]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Rate Limited 429]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Server Errors 5xx]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Runs\u0027[Versions Added]"
+    },
+    {
+      "RuleId": "HIDE_FACT_TABLE_COLUMNS",
+      "Rule": "[Formatting] Hide fact table columns",
+      "Severity": 2,
+      "Category": "Formatting",
+      "Scope": "DataColumn",
+      "Object": "\u0027Sync Run Events\u0027[Value]"
+    }
+  ],
+  "skipped": []
+}

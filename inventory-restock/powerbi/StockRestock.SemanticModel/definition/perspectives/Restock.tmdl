@@ -1,0 +1,40 @@
+perspective Restock
+
+	perspectiveTable Stock
+		includeAll
+
+	perspectiveTable Item
+		includeAll
+
+	perspectiveTable Store
+		includeAll
+
+	perspectiveTable Vendor
+		includeAll
+
+	perspectiveTable Status
+		includeAll
+
+	perspectiveTable 'Cover Band'
+		includeAll
+
+	perspectiveTable ABC
+		includeAll
+
+	perspectiveTable 'Service Level'
+		includeAll
+
+	perspectiveTable 'Review Period'
+		includeAll
+
+	perspectiveTable 'Analyze By'
+		includeAll
+
+	perspectiveTable Metric
+		includeAll
+
+	perspectiveTable 'Category Target'
+		includeAll
+
+	perspectiveTable _Measures
+		includeAll

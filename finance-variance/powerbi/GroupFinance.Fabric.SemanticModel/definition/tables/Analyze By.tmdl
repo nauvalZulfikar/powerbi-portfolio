@@ -1,0 +1,43 @@
+table 'Analyze By'
+	lineageTag: fcb1b82a-d1cb-5100-a08d-18dc66e67a97
+
+	column 'Analyze By'
+		dataType: string
+		lineageTag: 8334f015-39e0-55d6-94d5-7e4652a10be2
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Analyze By Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Analyze By Fields'
+
+	column 'Analyze By Fields'
+		dataType: string
+		isHidden
+		lineageTag: cabd7be4-b99b-55ed-8962-e655edef5474
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Analyze By Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	column 'Analyze By Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5a4028ad-d2dc-5d16-b778-f9d6686338bb
+		summarizeBy: none
+		sourceColumn: [Value3]
+
+	partition 'Analyze By' = calculated
+		mode: import
+		source =
+				{
+				    ( "Entity", NAMEOF ( 'Entity'[Entity] ), 0 ),
+				    ( "Department", NAMEOF ( 'Department'[Department] ), 1 ),
+				    ( "P&L line", NAMEOF ( 'P&L Line'[Line] ), 2 )
+				}

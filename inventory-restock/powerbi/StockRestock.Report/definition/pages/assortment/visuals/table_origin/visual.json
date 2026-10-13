@@ -1,0 +1,164 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "table_origin",
+  "position": {
+    "x": 256,
+    "y": 564,
+    "z": 2600,
+    "width": 440,
+    "height": 316,
+    "tabOrder": 2800
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "objects": {
+      "grid": [
+        {
+          "properties": {
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "6L"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'New lines vs carried over. New in 2016 = closing count only; received, not counted = bought in 2016 but in neither count, so empty at year-end'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'New lines vs carried over'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'New in 2016 = closing count only; received, not counted = bought in 2016 but in neither count, so empty at year-end'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Stock"
+                    }
+                  },
+                  "Property": "Line Origin"
+                }
+              },
+              "queryRef": "Stock.Line Origin",
+              "nativeQueryRef": "Line Origin"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Lines"
+                }
+              },
+              "queryRef": "_Measures.Lines",
+              "nativeQueryRef": "Lines"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Out of Stock Rate"
+                }
+              },
+              "queryRef": "_Measures.Out of Stock Rate",
+              "nativeQueryRef": "Out of Stock Rate"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Dead Stock Value"
+                }
+              },
+              "queryRef": "_Measures.Dead Stock Value",
+              "nativeQueryRef": "Dead Stock Value"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Stock Value"
+                }
+              },
+              "queryRef": "_Measures.Stock Value",
+              "nativeQueryRef": "Stock Value"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

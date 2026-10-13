@@ -1,0 +1,48 @@
+table 'Headcount Plan'
+	lineageTag: 9ae06639-c575-5f9b-98d7-35033931fea8
+
+	column Region
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: ce38cafe-df32-51d4-b51b-34517cf8816b
+		summarizeBy: none
+		sourceColumn: region
+
+	column 'Department Key'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		formatString: 0
+		lineageTag: 3bd8b073-3a80-5d4e-b8ed-82588ffea410
+		summarizeBy: none
+		sourceColumn: department_key
+
+	column 'Fiscal Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: 47d2cc12-24c8-578e-94fe-3a30fd61b696
+		summarizeBy: none
+		sourceColumn: fiscal_year
+
+	column 'Planned Heads'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		formatString: #,0
+		lineageTag: 24663733-9990-51b1-b716-cc0ca8d38f2e
+		summarizeBy: sum
+		sourceColumn: planned_heads
+
+	partition 'Headcount Plan' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "headcount_plan"]}[Data],
+				    #"Choose columns" = Table.SelectColumns(Data, {"region", "department_key", "fiscal_year", "planned_heads"}),
+				    Typed = Table.TransformColumnTypes(#"Choose columns", {{"region", type text}, {"department_key", Int64.Type}, {"fiscal_year", Int64.Type}, {"planned_heads", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

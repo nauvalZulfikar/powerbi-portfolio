@@ -1,0 +1,204 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "table_runs",
+  "position": {
+    "x": 832,
+    "y": 564,
+    "z": 2800,
+    "width": 744,
+    "height": 316,
+    "tabOrder": 1100
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "objects": {
+      "grid": [
+        {
+          "properties": {
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "6L"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Run log'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Run log'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sync Runs"
+                    }
+                  },
+                  "Property": "Sync Date"
+                }
+              },
+              "queryRef": "Sync Runs.Sync Date",
+              "nativeQueryRef": "Sync Date"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sync Runs"
+                    }
+                  },
+                  "Property": "Mode"
+                }
+              },
+              "queryRef": "Sync Runs.Mode",
+              "nativeQueryRef": "Mode"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sync Runs"
+                    }
+                  },
+                  "Property": "Requests"
+                }
+              },
+              "queryRef": "Sync Runs.Requests",
+              "nativeQueryRef": "Requests"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sync Runs"
+                    }
+                  },
+                  "Property": "Rate Limited 429"
+                }
+              },
+              "queryRef": "Sync Runs.Rate Limited 429",
+              "nativeQueryRef": "Rate Limited 429"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sync Runs"
+                    }
+                  },
+                  "Property": "Server Errors 5xx"
+                }
+              },
+              "queryRef": "Sync Runs.Server Errors 5xx",
+              "nativeQueryRef": "Server Errors 5xx"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sync Runs"
+                    }
+                  },
+                  "Property": "Deals Seen"
+                }
+              },
+              "queryRef": "Sync Runs.Deals Seen",
+              "nativeQueryRef": "Deals Seen"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sync Runs"
+                    }
+                  },
+                  "Property": "Versions Added"
+                }
+              },
+              "queryRef": "Sync Runs.Versions Added",
+              "nativeQueryRef": "Versions Added"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Sync Runs"
+                    }
+                  },
+                  "Property": "Run Seconds"
+                }
+              },
+              "queryRef": "Sync Runs.Run Seconds",
+              "nativeQueryRef": "Run Seconds"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Sync Runs"
+                  }
+                },
+                "Property": "Sync Date"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    }
+  }
+}

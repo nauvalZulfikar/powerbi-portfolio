@@ -1,0 +1,46 @@
+table 'Age Band'
+	lineageTag: 3bb1057b-e7e4-5788-a6ce-a8e634a0f968
+
+	column 'Age Band'
+		dataType: string
+		isKey
+		lineageTag: 4a31f6d7-5103-5574-8a6e-77d5dd864c7c
+		summarizeBy: none
+		sourceColumn: age_band
+		sortByColumn: 'Age Sort'
+
+	column 'Age Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9a031440-50ee-5b41-ac75-3dbc7b622d17
+		summarizeBy: none
+		sourceColumn: age_sort
+
+	column 'Low Days'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b543e14c-a14d-518f-80da-59ac0e1616bd
+		summarizeBy: none
+		sourceColumn: low_days
+
+	column 'High Days'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: aed7b066-b8d1-5df1-9b83-de81082e829f
+		summarizeBy: none
+		sourceColumn: high_days
+
+	partition 'Age Band' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_age_band.parquet")),
+				    Data = Source,
+				    Typed = Table.TransformColumnTypes(Data, {{"age_band", type text}, {"age_sort", Int64.Type}, {"low_days", Int64.Type}, {"high_days", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

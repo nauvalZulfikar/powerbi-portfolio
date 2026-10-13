@@ -1,0 +1,36 @@
+table 'Manager Access'
+	lineageTag: f120e611-ac7a-54ce-beca-baa7dd9c1072
+	isHidden
+
+	column 'User Email'
+		dataType: string
+		isHidden
+		lineageTag: ef99cc81-4c11-50e7-b289-929e5ad406fd
+		summarizeBy: none
+		sourceColumn: user_email
+
+	column Region
+		dataType: string
+		isHidden
+		lineageTag: 54c91b7c-149b-52d1-839e-e76fe4d5d46e
+		summarizeBy: none
+		sourceColumn: regional_office
+
+	column Manager
+		dataType: string
+		isHidden
+		lineageTag: d8422343-602e-5acb-913d-a7af44d06db8
+		summarizeBy: none
+		sourceColumn: manager
+
+	partition 'Manager Access' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "manager_access"]}[Data],
+				    Typed = Table.TransformColumnTypes(Data, {{"user_email", type text}, {"regional_office", type text}, {"manager", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

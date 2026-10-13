@@ -1,0 +1,79 @@
+table 'Agent Login Check'
+	lineageTag: 88c5b445-1c0e-52d1-b979-9a1cc4fd337d
+
+	column 'Sales Agent'
+		dataType: string
+		lineageTag: dd5d3d04-82a5-58f2-abb9-104a071309fd
+		summarizeBy: none
+		sourceColumn: Sales Agent
+
+	column Manager
+		dataType: string
+		lineageTag: 3f7f73d7-5c5f-5228-adf3-ad856eb870c9
+		summarizeBy: none
+		sourceColumn: Manager
+
+	column Region
+		dataType: string
+		lineageTag: 5b6067f9-f1e5-5bce-bb97-e519cf9e98c3
+		summarizeBy: none
+		sourceColumn: Region
+
+	column 'First Name'
+		dataType: string
+		lineageTag: cb738a56-dd52-5e9c-95eb-3cbd0f461734
+		summarizeBy: none
+		sourceColumn: First Name
+
+	column 'Last Name'
+		dataType: string
+		lineageTag: c82f16c0-5d03-5055-8142-75889390c7f3
+		summarizeBy: none
+		sourceColumn: Last Name
+
+	column 'Login Email'
+		dataType: string
+		lineageTag: ad71dd93-e2b9-5b87-83e8-d8d616c04a95
+		summarizeBy: none
+		sourceColumn: Login Email
+
+	column 'Model Email'
+		dataType: string
+		lineageTag: b97382f4-e556-5ecd-9f08-7e778e58c103
+		summarizeBy: none
+		sourceColumn: Model Email
+
+	column 'Email Matches'
+		dataType: boolean
+		lineageTag: 0e0b6ac9-6069-5fb6-87b9-9fb792b87528
+		summarizeBy: none
+		sourceColumn: Email Matches
+
+	column 'Manager In RLS Table'
+		dataType: boolean
+		lineageTag: 529fb79f-48e2-5359-bdff-6a7be713feee
+		summarizeBy: none
+		sourceColumn: Manager In RLS Table
+
+	partition 'Agent Login Check' = m
+		mode: import
+		source =
+				let
+				    Source = raw_teams,
+				    CopiedName = Table.DuplicateColumn(Source, "Sales Agent", "Agent Name Copy"),
+				    SplitName = Table.SplitColumn(CopiedName, "Agent Name Copy", Splitter.SplitTextByEachDelimiter({" "}, QuoteStyle.None, false),
+				        {"First Name", "Last Name"}),
+				    AddedLogin = Table.AddColumn(SplitName, "Login Email", each Text.Lower([First Name] & "." & [Last Name]) & "@maven-crm.example", type text),
+				    Agents = Parquet.Document(File.Contents(DataFolder & "dim_agent.parquet")),
+				    MergedAgent = Table.NestedJoin(AddedLogin, {"Sales Agent"}, Agents, {"agent"}, "AgentRow", JoinKind.LeftOuter),
+				    ExpandedAgent = Table.ExpandTableColumn(MergedAgent, "AgentRow", {"email"}, {"Model Email"}),
+				    AddedMatch = Table.AddColumn(ExpandedAgent, "Email Matches", each [Login Email] = [Model Email], type logical),
+				    Access = Parquet.Document(File.Contents(DataFolder & "manager_access.parquet")),
+				    MergedAccess = Table.NestedJoin(AddedMatch, {"Manager"}, Access, {"manager"}, "AccessRows", JoinKind.LeftOuter),
+				    AddedCovered = Table.AddColumn(MergedAccess, "Manager In RLS Table", each Table.RowCount([AccessRows]) > 0, type logical),
+				    Result = Table.SelectColumns(AddedCovered, {"Sales Agent", "Manager", "Region", "First Name", "Last Name",
+				        "Login Email", "Model Email", "Email Matches", "Manager In RLS Table"})
+				in
+				    Result
+
+	annotation PBI_ResultType = Table

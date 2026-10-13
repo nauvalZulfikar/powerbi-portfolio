@@ -1,0 +1,62 @@
+table 'Time Intelligence'
+	lineageTag: 48dfa5ed-3718-5c81-87e8-605d6e932452
+
+	calculationGroup
+		precedence: 10
+
+		calculationItem Current = SELECTEDMEASURE ()
+			ordinal: 0
+
+		calculationItem MTD = CALCULATE ( SELECTEDMEASURE (), DATESMTD ( 'Gregorian' ) )
+			ordinal: 1
+
+		calculationItem QTD = CALCULATE ( SELECTEDMEASURE (), DATESQTD ( 'Gregorian' ) )
+			ordinal: 2
+
+		calculationItem YTD = CALCULATE ( SELECTEDMEASURE (), DATESYTD ( 'Gregorian' ) )
+			ordinal: 3
+
+		calculationItem 'Fiscal YTD' = CALCULATE ( SELECTEDMEASURE (), DATESYTD ( 'Fiscal' ) )
+			ordinal: 4
+
+		calculationItem 'Prior Year' = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, YEAR ) )
+			ordinal: 5
+
+		calculationItem 'YoY %' =
+				VAR _py = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, YEAR ) )
+				RETURN DIVIDE ( SELECTEDMEASURE () - _py, _py )
+			ordinal: 6
+			formatStringDefinition = "+0.0%;-0.0%;0.0%"
+
+		calculationItem 'Prior Month' = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, MONTH ) )
+			ordinal: 7
+
+		calculationItem 'MoM %' =
+				VAR _pm = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, MONTH ) )
+				RETURN DIVIDE ( SELECTEDMEASURE () - _pm, _pm )
+			ordinal: 8
+			formatStringDefinition = "+0.0%;-0.0%;0.0%"
+
+		calculationItem 'Prior Quarter' = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, QUARTER ) )
+			ordinal: 9
+
+		calculationItem 'QoQ %' =
+				VAR _pq = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, QUARTER ) )
+				RETURN DIVIDE ( SELECTEDMEASURE () - _pq, _pq )
+			ordinal: 10
+			formatStringDefinition = "+0.0%;-0.0%;0.0%"
+
+	column Period
+		dataType: string
+		lineageTag: f7fd3ff6-a36d-536f-80c9-dfc1309cc24f
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+	column Ordinal
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: bc1175da-667a-5b0e-a14f-d7877ac0b032
+		summarizeBy: sum
+		sourceColumn: Ordinal

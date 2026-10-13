@@ -1,0 +1,115 @@
+table Sales
+	lineageTag: eaed6c7b-6fd2-55f1-ae86-0fbaa38b48cf
+
+	column 'Order Number'
+		dataType: string
+		lineageTag: 3cd496c1-f8bf-52e7-b7e1-7c8b010831f0
+		summarizeBy: none
+		sourceColumn: Order Number
+
+	column 'Order Line'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d43be72b-3bd4-5ab4-90bb-87329d72f6be
+		summarizeBy: none
+		sourceColumn: Order Line
+
+	column 'Order Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: cee7b2d9-eb80-5e35-ae27-7aabb45d258e
+		summarizeBy: none
+		sourceColumn: Order Date
+
+	column 'Ship Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: a46e88a0-a9e7-5731-92c2-1c1bbc25ec98
+		summarizeBy: none
+		sourceColumn: Ship Date
+
+	column 'Reseller Code'
+		dataType: string
+		isHidden
+		lineageTag: 246b7ebf-e498-5a2a-ac5c-8cc26bee8579
+		summarizeBy: none
+		sourceColumn: Reseller Code
+
+	column 'Rep Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 39991d3b-1eab-5787-9285-12bcaafaf6b1
+		summarizeBy: none
+		sourceColumn: Rep Key
+
+	column 'Territory Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a715ed35-0a8f-5e2d-9227-6d2adf15bb1a
+		summarizeBy: none
+		sourceColumn: Territory Key
+
+	column 'Product Code'
+		dataType: string
+		isHidden
+		lineageTag: f1849ff2-9760-5795-a3ab-ff8fca8a3c42
+		summarizeBy: none
+		sourceColumn: Product Code
+
+	column Quantity
+		dataType: int64
+		formatString: #,0
+		lineageTag: c620c4b2-6ae3-53a9-88cf-e06acf9c4b23
+		summarizeBy: none
+		sourceColumn: Quantity
+
+	column 'Unit Price'
+		dataType: decimal
+		isHidden
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: f3024fff-83df-5313-b82a-b7085a144ae9
+		summarizeBy: none
+		sourceColumn: Unit Price
+
+	column Discount
+		dataType: double
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		lineageTag: baac656a-ace2-581e-a1d4-74849d96c602
+		summarizeBy: none
+		sourceColumn: Discount
+
+	column Amount
+		dataType: decimal
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: cc4f641a-5362-5b15-a008-1be7b6cabdf9
+		summarizeBy: none
+		sourceColumn: Amount
+
+	column Branch
+		dataType: string
+		lineageTag: 5ad324ea-342d-5915-a700-16474e429fdb
+		summarizeBy: none
+		sourceColumn: Branch
+
+	partition Sales = m
+		mode: import
+		source =
+				// Clean order lines only: every row without an Issue. The source file name stays in Sales Staging and the
+				// Cleaning Log; the fact table keeps only what a report filters or adds up.
+				let
+				    Clean = Table.SelectRows(#"Sales Staging", each [Issue] = null),
+				    Territories = Table.Buffer(Table.SelectColumns(fnReference("Territories"), {"Territory Key", "Region"})),
+				    WithTerritory = Table.ExpandTableColumn(
+				        Table.NestedJoin(Clean, "Territory", Territories, "Region", "T", JoinKind.LeftOuter), "T", {"Territory Key"}),
+				    Kept = Table.SelectColumns(WithTerritory,
+				        {"Order Number", "Order Line", "Order Date", "Ship Date", "Reseller Code", "Rep Key", "Territory Key", "Product Code",
+				         "Quantity", "Unit Price", "Discount", "Amount", "Branch"})
+				in
+				    Table.TransformColumnTypes(Kept, {
+				        {"Territory Key", Int64.Type}, {"Quantity", Int64.Type}, {"Unit Price", Currency.Type},
+				        {"Discount", Percentage.Type}, {"Amount", Currency.Type}})
+
+	annotation PBI_ResultType = Table

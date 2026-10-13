@@ -1,0 +1,48 @@
+# fabric-cicd parameter.yml — per-environment values for one project (pbi-kit example)
+# Copy to <project>/powerbi/parameter.yml in phase E and keep only the parameters that project has.
+# Keys under replace_value must match --env (Test / Prod). Values are placeholders: put the real
+# workspace/lakehouse names here, never secrets (secrets go to GitHub environment secrets).
+#
+# is_regex: "true"  → find_value is a regex; capture group 1 is what gets replaced. Matching the TMDL
+# `expression X = "..."` line makes the file independent of the value currently committed.
+#
+# Known per-project parameters (from _plan): SqlEndpoint, LakehouseDb (crm Fabric model), DataFolder (csv
+# import models), InboxFolder/RawFolder (inventory, BARA), SourceMode (sales-target), TestUpn (RLS tests).
+
+find_replace:
+  # Fabric Warehouse/Lakehouse SQL endpoint the DirectLake/Import model reads
+  - find_value: 'expression SqlEndpoint = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "test-workspace.datawarehouse.fabric.microsoft.com"
+      Prod: "prod-workspace.datawarehouse.fabric.microsoft.com"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+  - find_value: 'expression LakehouseDb = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "crm_lakehouse_test"
+      Prod: "crm_lakehouse"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+  # Local-folder models (DataFolder / InboxFolder / RawFolder) — on the Service these point at a
+  # gateway-visible path or SharePoint URL. Uncomment per project:
+  # - find_value: 'expression DataFolder = "([^"]*)"'
+  #   is_regex: "true"
+  #   replace_value:
+  #     Test: "\\\\fileserver\\pbi-test\\olist\\"
+  #     Prod: "\\\\fileserver\\pbi\\olist\\"
+  #   item_type: "SemanticModel"
+  #   file_path: "**/definition/expressions.tmdl"
+  #
+  # - find_value: 'expression SourceMode = "([^"]*)"'
+  #   is_regex: "true"
+  #   replace_value: {Test: "Sample", Prod: "Full"}
+  #   item_type: "SemanticModel"
+  #   file_path: "**/definition/expressions.tmdl"
+
+# A thin report bound byPath to its model needs no rule: fabric-cicd rebinds it to the model it just
+# published in the same workspace. Use semantic_model_binding only for reports that point at a model
+# living in ANOTHER workspace.

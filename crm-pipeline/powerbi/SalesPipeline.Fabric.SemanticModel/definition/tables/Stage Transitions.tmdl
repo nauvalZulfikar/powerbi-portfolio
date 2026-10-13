@@ -1,0 +1,79 @@
+table 'Stage Transitions'
+	lineageTag: 94499392-759e-51fe-be88-9768a90f1ccf
+
+	column 'Transition Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: e707fffc-4ada-5ccd-a91a-f210ff5568dd
+		summarizeBy: none
+		sourceColumn: snapshot_date
+
+	column 'Opportunity ID'
+		dataType: string
+		isHidden
+		lineageTag: bc67ab03-fb0a-51c8-aaf3-b330fd8b39e9
+		summarizeBy: none
+		sourceColumn: opportunity_id
+
+	column 'Owner ID'
+		dataType: string
+		isHidden
+		lineageTag: 6535e3b3-cd91-5e79-9205-7687f62e0910
+		summarizeBy: none
+		sourceColumn: owner_id
+
+	column 'Account ID'
+		dataType: string
+		isHidden
+		lineageTag: 30872e0b-578a-5b47-ba37-5191c658f40a
+		summarizeBy: none
+		sourceColumn: account_id
+
+	column 'Product ID'
+		dataType: string
+		isHidden
+		lineageTag: e05c50b2-c82d-5b8f-ab86-23761ddc4dff
+		summarizeBy: none
+		sourceColumn: product_id
+
+	column 'From Stage'
+		dataType: string
+		lineageTag: 34fcf14b-0165-5c4b-ad15-c0f887181d42
+		summarizeBy: none
+		sourceColumn: from_stage
+		sortByColumn: 'From Sort'
+
+	column 'From Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8b564d0d-ef74-5846-a3d1-b0bd0028b0a0
+		summarizeBy: none
+		sourceColumn: from_sort
+
+	column 'To Stage'
+		dataType: string
+		lineageTag: 9eadbe8e-65bd-5484-8499-c92582dbe1a4
+		summarizeBy: none
+		sourceColumn: to_stage
+		sortByColumn: 'To Sort'
+
+	column 'To Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: abae507a-c9f9-5516-ab50-e21813881c19
+		summarizeBy: none
+		sourceColumn: to_sort
+
+	partition 'Stage Transitions' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "fact_stage_transition"]}[Data],
+				    Typed = Table.TransformColumnTypes(Data, {{"snapshot_date", type date}, {"opportunity_id", type text}, {"owner_id", type text}, {"account_id", type text}, {"product_id", type text}, {"from_stage", type text}, {"from_sort", Int64.Type}, {"to_stage", type text}, {"to_sort", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

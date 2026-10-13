@@ -1,0 +1,50 @@
+table Product
+	lineageTag: 171cc393-8295-5053-8a17-87dc23ce48a1
+
+	column 'Product ID'
+		dataType: string
+		isKey
+		isHidden
+		lineageTag: 036b2640-6691-50da-a4a5-71cb4a952218
+		summarizeBy: none
+		sourceColumn: product_id
+
+	column Product
+		dataType: string
+		lineageTag: de2c1229-8318-551b-a2d2-1963d7d7b619
+		summarizeBy: none
+		sourceColumn: product
+		sortByColumn: 'Product Sort'
+
+	column Series
+		dataType: string
+		lineageTag: dbccb32e-dce0-530e-ad30-08951ef20e66
+		summarizeBy: none
+		sourceColumn: series
+
+	column 'List Price'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: e26818a0-2ee2-583c-b62e-83156c4a8d70
+		summarizeBy: none
+		sourceColumn: list_price
+
+	column 'Product Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4d3ff1f1-688f-5a5e-a9a1-bf1ae6072d56
+		summarizeBy: none
+		sourceColumn: product_sort
+
+	partition Product = m
+		mode: dual
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "dim_product"]}[Data],
+				    Typed = Table.TransformColumnTypes(Data, {{"product_id", type text}, {"product", type text}, {"series", type text}, {"list_price", type number}, {"product_sort", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

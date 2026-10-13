@@ -1,0 +1,41 @@
+table 'Vendor Catalog'
+	lineageTag: fdd95d31-47bf-5589-a2c2-15871028686f
+
+	column 'Catalog Vendor No'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d5b3dabf-72aa-516c-9c6f-47e48b4319f7
+		summarizeBy: none
+		sourceColumn: Catalog Vendor No
+
+	column 'Catalog Items'
+		dataType: int64
+		formatString: #,0
+		lineageTag: af3e1b2d-ebcf-5597-bef8-787bc691354c
+		summarizeBy: none
+		sourceColumn: Catalog Items
+
+	column 'Catalog Avg Price'
+		dataType: double
+		formatString: \$#,0.00
+		lineageTag: 3a3ba99b-3bdf-5702-90ba-9af6ab92a0cf
+		summarizeBy: none
+		sourceColumn: Catalog Avg Price
+
+	partition 'Vendor Catalog' = m
+		mode: import
+		source =
+				let
+				    Source = #"Price List Raw",
+				    #"Changed types" = Table.TransformColumnTypes(Source, {{"VendorNumber", Int64.Type}, {"Price", type number}}, "en-US"),
+				    #"Removed type errors" = Table.RemoveRowsWithErrors(#"Changed types", {"VendorNumber", "Price"}),
+				    // Group By: one row per vendor, how many items it lists and at what average shelf price
+				    #"Grouped by vendor" = Table.Group(#"Removed type errors", {"VendorNumber"}, {
+				        {"Catalog Items", each Table.RowCount(_), Int64.Type},
+				        {"Catalog Avg Price", each List.Average([Price]), type number}}),
+				    #"Renamed columns" = Table.RenameColumns(#"Grouped by vendor", {{"VendorNumber", "Catalog Vendor No"}})
+				in
+				    #"Renamed columns"
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "kpi_2",
+  "position": {
+    "x": 808,
+    "y": 96,
+    "z": 300,
+    "width": 376,
+    "height": 140,
+    "tabOrder": 300
+  },
+  "visual": {
+    "visualType": "card",
+    "objects": {},
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'KPI card: Detail Rows.'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Detail Rows"
+                }
+              },
+              "queryRef": "_Measures.Detail Rows",
+              "nativeQueryRef": "Detail Rows"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

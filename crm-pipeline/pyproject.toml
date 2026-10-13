@@ -1,0 +1,10 @@
+[project]
+name = "crm-pipeline"
+version = "0.1.0"
+description = "B2B sales pipeline: CRM REST API -> incremental DuckDB warehouse -> Power BI (TMDL/PBIR)"
+requires-python = ">=3.12"
+dependencies = [
+    "duckdb>=1.5.5",
+    "pillow>=12.3.0",
+    "plotly>=7.0.0",
+]

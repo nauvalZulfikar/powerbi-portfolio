@@ -1,0 +1,46 @@
+table 'Age Band'
+	lineageTag: 297019cc-9372-5e5d-b497-d259987f997f
+
+	column 'Age Band'
+		dataType: string
+		isKey
+		lineageTag: 0aeb6dcf-4efe-53ed-a937-2023f18df2d7
+		summarizeBy: none
+		sourceColumn: age_band
+		sortByColumn: 'Age Sort'
+
+	column 'Age Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0e04952e-d8a6-5daa-ae35-ff6a1e846d13
+		summarizeBy: none
+		sourceColumn: age_sort
+
+	column 'Low Days'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: dfea78a8-11b6-5b44-9fef-dcd7ba68537d
+		summarizeBy: none
+		sourceColumn: low_days
+
+	column 'High Days'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b00f586a-e9e1-5b39-8896-402df6382891
+		summarizeBy: none
+		sourceColumn: high_days
+
+	partition 'Age Band' = m
+		mode: dual
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "dim_age_band"]}[Data],
+				    Typed = Table.TransformColumnTypes(Data, {{"age_band", type text}, {"age_sort", Int64.Type}, {"low_days", Int64.Type}, {"high_days", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

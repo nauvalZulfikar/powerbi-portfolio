@@ -1,0 +1,45 @@
+table 'Analyze By'
+	lineageTag: 8e4eae26-1e3e-551b-a009-07f58b46fd1a
+
+	column 'Analyze By'
+		dataType: string
+		lineageTag: 737f7e65-330a-53c5-bbd6-1cb5b4d1e099
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Analyze By Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Analyze By Fields'
+
+	column 'Analyze By Fields'
+		dataType: string
+		isHidden
+		lineageTag: 8de5fcea-8e33-539b-aeb7-9e948749cccf
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Analyze By Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	column 'Analyze By Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0869a28f-ffd1-54d3-adc5-fda6899058d8
+		summarizeBy: none
+		sourceColumn: [Value3]
+
+	partition 'Analyze By' = calculated
+		mode: import
+		source =
+				{
+				    ( "Sales agent", NAMEOF ( 'Agent'[Sales Agent] ), 0 ),
+				    ( "Manager", NAMEOF ( 'Agent'[Manager] ), 1 ),
+				    ( "Region", NAMEOF ( 'Agent'[Region] ), 2 ),
+				    ( "Product", NAMEOF ( 'Product'[Product] ), 3 ),
+				    ( "Sector", NAMEOF ( 'Account'[Sector] ), 4 )
+				}

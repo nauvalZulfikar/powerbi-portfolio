@@ -1,0 +1,23 @@
+region,department_key,fiscal_year,planned_heads
+European Operations,1,2013,10
+European Operations,2,2013,3
+European Operations,3,2013,3
+European Operations,4,2013,3
+European Operations,5,2013,2
+European Operations,6,2013,9
+North America Operations,1,2012,61
+North America Operations,1,2013,72
+North America Operations,2,2012,7
+North America Operations,2,2013,8
+North America Operations,3,2012,11
+North America Operations,3,2013,12
+North America Operations,4,2012,7
+North America Operations,4,2013,6
+North America Operations,5,2012,5
+North America Operations,5,2013,4
+North America Operations,6,2012,42
+North America Operations,6,2013,52
+North America Operations,7,2012,4
+North America Operations,7,2013,2
+Asia Operations,7,2013,4
+Asia Operations,2,2013,1

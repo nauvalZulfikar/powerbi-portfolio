@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "tabOrder": [
+    "Sales by region",
+    "Test key measures",
+    "Model measures",
+    "Model tables",
+    "Test security",
+    "Limited relationship"
+  ],
+  "defaultTab": "Sales by region"
+}

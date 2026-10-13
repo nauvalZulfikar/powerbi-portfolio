@@ -1,0 +1,38 @@
+[
+  {
+    "ID": "PROJ_RESTOCK_USES_UDF",
+    "Name": "[Project] Restock measures must call the Stock.* DAX UDF",
+    "Category": "Project",
+    "Description": "inventory: every Restock* measure goes through the shared function so the rule lives in one place.",
+    "Severity": 3,
+    "Scope": "Measure",
+    "Expression": "Name.StartsWith(\"Restock\") and not Expression.Contains(\"Stock.\")"
+  },
+  {
+    "ID": "PROJ_RATIO_USES_MATURED_ONLY",
+    "Name": "[Project] Rate measures must filter matured loans (LC.MaturedOnly)",
+    "Category": "Project",
+    "Description": "lendingclub: default/charge-off rates are only valid on matured loans.",
+    "Severity": 3,
+    "Scope": "Measure",
+    "Expression": "RegEx.IsMatch(Name, \"(?i)rate\") and not Expression.Contains(\"LC.MaturedOnly\")"
+  },
+  {
+    "ID": "PROJ_VARIANCE_SIGNED_FORMAT",
+    "Name": "[Project] Variance measures need a +/- format string",
+    "Category": "Project",
+    "Description": "finance-variance: variances show the sign explicitly, e.g. +#,0;-#,0;0",
+    "Severity": 2,
+    "Scope": "Measure",
+    "Expression": "RegEx.IsMatch(Name, \"(?i)variance|\\bvar\\b|delta\") and not FormatString.StartsWith(\"+\")"
+  },
+  {
+    "ID": "PROJ_UKURAN_DESCRIPTION",
+    "Name": "[Project] _Ukuran measures need a description",
+    "Category": "Project",
+    "Description": "BARA: every measure in the _Ukuran table is documented (Indonesian).",
+    "Severity": 2,
+    "Scope": "Measure",
+    "Expression": "Table.Name == \"_Ukuran\" and string.IsNullOrWhiteSpace(Description)"
+  }
+]

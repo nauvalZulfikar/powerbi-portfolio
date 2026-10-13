@@ -1,0 +1,4 @@
+{"rows": 1, "checks": [
+  {"column": "[Operating Profit]", "equals": 13793625.67, "tolerance": 1},
+  {"column": "[Operating Profit Budget]", "equals": 14922246.70, "tolerance": 1}
+]}

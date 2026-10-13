@@ -1,0 +1,36 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json",
+  "displayName": "Scorecard view",
+  "name": "bm_scorecard",
+  "options": {
+    "applyOnlyToTargetVisuals": true,
+    "targetVisualNames": [
+      "table_entity",
+      "bar_entity_compare"
+    ],
+    "suppressData": true
+  },
+  "explorationState": {
+    "version": "1.3",
+    "activeSection": "overview",
+    "sections": {
+      "overview": {
+        "visualContainers": {
+          "table_entity": {
+            "singleVisual": {
+              "visualType": "tableEx"
+            }
+          },
+          "bar_entity_compare": {
+            "singleVisual": {
+              "visualType": "clusteredBarChart",
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

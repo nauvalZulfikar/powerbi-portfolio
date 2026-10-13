@@ -1,0 +1,196 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "table_recon",
+  "position": {
+    "x": 256,
+    "y": 564,
+    "z": 2700,
+    "width": 560,
+    "height": 316,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "objects": {
+      "grid": [
+        {
+          "properties": {
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "6L"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Seed CSV vs warehouse, per stage'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Power Query: Group By, Append, Merge. Zero difference = nothing lost in the API syncs'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Seed CSV vs warehouse, per stage. Power Query: Group By, Append, Merge. Zero difference = nothing lost in the API syncs'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Source Reconciliation"
+                    }
+                  },
+                  "Property": "Source"
+                }
+              },
+              "queryRef": "Source Reconciliation.Source",
+              "nativeQueryRef": "Source"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Source Reconciliation"
+                    }
+                  },
+                  "Property": "Stage"
+                }
+              },
+              "queryRef": "Source Reconciliation.Stage",
+              "nativeQueryRef": "Stage"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Source Reconciliation"
+                    }
+                  },
+                  "Property": "Deal Rows"
+                }
+              },
+              "queryRef": "Source Reconciliation.Deal Rows",
+              "nativeQueryRef": "Deal Rows"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Source Reconciliation"
+                    }
+                  },
+                  "Property": "Close Value"
+                }
+              },
+              "queryRef": "Source Reconciliation.Close Value",
+              "nativeQueryRef": "Close Value"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Source Reconciliation"
+                    }
+                  },
+                  "Property": "Deals Diff"
+                }
+              },
+              "queryRef": "Source Reconciliation.Deals Diff",
+              "nativeQueryRef": "Deals Diff"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Source Reconciliation"
+                    }
+                  },
+                  "Property": "Value Diff"
+                }
+              },
+              "queryRef": "Source Reconciliation.Value Diff",
+              "nativeQueryRef": "Value Diff"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Source Reconciliation"
+                  }
+                },
+                "Property": "Stage"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    }
+  }
+}

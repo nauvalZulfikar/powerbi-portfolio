@@ -1,0 +1,439 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "line_forecast",
+  "position": {
+    "x": 256,
+    "y": 216,
+    "z": 2000,
+    "width": 652,
+    "height": 332,
+    "tabOrder": 1400
+  },
+  "visual": {
+    "visualType": "lineChart",
+    "objects": {
+      "categoryAxis": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9.0D"
+                }
+              }
+            },
+            "labelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#6F6D68'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "valueAxis": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9.0D"
+                }
+              }
+            },
+            "labelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#6F6D68'"
+                    }
+                  }
+                }
+              }
+            },
+            "gridlineShow": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "gridlineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#ECEBE6'"
+                    }
+                  }
+                }
+              }
+            },
+            "gridlineStyle": {
+              "expr": {
+                "Literal": {
+                  "Value": "'solid'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "lineStyles": [
+        {
+          "properties": {
+            "strokeWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "2L"
+                }
+              }
+            },
+            "showMarker": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dataPoint": [
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#2f7d62'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Measures.January Units Sold"
+          }
+        }
+      ],
+      "forecast": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "displayName": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Forecast'"
+                }
+              }
+            },
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#2f7d62'"
+                    }
+                  }
+                }
+              }
+            },
+            "style": {
+              "expr": {
+                "Literal": {
+                  "Value": "'dashed'"
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "2.0D"
+                }
+              }
+            },
+            "bandAreaShow": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "bandAreaColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#2f7d62'"
+                    }
+                  }
+                }
+              }
+            },
+            "bandAreaTransparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "80.0D"
+                }
+              }
+            },
+            "bandLineShow": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "transform": {
+              "Name": "forecast",
+              "Algorithm": "Forecast",
+              "Input": {
+                "Parameters": [
+                  {
+                    "Literal": {
+                      "Value": "7L"
+                    },
+                    "Name": "ForecastLength"
+                  },
+                  {
+                    "Literal": {
+                      "Value": "0.95D"
+                    },
+                    "Name": "ConfidenceLevel"
+                  },
+                  {
+                    "Literal": {
+                      "Value": "7L"
+                    },
+                    "Name": "Seasonality"
+                  },
+                  {
+                    "Literal": {
+                      "Value": "0L"
+                    },
+                    "Name": "IgnoreLast"
+                  },
+                  {
+                    "Literal": {
+                      "Value": "'Point'"
+                    },
+                    "Name": "Unit"
+                  }
+                ],
+                "Table": {
+                  "Name": "forecast_in",
+                  "Columns": [
+                    {
+                      "Role": "X",
+                      "Expression": {
+                        "Column": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Entity": "Date"
+                            }
+                          },
+                          "Property": "Date"
+                        },
+                        "Name": "Date.Date"
+                      }
+                    },
+                    {
+                      "Role": "Y",
+                      "Expression": {
+                        "Measure": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Entity": "_Measures"
+                            }
+                          },
+                          "Property": "January Units Sold"
+                        },
+                        "Name": "_Measures.January Units Sold"
+                      }
+                    }
+                  ]
+                }
+              },
+              "Output": {
+                "Table": {
+                  "Name": "forecast_out",
+                  "Columns": [
+                    {
+                      "Role": "forecast.ForecastValue",
+                      "Expression": {
+                        "TransformOutputRoleRef": {
+                          "Role": "forecast.ForecastValue"
+                        },
+                        "Name": "forecast.forecast.ForecastValue"
+                      }
+                    },
+                    {
+                      "Role": "forecast.ConfidenceHighBound",
+                      "Expression": {
+                        "TransformOutputRoleRef": {
+                          "Role": "forecast.ConfidenceHighBound"
+                        },
+                        "Name": "forecast.forecast.ConfidenceHighBound"
+                      }
+                    },
+                    {
+                      "Role": "forecast.ConfidenceLowBound",
+                      "Expression": {
+                        "TransformOutputRoleRef": {
+                          "Role": "forecast.ConfidenceLowBound"
+                        },
+                        "Name": "forecast.forecast.ConfidenceLowBound"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Measures.January Units Sold"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'What does the next week of daily units look like, with a 95% band?'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Units per day, with a 7-day forecast'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Analytics pane forecast: weekly seasonality, 95% confidence band'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Date"
+                    }
+                  },
+                  "Property": "Date"
+                }
+              },
+              "queryRef": "Date.Date",
+              "nativeQueryRef": "Date"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "January Units Sold"
+                }
+              },
+              "queryRef": "_Measures.January Units Sold",
+              "nativeQueryRef": "January Units Sold"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

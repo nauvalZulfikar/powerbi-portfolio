@@ -1,0 +1,42 @@
+table 'Store Access'
+	lineageTag: 7ab6bf92-d477-5326-9ea3-09afa1f15193
+	isHidden
+
+	column 'User Email'
+		dataType: string
+		isHidden
+		lineageTag: 50bd6674-7565-5e9b-9a4b-48c908b0048c
+		summarizeBy: none
+		sourceColumn: email
+
+	column 'City Key'
+		dataType: string
+		isHidden
+		lineageTag: 9c464ad9-fa52-5200-87ce-f94b7a47e124
+		summarizeBy: none
+		sourceColumn: city_key
+
+	column City
+		dataType: string
+		isHidden
+		lineageTag: d680a2fa-176a-5cbf-a47e-586b4a1cb823
+		summarizeBy: none
+		sourceColumn: city
+
+	column 'Store No'
+		dataType: string
+		isHidden
+		lineageTag: b9888311-9be7-5fcf-a8f4-144f7d2c576d
+		summarizeBy: none
+		sourceColumn: store
+
+	partition 'Store Access' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "store_access.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"email", type text}, {"city_key", type text}, {"city", type text}, {"store", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

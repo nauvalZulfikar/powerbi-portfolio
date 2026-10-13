@@ -1,0 +1,12 @@
+// Limited (many-to-many) relationship 'Headcount Plan'[Region] *-* Entity[Region].
+// A regular relationship adds a blank row on the one side for keys it can't match; a limited one does not:
+// "Asia Operations" (planned, no entity yet) gets no row under Region, but the grand total still counts it.
+// Expected (DuckDB, FY2013 plan, SYNTHETIC, NOT run in Power BI):
+//   European Operations 30, North America Operations 156, Pacific Operations (blank), Eliminations (blank);
+//   no blank Region row; total 191 = 186 + 5 for Asia Operations.
+EVALUATE
+SUMMARIZECOLUMNS (
+    ROLLUPADDISSUBTOTAL ( Entity[Region], "Is Total" ),
+    TREATAS ( { 2013 }, 'Headcount Plan'[Fiscal Year] ),
+    "Planned Heads", SUM ( 'Headcount Plan'[Planned Heads] )
+)

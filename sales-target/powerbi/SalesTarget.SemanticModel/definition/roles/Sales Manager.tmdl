@@ -1,0 +1,21 @@
+role 'Sales Manager'
+	modelPermission: read
+
+	tablePermission Products
+
+		columnPermission 'Standard Cost' = none
+
+	tablePermission Reps = PATHCONTAINS ( Reps[Manager Path], LOOKUPVALUE ( Reps[Rep Key], Reps[Email], USERPRINCIPALNAME () ) )
+
+
+	tablePermission 'Cleaning Log'
+		metadataPermission: none
+
+	tablePermission 'Reseller Cohort'
+		metadataPermission: none
+
+	tablePermission 'RFM Transition'
+		metadataPermission: none
+
+	tablePermission 'Subcategory Pairs'
+		metadataPermission: none

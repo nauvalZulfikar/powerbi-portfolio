@@ -1,0 +1,11 @@
+[
+  {
+    "ID": "PROJ_SALESTARGET_MEASURE_DESCRIPTION",
+    "Name": "[Project] Every visible measure needs a description",
+    "Category": "Project",
+    "Description": "sales-target: SalesTarget is the shared model other reports live-connect to, so a report author only sees the measure name and its description (tooltip in the field list, reports/dax.html, INFO.VIEW.MEASURES). A visible measure without one blocks the build.",
+    "Severity": 3,
+    "Scope": "Measure",
+    "Expression": "not IsHidden and string.IsNullOrWhitespace(Description)"
+  }
+]

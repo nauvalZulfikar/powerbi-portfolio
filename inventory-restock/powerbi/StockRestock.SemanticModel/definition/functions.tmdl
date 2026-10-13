@@ -1,0 +1,35 @@
+/// Safety stock for one line: z × √(lead days × daily SD² + daily demand² × lead-time SD²).
+function 'Stock.SafetyStock' =
+		( z : NUMERIC, demand : NUMERIC, lead : NUMERIC, demandSd : NUMERIC, leadSd : NUMERIC ) =>
+			z * SQRT ( lead * demandSd ^ 2 + demand ^ 2 * leadSd ^ 2 )
+	lineageTag: b80dfdf5-610e-5a6d-b8a6-e60fda69a49d
+
+/// Reorder point: demand over the lead time plus safety stock. Example: Stock.ReorderPoint ( 2, 7, 5 ) = 19.
+function 'Stock.ReorderPoint' = ( demand : NUMERIC, lead : NUMERIC, safety : NUMERIC ) => demand * lead + safety
+	lineageTag: 87f39319-afe2-58eb-afd9-2c9215efdc25
+
+/// Units that top a line up to demand over lead time + review period + safety stock, rounded up. Example: Stock.OrderQty ( 2, 7, 7, 5, 10 ) = 23.
+function 'Stock.OrderQty' =
+		( demand : NUMERIC, lead : NUMERIC, review : NUMERIC, safety : NUMERIC, onHand : NUMERIC ) =>
+			ROUNDUP ( demand * ( lead + review ) + safety - onHand, 0 )
+	lineageTag: 12e760b6-2caf-52bb-be83-d7f9c60b0fec
+
+/// Days the units last at the daily demand; blank when there is no demand. Example: Stock.CoverDays ( 300, 5 ) = 60.
+function 'Stock.CoverDays' = ( units : NUMERIC, perDay : NUMERIC ) => DIVIDE ( units, perDay )
+	lineageTag: 2b35bff1-4a4e-5876-b115-80cfd16b9483
+
+/// Part ÷ whole; blank when the whole is empty.
+function 'Kpi.Rate' = ( part : NUMERIC, whole : NUMERIC ) => DIVIDE ( part, whole )
+	lineageTag: 03b271d5-dc00-57e7-addb-c63f6cc7aa19
+
+/// Relative change from a base value; blank when the base is empty.
+function 'Kpi.Change' = ( current : NUMERIC, base : NUMERIC ) => DIVIDE ( current - base, base )
+	lineageTag: 50847bdd-1ec7-5b77-b018-9ab86821177a
+
+/// A measure as a share of the same measure with the filters on one table or column removed.
+function 'Kpi.ShareOf' = ( value : SCALAR NUMERIC EXPR, scope : ANYREF ) => DIVIDE ( value, CALCULATE ( value, REMOVEFILTERS ( scope ) ) )
+	lineageTag: dca4cb4d-b7f7-5ef6-8335-949a76b8593d
+
+/// A measure one month back on the calendar passed in.
+function 'Kpi.PriorMonth' = ( value : SCALAR NUMERIC EXPR, cal : CALENDARREF ) => CALCULATE ( value, DATEADD ( cal, -1, MONTH ) )
+	lineageTag: f072dd44-9ac2-54a3-ba61-80ef02c7f330

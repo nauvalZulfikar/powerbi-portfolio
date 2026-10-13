@@ -1,0 +1,58 @@
+table Funnel
+	lineageTag: f711984f-79fb-5d8d-ba1e-60c0ce75a035
+
+	column 'Opportunity ID'
+		dataType: string
+		isHidden
+		lineageTag: 7c38620b-9e6d-52c4-b8e6-818ae883196a
+		summarizeBy: none
+		sourceColumn: opportunity_id
+
+	column 'Owner ID'
+		dataType: string
+		isHidden
+		lineageTag: 4851f47f-403d-5355-a1f4-4c63991d8ad1
+		summarizeBy: none
+		sourceColumn: owner_id
+
+	column 'Account ID'
+		dataType: string
+		isHidden
+		lineageTag: a2596a61-2660-5873-a471-3be5274564be
+		summarizeBy: none
+		sourceColumn: account_id
+
+	column 'Product ID'
+		dataType: string
+		isHidden
+		lineageTag: 6a5f48fa-10c8-5c2a-8bf3-74fcbdf290dd
+		summarizeBy: none
+		sourceColumn: product_id
+
+	column 'Funnel Step'
+		dataType: string
+		isHidden
+		lineageTag: 2283d433-a1ea-5275-947c-b82975094aec
+		summarizeBy: none
+		sourceColumn: step
+		sortByColumn: 'Step Sort'
+
+	column 'Step Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 94fb2227-12d9-56f4-8474-3afa9b79bb98
+		summarizeBy: none
+		sourceColumn: step_sort
+
+	partition Funnel = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "fact_funnel"]}[Data],
+				    Typed = Table.TransformColumnTypes(Data, {{"opportunity_id", type text}, {"owner_id", type text}, {"account_id", type text}, {"product_id", type text}, {"step", type text}, {"step_sort", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

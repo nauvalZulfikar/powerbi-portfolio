@@ -1,0 +1,46 @@
+table 'Cycle Band'
+	lineageTag: e99eca6a-34f8-533f-a362-1754ef7bc900
+
+	column 'Cycle Band'
+		dataType: string
+		isKey
+		lineageTag: 95f63e1d-dfb3-56b7-aaea-6a31fc6b3fa9
+		summarizeBy: none
+		sourceColumn: cycle_band
+		sortByColumn: 'Cycle Sort'
+
+	column 'Cycle Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 678a1468-a17e-5f26-bffb-cbe89db981fd
+		summarizeBy: none
+		sourceColumn: cycle_sort
+
+	column 'Low Days'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b52111d7-156c-5448-a357-c8ddf6b41a30
+		summarizeBy: none
+		sourceColumn: low_days
+
+	column 'High Days'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 660451ff-69ff-58aa-a453-976e4ed314b8
+		summarizeBy: none
+		sourceColumn: high_days
+
+	partition 'Cycle Band' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_cycle_band.parquet")),
+				    Data = Source,
+				    Typed = Table.TransformColumnTypes(Data, {{"cycle_band", type text}, {"cycle_sort", Int64.Type}, {"low_days", Int64.Type}, {"high_days", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

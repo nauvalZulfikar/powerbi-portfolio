@@ -1,0 +1,34 @@
+table 'Entity Access'
+	lineageTag: 15e4583f-a6b2-58f1-a6ca-1cfcc4bef54b
+	isHidden
+
+	column 'User Email'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: 76072a36-c3cf-50ec-a2c9-698bbdaf7d6b
+		summarizeBy: none
+		sourceColumn: user_email
+
+	column 'Entity Key'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		formatString: 0
+		lineageTag: 2f040fcc-8626-540e-8388-6e88d8345305
+		summarizeBy: none
+		sourceColumn: entity_key
+
+	partition 'Entity Access' = m
+		mode: import
+		source =
+				let
+				    Data = if SourceMode = "Lakehouse"
+				        then Sql.Database(SqlEndpoint, LakehouseDb){[Schema = "dbo", Item = "entity_access"]}[Data]
+				        else Parquet.Document(File.Contents(DataFolder & "entity_access.parquet")),
+				    #"Choose columns" = Table.SelectColumns(Data, {"user_email", "entity_key"}),
+				    Typed = Table.TransformColumnTypes(#"Choose columns", {{"user_email", type text}, {"entity_key", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

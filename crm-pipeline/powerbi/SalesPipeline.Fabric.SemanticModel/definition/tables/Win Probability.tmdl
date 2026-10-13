@@ -1,0 +1,14 @@
+table 'Win Probability'
+	lineageTag: e7a74187-ec25-52b5-972b-8196b43a5f51
+
+	column 'Win Probability'
+		dataType: double
+		lineageTag: 95f24a9c-ba90-5fd6-939a-ab7b67e39321
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Win Probability]
+		formatString: 0%
+
+	partition 'Win Probability' = calculated
+		mode: import
+		source = SELECTCOLUMNS ( GENERATESERIES ( 0.4, 0.8, 0.01 ), "Win Probability", [Value] )

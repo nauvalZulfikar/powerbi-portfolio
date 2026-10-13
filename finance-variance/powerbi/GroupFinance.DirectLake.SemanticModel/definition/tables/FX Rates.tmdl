@@ -1,0 +1,38 @@
+table 'FX Rates'
+	lineageTag: 6abfb1ad-815a-57b8-9379-6dd2151e3d5e
+
+	column 'Rate Currency'
+		dataType: string
+		lineageTag: 3c7cef0f-6dd4-5089-b094-f05fa42096d9
+		summarizeBy: none
+		sourceColumn: currency_code
+
+	column Period
+		dataType: dateTime
+		isHidden
+		isAvailableInMdx: false
+		formatString: dd mmm yyyy
+		lineageTag: 997268e9-6563-5f81-b0d4-a017b9d746e9
+		summarizeBy: none
+		sourceColumn: period
+
+	column 'Average Rate'
+		dataType: double
+		formatString: 0.0000
+		lineageTag: 8233c81e-2cec-5e04-9458-85d80236e3cd
+		summarizeBy: none
+		sourceColumn: avg_rate
+
+	column 'Budget Rate'
+		dataType: double
+		formatString: 0.0000
+		lineageTag: 33b268ba-0948-5190-9bd2-a9aa9db01888
+		summarizeBy: none
+		sourceColumn: budget_rate
+
+	partition 'FX Rates' = entity
+		mode: directLake
+		source
+			entityName: fx_rates
+			schemaName: dbo
+			expressionSource: DatabaseQuery

@@ -1,0 +1,45 @@
+table 'Analyze By'
+	lineageTag: b5e7e00a-3664-5b80-a08b-635a3982b95c
+
+	column 'Analyze By'
+		dataType: string
+		lineageTag: df4e0be2-e116-5fdb-9c53-3d6099eb5216
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Analyze By Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Analyze By Fields'
+
+	column 'Analyze By Fields'
+		dataType: string
+		isHidden
+		lineageTag: 3e2f57da-8120-5f47-bf9d-a2f219435913
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Analyze By Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	column 'Analyze By Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: bf1be9c8-86c5-5187-af05-3f4a72590d05
+		summarizeBy: none
+		sourceColumn: [Value3]
+
+	partition 'Analyze By' = calculated
+		mode: import
+		source =
+				{
+				    ( "Store", NAMEOF ( 'Store'[Store Name] ), 0 ),
+				    ( "City", NAMEOF ( 'Store'[City] ), 1 ),
+				    ( "Vendor", NAMEOF ( 'Vendor'[Vendor] ), 2 ),
+				    ( "Category", NAMEOF ( 'Item'[Category] ), 3 ),
+				    ( "ABC class", NAMEOF ( 'ABC'[ABC Class] ), 4 )
+				}

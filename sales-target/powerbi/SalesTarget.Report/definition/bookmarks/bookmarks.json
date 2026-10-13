@@ -1,0 +1,20 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmarksMetadata/1.0.0/schema.json",
+  "items": [
+    {
+      "name": "bm_view_chart"
+    },
+    {
+      "name": "bm_view_table"
+    },
+    {
+      "name": "bm_help_show"
+    },
+    {
+      "name": "bm_help_hide"
+    },
+    {
+      "name": "bm_reset_filters"
+    }
+  ]
+}

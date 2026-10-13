@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>bpa-run</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- same TOM build the projects' tools/tmdl-validate use (19.117 knows functions + calendars) -->
+    <PackageReference Include="Microsoft.AnalysisServices" Version="19.117.0" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.6.9" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="../BPARules.json" CopyToOutputDirectory="PreserveNewest" Link="BPARules.json" />
+  </ItemGroup>
+</Project>

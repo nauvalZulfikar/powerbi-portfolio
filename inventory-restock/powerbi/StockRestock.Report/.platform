@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "StockRestock"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "c4e7a913-2b6d-4f80-b5a1-7e3d9f04c26b"
+  }
+}

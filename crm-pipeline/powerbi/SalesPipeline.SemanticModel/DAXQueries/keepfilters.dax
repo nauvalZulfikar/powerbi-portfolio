@@ -1,0 +1,15 @@
+// Replace vs add: a plain filter argument overwrites the Size Band coming from the row;
+// KEEPFILTERS intersects with it.
+// Expected (DuckDB):
+//   Size Band     Won Revenue   Large, KEEPFILTERS   Large, plain filter
+//   Large (5k+)     4,205,222            4,205,222             4,205,222
+//   Mid (1k–5k)     4,206,231              (blank)             4,205,222
+//   Small (<1k)     1,594,081              (blank)             4,205,222
+EVALUATE
+SUMMARIZECOLUMNS (
+    Account[Size Band],
+    "Won Revenue", [Won Revenue],
+    "Large, KEEPFILTERS", [Won Revenue Large Accounts],
+    "Large, plain filter", CALCULATE ( [Won Revenue], Account[Size Band] = "Large (5k+)" )
+)
+ORDER BY Account[Size Band]

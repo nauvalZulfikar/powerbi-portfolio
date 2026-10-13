@@ -1,0 +1,14 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.1.0/schema.json",
+  "pageOrder": [
+    "overview",
+    "pnl",
+    "drivers",
+    "entities",
+    "costs",
+    "forecast",
+    "account",
+    "tooltip"
+  ],
+  "activePageName": "overview"
+}

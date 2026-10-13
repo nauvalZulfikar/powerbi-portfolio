@@ -1,0 +1,25 @@
+{
+ "rows": 4,
+ "checks": [
+  {
+   "column": "[Deals]",
+   "row": 0,
+   "equals": 2473
+  },
+  {
+   "column": "[Deals]",
+   "row": 1,
+   "equals": 4238
+  },
+  {
+   "column": "[Deals]",
+   "row": 2,
+   "equals": 1589
+  },
+  {
+   "column": "[Deals]",
+   "row": 3,
+   "equals": 500
+  }
+ ]
+}

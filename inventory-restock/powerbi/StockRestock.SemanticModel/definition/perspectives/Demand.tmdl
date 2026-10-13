@@ -1,0 +1,28 @@
+perspective Demand
+
+	perspectiveTable 'Daily Sales'
+		includeAll
+
+	perspectiveTable 'Forecast Daily'
+		includeAll
+
+	perspectiveTable 'Forecast Scores'
+		includeAll
+
+	perspectiveTable 'Weekday Profile'
+		includeAll
+
+	perspectiveTable Date
+		includeAll
+
+	perspectiveTable Item
+		includeAll
+
+	perspectiveTable Store
+		includeAll
+
+	perspectiveTable 'Time Intelligence'
+		includeAll
+
+	perspectiveTable _Measures
+		includeAll

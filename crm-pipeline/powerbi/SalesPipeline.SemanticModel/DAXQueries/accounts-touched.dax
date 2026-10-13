@@ -1,0 +1,13 @@
+// Expanded table: Opportunities used as a CALCULATE filter carries its whole expanded table
+// (Opportunities + Account + Agent + ...) so Account is filtered to the accounts that have a deal.
+// Test: [Accounts Touched] must equal a plain DISTINCTCOUNT of the account key on every row.
+// Expected (DuckDB): Cara Losch 65, Celia Rouche 69, Dustin Brinkmann 75, Melvin Marxen 76,
+// Rocco Neubert 61, Summer Sewald 73; Equal = TRUE on all six rows.
+EVALUATE
+ADDCOLUMNS (
+    VALUES ( Agent[Manager] ),
+    "Accounts Touched", [Accounts Touched],
+    "Distinct Account IDs", CALCULATE ( DISTINCTCOUNT ( Opportunities[Account ID] ) ),
+    "Equal", [Accounts Touched] = CALCULATE ( DISTINCTCOUNT ( Opportunities[Account ID] ) )
+)
+ORDER BY Agent[Manager]

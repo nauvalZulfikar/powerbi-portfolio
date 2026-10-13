@@ -1,0 +1,38 @@
+table 'As Of Month'
+	lineageTag: 39b4251e-7e46-551d-b38e-d8bf32c2591e
+
+	column 'As Of Month'
+		dataType: dateTime
+		lineageTag: 6a8fcac6-43da-56ca-84ce-6f311aa27d80
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [As Of Month]
+		isHidden
+		formatString: mmm yyyy
+
+	column 'As Of'
+		dataType: string
+		lineageTag: b7d915aa-f9c1-5684-ae5d-8b85577c47bb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [As Of]
+		sortByColumn: 'As Of Sort'
+
+	column 'As Of Sort'
+		dataType: int64
+		lineageTag: 27a24df7-b93e-5745-9317-d49c87e3e037
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [As Of Sort]
+		isHidden
+		formatString: 0
+
+	partition 'As Of Month' = calculated
+		mode: import
+		source =
+				SELECTCOLUMNS (
+				    FILTER ( CALENDAR ( DATE ( 2011, 1, 1 ), DATE ( 2013, 12, 1 ) ), DAY ( [Date] ) = 1 ),
+				    "As Of Month", [Date],
+				    "As Of", FORMAT ( [Date], "mmm yyyy" ),
+				    "As Of Sort", YEAR ( [Date] ) * 100 + MONTH ( [Date] )
+				)

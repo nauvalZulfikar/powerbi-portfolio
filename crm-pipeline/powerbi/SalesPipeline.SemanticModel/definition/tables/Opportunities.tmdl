@@ -1,0 +1,158 @@
+table Opportunities
+	lineageTag: df568eaa-6956-560b-acd0-7aed63917ea9
+
+	column 'Opportunity ID'
+		dataType: string
+		isKey
+		lineageTag: e4027a28-6dda-5d57-8beb-c54fa20a506d
+		summarizeBy: none
+		sourceColumn: opportunity_id
+
+	column 'Owner ID'
+		dataType: string
+		isHidden
+		lineageTag: 4bbe5724-45a4-520e-a8eb-3cce08535593
+		summarizeBy: none
+		sourceColumn: owner_id
+
+	column 'Account ID'
+		dataType: string
+		isHidden
+		lineageTag: 24088c83-2ab1-5ff1-b1ed-2f82833e6a30
+		summarizeBy: none
+		sourceColumn: account_id
+
+	column 'Product ID'
+		dataType: string
+		isHidden
+		lineageTag: 61b172f7-a361-51f4-b5b5-e2db60a28c8b
+		summarizeBy: none
+		sourceColumn: product_id
+
+	column 'Stage Key'
+		dataType: string
+		isHidden
+		lineageTag: 85022b86-2326-5330-a819-1918229ceb0d
+		summarizeBy: none
+		sourceColumn: stage_key
+
+	column 'Created Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: d0bb3ab8-b79f-5e20-a2fe-142205c9399f
+		summarizeBy: none
+		sourceColumn: created_date
+
+	column 'Engaged Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: e11815c4-e1c1-53b4-96b6-534639491ffb
+		summarizeBy: none
+		sourceColumn: engaged_date
+
+	column 'Closed Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: a8d1ebe4-9d30-51f4-a437-4ae896f450c9
+		summarizeBy: none
+		sourceColumn: closed_date
+
+	column 'Close Value'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 26128b37-431f-516f-84ef-91758268ea08
+		summarizeBy: none
+		sourceColumn: close_value
+
+	column 'List Price'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: 87fdb47e-ac8b-56c5-b25c-fed7edc19bee
+		summarizeBy: none
+		sourceColumn: list_price
+
+	column 'Open Value'
+		dataType: double
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: fb737987-ff14-559f-a67c-7cd544c11835
+		summarizeBy: none
+		sourceColumn: open_value
+
+	column 'Realisation vs List'
+		dataType: double
+		formatString: 0%
+		lineageTag: 0a006690-9aef-5f0d-912d-0679cafb563d
+		summarizeBy: none
+		sourceColumn: price_realisation
+
+	column 'Cycle Days'
+		dataType: int64
+		formatString: 0
+		lineageTag: bd8e95bd-2a74-5e3c-b266-fac30a80685a
+		summarizeBy: none
+		sourceColumn: cycle_days
+
+	column 'Cycle Band'
+		dataType: string
+		isHidden
+		lineageTag: 18b3f629-4ce1-5e51-958b-5c1f7b2ae3a6
+		summarizeBy: none
+		sourceColumn: cycle_band
+
+	column 'Age Days'
+		dataType: int64
+		formatString: 0
+		lineageTag: d895e463-7bfc-5405-bdfe-7cfaf5a3f344
+		summarizeBy: none
+		sourceColumn: age_days
+
+	column 'Age Band'
+		dataType: string
+		isHidden
+		lineageTag: 43fe31c9-9c92-5ed6-8e7e-3b93d40c6771
+		summarizeBy: none
+		sourceColumn: age_band
+
+	column 'Has Account'
+		dataType: boolean
+		lineageTag: 46b98211-6207-54b5-8b57-31c4caacb95a
+		summarizeBy: none
+		sourceColumn: has_account
+
+	refreshPolicy
+		policyType: basic
+		rollingWindowGranularity: year
+		rollingWindowPeriods: 3
+		incrementalGranularity: month
+		incrementalPeriods: 15
+		pollingExpression =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_opportunity.parquet")),
+				    Data = Source,
+				    InRange = Table.SelectRows(Data, each DateTime.From([created_date]) >= RangeStart and DateTime.From([created_date]) < RangeEnd),
+				    LastChange = List.Max(InRange[modified_at])
+				in
+				    LastChange
+		sourceExpression =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_opportunity.parquet")),
+				    Data = Source,
+				    Kept = Table.RemoveColumns(Data, {"modified_at"}),
+				    Typed = Table.TransformColumnTypes(Kept, {{"opportunity_id", type text}, {"owner_id", type text}, {"account_id", type text}, {"product_id", type text}, {"stage_key", type text}, {"created_date", type date}, {"engaged_date", type date}, {"closed_date", type date}, {"close_value", type number}, {"list_price", type number}, {"open_value", type number}, {"price_realisation", type number}, {"cycle_days", Int64.Type}, {"cycle_band", type text}, {"age_days", Int64.Type}, {"age_band", type text}, {"has_account", type logical}}),
+				    InRange = Table.SelectRows(Typed, each DateTime.From([created_date]) >= RangeStart and DateTime.From([created_date]) < RangeEnd)
+				in
+				    InRange
+
+	partition Opportunities = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_opportunity.parquet")),
+				    Data = Source,
+				    Kept = Table.RemoveColumns(Data, {"modified_at"}),
+				    Typed = Table.TransformColumnTypes(Kept, {{"opportunity_id", type text}, {"owner_id", type text}, {"account_id", type text}, {"product_id", type text}, {"stage_key", type text}, {"created_date", type date}, {"engaged_date", type date}, {"closed_date", type date}, {"close_value", type number}, {"list_price", type number}, {"open_value", type number}, {"price_realisation", type number}, {"cycle_days", Int64.Type}, {"cycle_band", type text}, {"age_days", Int64.Type}, {"age_band", type text}, {"has_account", type logical}}),
+				    InRange = Table.SelectRows(Typed, each DateTime.From([created_date]) >= RangeStart and DateTime.From([created_date]) < RangeEnd)
+				in
+				    InRange
+
+	annotation PBI_ResultType = Table

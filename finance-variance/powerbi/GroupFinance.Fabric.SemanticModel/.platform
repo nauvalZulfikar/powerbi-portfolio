@@ -1,0 +1,5 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {"type": "SemanticModel", "displayName": "GroupFinance (Fabric)"},
+  "config": {"version": "2.0", "logicalId": "4e8c1a73-9b2d-4f65-a0e7-3c5d8b1f2a96"}
+}

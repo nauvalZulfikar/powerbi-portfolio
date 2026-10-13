@@ -1,0 +1,12 @@
+-- Restock Komposit: aggregation sanity check, run as pbi_reader over Tailscale (<db-server>)
+-- detail totals: rows | units | dollars
+1048575 | 2451169 | 33139375.29
+-- aggregation (GROUP BY sales_date, store, brand = what Daily Sales folds to): groups | units | dollars | sum(sales_rows)
+1048575 | 2451169 | 33139375.29 | 1048575
+-- totals match (units, dollars, rows)
+t
+-- orphan keys in the detail (brand not in dim_item | store not in dim_store | date not in dim_date)
+0 | 0 | 0
+-- per month: month | rows | units | dollars (January equals data/marts/fact_sales_daily.parquet: 937596 | 2194959 | 29854027.92)
+2016-01 | 937596 | 2194959 | 29854027.92
+2016-02 | 110979 | 256210 | 3285347.37

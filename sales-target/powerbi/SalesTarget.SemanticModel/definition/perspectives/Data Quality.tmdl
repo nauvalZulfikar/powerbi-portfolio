@@ -1,0 +1,10 @@
+perspective 'Data Quality'
+
+	perspectiveTable 'Cleaning Log'
+		includeAll
+
+	perspectiveTable Sales
+		includeAll
+
+	perspectiveTable Date
+		includeAll

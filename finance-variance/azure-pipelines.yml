@@ -1,0 +1,111 @@
+# GroupFinance — Azure DevOps mirror of .github/workflows/ci.yml (pbi-kit template).
+# Approval = "Approvals and checks" on the Prod environment
+# (Pipelines → Environments → Prod). Service connection "pbi-kit-fabric" = workload-identity federation
+# to the same Entra app the GitHub template uses.
+trigger:
+  branches: { include: [main] }
+pr:
+  branches: { include: [main] }
+
+variables:
+  MODEL: powerbi/GroupFinance.SemanticModel
+  PBIP_DIR: powerbi
+  AZURE_SERVICE_CONNECTION: pbi-kit-fabric
+
+stages:
+  - stage: ci
+    jobs:
+      - job: validate
+        pool: { vmImage: ubuntu-latest }
+        steps:
+          - checkout: self
+          - task: UseDotNet@2
+            inputs: { packageType: sdk, version: 8.0.x }
+          - script: curl -LsSf https://astral.sh/uv/install.sh | sh && echo "##vso[task.prependpath]$HOME/.local/bin"
+            displayName: Install uv
+          - script: |
+              uv tool install pbir-cli==0.9.32
+              uv run python src/build_report.py | tee report.log && grep -q "^Valid" report.log
+              git diff --exit-code -- "$(PBIP_DIR)"/*.Report
+            displayName: Regenerate report (data-free) + diff
+          - script: |
+              for m in "$(PBIP_DIR)"/*.SemanticModel; do tools/pbi-kit/bpa/bpa.sh "$m/definition" --rules bpa/project-rules.json --json "bpa-$(basename "$m" .SemanticModel).json" || exit 1; done
+            displayName: Best Practice Analyzer (TOM, every model)
+          - script: for m in "$(PBIP_DIR)"/*.SemanticModel; do dotnet run --project tools/tmdl-validate -- "$m/definition" || exit 1; done
+            displayName: TOM validate
+          - script: python3 tools/pbi-kit/dax-tests/daxtest.py "$(MODEL)/DAXQueries" --offline
+            displayName: DAX tests (offline)
+          - script: |
+              for r in "$(PBIP_DIR)"/*.Report; do pbir validate "$r"; done
+            displayName: Report validate (PBIR)
+      - job: data                    # opt-in (pipeline variable RUN_DATA=true): downloads the gitignored source data
+        condition: eq(variables['RUN_DATA'], 'true')
+        pool: { vmImage: ubuntu-latest }
+        steps:
+          - checkout: self
+          - script: curl -LsSf https://astral.sh/uv/install.sh | sh && echo "##vso[task.prependpath]$HOME/.local/bin"
+            displayName: Install uv
+          - script: uv run python src/pipeline.py
+            displayName: Data tests
+          - script: |
+              uv run python src/build_model.py
+              git diff --exit-code -- "$(PBIP_DIR)" ':!$(PBIP_DIR)/*.Report/*' ':!$(PBIP_DIR)/**/expressions.tmdl'
+            displayName: Rebuild models from the warehouse + stale check
+      - job: bpa_te2
+        condition: eq(variables['RUN_TE2_BPA'], 'true')
+        pool: { vmImage: windows-latest }
+        steps:
+          - checkout: self
+          - pwsh: ./tools/pbi-kit/bpa/te2-bpa.ps1 -Model "$(MODEL)/definition" -ProjectRules bpa/project-rules.json -Ci vsts
+            displayName: BPA via TabularEditor.exe
+
+  - stage: test
+    dependsOn: ci
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs:
+      - deployment: deploy_test
+        environment: Test
+        pool: { vmImage: ubuntu-latest }
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                - script: curl -LsSf https://astral.sh/uv/install.sh | sh && echo "##vso[task.prependpath]$HOME/.local/bin"
+                  displayName: Install uv
+                - task: AzureCLI@2
+                  displayName: Publish to Test + DAX tests online
+                  inputs:
+                    azureSubscription: $(AZURE_SERVICE_CONNECTION)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      export FABRIC_WS_TEST=$(FABRIC_WS_TEST)
+                      uv run --project tools/pbi-kit python tools/pbi-kit/deploy/deploy.py --repo "$(PBIP_DIR)" --env Test
+                      # refresh + executeQueries: same as the GitHub template; RLS models need a user token
+                      export PBI_WORKSPACE_ID=$(FABRIC_WS_TEST) PBI_DATASET_NAME=$(PBI_DATASET_NAME)
+                      export PBI_ACCESS_TOKEN=$(PBI_USER_TOKEN)   # RLS model: executeQueries refuses service principals
+                      python3 tools/pbi-kit/dax-tests/daxtest.py "$(MODEL)/DAXQueries"
+
+  - stage: prod
+    dependsOn: test
+    jobs:
+      - deployment: deploy_prod
+        environment: Prod            # approval gate lives on this environment
+        pool: { vmImage: ubuntu-latest }
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                - script: curl -LsSf https://astral.sh/uv/install.sh | sh && echo "##vso[task.prependpath]$HOME/.local/bin"
+                  displayName: Install uv
+                - task: AzureCLI@2
+                  displayName: Publish to Prod
+                  inputs:
+                    azureSubscription: $(AZURE_SERVICE_CONNECTION)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      export FABRIC_WS_PROD=$(FABRIC_WS_PROD)
+                      uv run --project tools/pbi-kit python tools/pbi-kit/deploy/deploy.py --repo "$(PBIP_DIR)" --env Prod

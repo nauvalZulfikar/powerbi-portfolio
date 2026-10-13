@@ -1,0 +1,49 @@
+table 'P&L Line'
+	lineageTag: 55ba8cc4-39ca-5f62-81ee-83556b6323e0
+
+	column 'Line ID'
+		dataType: string
+		isKey
+		lineageTag: 20943f2a-ba42-5e3b-a95e-74499c01c506
+		summarizeBy: none
+		sourceColumn: line_id
+
+	column Line
+		dataType: string
+		lineageTag: fd03c2eb-7bc1-5a32-a2f5-cecc9ecb0df4
+		summarizeBy: none
+		sourceColumn: line
+		sortByColumn: 'Line Sort'
+
+	column 'Line Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: de1512cd-2d4b-5416-b617-baad6a61c5bd
+		summarizeBy: none
+		sourceColumn: line_sort
+
+	column 'Line Kind'
+		dataType: string
+		lineageTag: 964faed0-97b1-5875-b60b-044b02e08e10
+		summarizeBy: none
+		sourceColumn: line_kind
+
+	column 'Is Operating'
+		dataType: boolean
+		lineageTag: 346399a7-434a-5117-9744-05178d60aeb0
+		summarizeBy: none
+		sourceColumn: is_operating
+
+	partition 'P&L Line' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "dim_pnl_line"]}[Data],
+				    #"Choose columns" = Table.SelectColumns(Data, {"line_id", "line", "line_sort", "line_kind", "is_operating"}),
+				    Typed = Table.TransformColumnTypes(#"Choose columns", {{"line_id", type text}, {"line", type text}, {"line_sort", Int64.Type}, {"line_kind", type text}, {"is_operating", type logical}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

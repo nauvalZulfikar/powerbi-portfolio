@@ -1,0 +1,12 @@
+role 'Store Staff'
+	modelPermission: read
+
+	tablePermission Vendor
+
+		columnPermission 'Invoiced Spend' = none
+		columnPermission 'Invoiced Freight' = none
+		columnPermission 'Freight Pct' = none
+		columnPermission 'Avg Days To Pay' = none
+
+	tablePermission Invoices
+		metadataPermission: none

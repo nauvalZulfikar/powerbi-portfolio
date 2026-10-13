@@ -1,0 +1,17 @@
+/// PostgreSQL host: the Mac Mini's Tailscale address.
+expression PgServer = "<db-server>" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 8be9473d-e8ab-5566-ab3e-7a8b4873a63c
+
+	annotation PBI_ResultType = Text
+
+/// PostgreSQL database that holds the inventory schema.
+expression PgDatabase = "portfolio" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: e9241080-2654-55b7-941e-39ddc13793cb
+
+	annotation PBI_ResultType = Text
+
+/// Folder with the Parquet marts (Stock).
+expression DataFolder = "/path/to/powerbi-portfolio/inventory-restock/data/marts/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: dc2c1bdf-9331-5e21-a25f-ebb2fc7300fa
+
+	annotation PBI_ResultType = Text

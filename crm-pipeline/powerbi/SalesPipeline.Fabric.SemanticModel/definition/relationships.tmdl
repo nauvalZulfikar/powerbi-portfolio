@@ -1,0 +1,101 @@
+relationship 6c061b8a-a655-5ae5-9968-a212b8b97f1c
+	fromColumn: Opportunities.'Closed Date'
+	toColumn: Date.Date
+
+relationship 7d8fc621-53f5-50d7-a264-dc5caa24ec4a
+	isActive: false
+	fromColumn: Opportunities.'Engaged Date'
+	toColumn: Date.Date
+
+relationship f2dd8f13-6351-56ce-9736-60a3c6c61146
+	isActive: false
+	fromColumn: Opportunities.'Created Date'
+	toColumn: Date.Date
+
+relationship 34c16507-0dfa-5955-b1bf-43e86f32b0de
+	fromColumn: Opportunities.'Owner ID'
+	toColumn: Agent.'Owner ID'
+
+relationship d70943ec-e41b-5fc7-81e7-c63305f722c9
+	fromColumn: Opportunities.'Account ID'
+	toColumn: Account.'Account ID'
+
+relationship 7d2c79da-3677-50c1-9170-e1dadbed4d12
+	fromColumn: Opportunities.'Product ID'
+	toColumn: Product.'Product ID'
+
+relationship c1f8c5e7-ad33-54ec-91f1-7583867603d0
+	fromColumn: Opportunities.'Stage Key'
+	toColumn: Stage.'Stage Key'
+
+relationship 5baf6db1-0b75-5dc5-a111-2d246c2dfdfc
+	fromColumn: Opportunities.'Cycle Band'
+	toColumn: 'Cycle Band'.'Cycle Band'
+
+relationship 7a7389af-9f80-53f2-85dd-611d8ce9d0fc
+	fromColumn: Opportunities.'Age Band'
+	toColumn: 'Age Band'.'Age Band'
+
+relationship 84b66c07-0d5f-50f1-bfcc-dee8d15293b6
+	fromColumn: 'Pipeline Snapshots'.'Snapshot Date'
+	toColumn: Date.Date
+
+relationship be19a7bc-d2f0-5602-8c30-a46d8c1fd16e
+	fromColumn: 'Pipeline Snapshots'.'Owner ID'
+	toColumn: Agent.'Owner ID'
+
+relationship 7b9ddf78-dac8-5bf9-a569-8db8458e4666
+	fromColumn: 'Pipeline Snapshots'.'Account ID'
+	toColumn: Account.'Account ID'
+
+relationship 5303ff78-efb9-5822-b7c4-5e7006cbcb71
+	fromColumn: 'Pipeline Snapshots'.'Product ID'
+	toColumn: Product.'Product ID'
+
+relationship 510fe5ad-9f57-53cd-aa41-53b0c836d976
+	fromColumn: 'Pipeline Snapshots'.'Stage Key'
+	toColumn: Stage.'Stage Key'
+
+relationship b235c78c-76b2-5be5-a504-bf61c9d8db10
+	fromColumn: 'Pipeline Snapshots'.'Age Band'
+	toColumn: 'Age Band'.'Age Band'
+
+relationship 32ba65b7-33a2-5fda-88ef-e756e29f2f4c
+	fromColumn: Funnel.'Opportunity ID'
+	toColumn: Opportunities.'Opportunity ID'
+
+relationship f60643fc-d5fa-5cce-8c7c-6d97c1844f02
+	fromColumn: 'Stage Transitions'.'Transition Date'
+	toColumn: Date.Date
+
+relationship 427e8eec-333c-58f9-9444-d3145370796a
+	fromColumn: 'Stage Transitions'.'Owner ID'
+	toColumn: Agent.'Owner ID'
+
+relationship 08eafa0d-5f9b-546d-9cc4-c662c248dba7
+	fromColumn: 'Stage Transitions'.'Account ID'
+	toColumn: Account.'Account ID'
+
+relationship 93714f27-c4b8-509c-8b40-5ee29c08ee02
+	fromColumn: 'Stage Transitions'.'Product ID'
+	toColumn: Product.'Product ID'
+
+relationship 887590c7-072f-5402-b4d7-f72868c1a77c
+	fromColumn: Funnel.'Funnel Step'
+	toColumn: Steps.Step
+
+relationship 2da81998-ab31-5870-9e5d-cd7fb1b5f2d1
+	fromColumn: 'Snapshot Agg'.'Snapshot Date'
+	toColumn: Date.Date
+
+relationship 20c709e4-e525-55cb-b4d5-a5b109b7ce0c
+	fromColumn: 'Snapshot Agg'.'Owner ID'
+	toColumn: Agent.'Owner ID'
+
+relationship de91d6fb-5398-5951-bc4f-fd132f271d5c
+	fromColumn: 'Snapshot Agg'.'Stage Key'
+	toColumn: Stage.'Stage Key'
+
+relationship 686fae1a-d254-576d-8f07-b145ee1a541f
+	fromColumn: 'Snapshot Agg'.'Age Band'
+	toColumn: 'Age Band'.'Age Band'

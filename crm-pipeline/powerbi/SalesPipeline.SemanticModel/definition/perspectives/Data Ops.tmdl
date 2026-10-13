@@ -1,0 +1,34 @@
+perspective 'Data Ops'
+
+	perspectiveTable 'Sync Runs'
+		includeAll
+
+	perspectiveTable 'Sync Run Events'
+		includeAll
+
+	perspectiveTable 'Source Reconciliation'
+		includeAll
+
+	perspectiveTable 'Agent Login Check'
+		includeAll
+
+	perspectiveTable 'Data Dictionary'
+		includeAll
+
+	perspectiveTable 'Pipeline Snapshots'
+		includeAll
+
+	perspectiveTable Opportunities
+		includeAll
+
+	perspectiveTable Date
+		includeAll
+
+	perspectiveTable Agent
+		includeAll
+
+	perspectiveTable 'Manager Access'
+		includeAll
+
+	perspectiveTable _Measures
+		includeAll

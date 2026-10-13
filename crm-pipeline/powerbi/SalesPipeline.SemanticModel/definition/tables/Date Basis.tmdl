@@ -1,0 +1,29 @@
+table 'Date Basis'
+	lineageTag: d535edae-f754-56a0-9466-2f713842e836
+
+	calculationGroup
+		precedence: 10
+
+		calculationItem Closed = SELECTEDMEASURE ()
+			ordinal: 0
+
+		calculationItem Engaged = CALCULATE ( SELECTEDMEASURE (), USERELATIONSHIP ( Opportunities[Engaged Date], 'Date'[Date] ) )
+			ordinal: 1
+
+		calculationItem Created = CALCULATE ( SELECTEDMEASURE (), USERELATIONSHIP ( Opportunities[Created Date], 'Date'[Date] ) )
+			ordinal: 2
+
+	column 'Date Basis'
+		dataType: string
+		lineageTag: 4f6630cb-cb68-5811-aef1-3872d3b99d9b
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+	column Ordinal
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 45d3ca40-e31f-527d-a440-c9060a03affd
+		summarizeBy: sum
+		sourceColumn: Ordinal

@@ -1,0 +1,9 @@
+// CI test: the README headline at default slicers (95% service, 7-day review). Expected values from DuckDB over mart.fact_stock.
+EVALUATE
+ROW (
+    "Stock Value", [Stock Value],
+    "Out of Stock Lines", [Out of Stock Lines],
+    "Order Value", [Order Value],
+    "Lines To Order", [Lines To Order],
+    "Units To Order", [Units To Order]
+)

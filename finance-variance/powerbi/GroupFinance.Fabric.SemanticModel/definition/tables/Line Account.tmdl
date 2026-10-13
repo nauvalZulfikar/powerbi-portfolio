@@ -1,0 +1,33 @@
+table 'Line Account'
+	lineageTag: 8436730b-7902-5904-90a2-776310fbfa00
+	isHidden
+
+	column 'Line ID'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: 1c43c3e7-b183-5914-9674-46d5a7c1b4d3
+		summarizeBy: none
+		sourceColumn: line_id
+
+	column 'Account Key'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		formatString: 0
+		lineageTag: e9289b0b-f538-5e96-ac5d-c5cfd0f499be
+		summarizeBy: none
+		sourceColumn: account_key
+
+	partition 'Line Account' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "bridge_line_account"]}[Data],
+				    #"Choose columns" = Table.SelectColumns(Data, {"line_id", "account_key"}),
+				    Typed = Table.TransformColumnTypes(#"Choose columns", {{"line_id", type text}, {"account_key", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

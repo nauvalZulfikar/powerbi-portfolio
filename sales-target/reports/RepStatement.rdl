@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="SalesTarget">
+      <ConnectionProperties>
+        <DataProvider>PBIDATASET</DataProvider>
+        <ConnectString>Data Source=pbiazure://api.powerbi.com/;Identity Provider="https://login.microsoftonline.com/common, https://analysis.windows.net/powerbi/api, 929d0ec0-7a41-4b1e-bc7c-b754a28bddcc";Initial Catalog=sobe_wowvirtualserver-DATASET_ID_SET_AT_PUBLISH;Integrated Security=ClaimsToken</ConnectString>
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="Statement">
+      <Query>
+        <DataSourceName>SalesTarget</DataSourceName>
+        <CommandText>DEFINE
+    VAR _quarters =
+        SELECTCOLUMNS (
+            SUMMARIZECOLUMNS ( Reps[Rep], 'Date'[Fiscal Quarter Number], 'Date'[Fiscal Quarter],
+                "S", [Net Sales], "T", [Target] ),
+            "Rep", Reps[Rep], "Section", "1 Quarter", "Sort", 'Date'[Fiscal Quarter Number],
+            "Label", 'Date'[Fiscal Quarter], "Net Sales", [S], "Target", [T] )
+    VAR _resellers =
+        SELECTCOLUMNS (
+            GENERATE ( VALUES ( Reps[Rep] ),
+                TOPN ( 5, ADDCOLUMNS ( VALUES ( Resellers[Reseller] ), "S", [Net Sales] ), [S], DESC ) ),
+            "Rep", Reps[Rep], "Section", "2 Top reseller", "Sort", - [S],
+            "Label", Resellers[Reseller], "Net Sales", [S], "Target", BLANK () )
+EVALUATE
+    FILTER ( UNION ( _quarters, _resellers ), NOT ISBLANK ( [Net Sales] ) || NOT ISBLANK ( [Target] ) )
+ORDER BY [Rep], [Section], [Sort]</CommandText>
+      </Query>
+      <Fields><Field Name="Rep"><DataField>[Rep]</DataField></Field><Field Name="Section"><DataField>[Section]</DataField></Field><Field Name="Sort"><DataField>[Sort]</DataField></Field><Field Name="Label"><DataField>[Label]</DataField></Field><Field Name="Net_Sales"><DataField>[Net Sales]</DataField></Field><Field Name="Target"><DataField>[Target]</DataField></Field></Fields>
+    </DataSet>
+  </DataSets>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <ReportItems>
+          <Tablix Name="Statement">
+            <TablixBody>
+              <TablixColumns><TablixColumn><Width>3.2in</Width></TablixColumn><TablixColumn><Width>1.3in</Width></TablixColumn><TablixColumn><Width>1.3in</Width></TablixColumn><TablixColumn><Width>1.1in</Width></TablixColumn></TablixColumns>
+              <TablixRows><TablixRow><Height>0.4in</Height><TablixCells><TablixCell><CellContents><Textbox Name="RepName"><CanGrow>true</CanGrow><KeepTogether>true</KeepTogether><Paragraphs><Paragraph><TextRuns><TextRun><Value>="Sales statement · " &amp; Fields!Rep.Value</Value><Style><FontFamily>Segoe UI</FontFamily><FontSize>14pt</FontSize><Color>#0b0b0b</Color><FontWeight>Bold</FontWeight></Style></TextRun></TextRuns><Style><TextAlign>Left</TextAlign></Style></Paragraph></Paragraphs><Style><Border><Style>None</Style></Border><BottomBorder><Color>#E6E4DD</Color><Style>Solid</Style></BottomBorder><PaddingLeft>4pt</PaddingLeft><PaddingRight>4pt</PaddingRight><PaddingTop>3pt</PaddingTop><PaddingBottom>3pt</PaddingBottom></Style></Textbox><ColSpan>4</ColSpan></CellContents></TablixCell><TablixCell /><TablixCell /><TablixCell /></TablixCells></TablixRow><TablixRow><Height>0.25in</Height><TablixCells><TablixCell><CellContents><Textbox Name="SectionHead"><CanGrow>true</CanGrow><KeepTogether>true</KeepTogether><Paragraphs><Paragraph><TextRuns><TextRun><Value>=IIF(Fields!Section.Value = "1 Quarter", "Fiscal quarter", "Top reseller")</Value><Style><FontFamily>Segoe UI</FontFamily><FontSize>9pt</FontSize><Color>#6E6C66</Color><FontWeight>Bold</FontWeight></Style></TextRun></TextRuns><Style><TextAlign>Left</TextAlign></Style></Paragraph></Paragraphs><Style><Border><Style>None</Style></Border><BottomBorder><Color>#E6E4DD</Color><Style>Solid</Style></BottomBorder><PaddingLeft>4pt</PaddingLeft><PaddingRight>4pt</PaddingRight><PaddingTop>3pt</PaddingTop><PaddingBottom>3pt</PaddingBottom></Style></Textbox></CellContents></TablixCell><TablixCell><CellContents><Textbox Name="HeadSales"><CanGrow>true</CanGrow><KeepTogether>true</KeepTogether><Paragraphs><Paragraph><TextRuns><TextRun><Value>Net sales</Value><Style><FontFamily>Segoe UI</FontFamily><FontSize>9pt</FontSize><Color>#6E6C66</Color><FontWeight>Bold</FontWeight></Style></TextRun></TextRuns><Style><TextAlign>Right</TextAlign></Style></Paragraph></Paragraphs><Style><Border><Style>None</Style></Border><BottomBorder><Color>#E6E4DD</Color><Style>Solid</Style></BottomBorder><PaddingLeft>4pt</PaddingLeft><PaddingRight>4pt</PaddingRight><PaddingTop>3pt</PaddingTop><PaddingBottom>3pt</PaddingBottom></Style></Textbox></CellContents></TablixCell><TablixCell><CellContents><Textbox Name="HeadTarget"><CanGrow>true</CanGrow><KeepTogether>true</KeepTogether><Paragraphs><Paragraph><TextRuns><TextRun><Value>=IIF(Fields!Section.Value = "1 Quarter", "Target", "")</Value><Style><FontFamily>Segoe UI</FontFamily><FontSize>9pt</FontSize><Color>#6E6C66</Color><FontWeight>Bold</FontWeight></Style></TextRun></TextRuns><Style><TextAlign>Right</TextAlign></Style></Paragraph></Paragraphs><Style><Border><Style>None</Style></Border><BottomBorder><Color>#E6E4DD</Color><Style>Solid</Style></BottomBorder><PaddingLeft>4pt</PaddingLeft><PaddingRight>4pt</PaddingRight><PaddingTop>3pt</PaddingTop><PaddingBottom>3pt</PaddingBottom></Style></Textbox></CellContents></TablixCell><TablixCell><CellContents><Textbox Name="HeadAtt"><CanGrow>true</CanGrow><KeepTogether>true</KeepTogether><Paragraphs><Paragraph><TextRuns><TextRun><Value>=IIF(Fields!Section.Value = "1 Quarter", "Attainment", "")</Value><Style><FontFamily>Segoe UI</FontFamily><FontSize>9pt</FontSize><Color>#6E6C66</Color><FontWeight>Bold</FontWeight></Style></TextRun></TextRuns><Style><TextAlign>Right</TextAlign></Style></Paragraph></Paragraphs><Style><Border><Style>None</Style></Border><BottomBorder><Color>#E6E4DD</Color><Style>Solid</Style></BottomBorder><PaddingLeft>4pt</PaddingLeft><PaddingRight>4pt</PaddingRight><PaddingTop>3pt</PaddingTop><PaddingBottom>3pt</PaddingBottom></Style></Textbox></CellContents></TablixCell></TablixCells></TablixRow><TablixRow><Height>0.22in</Height><TablixCells><TablixCell><CellContents><Textbox Name="Label"><CanGrow>true</CanGrow><KeepTogether>true</KeepTogether><Paragraphs><Paragraph><TextRuns><TextRun><Value>=Fields!Label.Value</Value><Style><FontFamily>Segoe UI</FontFamily><FontSize>9pt</FontSize><Color>#0b0b0b</Color></Style></TextRun></TextRuns><Style><TextAlign>Left</TextAlign></Style></Paragraph></Paragraphs><Style><Border><Style>None</Style></Border><BottomBorder><Color>#E6E4DD</Color><Style>Solid</Style></BottomBorder><PaddingLeft>4pt</PaddingLeft><PaddingRight>4pt</PaddingRight><PaddingTop>3pt</PaddingTop><PaddingBottom>3pt</PaddingBottom></Style></Textbox></CellContents></TablixCell><TablixCell><CellContents><Textbox Name="NetSales"><CanGrow>true</CanGrow><KeepTogether>true</KeepTogether><Paragraphs><Paragraph><TextRuns><TextRun><Value>=Fields!Net_Sales.Value</Value><Style><FontFamily>Segoe UI</FontFamily><FontSize>9pt</FontSize><Color>#0b0b0b</Color><Format>$#,0</Format></Style></TextRun></TextRuns><Style><TextAlign>Right</TextAlign></Style></Paragraph></Paragraphs><Style><Border><Style>None</Style></Border><BottomBorder><Color>#E6E4DD</Color><Style>Solid</Style></BottomBorder><PaddingLeft>4pt</PaddingLeft><PaddingRight>4pt</PaddingRight><PaddingTop>3pt</PaddingTop><PaddingBottom>3pt</PaddingBottom></Style></Textbox></CellContents></TablixCell><TablixCell><CellContents><Textbox Name="Target"><CanGrow>true</CanGrow><KeepTogether>true</KeepTogether><Paragraphs><Paragraph><TextRuns><TextRun><Value>=Fields!Target.Value</Value><Style><FontFamily>Segoe UI</FontFamily><FontSize>9pt</FontSize><Color>#0b0b0b</Color><Format>$#,0</Format></Style></TextRun></TextRuns><Style><TextAlign>Right</TextAlign></Style></Paragraph></Paragraphs><Style><Border><Style>None</Style></Border><BottomBorder><Color>#E6E4DD</Color><Style>Solid</Style></BottomBorder><PaddingLeft>4pt</PaddingLeft><PaddingRight>4pt</PaddingRight><PaddingTop>3pt</PaddingTop><PaddingBottom>3pt</PaddingBottom></Style></Textbox></CellContents></TablixCell><TablixCell><CellContents><Textbox Name="Attainment"><CanGrow>true</CanGrow><KeepTogether>true</KeepTogether><Paragraphs><Paragraph><TextRuns><TextRun><Value>=IIF(IsNothing(Fields!Target.Value) Or Fields!Target.Value = 0, Nothing, Fields!Net_Sales.Value / Fields!Target.Value)</Value><Style><FontFamily>Segoe UI</FontFamily><FontSize>9pt</FontSize><Color>#0b0b0b</Color><Format>0%</Format></Style></TextRun></TextRuns><Style><TextAlign>Right</TextAlign></Style></Paragraph></Paragraphs><Style><Border><Style>None</Style></Border><BottomBorder><Color>#E6E4DD</Color><Style>Solid</Style></BottomBorder><PaddingLeft>4pt</PaddingLeft><PaddingRight>4pt</PaddingRight><PaddingTop>3pt</PaddingTop><PaddingBottom>3pt</PaddingBottom></Style></Textbox></CellContents></TablixCell></TablixCells></TablixRow></TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy><TablixMembers><TablixMember /><TablixMember /><TablixMember /><TablixMember /></TablixMembers></TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <Group Name="Rep"><GroupExpressions><GroupExpression>=Fields!Rep.Value</GroupExpression></GroupExpressions>
+                    <PageBreak><BreakLocation>Between</BreakLocation></PageBreak></Group>
+                  <SortExpressions><SortExpression><Value>=Fields!Rep.Value</Value></SortExpression></SortExpressions>
+                  <TablixMembers>
+                    <TablixMember><KeepWithGroup>After</KeepWithGroup><RepeatOnNewPage>true</RepeatOnNewPage></TablixMember>
+                    <TablixMember>
+                      <Group Name="Section"><GroupExpressions><GroupExpression>=Fields!Section.Value</GroupExpression></GroupExpressions></Group>
+                      <SortExpressions><SortExpression><Value>=Fields!Section.Value</Value></SortExpression></SortExpressions>
+                      <TablixMembers>
+                        <TablixMember><KeepWithGroup>After</KeepWithGroup></TablixMember>
+                        <TablixMember>
+                          <Group Name="Details" />
+                          <SortExpressions><SortExpression><Value>=Fields!Sort.Value</Value></SortExpression></SortExpressions>
+                        </TablixMember>
+                      </TablixMembers>
+                    </TablixMember>
+                  </TablixMembers>
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>Statement</DataSetName>
+            <Top>0in</Top><Left>0in</Left><Height>0.87in</Height><Width>6.9in</Width>
+            <Style><Border><Style>None</Style></Border></Style>
+          </Tablix>
+        </ReportItems>
+        <Height>0.87in</Height>
+        <Style />
+      </Body>
+      <Width>6.9in</Width>
+      <Page>
+        <PageFooter>
+          <Height>0.3in</Height><PrintOnFirstPage>true</PrintOnFirstPage><PrintOnLastPage>true</PrintOnLastPage>
+          <ReportItems><Textbox Name="Footer"><Top>0.05in</Top><Height>0.22in</Height><Width>6.9in</Width><CanGrow>true</CanGrow><KeepTogether>true</KeepTogether><Paragraphs><Paragraph><TextRuns><TextRun><Value>="Adventure Works · Sales vs Target · printed " &amp; Format(Globals!ExecutionTime, "dd MMM yyyy") &amp; " · page " &amp; Globals!PageNumber &amp; " of " &amp; Globals!TotalPages</Value><Style><FontFamily>Segoe UI</FontFamily><FontSize>8pt</FontSize><Color>#6E6C66</Color></Style></TextRun></TextRuns><Style><TextAlign>Left</TextAlign></Style></Paragraph></Paragraphs><Style><Border><Style>None</Style></Border><BottomBorder><Color>#E6E4DD</Color><Style>Solid</Style></BottomBorder><PaddingLeft>4pt</PaddingLeft><PaddingRight>4pt</PaddingRight><PaddingTop>3pt</PaddingTop><PaddingBottom>3pt</PaddingBottom></Style></Textbox></ReportItems>
+          <Style />
+        </PageFooter>
+        <PageHeight>11.69in</PageHeight><PageWidth>8.27in</PageWidth>
+        <LeftMargin>0.6in</LeftMargin><RightMargin>0.6in</RightMargin><TopMargin>0.6in</TopMargin><BottomMargin>0.6in</BottomMargin>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>5b7e1d2c-3f4a-4c8e-9a61-2d0f7b3e8c41</rd:ReportID>
+</Report>

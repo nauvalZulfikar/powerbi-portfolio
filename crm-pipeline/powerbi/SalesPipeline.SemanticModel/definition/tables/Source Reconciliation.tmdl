@@ -1,0 +1,101 @@
+table 'Source Reconciliation'
+	lineageTag: ece2680a-b017-5b0e-a418-d380dceee170
+
+	column Source
+		dataType: string
+		lineageTag: 222b9d57-db88-52f7-8a42-000cf7850881
+		summarizeBy: none
+		sourceColumn: Source
+
+	column Stage
+		dataType: string
+		lineageTag: 265a55d7-971c-5285-a0f1-19846a1549fe
+		summarizeBy: none
+		sourceColumn: Stage
+		sortByColumn: 'Stage Sort'
+
+	column 'Stage Sort'
+		dataType: int64
+		lineageTag: 3eb09ac2-9d2a-5d7c-b3ae-f183044cd917
+		summarizeBy: none
+		sourceColumn: Stage Sort
+		isHidden
+		formatString: 0
+
+	column 'Deal Rows'
+		dataType: int64
+		lineageTag: 74916cd5-c643-5111-96c3-4cd90330acdc
+		summarizeBy: none
+		sourceColumn: Deal Rows
+		formatString: #,0
+
+	column 'Close Value'
+		dataType: double
+		lineageTag: dde64ee1-2dc9-50b5-9e9e-2e7beaee80f0
+		summarizeBy: none
+		sourceColumn: Close Value
+		formatString: \$#,0;(\$#,0);\$0
+
+	column 'Raw Deal Rows'
+		dataType: int64
+		lineageTag: 48565a3e-4db0-5c25-aa10-59b767877fe9
+		summarizeBy: none
+		sourceColumn: Raw Deal Rows
+		isHidden
+		formatString: #,0
+
+	column 'Raw Close Value'
+		dataType: double
+		lineageTag: 86a3d372-6047-5132-82aa-dacf0c18b59c
+		summarizeBy: none
+		sourceColumn: Raw Close Value
+		isHidden
+		formatString: \$#,0;(\$#,0);\$0
+
+	column 'Deals Diff'
+		dataType: int64
+		lineageTag: f0436b97-fd15-5a40-9108-4d793999febf
+		summarizeBy: none
+		sourceColumn: Deals Diff
+		formatString: +#,0;-#,0;0
+
+	column 'Value Diff'
+		dataType: double
+		lineageTag: 1a4c01c6-29ba-5c60-8731-e032db2b85f5
+		summarizeBy: none
+		sourceColumn: Value Diff
+		formatString: +#,0;-#,0;0
+
+	partition 'Source Reconciliation' = m
+		mode: import
+		source =
+				let
+				    // Raw side: the seed CSV, cleaned in raw_pipeline (Reference, not Duplicate)
+				    RawSource = raw_pipeline,
+				    RawGrouped = Table.Group(RawSource, {"deal_stage"}, {{"Deal Rows", each Table.RowCount(_), Int64.Type},
+				        {"Close Value", each List.Sum([close_value]), type nullable number}}),
+				    RawRenamed = Table.RenameColumns(RawGrouped, {{"deal_stage", "Stage"}}),
+				    RawTotals = Table.AddColumn(RawRenamed, "Source", each "Raw CSV", type text),
+				    // Mart side: the deals as the month-end API syncs rebuilt them
+				    Stages = Parquet.Document(File.Contents(DataFolder & "dim_stage.parquet")),
+				    Mart = Parquet.Document(File.Contents(DataFolder & "fact_opportunity.parquet")),
+				    MartGrouped = Table.Group(Mart, {"stage_key"}, {{"Deal Rows", each Table.RowCount(_), Int64.Type},
+				        {"Close Value", each List.Sum([close_value]), type nullable number}}),
+				    MartLabelled = Table.NestedJoin(MartGrouped, {"stage_key"}, Stages, {"stage_key"}, "StageRow", JoinKind.LeftOuter),
+				    MartExpanded = Table.ExpandTableColumn(MartLabelled, "StageRow", {"stage"}, {"Stage"}),
+				    MartTotals = Table.AddColumn(Table.RemoveColumns(MartExpanded, {"stage_key"}), "Source", each "Mart (API syncs)", type text),
+				    // Append both sides, then Merge the raw totals back on to show the difference per stage
+				    Appended = Table.Combine({RawTotals, MartTotals}),
+				    MergedRaw = Table.NestedJoin(Appended, {"Stage"}, RawTotals, {"Stage"}, "RawRow", JoinKind.LeftOuter),
+				    ExpandedRaw = Table.ExpandTableColumn(MergedRaw, "RawRow", {"Deal Rows", "Close Value"}, {"Raw Deal Rows", "Raw Close Value"}),
+				    AddedDealsDiff = Table.AddColumn(ExpandedRaw, "Deals Diff", each [Deal Rows] - [Raw Deal Rows], Int64.Type),
+				    AddedValueDiff = Table.AddColumn(AddedDealsDiff, "Value Diff", each (if [Close Value] = null then 0 else [Close Value]) - (if [Raw Close Value] = null then 0 else [Raw Close Value]), type number),
+				    // Merge to Stage for the funnel order
+				    MergedStage = Table.NestedJoin(AddedValueDiff, {"Stage"}, Stages, {"stage"}, "StageSort", JoinKind.LeftOuter),
+				    WithSort = Table.ExpandTableColumn(MergedStage, "StageSort", {"stage_sort"}, {"Stage Sort"}),
+				    Typed = Table.TransformColumnTypes(WithSort, {{"Stage Sort", Int64.Type}, {"Close Value", type number},
+				        {"Raw Close Value", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

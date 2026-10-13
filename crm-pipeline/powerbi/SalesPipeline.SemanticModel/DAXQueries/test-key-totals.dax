@@ -1,0 +1,7 @@
+// sql/90_tests.sql: 8800 deals; won revenue $10,005,534; 4238 won, 2473 lost, 1589 + 500 open.
+// Win Rate = 4238 / (4238 + 2473) = 0.63150 (open deals are not counted).
+EVALUATE
+ROW (
+    "Deals", [Deals], "Won Deals", [Won Deals], "Lost Deals", [Lost Deals],
+    "Open Deals", [Open Deals], "Won Revenue", [Won Revenue], "Win Rate", [Win Rate]
+)

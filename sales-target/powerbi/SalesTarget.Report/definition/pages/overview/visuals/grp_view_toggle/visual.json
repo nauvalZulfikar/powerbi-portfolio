@@ -1,0 +1,15 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "grp_view_toggle",
+  "position": {
+    "x": 972,
+    "y": 226,
+    "z": 2300,
+    "width": 150,
+    "height": 26
+  },
+  "visualGroup": {
+    "displayName": "Chart / Table buttons",
+    "groupMode": "ScaleMode"
+  }
+}

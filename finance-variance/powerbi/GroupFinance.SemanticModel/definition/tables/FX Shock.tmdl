@@ -1,0 +1,14 @@
+table 'FX Shock'
+	lineageTag: e2cc8588-b956-5320-aa33-ef29b5220117
+
+	column 'FX Shock'
+		dataType: double
+		lineageTag: 41cca92d-d42e-5f36-8138-f856e33b0759
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [FX Shock]
+		formatString: +0.0%;-0.0%;0.0%
+
+	partition 'FX Shock' = calculated
+		mode: import
+		source = SELECTCOLUMNS ( GENERATESERIES ( -0.2, 0.2, 0.05 ), "FX Shock", [Value] )

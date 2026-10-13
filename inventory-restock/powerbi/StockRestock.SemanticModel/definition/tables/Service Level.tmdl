@@ -1,0 +1,14 @@
+table 'Service Level'
+	lineageTag: 479db5e9-1581-5412-82be-207beaca5f16
+
+	column 'Service Level'
+		dataType: double
+		lineageTag: 1cab86cc-ac9b-5ade-9f08-4fd06e239965
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Service Level]
+		formatString: 0%
+
+	partition 'Service Level' = calculated
+		mode: import
+		source = SELECTCOLUMNS ( GENERATESERIES ( 0.80, 0.99, 0.01 ), "Service Level", [Value] )

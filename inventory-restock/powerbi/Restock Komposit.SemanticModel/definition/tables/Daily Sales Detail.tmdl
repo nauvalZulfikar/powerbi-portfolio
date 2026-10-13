@@ -1,0 +1,69 @@
+table 'Daily Sales Detail'
+	lineageTag: 92a176b4-d67d-57f1-bcd2-aed58e01c17c
+
+	column 'Detail Store'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a4b15bd2-3a4d-562d-8546-2cc3570bec13
+		summarizeBy: none
+		sourceColumn: store
+
+	column 'Detail Brand'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 82d823e6-8100-57d2-8d4f-0c6c0981af1d
+		summarizeBy: none
+		sourceColumn: brand
+
+	column 'Detail Date'
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy
+		lineageTag: cf09bea1-eadd-5df4-9dc8-e30d6df33a4a
+		summarizeBy: none
+		sourceColumn: sales_date
+
+	column Units
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: 87be0eb8-93e7-5fcd-b898-82bf5459f5e8
+		summarizeBy: none
+		sourceColumn: units
+
+	column Dollars
+		dataType: decimal
+		isHidden
+		formatString: \$#,0;(\$#,0);\$0
+		lineageTag: e1753c6e-ef02-594d-8447-7927e7884e59
+		summarizeBy: none
+		sourceColumn: dollars
+
+	column Price
+		dataType: decimal
+		formatString: \$#,0.00
+		lineageTag: d04703c5-5b1c-5405-9e58-03d8102dd007
+		summarizeBy: none
+		sourceColumn: price
+
+	column 'Excise Tax'
+		dataType: decimal
+		formatString: \$#,0.00
+		lineageTag: ac81f9bc-560b-5fea-8540-823f6bc51581
+		summarizeBy: none
+		sourceColumn: excise_tax
+
+	partition 'Daily Sales Detail' = m
+		mode: directQuery
+		source =
+				let
+				    Source = PostgreSQL.Database(PgServer, PgDatabase),
+				    Data = Source{[Schema = "inventory", Item = "daily_sales_detail"]}[Data],
+				    Selected = Table.SelectColumns(Data, {"store", "brand", "sales_date", "units", "dollars", "price", "excise_tax"}),
+				    Typed = Table.TransformColumnTypes(Selected, {{"store", Int64.Type}, {"brand", Int64.Type}, {"sales_date", type date}, {"units", Int64.Type}, {"dollars", Currency.Type}, {"price", Currency.Type}, {"excise_tax", Currency.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
