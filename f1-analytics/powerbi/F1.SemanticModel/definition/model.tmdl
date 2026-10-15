@@ -1,0 +1,43 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+ref table Season
+ref table Race
+ref table Driver
+ref table Constructor
+ref table Circuit
+ref table Results
+ref table Qualifying
+ref table 'Pit Stops'
+ref table 'Lap Times'
+ref table Standings
+ref table 'Grid Conversion'
+ref table 'Team Season'
+ref table 'Teammate H2H'
+ref table 'Driver Skill'
+ref table 'Sprint Results'
+ref table 'Session Results'
+ref table 'Race Pace'
+ref table 'Points Systems'
+ref table Calendar
+ref table 'Win Bands'
+ref table 'Win Points'
+ref table 'Seasons Since Debut'
+ref table 'Funnel Stage'
+ref table 'Team Access'
+ref table Period
+ref table 'Dynasty Metric'
+ref table 'Legends By'
+ref table _Measures
+
+ref role 'Team Analyst'
+ref role 'Ferrari Analyst'
+ref role Public

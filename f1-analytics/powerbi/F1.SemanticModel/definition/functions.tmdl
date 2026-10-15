@@ -1,0 +1,15 @@
+/// Part ÷ whole, blank when the whole is empty. Used by Win Rate, Podium Rate and DNF Rate.
+function 'F1.Rate' = ( part : NUMERIC, whole : NUMERIC ) => DIVIDE ( part, whole )
+	lineageTag: be0c0ecd-0f2e-5e54-960f-d62c6c55d5bc
+
+/// A value as a share of a total. VAL parameters: both are computed by the caller, then divided.
+function 'F1.Share' = ( value : SCALAR NUMERIC VAL, total : SCALAR NUMERIC VAL ) => DIVIDE ( value, total )
+	lineageTag: 0aadb0cd-3e37-5eac-b96f-4d06b9d20453
+
+/// A measure one season back. EXPR parameter: re-evaluated after DATEADD shifts the dates.
+function 'F1.PrevSeason' = ( value : SCALAR NUMERIC EXPR ) => CALCULATE ( value, DATEADD ( 'Calendar'[Date], -1, YEAR ), REMOVEFILTERS ( Season ) )
+	lineageTag: 3c5b2ef5-a26e-5beb-9d23-cbe1cd9d7f4f
+
+/// Any measure from the season's first race to the date in context, on the calendar passed in (typed CALENDARREF).
+function 'F1.SeasonToDate' = ( value : SCALAR NUMERIC EXPR, cal : CALENDARREF ) => CALCULATE ( value, DATESYTD ( cal ) )
+	lineageTag: bac7b12a-f92c-5e6e-a55c-681a93989eda

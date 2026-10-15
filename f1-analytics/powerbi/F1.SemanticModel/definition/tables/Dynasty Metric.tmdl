@@ -1,0 +1,45 @@
+table 'Dynasty Metric'
+	lineageTag: 1ef322e3-3754-53bf-85c9-3269ed54dc55
+
+	column 'Dynasty Metric'
+		dataType: string
+		lineageTag: 9589c789-73d6-58e3-8874-7ac2aa869504
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Dynasty Metric Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Dynasty Metric Fields'
+
+	column 'Dynasty Metric Fields'
+		dataType: string
+		isHidden
+		lineageTag: 1a4888c1-736c-551f-802c-96b9efdea51b
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Dynasty Metric Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	column 'Dynasty Metric Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3a7025c7-c182-58d8-9f1e-3bc5fd3b51c6
+		summarizeBy: none
+		sourceColumn: [Value3]
+
+	partition 'Dynasty Metric' = calculated
+		mode: import
+		source =
+				{
+				    ( "Points share", NAMEOF ( [Team Points Share] ), 0 ),
+				    ( "Points", NAMEOF ( [Points (Modern Scale)] ), 1 ),
+				    ( "Wins", NAMEOF ( [Wins] ), 2 ),
+				    ( "Podiums", NAMEOF ( [Podiums] ), 3 ),
+				    ( "Poles", NAMEOF ( [Poles] ), 4 )
+				}

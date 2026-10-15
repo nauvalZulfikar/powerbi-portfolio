@@ -1,0 +1,140 @@
+{
+  "name": "ki_dnf",
+  "visual": {
+    "visualType": "keyDriversVisual",
+    "query": {
+      "queryState": {
+        "Target": {
+          "projections": [
+            {
+              "queryRef": "Results.Is DNF",
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Results"
+                    }
+                  },
+                  "Property": "Is DNF"
+                }
+              },
+              "nativeQueryRef": "Is DNF"
+            }
+          ]
+        },
+        "ExplainBy": {
+          "projections": [
+            {
+              "queryRef": "Race.Race Era",
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Race"
+                    }
+                  },
+                  "Property": "Race Era"
+                }
+              },
+              "nativeQueryRef": "Race Era"
+            },
+            {
+              "queryRef": "Constructor.Constructor Name",
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Constructor"
+                    }
+                  },
+                  "Property": "Constructor Name"
+                }
+              },
+              "nativeQueryRef": "Constructor Name"
+            },
+            {
+              "queryRef": "Results.Grid Band",
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Results"
+                    }
+                  },
+                  "Property": "Grid Band"
+                }
+              },
+              "nativeQueryRef": "Grid Band"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {},
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'What makes a DNF more likely'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Key influencers (AI visual) · all seasons, ignores the slicers · era, team, grid band'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'What makes a DNF more likely. Key influencers (AI visual) · all seasons, ignores the slicers · era, team, grid band'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "position": {
+    "x": 428,
+    "y": 188,
+    "width": 464,
+    "height": 292,
+    "z": 0,
+    "tabOrder": 11
+  },
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json"
+}

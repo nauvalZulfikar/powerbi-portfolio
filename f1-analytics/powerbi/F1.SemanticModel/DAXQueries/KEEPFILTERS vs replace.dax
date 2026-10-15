@@ -1,0 +1,11 @@
+// Podiums from pole, split by Results[Is Pole].
+// The plain version REPLACES the Is Pole filter of each row, the KEEPFILTERS version intersects with it.
+// Expected: TRUE row  -> Podiums 721, Podiums From Pole 721, (KF) 721
+//           FALSE row -> Podiums 2675, Podiums From Pole 721 (filter replaced), (KF) blank
+EVALUATE
+SUMMARIZECOLUMNS (
+    Results[Is Pole],
+    "Podiums", [Podiums],
+    "Podiums From Pole", [Podiums From Pole],
+    "Podiums From Pole (KF)", [Podiums From Pole (KF)]
+)

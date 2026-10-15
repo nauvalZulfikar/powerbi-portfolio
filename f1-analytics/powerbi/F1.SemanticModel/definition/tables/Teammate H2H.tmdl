@@ -1,0 +1,93 @@
+table 'Teammate H2H'
+	lineageTag: 076df725-888f-5c0f-a1e1-3f1d9533deb8
+
+	column 'H2H Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: 0b068273-12fa-57d8-a87c-16889d4695b7
+		summarizeBy: none
+		sourceColumn: year
+
+	column 'Driver Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9785fafd-1f1f-5535-8a0a-90e1d93e58a7
+		summarizeBy: none
+		sourceColumn: driver_id
+
+	column 'Teammate Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: dddfbba7-32c3-5a68-b59f-d9882f978ea1
+		summarizeBy: none
+		sourceColumn: teammate_id
+
+	column 'Constructor Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 97466692-6be5-5fc0-85df-44029ba90f44
+		summarizeBy: none
+		sourceColumn: constructor_id
+
+	column 'Races Together'
+		dataType: int64
+		formatString: 0
+		lineageTag: 6b0a4324-e3c2-53cd-bd15-9dc1d185f6db
+		summarizeBy: none
+		sourceColumn: races_together
+
+	column 'Quali Wins'
+		dataType: int64
+		formatString: 0
+		lineageTag: bbf6f795-ac6f-53d6-9eb9-84939d953a39
+		summarizeBy: none
+		sourceColumn: quali_wins
+
+	column 'Race Wins'
+		dataType: int64
+		formatString: 0
+		lineageTag: 87447628-c4ed-5e77-91c1-4debcbc4ced0
+		summarizeBy: none
+		sourceColumn: race_wins
+
+	column 'Comparable Races'
+		dataType: int64
+		formatString: 0
+		lineageTag: 630f5822-9729-5928-8022-0a48c23d2e2b
+		summarizeBy: none
+		sourceColumn: comparable_races
+
+	column 'Points Delta'
+		dataType: int64
+		formatString: 0
+		lineageTag: 74925e38-e565-5ae8-b3e7-fdddd3ba7f6f
+		summarizeBy: none
+		sourceColumn: points_delta
+
+	column 'Quali H2H Rate'
+		dataType: double
+		formatString: 0%
+		lineageTag: 6d0327a5-e8cd-5947-b696-5c05f8b3351d
+		summarizeBy: none
+		sourceColumn: quali_h2h_rate
+
+	column 'Race H2H Rate'
+		dataType: double
+		formatString: 0%
+		lineageTag: 6f1e96f4-dd6f-54d3-8155-d04ed43b90c6
+		summarizeBy: none
+		sourceColumn: race_h2h_rate
+
+	partition 'Teammate H2H' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "teammate_h2h.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"year", Int64.Type}, {"driver_id", Int64.Type}, {"teammate_id", Int64.Type}, {"constructor_id", Int64.Type}, {"races_together", Int64.Type}, {"quali_wins", Int64.Type}, {"race_wins", Int64.Type}, {"comparable_races", Int64.Type}, {"points_delta", Int64.Type}, {"quali_h2h_rate", type number}, {"race_h2h_rate", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

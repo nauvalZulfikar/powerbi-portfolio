@@ -1,0 +1,71 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "e4e26cef304f45f9",
+  "displayName": "Race Craft",
+  "width": 1280,
+  "height": 720,
+  "displayOption": "FitToPage",
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#111116'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "slicer_era",
+      "target": "kpi_pole",
+      "type": "NoFilter"
+    },
+    {
+      "source": "slicer_era",
+      "target": "kpi_finish",
+      "type": "NoFilter"
+    },
+    {
+      "source": "slicer_era",
+      "target": "kpi_mech",
+      "type": "NoFilter"
+    },
+    {
+      "source": "slicer_era",
+      "target": "kpi_crash",
+      "type": "NoFilter"
+    },
+    {
+      "source": "slicer_era",
+      "target": "line_reliability",
+      "type": "NoFilter"
+    },
+    {
+      "source": "slicer_era",
+      "target": "stack_outcomes",
+      "type": "NoFilter"
+    },
+    {
+      "source": "slicer_era",
+      "target": "table_circuits",
+      "type": "NoFilter"
+    }
+  ]
+}

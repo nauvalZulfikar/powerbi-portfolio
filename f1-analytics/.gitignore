@@ -1,0 +1,21 @@
+.venv/
+__pycache__/
+data/warehouse/
+tools/tmdl-validate/bin/
+tools/tmdl-validate/obj/
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+data/raw/
+data/marts/*.parquet
+reports/dashboard.html
+.DS_Store
+node_modules/
+# pbi-kit (templates/pbip.gitignore)
+**/.pbi/unappliedChanges.json
+*.pbix.bak
+data/interim/
+.env
+*.local.json
+fabric_cicd.error.log
+tools/**/bin/
+tools/**/obj/

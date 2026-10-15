@@ -1,0 +1,61 @@
+table 'Driver Skill'
+	lineageTag: d3b270d7-20a0-5d51-b38f-608cb8299c9e
+
+	column 'Driver Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 73891030-3c9d-5280-b8db-17e9d488744e
+		summarizeBy: none
+		sourceColumn: driver_id
+
+	column 'Skill Value'
+		dataType: double
+		formatString: +0.000;-0.000;0.000
+		lineageTag: f6b041b8-8481-5c04-9b9a-76cf31806393
+		summarizeBy: none
+		sourceColumn: skill
+
+	column 'Races Modelled'
+		dataType: int64
+		formatString: 0
+		lineageTag: dae80611-2cba-559e-b9c6-183b43677b4c
+		summarizeBy: none
+		sourceColumn: races_modelled
+
+	column 'Skill SE'
+		dataType: double
+		formatString: 0.000
+		lineageTag: 3727aab6-6db5-5a2a-9e94-fd54af0e392b
+		summarizeBy: none
+		sourceColumn: skill_se
+
+	column 'Skill Rank Value'
+		dataType: int64
+		formatString: 0
+		lineageTag: fc49fb52-c553-52f5-a92e-5f3835b19b9e
+		summarizeBy: none
+		sourceColumn: skill_rank
+
+	column 'Is Ranked'
+		dataType: boolean
+		lineageTag: 0fcf9885-3994-5499-abde-8d7ced33e98a
+		summarizeBy: none
+		sourceColumn: is_ranked
+
+	column 'Skill Band'
+		dataType: string
+		lineageTag: 9a517610-169e-5be1-9943-29a9310bf0ad
+		summarizeBy: none
+		sourceColumn: skill_band
+
+	partition 'Driver Skill' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "driver_skill.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"driver_id", Int64.Type}, {"skill", type number}, {"races_modelled", Int64.Type}, {"skill_se", type number}, {"skill_rank", Int64.Type}, {"is_ranked", type logical}, {"skill_band", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

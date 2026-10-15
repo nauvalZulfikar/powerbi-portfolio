@@ -1,0 +1,849 @@
+table _Measures
+	lineageTag: f9c33346-542b-53b7-a2f2-118b073c6220
+
+	/// Grands Prix held in the current filter context.
+	measure Races = DISTINCTCOUNT ( Results[Race Id] )
+		formatString: #,0
+		displayFolder: Racing
+		lineageTag: 2138be61-d8af-5e3b-a433-f8fd406edd8d
+
+	/// Distinct seasons in the current filter context.
+	measure Seasons = DISTINCTCOUNT ( Race[Race Year] )
+		formatString: #,0
+		displayFolder: Racing
+		lineageTag: c48cf0b3-79ae-50fd-a125-1ff289d935d9
+
+	/// Race entries that took the start (grid slot or classified).
+	measure Starts = CALCULATE ( COUNTROWS ( Results ), Results[Status Group] <> "Did not start" )
+		formatString: #,0
+		displayFolder: Racing
+		lineageTag: 3965ee33-78ab-5c60-9d44-bf818d288386
+
+	/// Race wins.
+	measure Wins = CALCULATE ( COUNTROWS ( Results ), Results[Is Win] = TRUE () )
+		formatString: #,0
+		displayFolder: Racing
+		lineageTag: e8df5779-bcc9-54b8-8e0e-677b983ff622
+
+	/// Top-three finishes.
+	measure Podiums = CALCULATE ( COUNTROWS ( Results ), Results[Is Podium] = TRUE () )
+		formatString: #,0
+		displayFolder: Racing
+		lineageTag: 150464d8-3ffa-56d7-8770-86a7f38acfb3
+
+	/// Started from grid slot 1.
+	measure Poles = CALCULATE ( COUNTROWS ( Results ), Results[Is Pole] = TRUE () )
+		formatString: #,0
+		displayFolder: Racing
+		lineageTag: 331e95fb-e2ec-55da-9625-9daff4f6a3e8
+
+	/// Races in which the driver set the fastest lap.
+	measure 'Fastest Laps' = CALCULATE ( COUNTROWS ( Results ), Results[Is Fastest Lap] = TRUE () )
+		formatString: #,0
+		displayFolder: Racing
+		lineageTag: 2124732c-dc4e-51d4-80bd-7f319556c23b
+
+	/// Championship points as awarded at the time.
+	measure Points = SUM ( Results[Points Scored] )
+		formatString: #,0.0
+		displayFolder: Racing
+		lineageTag: f449dbbb-31f8-5b1f-b0e4-7ddb9d323642
+
+	/// Points re-scored on today's 25-18-15-12-10-8-6-4-2-1 system, comparable across eras.
+	measure 'Points (Modern Scale)' = SUM ( Results[Modern Points] )
+		formatString: #,0
+		displayFolder: Racing
+		lineageTag: 85209fea-2f38-55ec-882a-6faffaf167ed
+
+	/// Wins per start (UDF F1.Rate).
+	measure 'Win Rate' = F1.Rate ( [Wins], [Starts] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Racing
+		lineageTag: 3297e117-73ac-561c-a41a-e6927ba01c91
+
+	/// Podiums per start (UDF F1.Rate).
+	measure 'Podium Rate' = F1.Rate ( [Podiums], [Starts] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Racing
+		lineageTag: 3814e226-833c-50e3-b2a6-848b9006eb24
+
+	/// Share of pole positions turned into a win.
+	measure 'Pole Conversion' = DIVIDE ( CALCULATE ( COUNTROWS ( Results ), Results[Is Pole] = TRUE (), Results[Is Win] = TRUE () ), [Poles] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Racing
+		lineageTag: 908b2f17-52e3-5830-99ba-1a8d114178cc
+
+	/// Grid slot minus finishing position (classified finishers).
+	measure 'Avg Positions Gained' = AVERAGE ( Results[Positions Gained Value] )
+		formatString: +0.0;-0.0;0.0
+		displayFolder: Racing
+		lineageTag: 0731edc4-fb0e-5505-a7ad-bde90ac957bd
+
+	/// 1 = won, 0 = last classified. Comparable across field sizes.
+	measure 'Avg Finish Percentile' = AVERAGE ( Results[Finish Percentile Value] )
+		formatString: 0%
+		displayFolder: Racing
+		lineageTag: b262722a-0149-551f-a611-ef413fd41202
+
+	/// Distinct drivers with at least one race entry.
+	measure Drivers = DISTINCTCOUNT ( Results[Driver Id] )
+		formatString: #,0
+		displayFolder: Racing
+		lineageTag: c167c354-a86b-55f5-ae1c-ecc29e5822fb
+
+	/// Distinct constructors with at least one race entry.
+	measure Constructors = DISTINCTCOUNT ( Results[Constructor Id] )
+		formatString: #,0
+		displayFolder: Racing
+		lineageTag: 778a926c-9dc6-5f35-9d25-8dce73eac5ac
+
+	/// Distinct drivers who won at least one race.
+	measure 'Different Winners Count' = CALCULATE ( DISTINCTCOUNT ( Results[Driver Id] ), Results[Is Win] = TRUE () )
+		formatString: #,0
+		displayFolder: Racing
+		lineageTag: 002b47ef-cd02-57c1-bfa2-4f80514637dd
+
+	/// Distinct circuits that hosted a race in the current filter context.
+	measure 'Circuits Used' = CALCULATE ( DISTINCTCOUNT ( Race[Circuit Id] ), Results )
+		formatString: #,0
+		displayFolder: Racing
+		lineageTag: 92278b2b-765b-5f03-a439-957092139341
+
+	/// For map bubbles.
+	measure 'Map Latitude' = AVERAGE ( Circuit[Latitude] )
+		formatString: 0.0000
+		displayFolder: Racing
+		lineageTag: 182457f2-ed48-5e1d-b0d2-503e89a7f3d0
+
+	/// For map bubbles.
+	measure 'Map Longitude' = AVERAGE ( Circuit[Longitude] )
+		formatString: 0.0000
+		displayFolder: Racing
+		lineageTag: 8c2847b2-7c60-556f-b78e-8b9b2ded5dd0
+
+	/// Grands Prix held at the circuit (all time, ignores season filters).
+	measure 'Circuit Races Hosted' = SUM ( Circuit[Races Hosted] )
+		formatString: #,0
+		displayFolder: Racing
+		lineageTag: 6d551262-199f-500e-bd9b-08198d52ea79
+
+	/// Share of races at the circuit won from pole.
+	measure 'Circuit Pole Win Rate' = AVERAGE ( Circuit[Pole Win Rate] )
+		formatString: 0%
+		displayFolder: Racing
+		lineageTag: 3c65862f-a52a-5c6d-9f62-d6a9d5a6803c
+
+	/// Highest fastest-lap average speed (2004+ data).
+	measure 'Top Speed kph' = MAX ( Results[Fastest Lap Kph] )
+		formatString: #,0.0
+		displayFolder: Racing
+		lineageTag: a7551bd6-d5de-5b8e-99ec-728ff7b19c82
+
+	/// Share of starts that ended in retirement (UDF F1.Rate).
+	measure 'DNF Rate' = F1.Rate ( CALCULATE ( COUNTROWS ( Results ), Results[Is DNF] = TRUE () ), [Starts] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Reliability
+		lineageTag: 4c7d78a8-4444-5861-a0df-7ee1fe0e4390
+
+	/// Share of starts that ended in a mechanical retirement.
+	measure 'Mechanical DNF Rate' = DIVIDE ( CALCULATE ( COUNTROWS ( Results ), Results[Is Mechanical DNF] = TRUE () ), [Starts] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Reliability
+		lineageTag: e615b9d8-9d2f-5057-95a3-b844238d1144
+
+	/// Share of starts that ended in a crash or driver-caused retirement.
+	measure 'Crash DNF Rate' = DIVIDE ( CALCULATE ( COUNTROWS ( Results ), Results[Status Group] = "Crash / driver" ), [Starts] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Reliability
+		lineageTag: 9f3491c9-d73c-5256-bccc-4b55e99fb6c2
+
+	/// Share of starts that were classified at the finish.
+	measure 'Finish Rate' = DIVIDE ( CALCULATE ( COUNTROWS ( Results ), Results[Is Finished] = TRUE () ), [Starts] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Reliability
+		lineageTag: c42d7b10-5289-5661-b8a5-12ae7aad0425
+
+	/// Share of starts by outcome group (for 100% stacked charts).
+	measure 'Outcome Share' = DIVIDE ( [Starts], CALCULATE ( [Starts], ALL ( Results[Status Group] ) ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Reliability
+		lineageTag: 3f14909d-3826-5942-84e6-d873d8fadd00
+
+	/// World Drivers' Championships won by the drivers in context.
+	measure 'Driver Titles Won' = CALCULATE ( COUNTROWS ( Season ), TREATAS ( VALUES ( Driver[Driver Id] ), Season[Champion Driver Id] ), REMOVEFILTERS ( Race ) )
+		formatString: #,0
+		displayFolder: Championship
+		lineageTag: 462f7b3e-60d4-5b95-8338-d6ec0a91f1ad
+
+	/// Cumulative points in the standings after the round in context.
+	measure 'Championship Points' = MAX ( Standings[Standing Points] )
+		formatString: #,0.0
+		displayFolder: Championship
+		lineageTag: 7d6fa034-1b63-529e-9a9a-09db144a96cf
+
+	/// Championship points behind the standings leader (smallest gap in context).
+	measure 'Gap to Leader' = MIN ( Standings[Standing Gap] )
+		formatString: +#,0;-#,0;0
+		displayFolder: Championship
+		lineageTag: 9835b827-e2f8-532c-96a7-fcac8ccb28ce
+
+	/// Points after the last round of the season in context.
+	measure 'Final Standings Points' =
+			VAR _last = CALCULATE ( MAX ( Standings[Standings Round] ), REMOVEFILTERS ( Driver ) )
+			RETURN CALCULATE ( MAX ( Standings[Standing Points] ), Standings[Standings Round] = _last )
+		formatString: #,0.0
+		displayFolder: Championship
+		lineageTag: e42bc7a9-2860-5a88-b853-c271b6a576df
+
+	/// Points from sprint races (2021+), shaped in Power Query from the raw CSV.
+	measure 'Sprint Points Scored' = SUM ( 'Sprint Results'[Sprint Points] )
+		formatString: #,0.0
+		displayFolder: Championship
+		lineageTag: 66445153-b4cf-5e73-8d15-fbf8298f4aee
+
+	/// Grand Prix + sprint points: the appended 'Session Results' query. Equals the standings.
+	measure 'Points incl. Sprints' = SUM ( 'Session Results'[Session Points] )
+		formatString: #,0.0
+		displayFolder: Championship
+		lineageTag: 17dcb146-7a21-5d8f-8dde-a52fb6781cb6
+
+	/// Classified finishes re-scored with the points system picked in the 'Points Systems' slicer (default: today's 25-18-15…).
+	measure 'Points (Chosen System)' =
+			VAR _sys = SELECTEDVALUE ( 'Points Systems'[System], "2010–" )
+			RETURN SUMX ( FILTER ( ALL ( 'Points Systems' ), 'Points Systems'[System] = _sys ),
+			    VAR _p = 'Points Systems'[Position] RETURN 'Points Systems'[System Points] * CALCULATE ( COUNTROWS ( Results ), Results[Finish Position] = _p ) )
+		formatString: #,0
+		displayFolder: Championship
+		lineageTag: e8ec0dfd-be49-594e-be29-81160f821eb5
+
+	/// Constructor share of all modern-scale points in the season(s) in context.
+	measure 'Team Points Share' = DIVIDE ( SUM ( 'Team Season'[Team Modern Points] ), CALCULATE ( SUM ( 'Team Season'[Team Modern Points] ), REMOVEFILTERS ( Constructor ) ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Championship
+		lineageTag: 12ad11bf-342a-5cbe-94ea-416ca1beaccf
+
+	/// How dominant the best team was: its share of the season's points.
+	measure 'Avg Top Team Share' = AVERAGE ( Season[Top Team Points Share] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Championship
+		lineageTag: 6699c7c5-4114-505a-97a1-db7f0778f08a
+
+	/// Average of each season's champion win rate (wins per start of the drivers' champion).
+	measure 'Avg Champion Win Rate' = AVERAGE ( Season[Champion Win Rate] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Championship
+		lineageTag: 555e1a0a-6667-5a6a-bdcb-73d8d6dc2562
+
+	/// Champion's points lead over the runner-up, as a share of the champion's points.
+	measure 'Avg Title Margin %' = AVERAGE ( Season[Title Margin Pct] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Championship
+		lineageTag: 4c59f963-01e1-5364-9eff-876cedc987ab
+
+	/// Best qualifying lap vs the pole lap (1994+ data).
+	measure 'Avg Gap to Pole' = AVERAGE ( Qualifying[Gap To Pole Pct] )
+		formatString: 0.00%
+		displayFolder: Qualifying
+		lineageTag: 7ad1946a-d936-5a74-af28-8a66d598e7ff
+
+	/// Average starting grid slot.
+	measure 'Avg Grid' = AVERAGE ( Results[Grid Position] )
+		formatString: #,0.0
+		displayFolder: Qualifying
+		lineageTag: d27f238b-400c-57ce-9752-918a1e9f8945
+
+	/// Historic chance of winning from this starting slot.
+	measure 'Grid Win Probability' = DIVIDE ( SUM ( 'Grid Conversion'[Slot Wins] ), SUM ( 'Grid Conversion'[Slot Starts] ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Qualifying
+		lineageTag: 5a7e7281-8ed1-5d27-9d6a-bf4885bf62b1
+
+	/// Historical chance of a podium from the selected grid slot.
+	measure 'Grid Podium Probability' = DIVIDE ( SUM ( 'Grid Conversion'[Slot Podiums] ), SUM ( 'Grid Conversion'[Slot Starts] ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Qualifying
+		lineageTag: 9d0f8654-5a9f-59d6-a67d-5bc7213042b4
+
+	/// Pit stops recorded (pit-stop data, 2011 onward).
+	measure 'Pit Stops Made' = COUNTROWS ( 'Pit Stops' )
+		formatString: #,0
+		displayFolder: Pit Stops & Laps
+		lineageTag: 5cf7ef35-e87b-5eac-b508-15468bb87870
+
+	/// Pit-lane entry to exit, routine stops only (≤ 60 s). 2011+ data.
+	measure 'Median Pit Lane Time' = CALCULATE ( MEDIAN ( 'Pit Stops'[Pit Seconds] ), 'Pit Stops'[Is Routine Stop] = TRUE () )
+		formatString: 0.00" s"
+		displayFolder: Pit Stops & Laps
+		lineageTag: 5a7cdd71-153a-512b-84a0-09fcea601ebe
+
+	/// Quickest routine pit-lane time in seconds (excludes repairs and penalties).
+	measure 'Fastest Pit Lane Time' = CALCULATE ( MIN ( 'Pit Stops'[Pit Seconds] ), 'Pit Stops'[Is Routine Stop] = TRUE () )
+		formatString: 0.00" s"
+		displayFolder: Pit Stops & Laps
+		lineageTag: 948387c1-7a80-5796-87fa-3e11012a247f
+
+	/// Average stops per driver per race.
+	measure 'Stops per Race' = DIVIDE ( [Pit Stops Made], COUNTROWS ( SUMMARIZE ( 'Pit Stops', 'Pit Stops'[Race Id], 'Pit Stops'[Driver Id] ) ) )
+		formatString: 0.00
+		displayFolder: Pit Stops & Laps
+		lineageTag: 3e93bf59-0a7a-59b7-8d72-05981bc5e6e8
+
+	/// Position at the end of the lap (race-story chart, axis reversed).
+	measure 'Running Position' = MIN ( 'Lap Times'[Lap Position] )
+		formatString: 0
+		displayFolder: Pit Stops & Laps
+		lineageTag: 46445948-0b45-5288-b4c8-4cda6a585e36
+
+	/// Seconds; the dynamic format string shows it as m:ss.000 (90.013 → 1:30.013).
+	measure 'Avg Lap Time' = CALCULATE ( AVERAGE ( 'Lap Times'[Lap Seconds] ), 'Lap Times'[Is Pit Lap] = FALSE () )
+		displayFolder: Pit Stops & Laps
+		lineageTag: 6b8eef56-0b08-52c4-8d44-815a39fc4542
+		formatStringDefinition = VAR _s = SELECTEDMEASURE () VAR _m = INT ( _s / 60 ) RETURN IF ( ISBLANK ( _s ), "0.000", """" & _m & ":" & FORMAT ( _s - 60 * _m, "00.000" ) & """" )
+
+	/// Each driver's median racing lap per race (Power Query Group By), averaged; shown as m:ss.000.
+	measure 'Avg Median Race Pace' = AVERAGE ( 'Race Pace'[Median Lap Sec] )
+		displayFolder: Pit Stops & Laps
+		lineageTag: 1dac767f-171a-5876-b991-eb7fae5dea08
+		formatStringDefinition = VAR _s = SELECTEDMEASURE () VAR _m = INT ( _s / 60 ) RETURN IF ( ISBLANK ( _s ), "0.000", """" & _m & ":" & FORMAT ( _s - 60 * _m, "00.000" ) & """" )
+
+	/// Seconds; the dynamic format string shows it as m:ss.000.
+	measure 'Best Lap Time' = MIN ( 'Lap Times'[Lap Seconds] )
+		displayFolder: Pit Stops & Laps
+		lineageTag: 6b487799-35d5-5676-be45-01a87219e6df
+		formatStringDefinition = VAR _s = SELECTEDMEASURE () VAR _m = INT ( _s / 60 ) RETURN IF ( ISBLANK ( _s ), "0.000", """" & _m & ":" & FORMAT ( _s - 60 * _m, "00.000" ) & """" )
+
+	/// Laps completed in first place (lap-time data, 1996 onward).
+	measure 'Laps Led' = CALCULATE ( COUNTROWS ( 'Lap Times' ), 'Lap Times'[Lap Position] = 1 )
+		formatString: #,0
+		displayFolder: Pit Stops & Laps
+		lineageTag: 3dd9fdcd-a778-5eb0-8f05-1e2e1d2d6665
+
+	/// Car-adjusted skill: finish-percentile points above an average driver in the same car (0 = average).
+	measure 'Car-Adjusted Skill' = AVERAGE ( 'Driver Skill'[Skill Value] )
+		formatString: +0.000;-0.000;0.000
+		displayFolder: Drivers
+		lineageTag: 4e97d435-7fca-509a-b780-02855aa67b2d
+
+	/// Rank of the driver on car-adjusted skill (1 = best).
+	measure 'Skill Rank' = MIN ( 'Driver Skill'[Skill Rank Value] )
+		formatString: #0
+		displayFolder: Drivers
+		lineageTag: 57f946f4-3537-5e13-a929-6a492dc6e917
+
+	/// Share of races out-qualifying the team-mate.
+	measure 'Quali H2H Win %' = DIVIDE ( SUM ( 'Teammate H2H'[Quali Wins] ), SUM ( 'Teammate H2H'[Races Together] ) )
+		formatString: 0%
+		displayFolder: Drivers
+		lineageTag: 285ea917-4ca8-54df-9066-fd3ee5e1a509
+
+	/// Share of races finishing ahead of the team-mate (mechanical DNFs excluded).
+	measure 'Race H2H Win %' = DIVIDE ( SUM ( 'Teammate H2H'[Race Wins] ), SUM ( 'Teammate H2H'[Comparable Races] ) )
+		formatString: 0%
+		displayFolder: Drivers
+		lineageTag: dd39e104-9043-57e0-80f3-198fd124abf1
+
+	/// Average age of drivers at their first Grand Prix.
+	measure 'Avg Debut Age' = AVERAGE ( Driver[Debut Age] )
+		formatString: #,0.0
+		displayFolder: Drivers
+		lineageTag: 4a46a336-27ec-5db8-b049-d35b0c095645
+
+	/// Modern-scale points per Grand Prix entered: AVERAGEX over the races in context.
+	measure 'Avg Points per Race' = AVERAGEX ( VALUES ( Results[Race Id] ), [Points (Modern Scale)] )
+		formatString: #,0.0
+		displayFolder: Iterators
+		lineageTag: 5b3d3e1d-ee5d-5b66-97c4-dbd596e0c3ad
+
+	/// Wins at a circuit in the driver's own country (RELATED walks Results → Race → Circuit).
+	measure 'Home Wins' = COUNTROWS ( FILTER ( Results, Results[Is Win] && RELATED ( Driver[Driver Country] ) = RELATED ( Circuit[Circuit Country] ) ) )
+		formatString: #,0
+		displayFolder: Iterators
+		lineageTag: 612fd70c-1f92-59d1-b222-e82d625c6c39
+
+	/// Wins at circuits in any country of the drivers in context: the Circuit filter reaches Results through its expanded table (Results → Race → Circuit).
+	measure 'Wins at Home Circuits' = CALCULATE ( [Wins], TREATAS ( VALUES ( Driver[Driver Country] ), Circuit[Circuit Country] ) )
+		formatString: #,0
+		displayFolder: Iterators
+		lineageTag: 0c52db49-20ca-5151-b5bd-243ee4db0c99
+
+	/// Best single season on the modern scale: MAXX turns each season row into a filter (context transition).
+	measure 'Best Season Points' = MAXX ( VALUES ( Season[Year] ), [Points (Modern Scale)] )
+		formatString: #,0
+		displayFolder: Iterators
+		lineageTag: a8fb0c18-a451-53a5-875b-f7886b716fc0
+
+	/// Seasons in which the drivers in context won at least once.
+	measure 'Seasons With a Win' = COUNTROWS ( FILTER ( VALUES ( Season[Year] ), [Wins] > 0 ) )
+		formatString: #,0
+		displayFolder: Iterators
+		lineageTag: 2759f788-d8fe-5da0-b0ca-eb9de898a76d
+
+	/// Constructor with the most modern-scale points in the current selection (TOPN over ADDCOLUMNS).
+	measure 'Top Team of Selection' =
+			VAR _t = TOPN ( 1, ADDCOLUMNS ( VALUES ( Constructor[Constructor Name] ), "@p", [Points (Modern Scale)] ), [@p], DESC )
+			RETURN MAXX ( _t, Constructor[Constructor Name] )
+		displayFolder: Iterators
+		lineageTag: c7b63b43-59ab-5c97-99e0-bc99cdda2b43
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Wins from grid slot 1 or 2. KEEPFILTERS: a grid filter already on the visual is intersected, not replaced.
+	measure 'Front Row Wins' = CALCULATE ( [Wins], KEEPFILTERS ( Results[Grid Position] IN { 1, 2 } ) )
+		formatString: #,0
+		displayFolder: Filter Context
+		lineageTag: 3eecb814-dda5-513f-a6de-5f65321cccdc
+
+	/// Wins from grid slot 11 or lower (FILTER over the Results rows in context).
+	measure 'Wins From Outside Top 10' = CALCULATE ( [Wins], FILTER ( Results, Results[Grid Position] > 10 ) )
+		formatString: #,0
+		displayFolder: Filter Context
+		lineageTag: 779774ff-1d73-5dd7-a5f5-8af12204c7a6
+
+	/// Share of all wins in the season(s) in context: ALLEXCEPT keeps only the Season filters.
+	measure 'Share of Season Wins' = F1.Share ( [Wins], CALCULATE ( [Wins], ALLEXCEPT ( Results, Season ) ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Filter Context
+		lineageTag: bf4f38ca-84bb-5f65-bcd2-5a38d1e1ea2f
+
+	/// Share of the wins of the drivers visible in the visual (ALLSELECTED Driver).
+	measure '% of Visible Wins' = F1.Share ( [Wins], CALCULATE ( [Wins], ALLSELECTED ( Driver ) ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Filter Context
+		lineageTag: b72aac03-1d3a-5fc0-a59f-68287446745b
+
+	/// Podiums from pole; the pole filter REPLACES any filter on Results[Is Pole].
+	measure 'Podiums From Pole' = CALCULATE ( [Podiums], Results[Is Pole] = TRUE () )
+		formatString: #,0
+		displayFolder: Filter Context
+		lineageTag: 9e06df0d-4f9f-5a8a-9961-2127a9182595
+
+	/// Podiums from pole; KEEPFILTERS intersects with a filter already on Results[Is Pole].
+	measure 'Podiums From Pole (KF)' = CALCULATE ( [Podiums], KEEPFILTERS ( Results[Is Pole] = TRUE () ) )
+		formatString: #,0
+		displayFolder: Filter Context
+		lineageTag: 39650802-ee4b-5a0e-a96b-a840d5651d4f
+
+	/// Team-mates' points minus the driver's, read from the team-mate side: USERELATIONSHIP switches on the inactive Teammate Id → Driver relationship.
+	measure 'Teammate Points Delta' = CALCULATE ( SUM ( 'Teammate H2H'[Points Delta] ), USERELATIONSHIP ( 'Teammate H2H'[Teammate Id], Driver[Driver Id] ) )
+		formatString: +#,0;-#,0;0
+		displayFolder: Filter Context
+		lineageTag: 2a8c4ce7-518f-54fc-bd3e-40f3cac03134
+
+	/// Season-to-date modern-scale points (DATESYTD on the marked date table).
+	measure 'Points STD' = CALCULATE ( [Points (Modern Scale)], DATESYTD ( 'Calendar'[Date] ) )
+		formatString: #,0
+		displayFolder: Time Intelligence
+		lineageTag: 1369254d-d54c-5816-aa18-2429d31ce2d8
+
+	/// Quarter-to-date modern-scale points.
+	measure 'Points QTD' = CALCULATE ( [Points (Modern Scale)], DATESQTD ( 'Calendar'[Date] ) )
+		formatString: #,0
+		displayFolder: Time Intelligence
+		lineageTag: f5e4bfa4-b0ff-5c53-924d-72f2dab350a0
+
+	/// Month-to-date modern-scale points.
+	measure 'Points MTD' = CALCULATE ( [Points (Modern Scale)], DATESMTD ( 'Calendar'[Date] ) )
+		formatString: #,0
+		displayFolder: Time Intelligence
+		lineageTag: 02e96a06-32cb-589e-be74-cb1c40e63233
+
+	/// Modern-scale points in the same period one season earlier (Season filters cleared, so a season slicer can shift).
+	measure 'Points PY' = CALCULATE ( [Points (Modern Scale)], SAMEPERIODLASTYEAR ( 'Calendar'[Date] ), REMOVEFILTERS ( Season ) )
+		formatString: #,0
+		displayFolder: Time Intelligence
+		lineageTag: d4f2ca30-9a48-5bab-9739-da940aa67bf6
+
+	/// Modern-scale points vs the previous season.
+	measure 'Points YoY %' =
+			VAR _py = [Points PY]
+			RETURN DIVIDE ( [Points (Modern Scale)] - _py, _py )
+		formatString: +0%;-0%;0%
+		displayFolder: Time Intelligence
+		lineageTag: cd3fd2ce-a8ea-5c53-ab92-8ab12a7dcb52
+
+	/// Win rate one season back (DATEADD -1 YEAR).
+	measure 'Win Rate Prev Season' = CALCULATE ( [Win Rate], DATEADD ( 'Calendar'[Date], -1, YEAR ), REMOVEFILTERS ( Season ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Time Intelligence
+		lineageTag: 66580ec1-eecc-551f-a4e2-f8e30077182c
+
+	/// Same as Win Rate Prev Season with PREVIOUSYEAR: always the whole previous year.
+	measure 'Win Rate Prev Season (PREVIOUSYEAR)' = CALCULATE ( [Win Rate], PREVIOUSYEAR ( 'Calendar'[Date] ), REMOVEFILTERS ( Season ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Time Intelligence
+		lineageTag: 35fc956c-6b4d-5531-b0c9-e084ffa00176
+
+	/// Wins one season back (UDF F1.PrevSeason, EXPR parameter).
+	measure 'Wins Prev Season' = F1.PrevSeason ( [Wins] )
+		formatString: #,0
+		displayFolder: Time Intelligence
+		lineageTag: 9bdbbfb2-75f4-516e-98f5-77ceaa8571c8
+
+	/// Average of the yearly DNF rates over the five seasons ending in context (DATESINPERIOD -5 YEAR).
+	measure 'DNF Rate 5Y Avg' =
+			AVERAGEX (
+			    CALCULATETABLE ( VALUES ( 'Calendar'[Year] ), DATESINPERIOD ( 'Calendar'[Date], MAX ( 'Calendar'[Date] ), -5, YEAR ), REMOVEFILTERS ( Season ) ),
+			    CALCULATE ( [DNF Rate], REMOVEFILTERS ( Season ) ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Time Intelligence
+		lineageTag: 197382e0-5831-5b5b-959f-b7f96546e748
+
+	/// Semi-additive: the championship points on the last date with standings (LASTNONBLANKVALUE).
+	measure 'Points at Season End' = LASTNONBLANKVALUE ( 'Calendar'[Date], [Championship Points] )
+		formatString: #,0.0
+		displayFolder: Time Intelligence
+		lineageTag: 55599e3c-b175-5f0c-bc49-79e750c1d693
+
+	/// Season-to-date on the calendar 'F1 Calendar' (calendar-based time intelligence).
+	measure 'Points STD (Cal)' = TOTALYTD ( [Points (Modern Scale)], 'F1 Calendar' )
+		formatString: #,0
+		displayFolder: Time Intelligence
+		lineageTag: 20594f1e-94f9-56e1-bf24-145e631ea7e2
+
+	/// Season-to-date wins (UDF F1.SeasonToDate).
+	measure 'Wins STD' = F1.SeasonToDate ( [Wins], 'F1 Calendar' )
+		formatString: #,0
+		displayFolder: Time Intelligence
+		lineageTag: 54458d53-9b65-5f1f-87a1-9bc00c1de9dc
+
+	/// Season-to-date podiums (UDF F1.SeasonToDate).
+	measure 'Podiums STD' = F1.SeasonToDate ( [Podiums], 'F1 Calendar' )
+		formatString: #,0
+		displayFolder: Time Intelligence
+		lineageTag: 23c59a26-8e98-573a-a001-f53d0487e9e5
+
+	/// Championship points after the previous round (OFFSET -1 over the selected rounds).
+	measure 'Points Prev Round' = CALCULATE ( [Championship Points], OFFSET ( -1, ALLSELECTED ( Race[Round] ), ORDERBY ( Race[Round] ) ) )
+		formatString: #,0.0
+		displayFolder: Window Functions
+		lineageTag: 8c9d1561-dc71-5c84-8fa9-fad0bf834ae3
+
+	/// Modern-scale points from round 1 to the current round (WINDOW 1 ABS … 0 REL).
+	measure 'Running Points (Window)' = SUMX ( WINDOW ( 1, ABS, 0, REL, ALLSELECTED ( Race[Round] ), ORDERBY ( Race[Round] ) ), [Points (Modern Scale)] )
+		formatString: #,0
+		displayFolder: Window Functions
+		lineageTag: 43e2a6b4-f752-5d74-aa54-4b8765e7767b
+
+	/// Average modern-scale points over the current and two previous rounds.
+	measure 'Points 3-Race Avg' = AVERAGEX ( WINDOW ( -2, REL, 0, REL, ALLSELECTED ( Race[Round] ), ORDERBY ( Race[Round] ) ), [Points (Modern Scale)] )
+		formatString: #,0.0
+		displayFolder: Window Functions
+		lineageTag: 0f18f327-e395-5d0b-b4c3-8a6b796e1c07
+
+	/// Dense rank of the driver by wins among the drivers visible in the visual.
+	measure 'Season Rank by Wins' = IF ( [Wins] > 0, RANK ( DENSE, ALLSELECTED ( Driver[Driver Name] ), ORDERBY ( [Wins], DESC ) ) )
+		formatString: #0
+		displayFolder: Window Functions
+		lineageTag: 360a8c13-5040-5526-9c46-3294af106e37
+
+	/// Driver with the most wins in the decade(s) in context (INDEX 1 over all drivers).
+	measure 'Top Driver of Decade' = MAXX ( INDEX ( 1, ALL ( Driver[Driver Name] ), ORDERBY ( [Wins], DESC, Driver[Driver Name], ASC ) ), Driver[Driver Name] )
+		displayFolder: Window Functions
+		lineageTag: 5ef85525-2d3d-5518-9361-655f63da25b5
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Selected seasons, for page subtitles.
+	measure 'Season Range Label' =
+			VAR _a = MIN ( Race[Race Year] ) VAR _b = MAX ( Race[Race Year] )
+			RETURN IF ( _a = _b, FORMAT ( _a, "0" ), FORMAT ( _a, "0" ) & "–" & FORMAT ( _b, "0" ) )
+		displayFolder: Report UI
+		lineageTag: 8e8be2f2-d983-51df-9095-f560ef52a55f
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Drivers' and constructors' champion of the one selected season (text).
+	measure 'Champions (driver · team)' = IF ( HASONEVALUE ( Season[Year] ), SELECTEDVALUE ( Season[Champion] ) & " · " & COALESCE ( SELECTEDVALUE ( Season[Constructor Champion] ), "no constructors' title" ), "Select one season" )
+		displayFolder: Report UI
+		lineageTag: c8e525d5-acab-5f0c-a2d3-fcebcc7f1339
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Winner and pole sitter of the one selected race (text).
+	measure 'Race Winner Label' = IF ( HASONEVALUE ( Race[Race Label] ), "Winner: " & SELECTEDVALUE ( Race[Winner] ) & "  ·  Pole: " & SELECTEDVALUE ( Race[Pole Sitter] ), "Select one race" )
+		displayFolder: Report UI
+		lineageTag: 304dd2cc-6016-5d3d-9ea6-385544c04b86
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// The value picked on the 'Win Points' what-if slider (25 = today's system).
+	measure 'Win Points Value' = SELECTEDVALUE ( 'Win Points'[Win Points], 25 )
+		formatString: #,0
+		displayFolder: What-if
+		lineageTag: d7f2a031-26a8-51b4-b3bb-cb8ed72e3203
+
+	/// Modern-scale points with a win worth the slider value instead of 25. Not the same as 'Points (Chosen System)', which re-scores every finishing position with a historical system.
+	measure 'What-if Points' = [Points (Modern Scale)] + ( [Win Points Value] - 25 ) * [Wins]
+		formatString: #,0
+		displayFolder: What-if
+		lineageTag: e404f41e-d2c6-511e-ba2f-456a82840483
+
+	/// Driver's position in the official standings after the round in context.
+	measure 'Championship Position' = MIN ( Standings[Standing Position] )
+		formatString: #0
+		displayFolder: What-if
+		lineageTag: dea173c1-1760-5153-bb59-095458cd7bfd
+
+	/// Fastest race lap on record at the circuit (2004+ timing).
+	measure 'Circuit Lap Record' = SELECTEDVALUE ( Circuit[Lap Record], "—" )
+		displayFolder: Report UI
+		lineageTag: cd276bbb-ad4a-512e-a1ed-8bc902bbf827
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Driver who set the circuit's race lap record.
+	measure 'Circuit Lap Record Holder' = SELECTEDVALUE ( Circuit[Lap Record Holder], "—" )
+		displayFolder: Report UI
+		lineageTag: 5a1f9955-c49b-584d-b69a-f480990d2084
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Dense rank of the driver by wins among all drivers (RANKX), in the seasons in context.
+	measure 'Driver Win Rank' = IF ( [Wins] > 0, RANKX ( ALL ( Driver[Driver Name] ), [Wins], , DESC, DENSE ) )
+		formatString: #0
+		displayFolder: Market
+		lineageTag: 3c2d8351-51bc-5403-a03d-8269528d92a0
+
+	/// Pareto: share of all wins held by this driver and every driver ranked at or above (RANKX + SUMX, all drivers, seasons in context).
+	measure 'Cumulative Win Share' =
+			VAR _r = [Driver Win Rank]
+			VAR _t = FILTER ( ADDCOLUMNS ( ALL ( Driver[Driver Name] ), "@w", [Wins] ), [@w] > 0 )
+			VAR _ranked = ADDCOLUMNS ( _t, "@r", RANKX ( _t, [@w], , DESC, DENSE ) )
+			RETURN IF ( NOT ISBLANK ( _r ), DIVIDE ( SUMX ( FILTER ( _ranked, [@r] <= _r ), [@w] ), SUMX ( _t, [@w] ) ) )
+		formatString: 0%
+		displayFolder: Market
+		lineageTag: 8c7f2c8f-ab60-51b6-9d48-bd0caa4a9508
+
+	/// How many drivers, best first, it takes to reach 80% of the wins in context (drivers tied on wins count together).
+	measure 'Drivers for 80% of Wins' =
+			VAR _t = FILTER ( ADDCOLUMNS ( VALUES ( Driver[Driver Name] ), "@w", [Wins] ), [@w] > 0 )
+			VAR _tot = SUMX ( _t, [@w] )
+			VAR _c = ADDCOLUMNS ( _t, "@above", VAR _x = [@w] RETURN SUMX ( FILTER ( _t, [@w] > _x ), [@w] ) )
+			RETURN COUNTROWS ( FILTER ( _c, [@above] < 0.8 * _tot ) )
+		formatString: #,0
+		displayFolder: Market
+		lineageTag: 6b313cd1-b2d4-5f2e-b2d9-9c8969515db3
+
+	/// 'Drivers for 80% of Wins' as a share of every driver who raced in context.
+	measure 'Share of Drivers for 80% of Wins' = DIVIDE ( [Drivers for 80% of Wins], [Drivers] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Market
+		lineageTag: 674f5288-8816-5aca-955b-d1ed4764b0f5
+
+	/// Constructor's modern-scale points plus every team above it, as a share of all points in the seasons in context.
+	measure 'Cumulative Points Share' =
+			VAR _p = [Points (Modern Scale)]
+			VAR _t = FILTER ( ADDCOLUMNS ( ALL ( Constructor[Constructor Name] ), "@p", [Points (Modern Scale)] ), [@p] > 0 )
+			RETURN IF ( _p > 0, DIVIDE ( SUMX ( FILTER ( _t, [@p] >= _p ), [@p] ), SUMX ( _t, [@p] ) ) )
+		formatString: 0%
+		displayFolder: Market
+		lineageTag: 35946b4e-158e-5d49-85bb-fe8882865b7e
+
+	/// Dynamic ABC on modern-scale points, follows the era slicer: A = the teams that make up the first 70% of points, B = the next 20%, C = the last 10% (class set by where the team's slice starts).
+	measure 'ABC Class' =
+			VAR _cum = [Cumulative Points Share]
+			VAR _before = _cum - DIVIDE ( [Points (Modern Scale)], CALCULATE ( [Points (Modern Scale)], REMOVEFILTERS ( Constructor ) ) )
+			RETURN IF ( NOT ISBLANK ( _cum ), SWITCH ( TRUE (), _before < 0.7, "A", _before < 0.9, "B", "C" ) )
+		displayFolder: Market
+		lineageTag: eceda0db-8e73-56a1-afa3-d33a7b536ece
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Drivers who raced in context whose win rate in context falls in the selected 'Win Bands' row (disconnected table).
+	measure 'Drivers in Band' =
+			VAR _lo = MIN ( 'Win Bands'[Min Win Rate] )
+			VAR _hi = MAX ( 'Win Bands'[Max Win Rate] )
+			VAR _t = FILTER ( ADDCOLUMNS ( VALUES ( Driver[Driver Name] ), "@s", [Starts], "@r", COALESCE ( [Win Rate], 0 ) ), [@s] > 0 )
+			RETURN COUNTROWS ( FILTER ( _t, ( [@r] >= _lo && [@r] < _hi ) || ( _lo = 0 && [@r] = 0 ) ) ) + 0
+		formatString: #,0
+		displayFolder: Market
+		lineageTag: c9f7d75e-db11-5153-94a7-304989ca0bb3
+
+	/// The seasons the rookie / returning / churn cards count: the selected era or season, or 2023 when nothing narrows the seasons (over all 75 seasons every driver would be a rookie; 2023 is the last season whose leavers are known).
+	measure 'Period Counted' =
+			VAR _full = MIN ( Season[Year] ) = CALCULATE ( MIN ( Season[Year] ), REMOVEFILTERS ( Season ) )
+			    && MAX ( Season[Year] ) = CALCULATE ( MAX ( Season[Year] ), REMOVEFILTERS ( Season ) )
+			VAR _ref = CALCULATE ( MAX ( Season[Year] ), REMOVEFILTERS ( Season ) ) - 1
+			VAR _a = MIN ( Season[Year] ) VAR _b = MAX ( Season[Year] )
+			RETURN IF ( _full, FORMAT ( _ref, "0" ) & " (default)", IF ( _a = _b, FORMAT ( _a, "0" ), FORMAT ( _a, "0" ) & "–" & FORMAT ( _b, "0" ) ) )
+		displayFolder: Market
+		lineageTag: 5383ab70-760a-5bc9-a651-70a790d62c03
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Drivers who raced in the period counted (see 'Period Counted').
+	measure 'Drivers in Period' =
+			VAR _full = MIN ( Season[Year] ) = CALCULATE ( MIN ( Season[Year] ), REMOVEFILTERS ( Season ) )
+			    && MAX ( Season[Year] ) = CALCULATE ( MAX ( Season[Year] ), REMOVEFILTERS ( Season ) )
+			VAR _ref = CALCULATE ( MAX ( Season[Year] ), REMOVEFILTERS ( Season ) ) - 1
+			RETURN IF ( _full,
+			    CALCULATE ( [Drivers] + 0, REMOVEFILTERS ( Season ), Season[Year] = _ref ),
+			    [Drivers] + 0 )
+		formatString: #,0
+		displayFolder: Market
+		lineageTag: 7b09e8a7-38a3-5a88-b9e6-0a00d14f19eb
+
+	/// Drivers in the period counted whose first season falls inside it.
+	measure Rookies =
+			VAR _full = MIN ( Season[Year] ) = CALCULATE ( MIN ( Season[Year] ), REMOVEFILTERS ( Season ) )
+			    && MAX ( Season[Year] ) = CALCULATE ( MAX ( Season[Year] ), REMOVEFILTERS ( Season ) )
+			VAR _ref = CALCULATE ( MAX ( Season[Year] ), REMOVEFILTERS ( Season ) ) - 1
+			RETURN IF ( _full,
+			    CALCULATE ( VAR _s = MIN ( Season[Year] ) RETURN COUNTROWS ( FILTER ( SUMMARIZE ( Results, Driver[Driver Id], Driver[Driver First Season] ), Driver[Driver First Season] >= _s ) ) + 0, REMOVEFILTERS ( Season ), Season[Year] = _ref ),
+			    VAR _s = MIN ( Season[Year] ) RETURN COUNTROWS ( FILTER ( SUMMARIZE ( Results, Driver[Driver Id], Driver[Driver First Season] ), Driver[Driver First Season] >= _s ) ) + 0 )
+		formatString: #,0
+		displayFolder: Market
+		lineageTag: 930b936d-9f0f-5178-97cd-8636df47efa0
+
+	/// Drivers in the period counted who had raced before it started.
+	measure 'Returning Drivers' = [Drivers in Period] - [Rookies]
+		formatString: #,0
+		displayFolder: Market
+		lineageTag: 9acbd4e3-e231-5760-b12b-e5a4c36a927b
+
+	/// Rookies as a share of all drivers in the selected period.
+	measure 'Rookie Share' = DIVIDE ( [Rookies], [Drivers in Period] )
+		formatString: 0%
+		displayFolder: Market
+		lineageTag: da3df357-4770-5181-965a-4acf26ce99b3
+
+	/// Drivers in the period counted whose last season falls inside it (the last data season is excluded: its leavers are not known yet).
+	measure 'Drivers Leaving Grid' =
+			VAR _full = MIN ( Season[Year] ) = CALCULATE ( MIN ( Season[Year] ), REMOVEFILTERS ( Season ) )
+			    && MAX ( Season[Year] ) = CALCULATE ( MAX ( Season[Year] ), REMOVEFILTERS ( Season ) )
+			VAR _ref = CALCULATE ( MAX ( Season[Year] ), REMOVEFILTERS ( Season ) ) - 1
+			RETURN IF ( _full,
+			    CALCULATE ( VAR _b = MAX ( Season[Year] ) VAR _last = CALCULATE ( MAX ( Season[Year] ), REMOVEFILTERS ( Season ) ) RETURN IF ( MIN ( Season[Year] ) < _last, COUNTROWS ( FILTER ( SUMMARIZE ( Results, Driver[Driver Id], Driver[Driver Last Season] ), Driver[Driver Last Season] <= _b && Driver[Driver Last Season] < _last ) ) + 0 ), REMOVEFILTERS ( Season ), Season[Year] = _ref ),
+			    VAR _b = MAX ( Season[Year] ) VAR _last = CALCULATE ( MAX ( Season[Year] ), REMOVEFILTERS ( Season ) ) RETURN IF ( MIN ( Season[Year] ) < _last, COUNTROWS ( FILTER ( SUMMARIZE ( Results, Driver[Driver Id], Driver[Driver Last Season] ), Driver[Driver Last Season] <= _b && Driver[Driver Last Season] < _last ) ) + 0 ) )
+		formatString: #,0
+		displayFolder: Market
+		lineageTag: e333f5e7-d231-54b6-89ba-01c623f60474
+
+	/// Drivers leaving the grid ÷ drivers in the period counted.
+	measure 'Churn Rate' = DIVIDE ( [Drivers Leaving Grid], [Drivers in Period] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Market
+		lineageTag: a30b3dc7-9c5c-5eff-9be6-9d8bde379df7
+
+	/// Cohort retention: of the drivers in the row's debut cohort, the share who raced N seasons after their debut season (cohorts too recent to observe season N are left out). Ignores the era slicer.
+	measure '% Still on Grid' =
+			VAR _n = SELECTEDVALUE ( 'Seasons Since Debut'[Seasons Since Debut] )
+			VAR _last = CALCULATE ( MAX ( Season[Year] ), REMOVEFILTERS ( Season ) )
+			VAR _base = FILTER ( SUMMARIZE ( Driver, Driver[Driver Id], Driver[Driver First Season] ), Driver[Driver First Season] + _n <= _last )
+			VAR _kept = FILTER ( _base, VAR _y = Driver[Driver First Season] + _n RETURN CALCULATE ( NOT ISEMPTY ( Results ), REMOVEFILTERS ( Season ), Results[Result Year] = _y ) )
+			RETURN IF ( NOT ISBLANK ( _n ), DIVIDE ( COUNTROWS ( _kept ), COUNTROWS ( _base ) ) )
+		formatString: 0%
+		displayFolder: Market
+		lineageTag: e43777c9-93c1-53d7-b78b-fd04f2814d06
+
+	/// Team-seasons with a known next season (row band → column band).
+	measure 'Team Moves' = COUNTROWS ( FILTER ( 'Team Season', NOT ISBLANK ( 'Team Season'[Next Band] ) ) )
+		formatString: #,0
+		displayFolder: Market
+		lineageTag: df7b2cd1-08fa-5dc6-8316-68f09f6a9522
+
+	/// Share of the row band's team-seasons that landed in the column band the next season.
+	measure 'Transition %' = DIVIDE ( [Team Moves], CALCULATE ( [Team Moves], REMOVEFILTERS ( 'Team Season'[Next Band], 'Team Season'[Next Band Order] ) ) )
+		formatString: 0%
+		displayFolder: Market
+		lineageTag: 8cf3c027-49e7-55e0-a09a-1051bb71b0aa
+
+	/// Race entries reaching each 'Funnel Stage': entered → started → finished → scored points → podium → win; each stage nested in the one before.
+	measure 'Funnel Count' =
+			SWITCH ( SELECTEDVALUE ( 'Funnel Stage'[Stage Order] ),
+			    1, COUNTROWS ( Results ),
+			    2, [Starts],
+			    3, CALCULATE ( COUNTROWS ( Results ), Results[Is Finished] = TRUE () ),
+			    4, CALCULATE ( COUNTROWS ( Results ), Results[Is Finished] = TRUE (), Results[Is Points Finish] = TRUE () ),
+			    5, CALCULATE ( COUNTROWS ( Results ), Results[Is Finished] = TRUE (), Results[Is Points Finish] = TRUE (), Results[Is Podium] = TRUE () ),
+			    6, CALCULATE ( COUNTROWS ( Results ), Results[Is Finished] = TRUE (), Results[Is Points Finish] = TRUE (), Results[Is Podium] = TRUE (), Results[Is Win] = TRUE () ) )
+		formatString: #,0
+		displayFolder: Diagnosis
+		lineageTag: 0467409f-09e9-5f35-85d1-92297dcc0c64
+
+	/// Funnel stage as a share of all entries.
+	measure '% of Entries' = DIVIDE ( [Funnel Count], CALCULATE ( [Funnel Count], REMOVEFILTERS ( 'Funnel Stage' ), 'Funnel Stage'[Stage Order] = 1 ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Diagnosis
+		lineageTag: 0a8aa9af-30ac-5d86-9f21-c15a2f2eb7b3
+
+	/// Modern-scale points minus the same filter one season earlier ('Points PY').
+	measure 'Points Change vs PY' = [Points (Modern Scale)] - [Points PY]
+		formatString: +#,0;-#,0;0
+		displayFolder: Diagnosis
+		lineageTag: 24fbcaa0-598e-5d50-84e6-7e9257d0625c
+
+	/// DNF rate minus last season's, in percentage points (UDF F1.PrevSeason).
+	measure 'DNF Rate Change vs PY' = [DNF Rate] - F1.PrevSeason ( [DNF Rate] )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Diagnosis
+		lineageTag: 53e3c644-350c-5ebd-b49b-5fb11888a17c
+
+	/// Average grid slot minus last season's: + = starting further back.
+	measure 'Avg Grid Change vs PY' = [Avg Grid] - F1.PrevSeason ( [Avg Grid] )
+		formatString: +0.0;-0.0;0.0
+		displayFolder: Diagnosis
+		lineageTag: f9f66341-8f50-5fbd-88b9-8c820e21d66a
+
+	/// Least-squares line through the per-season median pit-lane time (LINESTX over the seasons in the visual).
+	measure 'Pit Lane Time Trend' =
+			VAR _t = FILTER ( ADDCOLUMNS ( ALLSELECTED ( Season[Year] ), "@v", [Median Pit Lane Time] ), NOT ISBLANK ( [@v] ) )
+			VAR _fit = LINESTX ( _t, [@v], Season[Year] )
+			RETURN IF ( NOT ISBLANK ( [Median Pit Lane Time] ), MAXX ( _fit, [Intercept] ) + MAXX ( _fit, [Slope1] ) * MAX ( Season[Year] ) )
+		formatString: 0.00" s"
+		displayFolder: Diagnosis
+		lineageTag: 994b7afa-bbec-5c08-803b-a5297e06e1dd
+
+	/// Seconds per season of the LINESTX trend.
+	measure 'Pit Lane Time Slope' =
+			VAR _t = FILTER ( ADDCOLUMNS ( ALLSELECTED ( Season[Year] ), "@v", [Median Pit Lane Time] ), NOT ISBLANK ( [@v] ) )
+			RETURN MAXX ( LINESTX ( _t, [@v], Season[Year] ), [Slope1] )
+		formatString: +0.000" s";-0.000" s"
+		displayFolder: Diagnosis
+		lineageTag: 2d61f6db-f46e-5dcc-bce0-b3fc779176c2
+
+	/// Season leader when every finish is re-scored with the points system picked in 'Points Systems'; 'changed' when it is not the official champion.
+	measure 'Re-scored Champion' =
+			IF ( HASONEVALUE ( Season[Year] ),
+			    VAR _t = ADDCOLUMNS ( SUMMARIZE ( Results, Driver[Driver Name], Driver[Surname] ), "@p", [Points (Chosen System)] )
+			    VAR _top = TOPN ( 1, _t, [@p], DESC )
+			    RETURN CONCATENATEX ( _top, Driver[Surname], " / " ) & IF ( COUNTROWS ( FILTER ( _top, Driver[Driver Name] = SELECTEDVALUE ( Season[Champion] ) ) ) > 0, " · unchanged", " · changed" ),
+			    "Select one season" )
+		displayFolder: Diagnosis
+		lineageTag: 189882e9-232c-5d6f-b83b-9e72a88d0c56
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Season leader on 'What-if Points' (modern scale, a win worth the slider value); 'changed' when it is not the official champion.
+	measure 'What-if Champion' =
+			IF ( HASONEVALUE ( Season[Year] ),
+			    VAR _t = ADDCOLUMNS ( SUMMARIZE ( Results, Driver[Driver Name], Driver[Surname] ), "@p", [What-if Points] )
+			    VAR _top = TOPN ( 1, _t, [@p], DESC )
+			    RETURN CONCATENATEX ( _top, Driver[Surname], " / " ) & IF ( COUNTROWS ( FILTER ( _top, Driver[Driver Name] = SELECTEDVALUE ( Season[Champion] ) ) ) > 0, " · unchanged", " · changed" ),
+			    "Select one season" )
+		displayFolder: Diagnosis
+		lineageTag: 82e529ea-ad10-5828-aff0-f534790c9adc
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Diverging colour for car-adjusted skill.
+	measure 'Skill Color' =
+			VAR _s = [Car-Adjusted Skill]
+			RETURN SWITCH ( TRUE (), ISBLANK ( _s ), "#383835", _s >= 0.08, "#3987E5", _s >= 0, "#86B6EF", _s > -0.08, "#F19A99", "#E66767" )
+		displayFolder: Report UI
+		lineageTag: 89b18b90-58c1-553b-ab51-26838b8b20f3
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	column Value
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: cef922bf-b16f-5a2f-b8bb-349878cf5acd
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition _Measures = calculated
+		mode: import
+		source = {1}

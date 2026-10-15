@@ -1,0 +1,12 @@
+[
+  {
+    "ID": "F1_RATE_SAFE_DIVISION",
+    "Name": "[F1] Rate/share measures must divide with DIVIDE or the F1.Rate UDF",
+    "Category": "DAX Expressions",
+    "Description": "Seasons, drivers and circuits with zero starts are common once a slicer narrows the period (2011+ pit data, one-race drivers). A rate built with '/' errors or shows Infinity there; DIVIDE and the F1.Rate / F1.Share UDFs return blank. Exempt by name: averages of a stored rate (Avg ...), counts (Drivers for 80% of Wins), running/period-over-period helpers (Cumulative, Change vs PY, 5Y Avg, Prev Season, YoY).",
+    "Severity": 3,
+    "Scope": "Measure",
+    "Expression": "RegEx.IsMatch(Name, \"(?i)(rate|share|conversion|probability|%)\") and not RegEx.IsMatch(Name, \"(?i)^avg |^drivers for|cumulative|change vs|5y avg|prev season|yoy|rank\") and not RegEx.IsMatch(Expression, \"DIVIDE|F1\\.(Rate|Share)|\\[[^\\]]*(Rate|Share|%)[^\\]]*\\]\")",
+    "CompatibilityLevel": 1200
+  }
+]

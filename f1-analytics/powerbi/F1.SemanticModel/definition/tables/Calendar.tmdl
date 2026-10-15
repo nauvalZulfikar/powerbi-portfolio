@@ -1,0 +1,93 @@
+table Calendar
+	lineageTag: 5686f49d-6e39-5212-80ff-b351bddafbe0
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		lineageTag: 0a389f19-80f6-57ca-aef3-963c737416cb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+		isKey
+		formatString: dd mmm yyyy
+
+	column Year
+		dataType: int64
+		lineageTag: f868be48-d060-553e-a3ed-8a1ff44e1030
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Year]
+		formatString: 0
+
+	column Decade
+		dataType: string
+		lineageTag: 275714f4-18ca-57f5-804c-058caa3d41f1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Decade]
+
+	column 'Month Number'
+		dataType: int64
+		lineageTag: 7360828f-b2db-5446-b340-2e3b3d6e859a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month Number]
+		isHidden
+		formatString: 0
+
+	column Month
+		dataType: string
+		lineageTag: 3aff946b-d156-5211-8020-c54962f7c1e7
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month]
+		sortByColumn: 'Month Number'
+
+	column 'Year Month'
+		dataType: int64
+		lineageTag: 52707a5d-6306-5de1-82e4-827ebf097cbd
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Year Month]
+		isHidden
+		formatString: 0
+
+	hierarchy 'Date Path'
+		lineageTag: a4be3805-b9b2-56f3-9bf6-11fff36a84c7
+
+		level Year
+			lineageTag: e7c7247a-2291-5c45-b08b-af866f4d806d
+			column: Year
+
+		level Month
+			lineageTag: 84443655-0154-5622-995d-c2ed0aef8133
+			column: Month
+
+		level Date
+			lineageTag: e044d587-ed9d-567e-820d-fa22f537af55
+			column: Date
+
+	calendar 'F1 Calendar'
+		lineageTag: 937554bf-6655-5f03-be27-47a455888fd7
+
+		calendarColumnGroup = year
+			primaryColumn: Year
+
+		calendarColumnGroup = month
+			primaryColumn: 'Year Month'
+			associatedColumn: Month
+
+		calendarColumnGroup = date
+			primaryColumn: Date
+
+	partition Calendar = calculated
+		mode: import
+		source =
+				ADDCOLUMNS (
+				    CALENDAR ( DATE ( 1950, 1, 1 ), DATE ( 2024, 12, 31 ) ),
+				    "Year", YEAR ( [Date] ),
+				    "Decade", FORMAT ( INT ( YEAR ( [Date] ) / 10 ) * 10, "0" ) & "s",
+				    "Month Number", MONTH ( [Date] ),
+				    "Month", FORMAT ( [Date], "mmm" ),
+				    "Year Month", YEAR ( [Date] ) * 100 + MONTH ( [Date] )
+				)

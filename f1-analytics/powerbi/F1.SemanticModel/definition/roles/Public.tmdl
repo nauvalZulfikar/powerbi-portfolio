@@ -1,0 +1,9 @@
+role Public
+	modelPermission: read
+
+	tablePermission Driver
+
+		columnPermission Dob = none
+
+	tablePermission 'Driver Skill'
+		metadataPermission: none

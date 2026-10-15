@@ -1,0 +1,224 @@
+table Results
+	lineageTag: 742d524e-c8eb-50c8-a666-6d730aba8d01
+
+	column 'Result Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 37b11d51-ec26-5ba9-bdbf-83fb7cddaff3
+		summarizeBy: none
+		sourceColumn: result_id
+
+	column 'Race Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d7e36741-0076-525a-a4a1-f0f461c8bd96
+		summarizeBy: none
+		sourceColumn: race_id
+
+	column 'Driver Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8a3d9880-4470-5654-9bb9-3ed893a4d74f
+		summarizeBy: none
+		sourceColumn: driver_id
+
+	column 'Constructor Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3bbcc15d-6d92-5ab3-8cf7-44b8d103279c
+		summarizeBy: none
+		sourceColumn: constructor_id
+
+	column 'Circuit Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 86af31e5-c323-54a7-9e77-cfa5059984a4
+		summarizeBy: none
+		sourceColumn: circuit_id
+
+	column 'Result Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: 955a1644-9ef1-50ea-aa51-3f5665fa1af5
+		summarizeBy: none
+		sourceColumn: year
+
+	column 'Result Round'
+		dataType: int64
+		formatString: 0
+		lineageTag: cb7d33f7-f0ff-56f9-a17f-4328edc0a722
+		summarizeBy: none
+		sourceColumn: round
+
+	column 'Grid Position'
+		dataType: int64
+		formatString: 0
+		lineageTag: 54c0df1c-8c32-51af-ab80-29a0393ab450
+		summarizeBy: none
+		sourceColumn: grid
+
+	column 'Grid Band'
+		dataType: string
+		lineageTag: ebdcc8cf-4fce-5db0-9a20-3b9993af1b2c
+		summarizeBy: none
+		sourceColumn: grid_band
+		sortByColumn: 'Grid Band Order'
+
+	column 'Grid Band Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5726cc4b-b680-54c9-b4b7-6f3095696b24
+		summarizeBy: none
+		sourceColumn: grid_band_order
+
+	column 'Finish Position'
+		dataType: int64
+		formatString: 0
+		lineageTag: d7c93500-210c-5dc5-81c4-60d4d9ae4248
+		summarizeBy: none
+		sourceColumn: finish_position
+
+	column 'Position Order'
+		dataType: int64
+		formatString: 0
+		lineageTag: 0351ac8c-e359-551c-9e81-4818e5e8573e
+		summarizeBy: none
+		sourceColumn: position_order
+
+	column 'Field Size'
+		dataType: int64
+		formatString: 0
+		lineageTag: 93826e2a-1763-5a91-aa1d-ed64785b3af2
+		summarizeBy: none
+		sourceColumn: field_size
+
+	column 'Points Scored'
+		dataType: double
+		lineageTag: 07a2645d-8d4a-544b-9999-58ebd3cc33b1
+		summarizeBy: none
+		sourceColumn: points
+
+	column 'Modern Points'
+		dataType: int64
+		formatString: 0
+		lineageTag: 29045d9e-43bf-594f-8562-2b58eb7e5e30
+		summarizeBy: none
+		sourceColumn: points_modern
+
+	column 'Laps Completed'
+		dataType: int64
+		formatString: 0
+		lineageTag: 5f8a7530-479b-5e54-b381-4b640a032dd6
+		summarizeBy: none
+		sourceColumn: laps
+
+	column Status
+		dataType: string
+		lineageTag: eb96ee97-d6ee-555c-88f0-411e1674ea76
+		summarizeBy: none
+		sourceColumn: status
+
+	column 'Status Group'
+		dataType: string
+		lineageTag: ad1cb6a8-a471-547b-976a-58525af22783
+		summarizeBy: none
+		sourceColumn: status_group
+
+	column 'Is Finished'
+		dataType: boolean
+		lineageTag: d036b27d-2eff-56fc-aca7-b7af544ea374
+		summarizeBy: none
+		sourceColumn: is_finished
+
+	column 'Is DNF'
+		dataType: boolean
+		lineageTag: 9edb5e0c-ccd5-579b-a1d2-96e644d797b6
+		summarizeBy: none
+		sourceColumn: is_dnf
+
+	column 'Is Mechanical DNF'
+		dataType: boolean
+		lineageTag: ddfe6ddf-4698-57c9-bd9a-79bbfb675209
+		summarizeBy: none
+		sourceColumn: is_mechanical_dnf
+
+	column 'Is Win'
+		dataType: boolean
+		lineageTag: 7be13f5c-30e9-5967-922c-c2a6a9b66d44
+		summarizeBy: none
+		sourceColumn: is_win
+
+	column 'Is Podium'
+		dataType: boolean
+		lineageTag: 4fd25f5a-0a87-5586-8db6-d2f1dd58e6eb
+		summarizeBy: none
+		sourceColumn: is_podium
+
+	column 'Is Pole'
+		dataType: boolean
+		lineageTag: 5659660b-9b90-524f-b870-4ff8797db9db
+		summarizeBy: none
+		sourceColumn: is_pole
+
+	column 'Is Points Finish'
+		dataType: boolean
+		lineageTag: 479413d1-83d3-5a67-a3f0-e83d779fb5f6
+		summarizeBy: none
+		sourceColumn: is_points_finish
+
+	column 'Is Fastest Lap'
+		dataType: boolean
+		lineageTag: 0a41ec7a-d0a5-5733-b0c9-bfdc050631ea
+		summarizeBy: none
+		sourceColumn: is_fastest_lap
+
+	column 'Positions Gained Value'
+		dataType: int64
+		formatString: 0
+		lineageTag: 3b9f8864-fb12-51ce-9f55-0d3ef4f029ff
+		summarizeBy: none
+		sourceColumn: positions_gained
+
+	column 'Finish Percentile Value'
+		dataType: double
+		formatString: 0%
+		lineageTag: 4707071b-707b-5ecc-918b-63746530cab2
+		summarizeBy: none
+		sourceColumn: finish_percentile
+
+	column 'Fastest Lap Ms'
+		dataType: int64
+		formatString: 0
+		lineageTag: 16792d5e-8fc5-5794-af04-3dab08094f36
+		summarizeBy: none
+		sourceColumn: fastest_lap_ms
+
+	column 'Fastest Lap Kph'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 93ca2b69-9e93-5195-87eb-5aba60905507
+		summarizeBy: none
+		sourceColumn: fastest_lap_kph
+
+	column 'Is Home Race' = RELATED ( Driver[Driver Country] ) = RELATED ( Circuit[Circuit Country] )
+		dataType: boolean
+		lineageTag: d3770da2-cc96-5feb-91f4-e07bcae1d73e
+		summarizeBy: none
+
+	partition Results = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_results.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"result_id", Int64.Type}, {"race_id", Int64.Type}, {"driver_id", Int64.Type}, {"constructor_id", Int64.Type}, {"circuit_id", Int64.Type}, {"year", Int64.Type}, {"round", Int64.Type}, {"grid", Int64.Type}, {"grid_band", type text}, {"grid_band_order", Int64.Type}, {"finish_position", Int64.Type}, {"position_order", Int64.Type}, {"field_size", Int64.Type}, {"points", type number}, {"points_modern", Int64.Type}, {"laps", Int64.Type}, {"status", type text}, {"status_group", type text}, {"is_finished", type logical}, {"is_dnf", type logical}, {"is_mechanical_dnf", type logical}, {"is_win", type logical}, {"is_podium", type logical}, {"is_pole", type logical}, {"is_points_finish", type logical}, {"is_fastest_lap", type logical}, {"positions_gained", Int64.Type}, {"finish_percentile", type number}, {"fastest_lap_ms", Int64.Type}, {"fastest_lap_kph", type number}}),
+				    InRange = Table.SelectRows(Typed, each #datetime([year], 1, 1, 0, 0, 0) >= RangeStart and #datetime([year], 1, 1, 0, 0, 0) < RangeEnd)
+				in
+				    InRange
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,14 @@
+  ✓ fact_results row count matches raw results
+  ✓ result_id is unique
+  ✓ every race has exactly one winner (except shared-drive 1950s races)
+  ✓ every result has a known driver, constructor, race, circuit
+  ✓ one champion per season, 1950 to latest
+  ✓ known champions (Fangio 5, Schumacher 7, Hamilton 7, Verstappen 4 by 2024)
+  ✓ finish percentile within [0, 1]
+  ✓ routine pit stops plausible (10–60 s)
+  ✓ team season shares sum to 1
+  ✓ grid probabilities within [0, 1]
+  ✓ driver skill covers every modelled driver exactly once
+  ✓ outcome flags are never null
+  ✓ race + sprint points equal the final standings (2021+, what 'Session Results' appends in Power Query)
+failed: 0

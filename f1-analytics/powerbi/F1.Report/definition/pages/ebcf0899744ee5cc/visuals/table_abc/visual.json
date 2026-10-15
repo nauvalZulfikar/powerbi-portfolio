@@ -1,0 +1,157 @@
+{
+  "name": "table_abc",
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "queryRef": "Constructor.Constructor Name",
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Constructor"
+                    }
+                  },
+                  "Property": "Constructor Name"
+                }
+              },
+              "nativeQueryRef": "Constructor Name"
+            },
+            {
+              "queryRef": "_Measures.Points (Modern Scale)",
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Points (Modern Scale)"
+                }
+              },
+              "nativeQueryRef": "Points (Modern Scale)",
+              "displayName": "Points (Modern)"
+            },
+            {
+              "queryRef": "_Measures.Cumulative Points Share",
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Cumulative Points Share"
+                }
+              },
+              "nativeQueryRef": "Cumulative Points Share",
+              "displayName": "Cumulative"
+            },
+            {
+              "queryRef": "_Measures.ABC Class",
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "ABC Class"
+                }
+              },
+              "nativeQueryRef": "ABC Class",
+              "displayName": "Class"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Measures"
+                  }
+                },
+                "Property": "Points (Modern Scale)"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {},
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'ABC classes of constructors'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Modern-scale points · A = first 70%, B = next 20%, C = last 10% · all eras: 11 A, 22 B, 101 C'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'ABC classes of constructors. Modern-scale points · A = first 70%, B = next 20%, C = last 10% · all eras: 11 A, 22 B, 101 C'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "position": {
+    "x": 880,
+    "y": 188,
+    "width": 384,
+    "height": 292,
+    "z": 0,
+    "tabOrder": 12
+  },
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json"
+}

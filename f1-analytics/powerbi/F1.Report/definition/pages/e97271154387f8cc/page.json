@@ -1,0 +1,10 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "e97271154387f8cc",
+  "displayName": "Circuit Card",
+  "width": 320,
+  "height": 240,
+  "displayOption": "ActualSize",
+  "type": "Tooltip",
+  "visibility": "HiddenInViewMode"
+}

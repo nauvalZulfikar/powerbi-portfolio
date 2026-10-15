@@ -1,0 +1,58 @@
+table 'Points Systems'
+	lineageTag: 06082e9d-9ac5-581c-a88a-0ed5d8b91a62
+
+	column Era
+		dataType: string
+		lineageTag: be49b112-b22b-5fd8-8768-79e96d98c1db
+		summarizeBy: none
+		sourceColumn: Era
+
+	column System
+		dataType: string
+		lineageTag: 3f8ae4dd-b925-5028-ab39-ab40cefe2ab4
+		summarizeBy: none
+		sourceColumn: System
+		sortByColumn: 'First Season'
+
+	column 'First Season'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3129fd9d-398d-57d4-b4b8-970351665c9e
+		summarizeBy: none
+		sourceColumn: First Season
+
+	column Position
+		dataType: int64
+		formatString: 0
+		lineageTag: ccddc225-8777-58bf-909d-9ec23f70036b
+		summarizeBy: none
+		sourceColumn: Position
+
+	column 'System Points'
+		dataType: double
+		formatString: 0
+		lineageTag: 076b85d0-691c-513b-aeb1-0c1310fa4d1d
+		summarizeBy: none
+		sourceColumn: System Points
+
+	partition 'Points Systems' = m
+		mode: import
+		source =
+				let
+				    // Enter Data: one row per scoring system, P1..P10 across
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("jdDNDsIgDAfwVzGcd2hhW+wD6AvojXEyRLlosqnZ49tq2cSPZAn/FBr4BfDebNM9robDpY/9YCqD1EB3s4COZ6QNLmtOy6k5jmM5xQiVN7s0FlQLc/kF4Jfw2o/5BqSAbKTlAClgAaw2pMAiYZOOp+vbMxhxE0fayFx+VfOHFXAfzwWH+sG6kCLHUSx8zuwnX09sCA8=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Era = _t, System = _t, #"First Season" = _t, P1 = _t, P2 = _t, P3 = _t, P4 = _t, P5 = _t, P6 = _t, P7 = _t, P8 = _t, P9 = _t, P10 = _t]),
+				    // Enter Data stores an empty cell as "": make it null so Fill Down and Unpivot skip it
+				    Blanks = Table.ReplaceValue(Source, "", null, Replacer.ReplaceValue, Table.ColumnNames(Source)),
+				    // Era is typed once per family
+				    Filled = Table.FillDown(Blanks, {"Era"}),
+				    // Wide to long: one row per system and paying position (nulls drop out)
+				    Long = Table.UnpivotOtherColumns(Filled, {"Era", "System", "First Season"}, "Slot", "System Points"),
+				    // "P7" -> 7
+				    Positioned = Table.AddColumn(Long, "Position", each Number.From(Text.AfterDelimiter([Slot], "P")), Int64.Type),
+				    Kept = Table.SelectColumns(Positioned, {"Era", "System", "First Season", "Position", "System Points"}),
+				    Typed = Table.TransformColumnTypes(Kept, {{"First Season", Int64.Type}, {"System Points", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,9 @@
+// pbi-kit CI test: every count must be 0 (mirrors sql/90_tests.sql inside the model).
+EVALUATE
+ROW (
+    "Duplicate Result IDs", COUNTROWS ( Results ) - DISTINCTCOUNT ( Results[Result Id] ),
+    "Results Without Driver", COUNTROWS ( FILTER ( Results, ISBLANK ( RELATED ( Driver[Driver Name] ) ) ) ),
+    "Results Without Race", COUNTROWS ( FILTER ( Results, ISBLANK ( RELATED ( Race[Race Year] ) ) ) ),
+    "Seasons Without Champion", COUNTROWS ( FILTER ( Season, ISBLANK ( Season[Champion] ) ) ),
+    "Percentile Out Of Range", COUNTROWS ( FILTER ( Results, Results[Finish Percentile Value] < 0 || Results[Finish Percentile Value] > 1 ) )
+)

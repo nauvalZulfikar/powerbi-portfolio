@@ -1,0 +1,13 @@
+// The Season Lens KPIs for Lewis Hamilton. Expected: Best Season Points 408, Seasons With a Win 16,
+// Home Wins 9, Wins at Home Circuits 9 (one driver: same thing), Avg Points per Race 14.5.
+EVALUATE
+CALCULATETABLE (
+    ROW (
+        "Best Season Points", [Best Season Points],
+        "Seasons With a Win", [Seasons With a Win],
+        "Home Wins", [Home Wins],
+        "Wins at Home Circuits", [Wins at Home Circuits],
+        "Avg Points per Race", [Avg Points per Race]
+    ),
+    Driver[Driver Name] = "Lewis Hamilton"
+)

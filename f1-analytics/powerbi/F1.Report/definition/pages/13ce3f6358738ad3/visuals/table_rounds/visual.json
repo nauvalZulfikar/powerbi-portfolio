@@ -1,0 +1,187 @@
+{
+  "name": "table_rounds",
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "queryRef": "Race.Round",
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Race"
+                    }
+                  },
+                  "Property": "Round"
+                }
+              },
+              "nativeQueryRef": "Round"
+            },
+            {
+              "queryRef": "_Measures.Points (Modern Scale)",
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Points (Modern Scale)"
+                }
+              },
+              "nativeQueryRef": "Points (Modern Scale)",
+              "displayName": "Points"
+            },
+            {
+              "queryRef": "_Measures.Running Points (Window)",
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Running Points (Window)"
+                }
+              },
+              "nativeQueryRef": "Running Points (Window)",
+              "displayName": "Running"
+            },
+            {
+              "queryRef": "_Measures.Points 3-Race Avg",
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Points 3-Race Avg"
+                }
+              },
+              "nativeQueryRef": "Points 3-Race Avg",
+              "displayName": "3-Race Avg"
+            },
+            {
+              "queryRef": "_Measures.Championship Points",
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Championship Points"
+                }
+              },
+              "nativeQueryRef": "Championship Points",
+              "displayName": "Standings (official)"
+            },
+            {
+              "queryRef": "_Measures.Points Prev Round",
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Points Prev Round"
+                }
+              },
+              "nativeQueryRef": "Points Prev Round",
+              "displayName": "Prev Round (official)"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Race"
+                  }
+                },
+                "Property": "Round"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {},
+    "drillFilterOtherVisuals": true,
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Season picked above, round by round'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Running and 3-race average: WINDOW, modern scale · standings: official points, previous round via OFFSET'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Season picked above, round by round. Running and 3-race average: WINDOW, modern scale · standings: official points, previous round via OFFSET'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "position": {
+    "x": 16,
+    "y": 492,
+    "width": 620,
+    "height": 216,
+    "z": 0,
+    "tabOrder": 12
+  },
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json"
+}

@@ -1,0 +1,25 @@
+{
+  "rows": 1,
+  "checks": [
+    {
+      "column": "[Races]",
+      "equals": 1125,
+      "tolerance": 0.5
+    },
+    {
+      "column": "[Starts]",
+      "equals": 25143,
+      "tolerance": 0.5
+    },
+    {
+      "column": "[Wins]",
+      "equals": 1128,
+      "tolerance": 0.5
+    },
+    {
+      "column": "[Points (Modern Scale)]",
+      "equals": 113523.0,
+      "tolerance": 0.5
+    }
+  ]
+}

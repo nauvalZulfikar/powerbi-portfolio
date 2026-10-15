@@ -1,0 +1,78 @@
+table 'Pit Stops'
+	lineageTag: de869077-e213-525b-bace-90758c344268
+
+	column 'Race Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5b8c4e76-0880-5e49-99c9-f72dc4995b50
+		summarizeBy: none
+		sourceColumn: race_id
+
+	column 'Driver Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 472e11c1-9ad7-5e01-8ccb-a6ad6ccbb508
+		summarizeBy: none
+		sourceColumn: driver_id
+
+	column 'Constructor Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ba831dcc-496f-5ab6-92e2-b09f1957aad7
+		summarizeBy: none
+		sourceColumn: constructor_id
+
+	column 'Pit Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: aba0f7df-6184-50c1-993c-83efb848d22a
+		summarizeBy: none
+		sourceColumn: year
+
+	column 'Stop No'
+		dataType: int64
+		formatString: 0
+		lineageTag: 695c79d2-60ef-536e-b18b-174adc0e7dba
+		summarizeBy: none
+		sourceColumn: stop_no
+
+	column 'Pit Lap'
+		dataType: int64
+		formatString: 0
+		lineageTag: 63247ac0-8700-5cdb-be03-87872ace3926
+		summarizeBy: none
+		sourceColumn: lap
+
+	column 'Pit Seconds'
+		dataType: double
+		formatString: 0.00" s"
+		lineageTag: 3fdcb99f-8679-5697-a7b7-d53c2083ef40
+		summarizeBy: none
+		sourceColumn: pit_seconds
+
+	column 'Is Routine Stop'
+		dataType: boolean
+		lineageTag: 4feffa6e-fbc5-53f6-bb0e-c664937aae9a
+		summarizeBy: none
+		sourceColumn: is_routine_stop
+
+	column 'Stops In Race'
+		dataType: int64
+		formatString: 0
+		lineageTag: 3d2b8d30-b6b1-599d-9627-c816b5e168bd
+		summarizeBy: none
+		sourceColumn: stops_in_race
+
+	partition 'Pit Stops' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_pit_stops.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"race_id", Int64.Type}, {"driver_id", Int64.Type}, {"constructor_id", Int64.Type}, {"year", Int64.Type}, {"stop_no", Int64.Type}, {"lap", Int64.Type}, {"pit_seconds", type number}, {"is_routine_stop", type logical}, {"stops_in_race", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

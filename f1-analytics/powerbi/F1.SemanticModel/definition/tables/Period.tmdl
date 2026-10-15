@@ -1,0 +1,38 @@
+table Period
+	lineageTag: 10f971ef-9a25-52cd-974c-086cdf292e75
+
+	calculationGroup
+		precedence: 10
+
+		calculationItem Current = SELECTEDMEASURE ()
+			ordinal: 0
+
+		calculationItem 'Prev Season' = F1.PrevSeason ( SELECTEDMEASURE () )
+			ordinal: 1
+
+		calculationItem 'YoY %' =
+				VAR _py = F1.PrevSeason ( SELECTEDMEASURE () )
+				RETURN DIVIDE ( SELECTEDMEASURE () - _py, _py )
+			ordinal: 2
+			formatStringDefinition = "+0%;-0%;0%"
+
+		calculationItem 'Season-to-date' = CALCULATE ( SELECTEDMEASURE (), DATESYTD ( 'Calendar'[Date] ) )
+			ordinal: 3
+
+		calculationItem 'Career-to-date' = CALCULATE ( SELECTEDMEASURE (), DATESBETWEEN ( 'Calendar'[Date], BLANK (), MAX ( 'Calendar'[Date] ) ), REMOVEFILTERS ( Season ) )
+			ordinal: 4
+
+	column Period
+		dataType: string
+		lineageTag: f464b7ff-3b98-5793-bf8b-1c1210325623
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+	column Ordinal
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5d5b4094-d838-5217-bae1-96e4e4bf08b6
+		summarizeBy: sum
+		sourceColumn: Ordinal

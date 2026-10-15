@@ -1,0 +1,11 @@
+# Clean-clone CI check (2026-10-09): git clone of this repo (HEAD c305bfb) into a temp folder, CI steps run by hand.
+# data job: src/pipeline.py NOT run locally (would re-download from Kaggle; clone has no data/ at all).
+# src/build_model.py on the clone:
+_duckdb.IOException: IO Error: Cannot open database "/private/tmp/claude-501/-Users-shaka-mac-mini/bcbfd734-0774-4cb0-ac25-97fb257b9c4c/scratchpad/cc/f1/data/warehouse/f1.duckdb" in read-only mode: database does not exist
+  -> fails: data/warehouse is gitignored => generators/drift moved to job 'data' (runs after the download)
+# ci job (repo files only; BPA/TOM via already-built runners, kit byte-identical to tools/pbi-kit):
+BPA  powerbi/F1.SemanticModel exit=0
+TOM  powerbi/F1.SemanticModel exit=0 1 no-errors
+7/7 passed, 3 with assert file; asserts NOT executed (offline)
+PBIR powerbi/F1.Report exit=0
+repo-only rc=0

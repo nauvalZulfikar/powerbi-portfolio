@@ -1,0 +1,241 @@
+table Driver
+	lineageTag: 42938f83-d43a-5a37-9f0d-4bcadbd76a5b
+
+	column 'Driver Id'
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 88fabba7-1453-59f5-8807-bb0b4554684f
+		summarizeBy: none
+		sourceColumn: driver_id
+
+	column 'Driver Name'
+		dataType: string
+		lineageTag: 548cef5a-2121-5c7c-9343-f9469edfa848
+		summarizeBy: none
+		sourceColumn: driver_name
+
+	column 'Driver Code'
+		dataType: string
+		lineageTag: 889175b6-9645-5a0c-b20e-4a39c249680a
+		summarizeBy: none
+		sourceColumn: driver_code
+
+	column Surname
+		dataType: string
+		lineageTag: 79a17e29-15ad-53b8-982f-4180868faa28
+		summarizeBy: none
+		sourceColumn: surname
+
+	column Dob
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: f791c82e-e6a8-51bf-aa8e-e0f4312b8ef8
+		summarizeBy: none
+		sourceColumn: dob
+
+	column 'Driver Nationality'
+		dataType: string
+		lineageTag: 2b05947e-93fb-5b2a-85eb-d7bb8d8651fc
+		summarizeBy: none
+		sourceColumn: nationality
+
+	column 'Driver Country'
+		dataType: string
+		dataCategory: Country
+		lineageTag: 1a97bc1a-0d52-51b4-aeba-09601c19b7c9
+		summarizeBy: none
+		sourceColumn: country
+
+	column 'Driver World Region'
+		dataType: string
+		lineageTag: f6075602-ab98-532c-aaaa-343aa8ff33be
+		summarizeBy: none
+		sourceColumn: world_region
+
+	column 'Driver First Season'
+		dataType: int64
+		formatString: 0
+		lineageTag: 263cffc2-775b-5980-9c80-e231484c2a0d
+		summarizeBy: none
+		sourceColumn: first_season
+
+	column 'Driver Last Season'
+		dataType: int64
+		formatString: 0
+		lineageTag: 8d7d407b-92ca-5dc4-b25f-4fecdf838dd3
+		summarizeBy: none
+		sourceColumn: last_season
+
+	column 'Career Span'
+		dataType: int64
+		formatString: 0
+		lineageTag: 9271f572-c281-5c52-bcb6-f36d362d76a1
+		summarizeBy: none
+		sourceColumn: career_span
+
+	column 'Debut Age'
+		dataType: int64
+		formatString: 0
+		lineageTag: db296995-c41e-5f35-9e93-d87b4102c021
+		summarizeBy: none
+		sourceColumn: debut_age
+
+	column 'Debut Era'
+		dataType: string
+		lineageTag: 331081df-2430-56bc-a10f-54583751f501
+		summarizeBy: none
+		sourceColumn: debut_era
+
+	column 'Career Starts'
+		dataType: int64
+		formatString: 0
+		lineageTag: d50d8aec-992f-5459-82f7-5ebfdf9de102
+		summarizeBy: none
+		sourceColumn: starts
+
+	column 'Career Wins'
+		dataType: int64
+		formatString: 0
+		lineageTag: 93610a96-67b3-58e5-ba54-d1d5d08cba1e
+		summarizeBy: none
+		sourceColumn: wins
+
+	column 'Career Podiums'
+		dataType: int64
+		formatString: 0
+		lineageTag: 59a1d1bd-1958-5305-8b99-58fb25870f22
+		summarizeBy: none
+		sourceColumn: podiums
+
+	column 'Career Poles'
+		dataType: int64
+		formatString: 0
+		lineageTag: 6ed32902-0c92-5954-bfe8-48a2893057f8
+		summarizeBy: none
+		sourceColumn: poles
+
+	column 'Career Fastest Laps'
+		dataType: int64
+		formatString: 0
+		lineageTag: 959e5496-fc6e-5e25-8fdc-ec8743d866fa
+		summarizeBy: none
+		sourceColumn: fastest_laps
+
+	column 'Career Points'
+		dataType: double
+		lineageTag: d8e3466d-ab52-57ba-80ee-6660b0c0cfdd
+		summarizeBy: none
+		sourceColumn: career_points
+
+	column 'Career Points Modern'
+		dataType: int64
+		formatString: 0
+		lineageTag: 50617fa0-79a5-5bb7-b31c-e43cdfefc6ed
+		summarizeBy: none
+		sourceColumn: career_points_modern
+
+	column 'Career DNFs'
+		dataType: int64
+		formatString: 0
+		lineageTag: 1154685c-c284-526e-ad45-9b9d3dbf3bbd
+		summarizeBy: none
+		sourceColumn: dnfs
+
+	column 'Teams Driven For'
+		dataType: int64
+		formatString: 0
+		lineageTag: 90c2bb7a-3965-5ab1-82b2-4de3bfe18bab
+		summarizeBy: none
+		sourceColumn: teams_driven_for
+
+	column 'Driver Titles'
+		dataType: int64
+		formatString: 0
+		lineageTag: 40355e9b-7901-5024-8334-5e4f7486b937
+		summarizeBy: none
+		sourceColumn: titles
+
+	column 'Title Years'
+		dataType: string
+		lineageTag: 8ee6028c-9345-516f-94b9-aab21d1cbcdb
+		summarizeBy: none
+		sourceColumn: title_years
+
+	column 'Last Team'
+		dataType: string
+		lineageTag: 949f0914-6da2-51f5-a9b9-fd8da3b6d1ce
+		summarizeBy: none
+		sourceColumn: last_team
+
+	column 'Wikipedia URL'
+		dataType: string
+		dataCategory: WebUrl
+		lineageTag: 8b08f084-0233-5102-b5ea-638694771b4e
+		summarizeBy: none
+		sourceColumn: wikipedia_url
+
+	column 'Career Win Rate'
+		dataType: double
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		lineageTag: 5d92336f-3934-5132-beb4-b4abbc703fa5
+		summarizeBy: none
+		sourceColumn: win_rate
+
+	column 'Career Podium Rate'
+		dataType: double
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		lineageTag: 2dedf099-f61c-5be6-8e85-fac4cd09cac8
+		summarizeBy: none
+		sourceColumn: podium_rate
+
+	column 'Achievement Tier'
+		dataType: string
+		lineageTag: a810c0f0-a556-52eb-b637-694b592843d2
+		summarizeBy: none
+		sourceColumn: achievement_tier
+		sortByColumn: 'Achievement Tier Order'
+
+	column 'Achievement Tier Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8dd646bc-afe1-5a3a-9f91-1e96af05ff14
+		summarizeBy: none
+		sourceColumn: achievement_tier_order
+
+	column 'Active Driver'
+		dataType: boolean
+		lineageTag: 54660d52-3ad8-5b56-8308-aeba88bbec92
+		summarizeBy: none
+		sourceColumn: is_active
+
+	column 'Debut Decade' = FORMAT ( QUOTIENT ( Driver[Driver First Season], 10 ) * 10, "0" ) & "s"
+		dataType: string
+		lineageTag: c9cd0d47-dd49-5f5a-950c-f7abc0b9dd7b
+		summarizeBy: none
+
+	column 'Win Band Order' = VAR _r = Driver[Career Win Rate] RETURN SWITCH ( TRUE (), _r = 0, 1, _r < 0.05, 2, _r < 0.2, 3, 4 )
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 58c13503-7547-5688-bff4-85314a03a23a
+		summarizeBy: none
+
+	column 'Win Band' = SWITCH ( Driver[Win Band Order], 1, "No wins", 2, "Under 5%", 3, "5–19%", "20%+" )
+		dataType: string
+		sortByColumn: 'Win Band Order'
+		lineageTag: a4da9547-fdf1-569e-b01d-13569aa5d981
+		summarizeBy: none
+
+	partition Driver = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_driver.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"driver_id", Int64.Type}, {"driver_name", type text}, {"driver_code", type text}, {"surname", type text}, {"dob", type date}, {"nationality", type text}, {"country", type text}, {"world_region", type text}, {"first_season", Int64.Type}, {"last_season", Int64.Type}, {"career_span", Int64.Type}, {"debut_age", Int64.Type}, {"debut_era", type text}, {"starts", Int64.Type}, {"wins", Int64.Type}, {"podiums", Int64.Type}, {"poles", Int64.Type}, {"fastest_laps", Int64.Type}, {"career_points", type number}, {"career_points_modern", Int64.Type}, {"dnfs", Int64.Type}, {"teams_driven_for", Int64.Type}, {"titles", Int64.Type}, {"title_years", type text}, {"last_team", type text}, {"wikipedia_url", type text}, {"win_rate", type number}, {"podium_rate", type number}, {"achievement_tier", type text}, {"achievement_tier_order", Int64.Type}, {"is_active", type logical}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

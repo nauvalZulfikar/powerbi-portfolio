@@ -1,0 +1,24 @@
+table 'Funnel Stage'
+	lineageTag: cfd153c7-da22-5c3f-8876-5484f1dd398a
+
+	column Stage
+		dataType: string
+		lineageTag: a6e9b219-725d-56eb-921b-acc8311ff806
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Stage]
+		sortByColumn: 'Stage Order'
+
+	column 'Stage Order'
+		dataType: int64
+		lineageTag: 11f95109-69ee-5a00-96ac-918b2834eb55
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Stage Order]
+		isHidden
+		formatString: 0
+
+	partition 'Funnel Stage' = calculated
+		mode: import
+		source =
+				DATATABLE ( "Stage", STRING, "Stage Order", INTEGER, { { "Entered", 1 }, { "Started", 2 }, { "Finished", 3 }, { "Scored points", 4 }, { "Podium", 5 }, { "Win", 6 } } )

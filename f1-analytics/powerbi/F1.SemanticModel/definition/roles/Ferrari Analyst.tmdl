@@ -1,0 +1,5 @@
+role 'Ferrari Analyst'
+	modelPermission: read
+
+	tablePermission Constructor = Constructor[Constructor Name] = "Ferrari"
+

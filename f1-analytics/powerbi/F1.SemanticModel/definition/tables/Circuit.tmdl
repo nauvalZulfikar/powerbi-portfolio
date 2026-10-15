@@ -1,0 +1,144 @@
+table Circuit
+	lineageTag: 4d2241e9-646c-5db3-863d-226499fedc4f
+
+	column 'Circuit Id'
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 90b6821f-8580-5751-9a9b-cae5e38b55f7
+		summarizeBy: none
+		sourceColumn: circuit_id
+
+	column 'Circuit Name'
+		dataType: string
+		lineageTag: cf497c93-35dc-541a-aa1b-c7f4812e7f11
+		summarizeBy: none
+		sourceColumn: circuit_name
+
+	column Location
+		dataType: string
+		dataCategory: City
+		lineageTag: b7141631-ffbe-52ca-976a-72ef0f24db7f
+		summarizeBy: none
+		sourceColumn: location
+
+	column 'Circuit Country'
+		dataType: string
+		dataCategory: Country
+		lineageTag: 6fd9f85d-f4b9-5ff4-9d2f-7fa98680ab18
+		summarizeBy: none
+		sourceColumn: country
+
+	column 'Circuit Geo'
+		dataType: string
+		dataCategory: Place
+		lineageTag: 7ff7ee18-7718-5169-9414-f912b42b913a
+		summarizeBy: none
+		sourceColumn: circuit_geo
+
+	column Latitude
+		dataType: double
+		dataCategory: Latitude
+		lineageTag: 5b0208a8-1b08-5c88-9772-0371a2f159ae
+		summarizeBy: none
+		sourceColumn: lat
+
+	column Longitude
+		dataType: double
+		dataCategory: Longitude
+		lineageTag: 3b5f21fe-c870-528a-b13c-5421f4b20f50
+		summarizeBy: none
+		sourceColumn: lng
+
+	column 'Altitude m'
+		dataType: int64
+		formatString: 0
+		lineageTag: 1e45dedd-f24e-5b4c-8453-7ae69a8bd2f4
+		summarizeBy: none
+		sourceColumn: alt
+
+	column 'Races Hosted'
+		dataType: int64
+		formatString: 0
+		lineageTag: 740979a3-5eb5-5389-95f1-ccfde5c370f9
+		summarizeBy: none
+		sourceColumn: races_hosted
+
+	column 'First Race'
+		dataType: int64
+		formatString: 0
+		lineageTag: d12bf7f7-74ea-546c-a1f6-3692eb7bc827
+		summarizeBy: none
+		sourceColumn: first_race
+
+	column 'Last Race'
+		dataType: int64
+		formatString: 0
+		lineageTag: 90c6611b-7dd5-5520-bac8-7f15efd74986
+		summarizeBy: none
+		sourceColumn: last_race
+
+	column 'On Current Calendar'
+		dataType: boolean
+		lineageTag: ca49eadb-b196-5fea-9e09-eb543627397b
+		summarizeBy: none
+		sourceColumn: on_current_calendar
+
+	column 'Pole Win Rate'
+		dataType: double
+		formatString: 0%
+		lineageTag: 67ea0773-1886-54e4-bf40-7731e28fd801
+		summarizeBy: none
+		sourceColumn: pole_win_rate
+
+	column 'Avg Position Change'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 4287ffce-8840-53b9-b0d0-48034441d2e5
+		summarizeBy: none
+		sourceColumn: avg_position_change
+
+	column 'Lap Record Ms'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8fad7d61-ad24-55de-a2a3-f92701336895
+		summarizeBy: none
+		sourceColumn: lap_record_ms
+
+	column 'Lap Record'
+		dataType: string
+		lineageTag: 7d2c60ff-9d40-54fb-aa36-f4b3020aad62
+		summarizeBy: none
+		sourceColumn: lap_record
+
+	column 'Lap Record Holder'
+		dataType: string
+		lineageTag: d2ec3c4e-a76a-5c7c-a457-07ffffdc7150
+		summarizeBy: none
+		sourceColumn: lap_record_holder
+
+	column 'Lap Record Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: df3ab958-5fa6-5da4-863c-25c555e1cde5
+		summarizeBy: none
+		sourceColumn: lap_record_year
+
+	column 'Races in Data' = COUNTROWS ( RELATEDTABLE ( Race ) )
+		dataType: int64
+		formatString: 0
+		lineageTag: 1cf41100-4511-5c8e-88ca-03dd06dfafdf
+		summarizeBy: none
+
+	partition Circuit = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_circuit.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"circuit_id", Int64.Type}, {"circuit_name", type text}, {"location", type text}, {"country", type text}, {"circuit_geo", type text}, {"lat", type number}, {"lng", type number}, {"alt", Int64.Type}, {"races_hosted", Int64.Type}, {"first_race", Int64.Type}, {"last_race", Int64.Type}, {"on_current_calendar", type logical}, {"pole_win_rate", type number}, {"avg_position_change", type number}, {"lap_record_ms", Int64.Type}, {"lap_record", type text}, {"lap_record_holder", type text}, {"lap_record_year", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

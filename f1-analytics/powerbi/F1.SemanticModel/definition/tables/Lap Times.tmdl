@@ -1,0 +1,79 @@
+table 'Lap Times'
+	lineageTag: 6cb7735e-4b06-5a82-a33a-f0490d52d412
+
+	column 'Race Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 096e5199-f596-5c59-8b1b-7c3e8a916df0
+		summarizeBy: none
+		sourceColumn: race_id
+
+	column 'Driver Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 778803ac-0ba7-5731-9f0e-ed7b55188b8b
+		summarizeBy: none
+		sourceColumn: driver_id
+
+	column Lap
+		dataType: int64
+		formatString: 0
+		lineageTag: a119313e-3636-56ea-b746-c197e00e3d87
+		summarizeBy: none
+		sourceColumn: lap
+
+	column 'Lap Position'
+		dataType: int64
+		formatString: 0
+		lineageTag: 1cde3c87-dbbf-59cf-b58d-8ae65e73eeb6
+		summarizeBy: none
+		sourceColumn: position
+
+	column 'Lap Seconds'
+		dataType: double
+		formatString: 0.000
+		lineageTag: c0bc2b3a-b69a-529b-9d15-ec3763b20ee3
+		summarizeBy: none
+		sourceColumn: lap_seconds
+
+	column 'Is Pit Lap'
+		dataType: boolean
+		lineageTag: 6feadebf-e008-54f5-bc06-c36191c6cbfd
+		summarizeBy: none
+		sourceColumn: is_pit_lap
+
+	column 'Lap Race Date'
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy
+		lineageTag: af06ec7a-f3ed-50c2-9174-2d421c10448e
+		summarizeBy: none
+		sourceColumn: race_date
+
+	refreshPolicy
+		policyType: basic
+		rollingWindowGranularity: year
+		rollingWindowPeriods: 30
+		incrementalGranularity: year
+		incrementalPeriods: 1
+		sourceExpression =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_lap_times.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"race_id", Int64.Type}, {"driver_id", Int64.Type}, {"lap", Int64.Type}, {"position", Int64.Type}, {"lap_seconds", type number}, {"is_pit_lap", type logical}, {"race_date", type date}}),
+				    InRange = Table.SelectRows(Typed, each DateTime.From([race_date]) >= RangeStart and DateTime.From([race_date]) < RangeEnd)
+				in
+				    InRange
+
+	partition 'Lap Times' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_lap_times.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"race_id", Int64.Type}, {"driver_id", Int64.Type}, {"lap", Int64.Type}, {"position", Int64.Type}, {"lap_seconds", type number}, {"is_pit_lap", type logical}, {"race_date", type date}}),
+				    InRange = Table.SelectRows(Typed, each DateTime.From([race_date]) >= RangeStart and DateTime.From([race_date]) < RangeEnd)
+				in
+				    InRange
+
+	annotation PBI_ResultType = Table

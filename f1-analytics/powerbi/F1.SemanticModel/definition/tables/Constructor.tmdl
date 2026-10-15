@@ -1,0 +1,137 @@
+table Constructor
+	lineageTag: db98254b-db28-5aa4-b98f-1591b50bc1da
+
+	column 'Constructor Id'
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: e0371157-88ba-588a-aa4b-2fbe2c11977a
+		summarizeBy: none
+		sourceColumn: constructor_id
+
+	column 'Constructor Name'
+		dataType: string
+		lineageTag: 2f9a0f4e-e975-5608-9a6d-fab8413cb8b6
+		summarizeBy: none
+		sourceColumn: constructor_name
+
+	column 'Team Nationality'
+		dataType: string
+		lineageTag: 3bbc9df5-c6b4-5bf5-a834-35a451856cba
+		summarizeBy: none
+		sourceColumn: nationality
+
+	column 'Team Country'
+		dataType: string
+		dataCategory: Country
+		lineageTag: af70f0d6-c863-5702-a5b2-7c1bc433270c
+		summarizeBy: none
+		sourceColumn: country
+
+	column 'Team First Season'
+		dataType: int64
+		formatString: 0
+		lineageTag: 72773bb0-cfe2-52c5-a318-d74377823807
+		summarizeBy: none
+		sourceColumn: first_season
+
+	column 'Team Last Season'
+		dataType: int64
+		formatString: 0
+		lineageTag: b0cdec8f-bf5d-5e04-8d5c-927069dbfd92
+		summarizeBy: none
+		sourceColumn: last_season
+
+	column 'Races Entered'
+		dataType: int64
+		formatString: 0
+		lineageTag: 4be9a1e8-efb9-5e22-9ae1-b865314ce54f
+		summarizeBy: none
+		sourceColumn: races_entered
+
+	column 'Team Wins'
+		dataType: int64
+		formatString: 0
+		lineageTag: fc9f8729-217a-54af-ad87-af745d94cae5
+		summarizeBy: none
+		sourceColumn: wins
+
+	column 'Team Podiums'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7669e7a7-4fc1-5ab3-bb11-02387702a997
+		summarizeBy: none
+		sourceColumn: podiums
+
+	column 'Team Poles'
+		dataType: int64
+		formatString: 0
+		lineageTag: cf7b3ce2-10ee-58b0-8e8c-26b1ecada1dd
+		summarizeBy: none
+		sourceColumn: poles
+
+	column 'Total Points'
+		dataType: double
+		lineageTag: 93593e9d-b060-52af-8b7b-2c4284c38b6a
+		summarizeBy: none
+		sourceColumn: total_points
+
+	column 'Total Points Modern'
+		dataType: int64
+		formatString: 0
+		lineageTag: 098040c5-1a2d-5cf2-96f8-e18bbc16ee8e
+		summarizeBy: none
+		sourceColumn: total_points_modern
+
+	column 'Drivers Used'
+		dataType: int64
+		formatString: 0
+		lineageTag: 4bf23249-5da9-5791-bf24-99fdb73c6dad
+		summarizeBy: none
+		sourceColumn: drivers_used
+
+	column 'Team Mechanical DNF Rate'
+		dataType: double
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		lineageTag: 4f9bebb5-6d25-5b60-aed9-762bdbf29a88
+		summarizeBy: none
+		sourceColumn: mechanical_dnf_rate
+
+	column 'Constructor Titles'
+		dataType: int64
+		formatString: 0
+		lineageTag: 9dbfe1af-f30e-5cd1-9812-79c76807ee58
+		summarizeBy: none
+		sourceColumn: constructor_titles
+
+	column 'Team Driver Titles'
+		dataType: int64
+		formatString: 0
+		lineageTag: 60705745-6252-521f-9d26-e3c103e8878d
+		summarizeBy: none
+		sourceColumn: driver_titles
+
+	column 'Team Win Rate'
+		dataType: double
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		lineageTag: 0a31fe01-c4a1-5e5b-b257-e98178f9f789
+		summarizeBy: none
+		sourceColumn: win_rate
+
+	column 'Active Team'
+		dataType: boolean
+		lineageTag: 481f4c77-c03d-5b88-aa05-7d5be750a232
+		summarizeBy: none
+		sourceColumn: is_active
+
+	partition Constructor = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_constructor.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"constructor_id", Int64.Type}, {"constructor_name", type text}, {"nationality", type text}, {"country", type text}, {"first_season", Int64.Type}, {"last_season", Int64.Type}, {"races_entered", Int64.Type}, {"wins", Int64.Type}, {"podiums", Int64.Type}, {"poles", Int64.Type}, {"total_points", type number}, {"total_points_modern", Int64.Type}, {"drivers_used", Int64.Type}, {"mechanical_dnf_rate", type number}, {"constructor_titles", Int64.Type}, {"driver_titles", Int64.Type}, {"win_rate", type number}, {"is_active", type logical}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

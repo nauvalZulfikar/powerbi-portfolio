@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "tabOrder": [
+    "KEEPFILTERS vs replace",
+    "Season-to-date resets each year",
+    "Role-playing team-mate",
+    "Season Lens check",
+    "ci-champions",
+    "ci-key-measures",
+    "ci-data-integrity"
+  ],
+  "defaultTab": "KEEPFILTERS vs replace"
+}

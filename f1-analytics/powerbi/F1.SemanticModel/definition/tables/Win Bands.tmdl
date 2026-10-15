@@ -1,0 +1,42 @@
+table 'Win Bands'
+	lineageTag: f20ead1f-3580-53b6-8eac-d6a405d20a14
+
+	column 'Win Band'
+		dataType: string
+		lineageTag: 72dd61fb-9fa1-5f0c-84c2-0c88d1d108a1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Win Band]
+		sortByColumn: 'Band Order'
+
+	column 'Band Order'
+		dataType: int64
+		lineageTag: 63861797-011d-525a-a717-82d978200c91
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Band Order]
+		isHidden
+		formatString: 0
+
+	column 'Min Win Rate'
+		dataType: double
+		lineageTag: 01a4893b-f847-560f-944f-9e0053b74b79
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Min Win Rate]
+		isHidden
+		formatString: 0%
+
+	column 'Max Win Rate'
+		dataType: double
+		lineageTag: 3f9d4537-f5e1-541f-bfc2-f87420fae551
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Max Win Rate]
+		isHidden
+		formatString: 0%
+
+	partition 'Win Bands' = calculated
+		mode: import
+		source =
+				DATATABLE ( "Win Band", STRING, "Band Order", INTEGER, "Min Win Rate", DOUBLE, "Max Win Rate", DOUBLE, { { "No wins", 1, 0, 0 }, { "Under 5%", 2, 0.000001, 0.05 }, { "5–19%", 3, 0.05, 0.2 }, { "20%+", 4, 0.2, 1.01 } } )

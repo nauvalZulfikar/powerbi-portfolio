@@ -1,0 +1,71 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "13ce3f6358738ad3",
+  "displayName": "Season Lens",
+  "width": 1280,
+  "height": 720,
+  "displayOption": "FitToPage",
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#111116'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "slicer_season",
+      "target": "kpi_best",
+      "type": "NoFilter"
+    },
+    {
+      "source": "slicer_season",
+      "target": "kpi_per_race",
+      "type": "NoFilter"
+    },
+    {
+      "source": "slicer_season",
+      "target": "kpi_seasons_won",
+      "type": "NoFilter"
+    },
+    {
+      "source": "slicer_season",
+      "target": "kpi_home",
+      "type": "NoFilter"
+    },
+    {
+      "source": "slicer_season",
+      "target": "table_seasons",
+      "type": "NoFilter"
+    },
+    {
+      "source": "slicer_season",
+      "target": "matrix_period",
+      "type": "NoFilter"
+    },
+    {
+      "source": "slicer_driver",
+      "target": "table_ranking",
+      "type": "NoFilter"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+=== deploy.py --env Test --dry-run
+[37m[1m[info]   18:31:51 - Parameter file validation passed[0m
+deploy /Users/shaka-mac-mini/coding-projects/portfolio-analytics/f1-analytics/powerbi → Test (DRY RUN)
+items in scope (SemanticModel, Report): 2
+  Report         'F1'                                 F1.Report
+  SemanticModel  'F1'                                 F1.SemanticModel
+  find_replace[0] 'expression DataFolder = "([^"]*)"' → '\\\\pbi-gw01\\f1\\test\\marts\\': F1.SemanticModel/definition/expressions.tmdl
+  find_replace[1] 'expression RawFolder = "([^"]*)"' → '\\\\pbi-gw01\\f1\\test\\raw\\': F1.SemanticModel/definition/expressions.tmdl
+fabric-cicd parameter validation: OK
+exit=0
+=== deploy.py --env Prod --dry-run
+[37m[1m[info]   18:31:51 - Parameter file validation passed[0m
+deploy /Users/shaka-mac-mini/coding-projects/portfolio-analytics/f1-analytics/powerbi → Prod (DRY RUN)
+items in scope (SemanticModel, Report): 2
+  Report         'F1'                                 F1.Report
+  SemanticModel  'F1'                                 F1.SemanticModel
+  find_replace[0] 'expression DataFolder = "([^"]*)"' → '\\\\pbi-gw01\\f1\\prod\\marts\\': F1.SemanticModel/definition/expressions.tmdl
+  find_replace[1] 'expression RawFolder = "([^"]*)"' → '\\\\pbi-gw01\\f1\\prod\\raw\\': F1.SemanticModel/definition/expressions.tmdl
+fabric-cicd parameter validation: OK
+exit=0

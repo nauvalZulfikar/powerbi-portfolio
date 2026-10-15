@@ -1,0 +1,13 @@
+diff --git a/powerbi/F1.SemanticModel/definition/tables/_Measures.tmdl b/powerbi/F1.SemanticModel/definition/tables/_Measures.tmdl
+index d1fddeb..a726dce 100644
+--- a/powerbi/F1.SemanticModel/definition/tables/_Measures.tmdl
++++ b/powerbi/F1.SemanticModel/definition/tables/_Measures.tmdl
+@@ -248,7 +248,7 @@ table _Measures
+ 
+ 	/// Average starting grid slot.
+ 	measure 'Avg Grid' = AVERAGE ( Results[Grid Position] )
+-		formatString: #,0.0
++		formatString: 0.00
+ 		displayFolder: Qualifying
+ 		lineageTag: d27f238b-400c-57ce-9752-918a1e9f8945
+ 

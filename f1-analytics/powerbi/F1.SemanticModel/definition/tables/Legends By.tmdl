@@ -1,0 +1,43 @@
+table 'Legends By'
+	lineageTag: 385b2281-3d8c-5e66-bf2a-291c90bb0fc9
+
+	column 'Legends By'
+		dataType: string
+		lineageTag: 0e2dcec8-2b8f-5302-8a51-46906b48b58e
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Legends By Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Legends By Fields'
+
+	column 'Legends By Fields'
+		dataType: string
+		isHidden
+		lineageTag: 0321a332-e4f3-595b-baf6-57bb499c74e3
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Legends By Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	column 'Legends By Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 2f13e2e7-04f8-58b0-961a-3b8a82aaf92a
+		summarizeBy: none
+		sourceColumn: [Value3]
+
+	partition 'Legends By' = calculated
+		mode: import
+		source =
+				{
+				    ( "Nationality", NAMEOF ( Driver[Driver Nationality] ), 0 ),
+				    ( "Driver", NAMEOF ( Driver[Driver Name] ), 1 ),
+				    ( "Last team", NAMEOF ( Driver[Last Team] ), 2 )
+				}

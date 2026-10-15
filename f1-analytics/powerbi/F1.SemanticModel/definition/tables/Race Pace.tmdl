@@ -1,0 +1,49 @@
+table 'Race Pace'
+	lineageTag: d9a0a965-4b4a-5747-bb55-82a9e5465432
+
+	column 'Race Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b36eaf7a-d92e-5e86-84fa-7eaa35258dfd
+		summarizeBy: none
+		sourceColumn: Race Id
+
+	column 'Driver Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e39a703b-bd63-546e-bde6-da3fb26fd06a
+		summarizeBy: none
+		sourceColumn: Driver Id
+
+	column 'Median Lap Sec'
+		dataType: double
+		formatString: 0.000
+		lineageTag: 367211e5-1c2c-5ea7-921a-542800509c89
+		summarizeBy: none
+		sourceColumn: Median Lap Sec
+
+	column 'Laps Timed'
+		dataType: int64
+		formatString: 0
+		lineageTag: c6152e3f-d640-5c10-86b8-6adec0c37010
+		summarizeBy: none
+		sourceColumn: Laps Timed
+
+	partition 'Race Pace' = m
+		mode: import
+		source =
+				let
+				    // Lap-by-lap timing (1996+), the same mart as Lap Times
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_lap_times.parquet")),
+				    // In- and out-laps distort pace: keep racing laps only
+				    RacingLaps = Table.SelectRows(Source, each [is_pit_lap] = false),
+				    // One row per driver per race
+				    Grouped = Table.Group(RacingLaps, {"race_id", "driver_id"}, {{"Median Lap Sec", each List.Median([lap_seconds]), type number}, {"Laps Timed", each Table.RowCount(_), Int64.Type}}),
+				    Renamed = Table.RenameColumns(Grouped, {{"race_id", "Race Id"}, {"driver_id", "Driver Id"}}),
+				    Typed = Table.TransformColumnTypes(Renamed, {{"Race Id", Int64.Type}, {"Driver Id", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

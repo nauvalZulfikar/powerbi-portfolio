@@ -1,0 +1,126 @@
+table Race
+	lineageTag: 9fe42d96-d3e9-55e1-a0e0-08c614a319c6
+
+	column 'Race Id'
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 08b036c9-fa92-59fd-9abc-893d7fb83eeb
+		summarizeBy: none
+		sourceColumn: race_id
+
+	column 'Race Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: f8bf70ad-4bd9-5179-a11f-139c0b065ea5
+		summarizeBy: none
+		sourceColumn: year
+
+	column Round
+		dataType: int64
+		formatString: 0
+		lineageTag: 7929386c-b087-5db6-9032-eedd9a80ebb4
+		summarizeBy: none
+		sourceColumn: round
+
+	column 'Race Name'
+		dataType: string
+		lineageTag: e4769f9d-cac0-56aa-86ac-a90e277fccc8
+		summarizeBy: none
+		sourceColumn: race_name
+
+	column 'Race Short'
+		dataType: string
+		lineageTag: 2438d737-09bd-59f0-8684-2577536bcd8a
+		summarizeBy: none
+		sourceColumn: race_short
+
+	column 'Race Label'
+		dataType: string
+		lineageTag: 7d7d8d23-34e3-5614-b4a3-7cd41f70b19b
+		summarizeBy: none
+		sourceColumn: race_label
+		sortByColumn: 'Race Label Order'
+
+	column 'Race Label Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 02d6f1da-0ed9-5d24-bba5-03fff4cef6ff
+		summarizeBy: none
+		sourceColumn: race_label_order
+
+	column 'Race Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: aca32565-2bcf-5d33-867b-d35fa7ab4b9d
+		summarizeBy: none
+		sourceColumn: race_date
+
+	column 'Circuit Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b7b0c84f-b137-57f5-a811-fd15153b5d15
+		summarizeBy: none
+		sourceColumn: circuit_id
+
+	column 'Race Era'
+		dataType: string
+		lineageTag: 3ee3370a-e84a-5849-96d4-b016bf302f59
+		summarizeBy: none
+		sourceColumn: era
+
+	column 'Has Sprint'
+		dataType: boolean
+		lineageTag: 5e5959b3-efe6-5be9-9e2c-244f3c235488
+		summarizeBy: none
+		sourceColumn: has_sprint
+
+	column 'Is Season Finale'
+		dataType: boolean
+		lineageTag: af7f5332-5715-5dd4-bfbf-01d419702964
+		summarizeBy: none
+		sourceColumn: is_season_finale
+
+	column 'Is Indy500'
+		dataType: boolean
+		lineageTag: b7848324-96aa-5589-acbe-250d74745aa8
+		summarizeBy: none
+		sourceColumn: is_indy500
+
+	column Winner
+		dataType: string
+		lineageTag: a864d454-6d2f-511b-bd95-48c3ecb585a7
+		summarizeBy: none
+		sourceColumn: winner
+
+	column 'Winning Team'
+		dataType: string
+		lineageTag: 2eeaacc4-0e5e-52a3-bec1-74e3f6cfbc60
+		summarizeBy: none
+		sourceColumn: winning_team
+
+	column 'Pole Sitter'
+		dataType: string
+		lineageTag: cec8e4ed-0d73-5e41-beda-de2854bf3037
+		summarizeBy: none
+		sourceColumn: pole_sitter
+
+	column 'Has Lap Data'
+		dataType: boolean
+		lineageTag: a027061a-772b-57dc-8831-1eea3731b832
+		summarizeBy: none
+		sourceColumn: has_lap_data
+
+	partition Race = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_race.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"race_id", Int64.Type}, {"year", Int64.Type}, {"round", Int64.Type}, {"race_name", type text}, {"race_short", type text}, {"race_label", type text}, {"race_label_order", Int64.Type}, {"race_date", type date}, {"circuit_id", Int64.Type}, {"era", type text}, {"has_sprint", type logical}, {"is_season_finale", type logical}, {"is_indy500", type logical}, {"winner", type text}, {"winning_team", type text}, {"pole_sitter", type text}, {"has_lap_data", type logical}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

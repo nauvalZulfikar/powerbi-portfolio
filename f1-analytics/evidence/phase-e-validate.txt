@@ -1,0 +1,102 @@
+=== TOM F1.SemanticModel
+✓ TMDL parsed: compatibility 1702, 28 tables, 32 relationships, 123 measures, 6 expressions
+  Season             cols  18  measures   0  partitions 1
+  Race               cols  17  measures   0  partitions 1
+  Driver             cols  34  measures   0  partitions 1
+  Constructor        cols  18  measures   0  partitions 1
+  Circuit            cols  19  measures   0  partitions 1
+  Results            cols  31  measures   0  partitions 1
+  Qualifying         cols   7  measures   0  partitions 1
+  Pit Stops          cols   9  measures   0  partitions 1
+  Lap Times          cols   7  measures   0  partitions 1
+  Standings          cols   8  measures   0  partitions 1
+  Grid Conversion    cols   8  measures   0  partitions 1
+  Team Season        cols  11  measures   0  partitions 1
+  Teammate H2H       cols  11  measures   0  partitions 1
+  Driver Skill       cols   7  measures   0  partitions 1
+  Sprint Results     cols   9  measures   0  partitions 1
+  Session Results    cols   7  measures   0  partitions 1
+  Race Pace          cols   4  measures   0  partitions 1
+  Points Systems     cols   5  measures   0  partitions 1
+  Calendar           cols   6  measures   0  partitions 1  [date table]
+  Win Bands          cols   4  measures   0  partitions 1
+  Win Points         cols   1  measures   0  partitions 1
+  Seasons Since Debut cols   1  measures   0  partitions 1
+  Funnel Stage       cols   2  measures   0  partitions 1
+  Team Access        cols   2  measures   0  partitions 1
+  Period             cols   2  measures   0  partitions 1
+  Dynasty Metric     cols   3  measures   0  partitions 1
+  Legends By         cols   3  measures   0  partitions 1
+  _Measures          cols   1  measures 123  partitions 1
+  rel Race[Circuit Id] (Many) → Circuit[Circuit Id] (One)
+  rel Race[Race Date] (Many) → Calendar[Date] (One)
+  rel Calendar[Year] (Many) → Season[Year] (One)
+  rel Results[Race Id] (Many) → Race[Race Id] (One)
+  rel Results[Driver Id] (Many) → Driver[Driver Id] (One)
+  rel Results[Constructor Id] (Many) → Constructor[Constructor Id] (One)
+  rel Qualifying[Race Id] (Many) → Race[Race Id] (One)
+  rel Qualifying[Driver Id] (Many) → Driver[Driver Id] (One)
+  rel Qualifying[Constructor Id] (Many) → Constructor[Constructor Id] (One)
+  rel Pit Stops[Race Id] (Many) → Race[Race Id] (One)
+  rel Pit Stops[Driver Id] (Many) → Driver[Driver Id] (One)
+  rel Pit Stops[Constructor Id] (Many) → Constructor[Constructor Id] (One)
+  rel Lap Times[Race Id] (Many) → Race[Race Id] (One)
+  rel Lap Times[Driver Id] (Many) → Driver[Driver Id] (One)
+  rel Standings[Race Id] (Many) → Race[Race Id] (One)
+  rel Standings[Driver Id] (Many) → Driver[Driver Id] (One)
+  rel Team Season[Team Year] (Many) → Season[Year] (One)
+  rel Team Season[Constructor Id] (Many) → Constructor[Constructor Id] (One)
+  rel Teammate H2H[H2H Year] (Many) → Season[Year] (One)
+  rel Teammate H2H[Driver Id] (Many) → Driver[Driver Id] (One)
+  rel Teammate H2H[Constructor Id] (Many) → Constructor[Constructor Id] (One)
+  rel Teammate H2H[Teammate Id] (Many) → Driver[Driver Id] (One)
+  rel Grid Conversion[Grid Era] (Many) → Race[Race Era] (Many)
+  rel Driver Skill[Driver Id] (Many) → Driver[Driver Id] (One)
+  rel Sprint Results[Race Id] (Many) → Race[Race Id] (One)
+  rel Sprint Results[Driver Id] (Many) → Driver[Driver Id] (One)
+  rel Sprint Results[Constructor Id] (Many) → Constructor[Constructor Id] (One)
+  rel Session Results[Race Id] (Many) → Race[Race Id] (One)
+  rel Session Results[Driver Id] (Many) → Driver[Driver Id] (One)
+  rel Session Results[Constructor Id] (Many) → Constructor[Constructor Id] (One)
+  rel Race Pace[Race Id] (Many) → Race[Race Id] (One)
+  rel Race Pace[Driver Id] (Many) → Driver[Driver Id] (One)
+  role Team Analyst: Constructor
+  role Ferrari Analyst: Constructor
+  role Public: Driver, Driver Skill
+  calc group Period: Current, Prev Season, YoY %, Season-to-date, Career-to-date
+  function F1.Rate
+  function F1.Share
+  function F1.PrevSeason
+  function F1.SeasonToDate
+  calendar Calendar.F1 Calendar: Year, Month, Date
+  OLS Public: Driver 1 columns hidden
+  OLS Public: Driver Skill hidden
+  sort-by: Race Label→Race Label Order, Achievement Tier→Achievement Tier Order, Win Band→Win Band Order, Grid Band→Grid Band Order, Rank Band→Rank Band Order, Next Band→Next Band Order, System→First Season, Month→Month Number, Win Band→Band Order, Stage→Stage Order, Period→Ordinal, Dynasty Metric→Dynasty Metric Order, Dynasty Metric Fields→Dynasty Metric Order, Legends By→Legends By Order, Legends By Fields→Legends By Order
+  refresh policy Lap Times: keep 30 Year, refresh 1 Year
+✓ model.Validate(): no errors
+✓ round-trip serialize/deserialize OK
+exit=0
+=== pbir validate
+[36mValidating F1[0m
+
+
+[32m✓[0m [1mF1[0m validation passed
+
+[2mPages: 12, Visuals: 153[0m
+[2mFields: SKIPPED (--fields)[0m
+[2mQA: SKIPPED (--qa)[0m
+[2mSemantic: SKIPPED (--semantic)[0m
+
+Valid (1 info)
+exit=0
+=== daxtest offline
+DAX tests: 7 file(s), mode offline (syntax/structure/references)
+ok   KEEPFILTERS vs replace.dax
+ok   Role-playing team-mate.dax
+ok   Season Lens check.dax
+ok   Season-to-date resets each year.dax
+ok   ci-champions.dax [assert]
+ok   ci-data-integrity.dax [assert]
+ok   ci-key-measures.dax [assert]
+7/7 passed, 3 with assert file; asserts NOT executed (offline)
+exit=0

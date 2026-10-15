@@ -1,0 +1,69 @@
+table Standings
+	lineageTag: a4b5ae2d-481c-5b80-a842-de90edff6323
+
+	column 'Race Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 939a1c8d-0117-5148-b69c-d445ac6731ca
+		summarizeBy: none
+		sourceColumn: race_id
+
+	column 'Driver Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 88491775-54f3-553d-b24d-af292f124cae
+		summarizeBy: none
+		sourceColumn: driver_id
+
+	column 'Standings Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: b305f119-c76c-5d87-9b3b-384ea809d08a
+		summarizeBy: none
+		sourceColumn: year
+
+	column 'Standings Round'
+		dataType: int64
+		formatString: 0
+		lineageTag: c830f69e-d560-5649-81ae-cd38b60b00b2
+		summarizeBy: none
+		sourceColumn: round
+
+	column 'Standing Points'
+		dataType: double
+		lineageTag: 4de984b6-5cc1-5efd-ab42-7be34d597eed
+		summarizeBy: none
+		sourceColumn: points
+
+	column 'Standing Position'
+		dataType: int64
+		formatString: 0
+		lineageTag: 30d373ce-72a7-5b66-b272-6e9dc38802c9
+		summarizeBy: none
+		sourceColumn: position
+
+	column 'Standing Wins'
+		dataType: int64
+		formatString: 0
+		lineageTag: 65dd22b2-8088-5c3f-816a-9d0141a497aa
+		summarizeBy: none
+		sourceColumn: wins
+
+	column 'Standing Gap'
+		dataType: double
+		lineageTag: 5f13237c-ce2e-536f-a835-81b5e9ccf854
+		summarizeBy: none
+		sourceColumn: gap_to_leader
+
+	partition Standings = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_standings.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"race_id", Int64.Type}, {"driver_id", Int64.Type}, {"year", Int64.Type}, {"round", Int64.Type}, {"points", type number}, {"position", Int64.Type}, {"wins", Int64.Type}, {"gap_to_leader", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

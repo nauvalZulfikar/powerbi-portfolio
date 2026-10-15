@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json",
+  "name": "602bea8993ccb2c20dc4",
+  "displayName": "Modern points",
+  "options": {
+    "targetVisualNames": [
+      "line_titlefight_modern",
+      "line_titlefight"
+    ],
+    "suppressData": true,
+    "applyOnlyToTargetVisuals": true
+  },
+  "explorationState": {
+    "version": "1.3",
+    "activeSection": "93d19250be38f30c",
+    "sections": {
+      "93d19250be38f30c": {
+        "visualContainers": {
+          "line_titlefight_modern": {
+            "singleVisual": {
+              "visualType": "lineChart",
+              "objects": {}
+            }
+          },
+          "line_titlefight": {
+            "singleVisual": {
+              "visualType": "lineChart",
+              "objects": {},
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

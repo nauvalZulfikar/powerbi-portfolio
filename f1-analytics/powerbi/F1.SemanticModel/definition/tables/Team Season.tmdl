@@ -1,0 +1,89 @@
+table 'Team Season'
+	lineageTag: 96378ccc-7ec2-5363-b73e-574f1cb0d539
+
+	column 'Team Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: 34a8c409-e457-5aef-983e-a1254b1e209d
+		summarizeBy: none
+		sourceColumn: year
+
+	column 'Constructor Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0d916972-6b5e-56cb-baed-c41013b23dee
+		summarizeBy: none
+		sourceColumn: constructor_id
+
+	column 'Team Modern Points'
+		dataType: int64
+		formatString: 0
+		lineageTag: ae14a1aa-cbc4-5fa0-8126-c754d5c98c6e
+		summarizeBy: none
+		sourceColumn: points_modern
+
+	column 'Team Season Wins'
+		dataType: int64
+		formatString: 0
+		lineageTag: 940e9230-86dd-5c0e-80ce-3c06e270f2b2
+		summarizeBy: none
+		sourceColumn: wins
+
+	column 'Team Season Poles'
+		dataType: int64
+		formatString: 0
+		lineageTag: 25f442da-1d1a-502c-916d-18e672750b60
+		summarizeBy: none
+		sourceColumn: poles
+
+	column 'Season Points Share'
+		dataType: double
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		lineageTag: d3586f39-7803-5743-b142-f15126151de6
+		summarizeBy: none
+		sourceColumn: season_points_share
+
+	column 'Season Rank'
+		dataType: int64
+		formatString: 0
+		lineageTag: 00428a9f-c57f-5f6a-b29b-9bbf2008d122
+		summarizeBy: none
+		sourceColumn: season_rank
+
+	column 'Rank Band Order' = SWITCH ( TRUE (), 'Team Season'[Season Rank] <= 3, 1, 'Team Season'[Season Rank] <= 7, 2, 3 )
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 37ce03f4-96fa-5a63-bcba-2d10deb685ee
+		summarizeBy: none
+
+	column 'Rank Band' = SWITCH ( 'Team Season'[Rank Band Order], 1, "Top 3", 2, "Midfield 4–7", "Back 8+" )
+		dataType: string
+		sortByColumn: 'Rank Band Order'
+		lineageTag: 0b896356-bbe8-51ed-bc74-54649f480aa8
+		summarizeBy: none
+
+	column 'Next Band Order' = VAR _y = 'Team Season'[Team Year] + 1 VAR _r = LOOKUPVALUE ( 'Team Season'[Rank Band Order], 'Team Season'[Team Year], _y, 'Team Season'[Constructor Id], 'Team Season'[Constructor Id] ) RETURN IF ( _y > MAX ( 'Team Season'[Team Year] ), BLANK (), COALESCE ( _r, 4 ) )
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: cd23e87c-ecd8-5143-af9d-21966c9b01bc
+		summarizeBy: none
+
+	column 'Next Band' = SWITCH ( 'Team Season'[Next Band Order], 1, "Top 3", 2, "Midfield 4–7", 3, "Back 8+", 4, "Left F1" )
+		dataType: string
+		sortByColumn: 'Next Band Order'
+		lineageTag: 9bcb2ec1-30a2-5581-8b7d-e4395549215d
+		summarizeBy: none
+
+	partition 'Team Season' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "team_season.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"year", Int64.Type}, {"constructor_id", Int64.Type}, {"points_modern", Int64.Type}, {"wins", Int64.Type}, {"poles", Int64.Type}, {"season_points_share", type number}, {"season_rank", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

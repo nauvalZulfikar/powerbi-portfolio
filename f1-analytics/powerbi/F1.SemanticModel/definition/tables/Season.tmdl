@@ -1,0 +1,149 @@
+table Season
+	lineageTag: 8a76dd92-ba92-5ed9-8532-db97e949ddc3
+
+	column Year
+		dataType: int64
+		isKey
+		formatString: 0
+		lineageTag: 09e08927-ab7b-5bd2-9727-c498f1b7a6b8
+		summarizeBy: none
+		sourceColumn: year
+
+	column Decade
+		dataType: string
+		lineageTag: f0728d92-b798-5b14-a134-091bd5dbf094
+		summarizeBy: none
+		sourceColumn: decade
+
+	column Era
+		dataType: string
+		lineageTag: 4260e153-1e9c-5f56-9f20-7f1e6e12236d
+		summarizeBy: none
+		sourceColumn: era
+
+	column 'Races in Season'
+		dataType: int64
+		formatString: 0
+		lineageTag: b9cfa9bd-d0de-5698-a6ae-30d4c4902208
+		summarizeBy: none
+		sourceColumn: races
+
+	column 'Sprint Weekends'
+		dataType: int64
+		formatString: 0
+		lineageTag: e574e28f-963d-5a3f-a115-6bcd686311eb
+		summarizeBy: none
+		sourceColumn: sprint_weekends
+
+	column 'Drivers Entered'
+		dataType: int64
+		formatString: 0
+		lineageTag: 66a4b316-f2cc-54e2-b00b-329336a0e176
+		summarizeBy: none
+		sourceColumn: drivers_entered
+
+	column 'Different Winners'
+		dataType: int64
+		formatString: 0
+		lineageTag: c2047d9b-ff8a-5325-8ec3-5cb51ae46536
+		summarizeBy: none
+		sourceColumn: different_winners
+
+	column 'Winning Teams'
+		dataType: int64
+		formatString: 0
+		lineageTag: 52b9021b-f94c-5cfc-8352-b82d8b463f43
+		summarizeBy: none
+		sourceColumn: winning_teams
+
+	column 'Champion Driver Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 24519e25-ee66-58b6-9d9b-673fbf54fb1b
+		summarizeBy: none
+		sourceColumn: champion_driver_id
+
+	column Champion
+		dataType: string
+		lineageTag: 2f9a0156-96bb-5aa5-adb0-6a7d508a6344
+		summarizeBy: none
+		sourceColumn: champion
+
+	column 'Champion Points'
+		dataType: double
+		lineageTag: 05aeba57-fb5e-5ed3-9d59-e431e709323a
+		summarizeBy: none
+		sourceColumn: champion_points
+
+	column 'Champion Wins'
+		dataType: int64
+		formatString: 0
+		lineageTag: 09d48915-94bd-5fe0-9122-aecf8f209a1d
+		summarizeBy: none
+		sourceColumn: champion_wins
+
+	column 'Champion Win Rate'
+		dataType: double
+		formatString: 0%
+		lineageTag: d6c4f960-6996-55f9-b182-b1456463473c
+		summarizeBy: none
+		sourceColumn: champion_win_rate
+
+	column 'Title Margin'
+		dataType: double
+		lineageTag: 61070211-1389-5258-be9f-3b292692e9e6
+		summarizeBy: none
+		sourceColumn: title_margin
+
+	column 'Title Margin Pct'
+		dataType: double
+		formatString: 0%
+		lineageTag: 3587c18d-b020-51bc-acb3-7d9296991861
+		summarizeBy: none
+		sourceColumn: title_margin_pct
+
+	column 'Runner Up'
+		dataType: string
+		lineageTag: 017858a5-f247-58a4-a1e7-80952d8f9275
+		summarizeBy: none
+		sourceColumn: runner_up
+
+	column 'Constructor Champion'
+		dataType: string
+		lineageTag: 7b4c2d94-5d66-5ac9-8a03-dd7a98468898
+		summarizeBy: none
+		sourceColumn: constructor_champion
+
+	column 'Top Team Points Share'
+		dataType: double
+		formatString: 0%
+		lineageTag: d8eaf2c1-d201-5676-827d-0205d272e5ac
+		summarizeBy: none
+		sourceColumn: top_team_points_share
+
+	hierarchy 'Season Path'
+		lineageTag: 892a3c2a-f54a-50bb-96cf-6b117a044522
+
+		level Era
+			lineageTag: 1a7b809c-1dc3-5f0d-89c1-eac5f3e2a026
+			column: Era
+
+		level Decade
+			lineageTag: 871e1f3b-acf2-5378-9092-b7b202edcd13
+			column: Decade
+
+		level Year
+			lineageTag: 54e86d0d-5aa7-5d5e-ad4c-dc4901e1ee81
+			column: Year
+
+	partition Season = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_season.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"year", Int64.Type}, {"decade", type text}, {"era", type text}, {"races", Int64.Type}, {"sprint_weekends", Int64.Type}, {"drivers_entered", Int64.Type}, {"different_winners", Int64.Type}, {"winning_teams", Int64.Type}, {"champion_driver_id", Int64.Type}, {"champion", type text}, {"champion_points", type number}, {"champion_wins", Int64.Type}, {"champion_win_rate", type number}, {"title_margin", type number}, {"title_margin_pct", type number}, {"runner_up", type text}, {"constructor_champion", type text}, {"top_team_points_share", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

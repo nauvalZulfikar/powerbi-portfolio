@@ -1,0 +1,12 @@
+// Driver plays two roles in 'Teammate H2H': the driver (active relationship) and the team-mate (inactive,
+// switched on by USERELATIONSHIP inside [Teammate Points Delta]).
+// Expected for Lewis Hamilton: as driver +878 (his points minus his team-mates'),
+// as team-mate -878 (the same pairs read from the other side).
+EVALUATE
+CALCULATETABLE (
+    ROW (
+        "Points Delta (as driver)", SUM ( 'Teammate H2H'[Points Delta] ),
+        "Teammate Points Delta", [Teammate Points Delta]
+    ),
+    Driver[Driver Name] = "Lewis Hamilton"
+)

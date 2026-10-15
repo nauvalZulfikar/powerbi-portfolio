@@ -1,0 +1,35 @@
+/// Sales lines
+table Sales
+
+	measure Bad = SUM([Amount])
+
+	/// refs a measure fully qualified
+	measure 'Bad Ref' = Sales[Good] * 2
+		formatString: #,0
+		displayFolder: Test
+
+	/// fine
+	measure Good = SUM(Sales[Amount])
+		formatString: #,0
+		displayFolder: Test
+
+	/// text measure; its format-string finding is ignored on purpose
+	measure Label = "text"
+		displayFolder: Test
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES"]}
+
+	/// amount
+	column Amount
+		dataType: double
+		summarizeBy: sum
+		sourceColumn: Amount
+
+	column 'Customer Key'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: Customer Key
+
+	partition Sales = m
+		mode: import
+		source = #table({"Amount","Customer Key"}, {{1.5,1}})

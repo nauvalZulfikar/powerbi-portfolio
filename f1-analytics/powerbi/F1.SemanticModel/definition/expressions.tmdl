@@ -1,0 +1,45 @@
+expression DataFolder = "/Users/shaka-mac-mini/coding-projects/portfolio-analytics/f1-analytics/data/marts/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 72e67886-33eb-5a5e-aff8-1b73ddd6c455
+
+	annotation PBI_ResultType = Text
+
+expression RawFolder = "/Users/shaka-mac-mini/coding-projects/portfolio-analytics/f1-analytics/data/raw/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 152ec67e-d060-54a0-8739-fd7a632d8e81
+
+	annotation PBI_ResultType = Text
+
+expression RangeStart = #datetime(1950, 1, 1, 0, 0, 0) meta [IsParameterQuery=true, Type="DateTime", IsParameterQueryRequired=true]
+	lineageTag: 51bf8beb-79f1-56af-b3b0-f760999f1538
+
+	annotation PBI_ResultType = DateTime
+
+expression RangeEnd = #datetime(2025, 1, 1, 0, 0, 0) meta [IsParameterQuery=true, Type="DateTime", IsParameterQueryRequired=true]
+	lineageTag: 31371f3e-5a30-5327-975a-3f2ddbf874ee
+
+	annotation PBI_ResultType = DateTime
+
+expression 'Sprint Raw' =
+			let
+			    // The raw Ergast file: sprint results are not in the Parquet marts, Power Query shapes them
+			    Source = Csv.Document(File.Contents(RawFolder & "sprint_results.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+			    // First row holds the column names
+			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+			    // Ergast writes a missing value as \N: make it a real null in every column
+			    NullMarkers = Table.ReplaceValue(Promoted, "\N", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted))
+			in
+			    NullMarkers
+	lineageTag: 2a07d065-036c-5b67-be81-2e45ed548149
+
+	annotation PBI_ResultType = Table
+
+expression 'Status Lookup' =
+			let
+			    // statusId -> text ("Finished", "+1 Lap", "Engine", …)
+			    Source = Csv.Document(File.Contents(RawFolder & "status.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+			    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+			    Typed = Table.TransformColumnTypes(Promoted, {{"statusId", Int64.Type}, {"status", type text}})
+			in
+			    Typed
+	lineageTag: b677f52e-943f-5663-99c6-65ab6b1f1959
+
+	annotation PBI_ResultType = Table

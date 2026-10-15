@@ -1,0 +1,130 @@
+relationship d11db826-a9ad-50ee-ae12-ea640e69f03a
+	fromColumn: Race.'Circuit Id'
+	toColumn: Circuit.'Circuit Id'
+
+relationship 5b4d19d0-3bea-5f31-9618-2bf986966a2d
+	fromColumn: Race.'Race Date'
+	toColumn: Calendar.Date
+
+relationship ee0b1251-3c3a-5137-826d-5465d1a334d7
+	fromColumn: Calendar.Year
+	toColumn: Season.Year
+
+relationship a61d9ddb-0906-5156-8462-e1196dfbef81
+	fromColumn: Results.'Race Id'
+	toColumn: Race.'Race Id'
+
+relationship 64a5ac4c-0b08-51f5-b43a-3cd3664096f7
+	fromColumn: Results.'Driver Id'
+	toColumn: Driver.'Driver Id'
+
+relationship 19f0f464-5321-5c74-84fd-f6a1e66de71e
+	fromColumn: Results.'Constructor Id'
+	toColumn: Constructor.'Constructor Id'
+
+relationship 081c9a45-7131-5979-b768-d88cda707044
+	fromColumn: Qualifying.'Race Id'
+	toColumn: Race.'Race Id'
+
+relationship 9c1aa24c-7ad4-5d14-9592-b25ba63692aa
+	fromColumn: Qualifying.'Driver Id'
+	toColumn: Driver.'Driver Id'
+
+relationship 75f943d0-54bf-55f0-9d96-0c8c22edbb53
+	fromColumn: Qualifying.'Constructor Id'
+	toColumn: Constructor.'Constructor Id'
+
+relationship 27e62dce-2fa0-570b-b9a2-ec7a2d686756
+	fromColumn: 'Pit Stops'.'Race Id'
+	toColumn: Race.'Race Id'
+
+relationship 09b2bd3c-a536-5a5f-bf99-8116e24870cb
+	fromColumn: 'Pit Stops'.'Driver Id'
+	toColumn: Driver.'Driver Id'
+
+relationship 928e5590-8af9-5087-91a2-667e329b22a2
+	fromColumn: 'Pit Stops'.'Constructor Id'
+	toColumn: Constructor.'Constructor Id'
+
+relationship c35c08a0-e635-54f7-954a-51c7cad88461
+	fromColumn: 'Lap Times'.'Race Id'
+	toColumn: Race.'Race Id'
+
+relationship ca515fcc-c394-550d-891c-fd42b935b5df
+	fromColumn: 'Lap Times'.'Driver Id'
+	toColumn: Driver.'Driver Id'
+
+relationship 87340ca4-8165-558e-a755-f123acb16d42
+	fromColumn: Standings.'Race Id'
+	toColumn: Race.'Race Id'
+
+relationship 8ce62c66-c57a-56be-b460-2758487c3a0d
+	fromColumn: Standings.'Driver Id'
+	toColumn: Driver.'Driver Id'
+
+relationship f8fa2dd5-a7b5-5e38-9f11-e8c358b5daa9
+	fromColumn: 'Team Season'.'Team Year'
+	toColumn: Season.Year
+
+relationship 2b73e492-5b76-57da-b243-8dfadcd75f37
+	fromColumn: 'Team Season'.'Constructor Id'
+	toColumn: Constructor.'Constructor Id'
+
+relationship 91080b2a-a9db-59f5-82c8-3b8e5b402db7
+	fromColumn: 'Teammate H2H'.'H2H Year'
+	toColumn: Season.Year
+
+relationship eac1f3dc-130e-57a0-a32e-fdd4fb7a25ed
+	fromColumn: 'Teammate H2H'.'Driver Id'
+	toColumn: Driver.'Driver Id'
+
+relationship 8f6a674b-3397-5fe9-968e-0d96c79922eb
+	fromColumn: 'Teammate H2H'.'Constructor Id'
+	toColumn: Constructor.'Constructor Id'
+
+relationship d22f97ca-2aba-5359-8025-195bf354e3ef
+	isActive: false
+	fromColumn: 'Teammate H2H'.'Teammate Id'
+	toColumn: Driver.'Driver Id'
+
+relationship e28d135e-8400-5ee2-b51d-552a62a10032
+	fromCardinality: many
+	toCardinality: many
+	fromColumn: 'Grid Conversion'.'Grid Era'
+	toColumn: Race.'Race Era'
+
+relationship 2603bef5-09a7-5937-8547-e12156d32f1e
+	fromColumn: 'Driver Skill'.'Driver Id'
+	toColumn: Driver.'Driver Id'
+
+relationship adb03d68-761f-59ae-a0d7-742ad1bea1f6
+	fromColumn: 'Sprint Results'.'Race Id'
+	toColumn: Race.'Race Id'
+
+relationship 46ada902-489c-5e02-aca7-123207d3bc6a
+	fromColumn: 'Sprint Results'.'Driver Id'
+	toColumn: Driver.'Driver Id'
+
+relationship 6e5bfcc9-b99f-5991-9bac-39e7de37613c
+	fromColumn: 'Sprint Results'.'Constructor Id'
+	toColumn: Constructor.'Constructor Id'
+
+relationship ef672b9d-e6ac-59af-bad4-adfde1b21165
+	fromColumn: 'Session Results'.'Race Id'
+	toColumn: Race.'Race Id'
+
+relationship ab9d559a-e11d-5ea8-bb3c-22f9541c6af9
+	fromColumn: 'Session Results'.'Driver Id'
+	toColumn: Driver.'Driver Id'
+
+relationship 4767b787-3305-5986-ac0f-755a9f233eb2
+	fromColumn: 'Session Results'.'Constructor Id'
+	toColumn: Constructor.'Constructor Id'
+
+relationship 371d5f6e-875b-566f-afa2-133d1d788ef4
+	fromColumn: 'Race Pace'.'Race Id'
+	toColumn: Race.'Race Id'
+
+relationship 3f752e31-70d4-5cf8-9d24-b8d4e7d1a511
+	fromColumn: 'Race Pace'.'Driver Id'
+	toColumn: Driver.'Driver Id'

@@ -1,0 +1,22 @@
+table 'Team Access'
+	lineageTag: 8bd7a151-cfb4-582d-af1a-5e7be0188cd7
+	isHidden
+
+	column Email
+		dataType: string
+		lineageTag: 8d254ac6-57b7-5ef8-9b70-86de90942a50
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Email]
+
+	column 'Constructor Name'
+		dataType: string
+		lineageTag: 92db7ddb-24e9-587a-9d8b-1a22b69a9c2e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Constructor Name]
+
+	partition 'Team Access' = calculated
+		mode: import
+		source =
+				DATATABLE ( "Email", STRING, "Constructor Name", STRING, { { "ferrari.analyst@example.org", "Ferrari" }, { "mercedes.analyst@example.org", "Mercedes" }, { "redbull.analyst@example.org", "Red Bull" } } )

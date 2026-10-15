@@ -1,0 +1,30 @@
+{
+  "rows": 1,
+  "checks": [
+    {
+      "column": "[Duplicate Result IDs]",
+      "equals": 0,
+      "tolerance": 0
+    },
+    {
+      "column": "[Results Without Driver]",
+      "equals": 0,
+      "tolerance": 0
+    },
+    {
+      "column": "[Results Without Race]",
+      "equals": 0,
+      "tolerance": 0
+    },
+    {
+      "column": "[Seasons Without Champion]",
+      "equals": 0,
+      "tolerance": 0
+    },
+    {
+      "column": "[Percentile Out Of Range]",
+      "equals": 0,
+      "tolerance": 0
+    }
+  ]
+}

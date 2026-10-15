@@ -1,0 +1,12 @@
+[project]
+name = "f1-analytics"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "duckdb>=1.5.5",
+    "kagglehub>=1.0.2",
+    "pandas>=3.0.5",
+    "plotly>=7.0.0",
+    "pyarrow>=25.0.1",
+    "statsmodels>=0.15.0",
+]

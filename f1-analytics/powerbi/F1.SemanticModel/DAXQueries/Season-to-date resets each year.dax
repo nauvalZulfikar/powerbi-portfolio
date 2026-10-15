@@ -1,0 +1,15 @@
+// Calendar-based time intelligence: 'F1 Calendar' tags Year / Month / Date, so TOTALYTD restarts every Year.
+// Lewis Hamilton, 2020-2021, by month. Expected: December 2020 STD = 341, December 2021 STD = 387;
+// January 2021 is blank again (STD restarts; the season had not begun). Both STD columns agree.
+EVALUATE
+CALCULATETABLE (
+    SUMMARIZECOLUMNS (
+        'Calendar'[Year], 'Calendar'[Month Number], 'Calendar'[Month],
+        "Points", [Points (Modern Scale)],
+        "Points STD (Cal)", [Points STD (Cal)],
+        "Points STD", [Points STD]
+    ),
+    Driver[Driver Name] = "Lewis Hamilton",
+    'Calendar'[Year] IN { 2020, 2021 }
+)
+ORDER BY 'Calendar'[Year], 'Calendar'[Month Number]

@@ -1,0 +1,15 @@
+table 'Seasons Since Debut'
+	lineageTag: 664ad3aa-041e-54ed-8c4f-d29b0f0f0675
+
+	column 'Seasons Since Debut'
+		dataType: int64
+		lineageTag: 80354e0b-6400-526a-9202-15b317968b2b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+		formatString: 0
+
+	partition 'Seasons Since Debut' = calculated
+		mode: import
+		source =
+				GENERATESERIES ( 1, 8, 1 )

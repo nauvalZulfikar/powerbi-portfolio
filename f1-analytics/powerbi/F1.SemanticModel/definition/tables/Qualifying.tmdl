@@ -1,0 +1,65 @@
+table Qualifying
+	lineageTag: 9caa3ad1-5cb4-52c6-aff4-c031caf95968
+
+	column 'Race Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 18487688-e6eb-51ca-bec7-5aaa23084f7b
+		summarizeBy: none
+		sourceColumn: race_id
+
+	column 'Driver Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8117b5d9-3e04-54da-8f61-c09832b9630e
+		summarizeBy: none
+		sourceColumn: driver_id
+
+	column 'Constructor Id'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3c435b7a-c90a-52cd-a43f-41dcc3878f6d
+		summarizeBy: none
+		sourceColumn: constructor_id
+
+	column 'Quali Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: f43f5d33-19af-5488-864d-c349ba5a1554
+		summarizeBy: none
+		sourceColumn: year
+
+	column 'Quali Position'
+		dataType: int64
+		formatString: 0
+		lineageTag: 568d8a9c-3cf8-5918-be25-41cea3ce0d44
+		summarizeBy: none
+		sourceColumn: quali_position
+
+	column 'Best Quali Ms'
+		dataType: int64
+		formatString: 0
+		lineageTag: e9a4dfa5-d72b-5b57-9597-ba950e9213c2
+		summarizeBy: none
+		sourceColumn: best_quali_ms
+
+	column 'Gap To Pole Pct'
+		dataType: double
+		formatString: 0.00%
+		lineageTag: f6f29f6e-e021-5d27-8f91-d725ae32d89b
+		summarizeBy: none
+		sourceColumn: gap_to_pole_pct
+
+	partition Qualifying = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_qualifying.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"race_id", Int64.Type}, {"driver_id", Int64.Type}, {"constructor_id", Int64.Type}, {"year", Int64.Type}, {"quali_position", Int64.Type}, {"best_quali_ms", Int64.Type}, {"gap_to_pole_pct", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

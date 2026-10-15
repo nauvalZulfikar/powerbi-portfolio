@@ -1,0 +1,68 @@
+table 'Grid Conversion'
+	lineageTag: ebfc8d69-14d1-56bf-8fcf-b1682b4331fb
+
+	column 'Grid Era'
+		dataType: string
+		lineageTag: b5a9061a-a442-5ccf-bddb-71d8ee547acd
+		summarizeBy: none
+		sourceColumn: era
+
+	column 'Starting Slot'
+		dataType: int64
+		formatString: 0
+		lineageTag: f8ddaa29-8920-5766-b91d-e4feb3408528
+		summarizeBy: none
+		sourceColumn: grid
+
+	column 'Slot Starts'
+		dataType: int64
+		formatString: 0
+		lineageTag: 90c2c1e3-4e8f-542d-98c9-b3e7cdf8b0a8
+		summarizeBy: none
+		sourceColumn: starts
+
+	column 'Slot Wins'
+		dataType: int64
+		formatString: 0
+		lineageTag: 79697fd4-565e-5ee8-9bed-48949e3e4e2b
+		summarizeBy: none
+		sourceColumn: wins
+
+	column 'Slot Podiums'
+		dataType: int64
+		formatString: 0
+		lineageTag: 3998937b-4b38-5b2e-b489-95bdeb6becdb
+		summarizeBy: none
+		sourceColumn: podiums
+
+	column 'Win Probability'
+		dataType: double
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		lineageTag: acec9dfa-2231-56ec-ad0b-834ae3c049f4
+		summarizeBy: none
+		sourceColumn: win_probability
+
+	column 'Podium Probability'
+		dataType: double
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		lineageTag: 223aefae-3ca8-503d-a85e-6d4d379ff70e
+		summarizeBy: none
+		sourceColumn: podium_probability
+
+	column 'Slot Avg Positions Gained'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 28e77e6e-fe65-5caf-add2-91dc824ec8aa
+		summarizeBy: none
+		sourceColumn: avg_positions_gained
+
+	partition 'Grid Conversion' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "grid_conversion.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"era", type text}, {"grid", Int64.Type}, {"starts", Int64.Type}, {"wins", Int64.Type}, {"podiums", Int64.Type}, {"win_probability", type number}, {"podium_probability", type number}, {"avg_positions_gained", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

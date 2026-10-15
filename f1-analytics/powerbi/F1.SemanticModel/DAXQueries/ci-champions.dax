@@ -1,0 +1,11 @@
+// pbi-kit CI test: Driver Titles Won for four known champions (same list as sql/90_tests.sql)
+// plus one title per season. Expected values: ci-champions.assert.json.
+EVALUATE
+ROW (
+    "Juan Fangio", CALCULATE ( [Driver Titles Won], Driver[Driver Name] = "Juan Fangio" ),
+    "Michael Schumacher", CALCULATE ( [Driver Titles Won], Driver[Driver Name] = "Michael Schumacher" ),
+    "Lewis Hamilton", CALCULATE ( [Driver Titles Won], Driver[Driver Name] = "Lewis Hamilton" ),
+    "Max Verstappen", CALCULATE ( [Driver Titles Won], Driver[Driver Name] = "Max Verstappen" ),
+    "Titles Awarded", CALCULATE ( [Driver Titles Won], REMOVEFILTERS ( Driver ) ),
+    "Seasons", COUNTROWS ( Season )
+)

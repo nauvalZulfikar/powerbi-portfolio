@@ -1,0 +1,8 @@
+// pbi-kit CI test: headline measures vs the DuckDB marts (all-time, no filters).
+EVALUATE
+ROW (
+    "Races", [Races],
+    "Starts", [Starts],
+    "Wins", [Wins],
+    "Points (Modern Scale)", [Points (Modern Scale)]
+)
