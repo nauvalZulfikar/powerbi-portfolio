@@ -1,0 +1,38 @@
+table 'Load Band'
+	lineageTag: 233948ee-0e17-57b4-8f65-8dcaf6518f1e
+
+	column Band
+		dataType: string
+		lineageTag: 1e25f943-bd60-5e83-ba84-7f0b042400fe
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Band]
+		sortByColumn: 'Band Order'
+
+	column 'Band Order'
+		dataType: int64
+		lineageTag: 9b7d20c4-927c-5f5e-9fcd-1119541a6c76
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Band Order]
+		isHidden
+
+	column 'Min Open'
+		dataType: int64
+		lineageTag: 4cc544a6-b90d-52ce-b71b-148b997869d8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Min Open]
+		isHidden
+
+	column 'Max Open'
+		dataType: int64
+		lineageTag: b5cc4f43-903d-5d2d-9338-8e40cbb70629
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Max Open]
+		isHidden
+
+	partition 'Load Band' = calculated
+		mode: import
+		source = DATATABLE ( "Band", STRING, "Band Order", INTEGER, "Min Open", INTEGER, "Max Open", INTEGER, { { "1–5", 1, 1, 5 }, { "6–20", 2, 6, 20 }, { "Over 20", 3, 21, 100000 } } )

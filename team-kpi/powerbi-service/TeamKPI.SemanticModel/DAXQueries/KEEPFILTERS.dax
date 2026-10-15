@@ -1,0 +1,14 @@
+// 6-s3 / 9-s2: a filter argument on a column REPLACES the filter already on that column;
+// KEEPFILTERS INTERSECTS with it. One row per priority, so the priority filter comes from the row:
+//   replaces: every row shows the P1 figure (the row filter is overwritten)
+//   KEEPFILTERS: only the P1 row has a value (P2 AND P1 is empty) - that is [P1 Resolution SLA %]
+DEFINE
+    MEASURE '_Measures'[P1 SLA replaces filter] = CALCULATE ( [Resolution SLA %], Priorities[Priority Key] = 1 )
+EVALUATE
+SUMMARIZECOLUMNS (
+    Priorities[Priority],
+    "Resolution SLA %", [Resolution SLA %],
+    "P1 SLA replaces filter", [P1 SLA replaces filter],
+    "P1 SLA with KEEPFILTERS", [P1 Resolution SLA %]
+)
+ORDER BY Priorities[Priority]

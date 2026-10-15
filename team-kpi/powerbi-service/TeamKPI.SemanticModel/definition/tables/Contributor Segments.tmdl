@@ -1,0 +1,29 @@
+table 'Contributor Segments'
+	lineageTag: ea4553f4-0b8f-5f49-9f40-d5fd0fbf7178
+
+	column Segment
+		dataType: string
+		lineageTag: d4f9430a-1b39-52ce-aac7-0140dc8460de
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Segment]
+		sortByColumn: 'Segment Order'
+
+	column 'Segment Order'
+		dataType: int64
+		lineageTag: a1377266-71fe-5014-b17a-1665121eedf4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Segment Order]
+		isHidden
+
+	column Action
+		dataType: string
+		lineageTag: 92f7176a-65b8-55b0-ae25-f1ba24bc2b49
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Action]
+
+	partition 'Contributor Segments' = calculated
+		mode: import
+		source = DATATABLE ( "Segment", STRING, "Segment Order", INTEGER, "Action", STRING, { { "Core", 1, "Watch load; pair with a riser" }, { "Rising", 2, "Mentor; hand over bigger tickets" }, { "Fading", 3, "Check in; reassign open work" }, { "Occasional", 4, "Tag good first issues" } } )

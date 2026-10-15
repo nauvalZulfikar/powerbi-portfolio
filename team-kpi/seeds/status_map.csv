@@ -1,0 +1,32 @@
+team_key,status,stage
+HIVE,Open,Backlog
+HIVE,Reopened,Backlog
+HIVE,In Progress,In Progress
+HIVE,Patch Available,In Review
+HIVE,Resolved,Done
+HIVE,Closed,Done
+HBASE,Open,Backlog
+HBASE,Reopened,Backlog
+HBASE,In Progress,In Progress
+HBASE,Patch Available,In Review
+HBASE,Resolved,Done
+HBASE,Closed,Done
+ARTEMIS,Open,Backlog
+ARTEMIS,Reopened,Backlog
+ARTEMIS,In Progress,In Progress
+ARTEMIS,Patch Available,In Review
+ARTEMIS,Resolved,Done
+ARTEMIS,Closed,Done
+CASSANDRA,Triage Needed,Backlog
+CASSANDRA,Open,Backlog
+CASSANDRA,Awaiting Feedback,Backlog
+CASSANDRA,In Progress,In Progress
+CASSANDRA,Changes Suggested,In Progress
+CASSANDRA,Patch Available,In Review
+CASSANDRA,Review In Progress,In Review
+CASSANDRA,Needs Committer,In Review
+CASSANDRA,Ready to Commit,In Review
+CASSANDRA,Requires Testing,In Review
+CASSANDRA,Testing,In Review
+CASSANDRA,Resolved,Done
+CASSANDRA,Closed,Done

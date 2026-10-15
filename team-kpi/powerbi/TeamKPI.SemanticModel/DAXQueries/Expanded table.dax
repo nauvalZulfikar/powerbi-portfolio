@@ -1,0 +1,11 @@
+// 9-s1: a Tickets row "contains" every column on the one side of its relationships (the expanded
+// table), so RELATED works inside FILTER ( Tickets, ... ) and a filter on Priorities reaches Tickets.
+// All three numbers are as of 30 Sep 2026 with the SLA Scale at 100%.
+EVALUATE
+VAR _open = CALCULATETABLE ( Tickets, ISBLANK ( Tickets[Resolved At] ) )
+RETURN
+    ROW (
+        "Open Breached (measure)", [Open Breached],
+        "FILTER over Tickets with RELATED", COUNTROWS ( FILTER ( _open, Tickets[Age Days] > RELATED ( Priorities[Resolution Target Days] ) ) ),
+        "Open P1 via a filter on Priorities", COUNTROWS ( CALCULATETABLE ( _open, Priorities[Priority Key] = 1 ) )
+    )

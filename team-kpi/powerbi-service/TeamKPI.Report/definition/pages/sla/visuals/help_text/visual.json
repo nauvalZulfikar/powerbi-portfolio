@@ -1,0 +1,66 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "help_text",
+  "position": {
+    "x": 1056,
+    "y": 104,
+    "z": 1100,
+    "width": 520,
+    "height": 260,
+    "tabOrder": 1700
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "How to read this page",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI Semibold",
+                      "fontSize": "12pt",
+                      "color": "#0b0b0b"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Green = 90% or more within target, amber 75–89%, red below; the words On track / At risk / Off track are in the matrix tooltip and the Status column. The gauge needle is the SLA, the line the 90% target. Drill the bars from team to priority. The slider loosens or tightens every target.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "10pt",
+                      "color": "#52514e"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'How to read this page Green = 90% or more within target, amber 75–89%, red below; the words On track / At risk / Off track are in the matrix tooltip and the Status column. The gauge needle is the SLA, the line the 90% target. Drill the bars from team'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "parentGroupName": "help_sla"
+}

@@ -1,0 +1,90 @@
+table 'Data Checks'
+	lineageTag: ca67a6d2-6d19-58b2-bc18-2a087ffb31d1
+
+	/// Issues returned by the Jira API for the window.
+	measure 'Tickets Pulled' = CALCULATE ( SUM ( 'Data Checks'[Tickets] ), 'Data Checks'[Step] = 1 )
+		formatString: #,0
+		displayFolder: Data quality
+		lineageTag: 2d94b906-35b1-5185-a622-2a3ded840715
+
+	/// Issues kept as tickets (epics excluded).
+	measure 'Tickets Counted' = CALCULATE ( SUM ( 'Data Checks'[Tickets] ), 'Data Checks'[Step] = 3 )
+		formatString: #,0
+		displayFolder: Data quality
+		lineageTag: 43780726-58b0-5aac-9560-1967ab158599
+
+	/// Issues left out, with the reason in the Check column.
+	measure 'Tickets Excluded' = [Tickets Pulled] - [Tickets Counted]
+		formatString: #,0
+		displayFolder: Data quality
+		lineageTag: 559373c9-c5d6-5fad-96f0-a487f4850a84
+
+	/// Tickets behind each data check.
+	measure 'Check Tickets' = SUM ( 'Data Checks'[Tickets] )
+		formatString: #,0
+		displayFolder: Data quality
+		lineageTag: 0609766a-c9f0-502e-8e53-0b9501209193
+
+	/// Resolved tickets never marked in progress: cycle time can't be measured.
+	measure 'No Start Recorded' = CALCULATE ( SUM ( 'Data Checks'[Tickets] ), 'Data Checks'[Step] = 5 )
+		formatString: #,0
+		displayFolder: Data quality
+		lineageTag: e5bc1142-32d4-50c6-9fdc-50dacb2cb6ab
+
+	/// Ticket rows where a duration failed its type on import (query Import Errors).
+	measure 'Import Error Rows' = COUNTROWS ( 'Import Errors' ) + 0
+		formatString: #,0
+		displayFolder: Data quality
+		lineageTag: 281492b7-dcd0-5874-9c9e-e5bb8cdbf59f
+
+	/// Tickets whose Jira status is the mapping row's status, live from Tickets (TREATAS: no relationship needed).
+	measure 'Tickets in Status' = CALCULATE ( COUNTROWS ( Tickets ), TREATAS ( VALUES ( 'Status Map'[Jira Status] ), Tickets[Status] ), REMOVEFILTERS ( 'Date' ) )
+		formatString: #,0
+		displayFolder: Data quality
+		lineageTag: 85ebf92a-acbe-578f-859d-d4a6b987ccb1
+
+	column 'Team Key'
+		dataType: string
+		isHidden
+		lineageTag: b50b9d74-64fa-5bf4-a327-cb3dcc6236b7
+		summarizeBy: none
+		sourceColumn: Team Key
+
+	column Step
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: afeb4ad9-375a-52bf-9378-e12982c9d61e
+		summarizeBy: none
+		sourceColumn: Step
+
+	column Check
+		dataType: string
+		lineageTag: f7d2a4b9-0ccd-5132-b3bc-726e44e461f6
+		summarizeBy: none
+		sourceColumn: Check
+		sortByColumn: Step
+
+	column Tickets
+		dataType: int64
+		formatString: #,0
+		lineageTag: a9f7d695-77bd-5caa-ad4a-104165950309
+		summarizeBy: none
+		sourceColumn: Tickets
+
+	partition 'Data Checks' = m
+		mode: import
+		source =
+				let
+				    // Read the mart the pipeline wrote
+				    Data = Parquet.Document(File.Contents(DataFolder & "data_checks.parquet")),
+				    // Keep only the columns the model uses, first: Parquet (and SQL) then reads just these
+				    Kept = Table.SelectColumns(Data, {"team_key", "step", "check", "tickets"}),
+				    // Business names
+				    Renamed = Table.RenameColumns(Kept, {{"team_key", "Team Key"}, {"step", "Step"}, {"check", "Check"}, {"tickets", "Tickets"}}),
+				    // Types last, once the shape is final
+				    Typed = Table.TransformColumnTypes(Renamed, {{"Team Key", type text}, {"Step", Int64.Type}, {"Check", type text}, {"Tickets", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

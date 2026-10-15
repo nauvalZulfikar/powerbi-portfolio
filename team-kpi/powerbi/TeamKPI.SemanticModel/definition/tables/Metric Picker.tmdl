@@ -1,0 +1,44 @@
+table 'Metric Picker'
+	lineageTag: a03a629b-570a-506f-8363-45c3962d7e88
+
+	column 'Metric Picker'
+		dataType: string
+		lineageTag: 837f19df-56db-5d0e-9415-cd7fe833f6b0
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Metric Picker Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Metric Picker Fields'
+
+	column 'Metric Picker Fields'
+		dataType: string
+		isHidden
+		lineageTag: 0c333e9b-80af-5b0f-bc3f-b0b48339d923
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Metric Picker Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	column 'Metric Picker Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 95ccb3e1-1957-5075-bfe6-7852f1ac2a06
+		summarizeBy: none
+		sourceColumn: [Value3]
+
+	partition 'Metric Picker' = calculated
+		mode: import
+		source =
+				{
+				    ( "Delivered", NAMEOF ( [Delivered] ), 0 ),
+				    ( "Median Lead Time", NAMEOF ( [Median Lead Time] ), 1 ),
+				    ( "Resolution SLA %", NAMEOF ( [Resolution SLA %] ), 2 ),
+				    ( "Open Tickets", NAMEOF ( [Open Tickets] ), 3 )
+				}

@@ -1,0 +1,15 @@
+{
+  "rows": 1,
+  "checks": [
+    {
+      "column": "[Open Breached (measure)]",
+      "row": 0,
+      "equals": 1212
+    },
+    {
+      "column": "[FILTER over Tickets with RELATED]",
+      "row": 0,
+      "equals": 1212
+    }
+  ]
+}

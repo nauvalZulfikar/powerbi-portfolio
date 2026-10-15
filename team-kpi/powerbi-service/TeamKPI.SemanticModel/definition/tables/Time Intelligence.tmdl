@@ -1,0 +1,47 @@
+table 'Time Intelligence'
+	lineageTag: 4cb8869b-66d7-5ee1-9b83-0ff8c3b36531
+
+	calculationGroup
+		precedence: 10
+
+		calculationItem Current = SELECTEDMEASURE ()
+			ordinal: 0
+
+		calculationItem 'Previous Week' = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Weekly', -1, WEEK ) )
+			ordinal: 1
+
+		calculationItem 'Last 4 Weeks' = CALCULATE ( SELECTEDMEASURE (), DATESINPERIOD ( 'Date'[Date], MAX ( 'Date'[Date] ), -28, DAY ) )
+			ordinal: 2
+
+		calculationItem MTD = CALCULATE ( SELECTEDMEASURE (), DATESMTD ( 'Gregorian' ) )
+			ordinal: 3
+
+		calculationItem QTD = CALCULATE ( SELECTEDMEASURE (), DATESQTD ( 'Gregorian' ) )
+			ordinal: 4
+
+		calculationItem YTD = CALCULATE ( SELECTEDMEASURE (), DATESYTD ( 'Gregorian' ) )
+			ordinal: 5
+
+		calculationItem 'Prior Year' = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, YEAR ) )
+			ordinal: 6
+
+		calculationItem 'YoY %' =
+				VAR _py = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, YEAR ) )
+				RETURN DIVIDE ( SELECTEDMEASURE () - _py, _py )
+			ordinal: 7
+			formatStringDefinition = "+0.0%;-0.0%;0.0%"
+
+	column Period
+		dataType: string
+		lineageTag: df4aa297-9978-5b41-a5c1-4799d3a8220c
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+	column Ordinal
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 402622a2-d7dc-5cb4-b6db-cc07da16b65b
+		summarizeBy: sum
+		sourceColumn: Ordinal

@@ -1,0 +1,82 @@
+[
+  {
+    "local": "data/marts/bridge_ticket_component.parquet",
+    "remote": "data/marts/bridge_ticket_component.parquet",
+    "bytes": 29519
+  },
+  {
+    "local": "data/marts/data_checks.parquet",
+    "remote": "data/marts/data_checks.parquet",
+    "bytes": 1152
+  },
+  {
+    "local": "data/marts/dim_component.parquet",
+    "remote": "data/marts/dim_component.parquet",
+    "bytes": 4302
+  },
+  {
+    "local": "data/marts/dim_date.parquet",
+    "remote": "data/marts/dim_date.parquet",
+    "bytes": 8967
+  },
+  {
+    "local": "data/marts/dim_person.parquet",
+    "remote": "data/marts/dim_person.parquet",
+    "bytes": 19417
+  },
+  {
+    "local": "data/marts/dim_priority.parquet",
+    "remote": "data/marts/dim_priority.parquet",
+    "bytes": 747
+  },
+  {
+    "local": "data/marts/dim_stage.parquet",
+    "remote": "data/marts/dim_stage.parquet",
+    "bytes": 478
+  },
+  {
+    "local": "data/marts/dim_team.parquet",
+    "remote": "data/marts/dim_team.parquet",
+    "bytes": 650
+  },
+  {
+    "local": "data/marts/dim_type.parquet",
+    "remote": "data/marts/dim_type.parquet",
+    "bytes": 363
+  },
+  {
+    "local": "data/marts/fact_backlog_daily.parquet",
+    "remote": "data/marts/fact_backlog_daily.parquet",
+    "bytes": 62697
+  },
+  {
+    "local": "data/marts/fact_stage_time.parquet",
+    "remote": "data/marts/fact_stage_time.parquet",
+    "bytes": 87408
+  },
+  {
+    "local": "data/marts/fact_stage_transition.parquet",
+    "remote": "data/marts/fact_stage_transition.parquet",
+    "bytes": 48396
+  },
+  {
+    "local": "data/marts/fact_ticket.parquet",
+    "remote": "data/marts/fact_ticket.parquet",
+    "bytes": 505797
+  },
+  {
+    "local": "data/marts/status_map.parquet",
+    "remote": "data/marts/status_map.parquet",
+    "bytes": 1265
+  },
+  {
+    "local": "data/marts/team_access.parquet",
+    "remote": "data/marts/team_access.parquet",
+    "bytes": 552
+  },
+  {
+    "local": "seeds/quarter_goals.xlsx",
+    "remote": "seeds/quarter_goals.xlsx",
+    "bytes": 5390
+  }
+]

@@ -1,0 +1,18 @@
+resolution,outcome
+Fixed,Delivered
+Implemented,Delivered
+Done,Delivered
+Resolved,Delivered
+Duplicate,Closed without change
+Invalid,Closed without change
+Won't Fix,Closed without change
+Won't Do,Closed without change
+Not A Problem,Closed without change
+Not A Bug,Closed without change
+Cannot Reproduce,Closed without change
+Information Provided,Closed without change
+Feedback Received,Closed without change
+Abandoned,Closed without change
+Incomplete,Closed without change
+Pending Closed,Closed without change
+Later,Closed without change

@@ -1,0 +1,45 @@
+table 'Stage Time'
+	lineageTag: af620664-304e-5596-bb35-e9089a2d2320
+	isHidden
+
+	column 'Ticket Key'
+		dataType: string
+		isHidden
+		lineageTag: c6704d93-e4ea-5dac-a01e-08cdabce8a2a
+		summarizeBy: none
+		sourceColumn: Ticket Key
+
+	column 'Stage Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3f4e4094-2b88-5561-87f6-0855a4dc8228
+		summarizeBy: none
+		sourceColumn: Stage Key
+
+	column Days
+		dataType: double
+		isHidden
+		formatString: #,0.0
+		lineageTag: e0b475df-785d-5a75-bfac-a368784e3716
+		summarizeBy: none
+		sourceColumn: Days
+
+	partition 'Stage Time' = m
+		mode: import
+		source =
+				let
+				    // Read the mart the pipeline wrote
+				    Data = Parquet.Document(File.Contents(DataFolder & "fact_stage_time.parquet")),
+				    // Keep only the columns the model uses, first: Parquet (and SQL) then reads just these
+				    Kept = Table.SelectColumns(Data, {"ticket_key", "stage_key", "days"}),
+				    // Business names
+				    Renamed = Table.RenameColumns(Kept, {{"ticket_key", "Ticket Key"}, {"stage_key", "Stage Key"}, {"days", "Days"}}),
+				    // Types last, once the shape is final
+				    Typed = Table.TransformColumnTypes(Renamed, {{"Ticket Key", type text}, {"Stage Key", Int64.Type}, {"Days", type number}}),
+				    // Drop zero-length stage intervals (status changed and changed back in the same second)
+				    NonZero = Table.SelectRows(Typed, each [Days] > 0)
+				in
+				    NonZero
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,50 @@
+expression DataFolder = "/Users/shaka-mac-mini/coding-projects/portfolio-analytics/team-kpi/data/marts/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: fee4428b-251f-56b3-84af-01abec3df7d3
+
+	annotation PBI_ResultType = Text
+
+expression SeedFolder = "/Users/shaka-mac-mini/coding-projects/portfolio-analytics/team-kpi/seeds/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 3d65ba77-de4b-57e4-bc10-3615ca9993e4
+
+	annotation PBI_ResultType = Text
+
+expression AsOfDate = #datetime(2026, 9, 30, 0, 0, 0) meta [IsParameterQuery=true, Type="DateTime", IsParameterQueryRequired=true]
+	lineageTag: cd8c8f6f-9024-5b51-9545-84b1bcf19267
+
+	annotation PBI_ResultType = DateTime
+
+expression TestUpn = "test.lead@example.org" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 5c40ebe8-6265-5f91-8e61-c828a360450c
+
+	annotation PBI_ResultType = Text
+
+expression LakehouseSqlEndpoint = "<workspace>.datawarehouse.fabric.microsoft.com" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 858569e9-fd86-53a3-a8da-646f80873104
+
+	annotation PBI_ResultType = Text
+
+expression RangeStart = #datetime(2024, 10, 1, 0, 0, 0) meta [IsParameterQuery=true, Type="DateTime", IsParameterQueryRequired=true]
+	lineageTag: 324c6f87-f5bc-569d-ae13-999702243e05
+
+	annotation PBI_ResultType = DateTime
+
+expression RangeEnd = #datetime(2026, 10, 1, 0, 0, 0) meta [IsParameterQuery=true, Type="DateTime", IsParameterQueryRequired=true]
+	lineageTag: ac2f2e35-c0a6-5109-96b5-22bd203236be
+
+	annotation PBI_ResultType = DateTime
+
+expression 'Tickets Source' =
+		let
+		    // Read the mart the pipeline wrote
+		    Data = Parquet.Document(File.Contents(DataFolder & "fact_ticket.parquet")),
+		    // Keep only the columns the model uses, first: Parquet (and SQL) then reads just these
+		    Kept = Table.SelectColumns(Data, {"ticket_key", "team_key", "type_key", "priority_key", "person_key", "stage", "stage_key", "status", "resolution", "outcome", "summary", "created_at", "created_date", "resolved_at", "resolved_date", "first_response_at", "started_at", "response_hours", "wait_hours", "lead_days", "cycle_days", "age_days", "reopened", "response_sla", "resolution_sla"}),
+		    // Business names
+		    Renamed = Table.RenameColumns(Kept, {{"ticket_key", "Ticket Key"}, {"team_key", "Team Key"}, {"type_key", "Type Key"}, {"priority_key", "Priority Key"}, {"person_key", "Person Key"}, {"stage", "Stage"}, {"stage_key", "Stage Key"}, {"status", "Status"}, {"resolution", "Resolution"}, {"outcome", "Outcome"}, {"summary", "Summary"}, {"created_at", "Created At"}, {"created_date", "Created Date"}, {"resolved_at", "Resolved At"}, {"resolved_date", "Resolved Date"}, {"first_response_at", "First Response At"}, {"started_at", "Started At"}, {"response_hours", "Response Hours"}, {"wait_hours", "Wait Hours"}, {"lead_days", "Lead Days"}, {"cycle_days", "Cycle Days"}, {"age_days", "Age Days"}, {"reopened", "Reopened"}, {"response_sla", "Response SLA"}, {"resolution_sla", "Resolution SLA"}}),
+		    // Types last, once the shape is final
+		    Typed = Table.TransformColumnTypes(Renamed, {{"Ticket Key", type text}, {"Team Key", type text}, {"Type Key", Int64.Type}, {"Priority Key", Int64.Type}, {"Person Key", Int64.Type}, {"Stage", type text}, {"Stage Key", Int64.Type}, {"Status", type text}, {"Resolution", type text}, {"Outcome", type text}, {"Summary", type text}, {"Created At", type datetime}, {"Created Date", type date}, {"Resolved At", type datetime}, {"Resolved Date", type date}, {"First Response At", type datetime}, {"Started At", type datetime}, {"Response Hours", type number}, {"Wait Hours", type number}, {"Lead Days", type number}, {"Cycle Days", type number}, {"Age Days", type number}, {"Reopened", Int64.Type}, {"Response SLA", type text}, {"Resolution SLA", type text}})
+		in
+		    Typed
+	lineageTag: 69c59309-5484-57c9-8dc1-fac678a99ce7
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,33 @@
+table 'Ticket Text'
+	lineageTag: 64f4e620-8f96-5441-a13d-96e3db4b7fda
+
+	column 'Ticket Key'
+		dataType: string
+		isKey
+		isHidden
+		lineageTag: a179a947-0512-5a1f-ab76-e133ab996a3b
+		summarizeBy: none
+		sourceColumn: Ticket Key
+
+	column Summary
+		dataType: string
+		lineageTag: 569de064-8810-5a9d-a1de-ffdedb49ba9d
+		summarizeBy: none
+		sourceColumn: Summary
+
+	partition 'Ticket Text' = m
+		mode: import
+		source =
+				let
+				    // Same staging query as Tickets: one read of the Parquet file
+				    Source = #"Tickets Source",
+				    // Same row filters as Tickets, so the 1:1 relationship lines up
+				    HasKey = Table.SelectRows(Source, each [Ticket Key] <> null and [Created Date] <= Date.From(AsOfDate)),
+				    // Just the key and the text
+				    Kept = Table.SelectColumns(HasKey, {"Ticket Key", "Summary"}),
+				    // Trim and strip control characters
+				    Cleaned = Table.TransformColumns(Kept, {{"Summary", each Text.Clean(Text.Trim(_)), type text}})
+				in
+				    Cleaned
+
+	annotation PBI_ResultType = Table

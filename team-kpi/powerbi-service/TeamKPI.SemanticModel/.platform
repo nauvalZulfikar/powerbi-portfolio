@@ -1,0 +1,5 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {"type": "SemanticModel", "displayName": "TeamKPI"},
+  "config": {"version": "2.0", "logicalId": "b2d84f1e-6a3c-4e97-9f05-3c71e8a2d640"}
+}

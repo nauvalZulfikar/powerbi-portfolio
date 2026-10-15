@@ -1,0 +1,14 @@
+table 'SLA Scale'
+	lineageTag: 54303f89-7f62-5cae-a650-12e9ddc5481e
+
+	column 'SLA Scale'
+		dataType: double
+		lineageTag: 0aed938d-d9d3-5cb8-a4dd-ae8068989a14
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [SLA Scale]
+		formatString: 0%
+
+	partition 'SLA Scale' = calculated
+		mode: import
+		source = SELECTCOLUMNS ( GENERATESERIES ( 0.5, 2, 0.25 ), "SLA Scale", [Value] )

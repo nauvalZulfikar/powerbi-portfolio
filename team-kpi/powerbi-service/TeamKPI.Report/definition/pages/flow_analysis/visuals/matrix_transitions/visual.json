@@ -1,0 +1,144 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "matrix_transitions",
+  "position": {
+    "x": 256,
+    "y": 216,
+    "z": 2600,
+    "width": 480,
+    "height": 332,
+    "tabOrder": 700
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "objects": {
+      "grid": [
+        {
+          "properties": {
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "6L"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Stage transitions: from (rows) → to (columns)'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Each move between shared stages in the replayed history; back-moves are rework'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Stage transitions: from (rows) → to (columns). Each move between shared stages in the replayed history; back-moves are rework'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Stage Transitions"
+                    }
+                  },
+                  "Property": "From Stage"
+                }
+              },
+              "queryRef": "Stage Transitions.From Stage",
+              "nativeQueryRef": "From Stage"
+            }
+          ]
+        },
+        "Columns": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Stage Transitions"
+                    }
+                  },
+                  "Property": "To Stage"
+                }
+              },
+              "queryRef": "Stage Transitions.To Stage",
+              "nativeQueryRef": "To Stage"
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Transitions"
+                }
+              },
+              "queryRef": "_Measures.Transitions",
+              "nativeQueryRef": "Transitions"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

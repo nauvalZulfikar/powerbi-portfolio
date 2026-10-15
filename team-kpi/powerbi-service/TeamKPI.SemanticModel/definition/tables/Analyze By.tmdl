@@ -1,0 +1,45 @@
+table 'Analyze By'
+	lineageTag: 86877e7a-2e53-5a0b-beb7-ee8bcc6a43c5
+
+	column 'Analyze By'
+		dataType: string
+		lineageTag: a082c9d0-6537-55ec-a8ba-52abd65c6ccd
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Analyze By Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Analyze By Fields'
+
+	column 'Analyze By Fields'
+		dataType: string
+		isHidden
+		lineageTag: 8d3698ca-546e-5de5-8ff1-1cf92e87a385
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Analyze By Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	column 'Analyze By Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 66444eab-965e-5d53-8283-59ff80d3e2c8
+		summarizeBy: none
+		sourceColumn: [Value3]
+
+	partition 'Analyze By' = calculated
+		mode: import
+		source =
+				{
+				    ( "Team", NAMEOF ( Teams[Team] ), 0 ),
+				    ( "Priority", NAMEOF ( Priorities[Priority] ), 1 ),
+				    ( "Type", NAMEOF ( Types[Type] ), 2 ),
+				    ( "Engineer", NAMEOF ( People[Person] ), 3 ),
+				    ( "Stage", NAMEOF ( Tickets[Stage] ), 4 )
+				}

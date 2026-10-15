@@ -1,0 +1,62 @@
+table People
+	lineageTag: bc7f33a6-067e-5141-90de-46076b6c2348
+
+	column 'Person Key'
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: fbce7e6e-58de-55f6-802b-7c986102e56e
+		summarizeBy: none
+		sourceColumn: Person Key
+
+	column Person
+		dataType: string
+		lineageTag: 279dff6e-0095-52ad-8f5f-0978a1226635
+		summarizeBy: none
+		sourceColumn: Person
+
+	column 'Home Team'
+		dataType: string
+		lineageTag: 79753990-1b0b-5cba-a542-a45de3929b99
+		summarizeBy: none
+		sourceColumn: Home Team
+
+	column 'First Delivered'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: ad97406a-59bf-5593-92a6-bed6efdeabfe
+		summarizeBy: none
+		sourceColumn: First Delivered
+
+	column 'First Quarter'
+		dataType: string
+		lineageTag: faaa4dbb-ee4b-5f56-aa13-9b719c3fb308
+		summarizeBy: none
+		sourceColumn: First Quarter
+		sortByColumn: 'First Quarter Key'
+
+	column 'First Quarter Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: bf9999be-ebc2-594a-a4ac-9c2cd9c921d0
+		summarizeBy: none
+		sourceColumn: First Quarter Key
+
+	partition People = m
+		mode: import
+		source =
+				let
+				    // Read the mart the pipeline wrote
+				    Data = Parquet.Document(File.Contents(DataFolder & "dim_person.parquet")),
+				    // Keep only the columns the model uses, first: Parquet (and SQL) then reads just these
+				    Kept = Table.SelectColumns(Data, {"person_key", "person", "home_team", "first_delivered", "first_quarter", "first_quarter_key"}),
+				    // Business names
+				    Renamed = Table.RenameColumns(Kept, {{"person_key", "Person Key"}, {"person", "Person"}, {"home_team", "Home Team"}, {"first_delivered", "First Delivered"}, {"first_quarter", "First Quarter"}, {"first_quarter_key", "First Quarter Key"}}),
+				    // Types last, once the shape is final
+				    Typed = Table.TransformColumnTypes(Renamed, {{"Person Key", Int64.Type}, {"Person", type text}, {"Home Team", type text}, {"First Delivered", type date}, {"First Quarter", type text}, {"First Quarter Key", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

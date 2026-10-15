@@ -1,0 +1,117 @@
+{
+  "rows": 7,
+  "checks": [
+    {
+      "column": "[Check]",
+      "row": 0,
+      "equals": "Created"
+    },
+    {
+      "column": "[Actual]",
+      "row": 0,
+      "equals": 5832,
+      "tolerance": 0
+    },
+    {
+      "column": "[Result]",
+      "row": 0,
+      "equals": "PASS"
+    },
+    {
+      "column": "[Check]",
+      "row": 1,
+      "equals": "Resolved"
+    },
+    {
+      "column": "[Actual]",
+      "row": 1,
+      "equals": 4187,
+      "tolerance": 0
+    },
+    {
+      "column": "[Result]",
+      "row": 1,
+      "equals": "PASS"
+    },
+    {
+      "column": "[Check]",
+      "row": 2,
+      "equals": "Delivered"
+    },
+    {
+      "column": "[Actual]",
+      "row": 2,
+      "equals": 3827,
+      "tolerance": 0
+    },
+    {
+      "column": "[Result]",
+      "row": 2,
+      "equals": "PASS"
+    },
+    {
+      "column": "[Check]",
+      "row": 3,
+      "equals": "Median Lead Time"
+    },
+    {
+      "column": "[Actual]",
+      "row": 3,
+      "equals": 7.299,
+      "tolerance": 0.001
+    },
+    {
+      "column": "[Result]",
+      "row": 3,
+      "equals": "PASS"
+    },
+    {
+      "column": "[Check]",
+      "row": 4,
+      "equals": "Resolution SLA %"
+    },
+    {
+      "column": "[Actual]",
+      "row": 4,
+      "equals": 0.895868,
+      "tolerance": 0.001
+    },
+    {
+      "column": "[Result]",
+      "row": 4,
+      "equals": "PASS"
+    },
+    {
+      "column": "[Check]",
+      "row": 5,
+      "equals": "Open Tickets"
+    },
+    {
+      "column": "[Actual]",
+      "row": 5,
+      "equals": 1645,
+      "tolerance": 0
+    },
+    {
+      "column": "[Result]",
+      "row": 5,
+      "equals": "PASS"
+    },
+    {
+      "column": "[Check]",
+      "row": 6,
+      "equals": "Open Breached"
+    },
+    {
+      "column": "[Actual]",
+      "row": 6,
+      "equals": 1212,
+      "tolerance": 0
+    },
+    {
+      "column": "[Result]",
+      "row": 6,
+      "equals": "PASS"
+    }
+  ]
+}

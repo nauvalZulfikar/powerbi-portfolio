@@ -1,0 +1,65 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmarksMetadata/1.0.0/schema.json",
+  "items": [
+    {
+      "name": "bm_open_chart"
+    },
+    {
+      "name": "bm_open_table"
+    },
+    {
+      "name": "bm_help_overview_on"
+    },
+    {
+      "name": "bm_help_overview_off"
+    },
+    {
+      "name": "bm_help_flow_on"
+    },
+    {
+      "name": "bm_help_flow_off"
+    },
+    {
+      "name": "bm_help_sla_on"
+    },
+    {
+      "name": "bm_help_sla_off"
+    },
+    {
+      "name": "bm_help_workload_on"
+    },
+    {
+      "name": "bm_help_workload_off"
+    },
+    {
+      "name": "bm_help_teams_on"
+    },
+    {
+      "name": "bm_help_teams_off"
+    },
+    {
+      "name": "bm_help_quality_on"
+    },
+    {
+      "name": "bm_help_quality_off"
+    },
+    {
+      "name": "bm_help_diagnosis_on"
+    },
+    {
+      "name": "bm_help_diagnosis_off"
+    },
+    {
+      "name": "bm_help_contributors_on"
+    },
+    {
+      "name": "bm_help_contributors_off"
+    },
+    {
+      "name": "bm_help_flow_analysis_on"
+    },
+    {
+      "name": "bm_help_flow_analysis_off"
+    }
+  ]
+}

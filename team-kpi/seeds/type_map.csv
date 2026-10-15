@@ -1,0 +1,12 @@
+type_raw,type_key,type,counted
+Bug,1,Bug,true
+Improvement,2,Feature,true
+New Feature,2,Feature,true
+Wish,2,Feature,true
+Brainstorming,2,Feature,true
+Task,3,Task,true
+Sub-task,3,Task,true
+Test,3,Task,true
+Epic,9,Epic,false
+Umbrella,9,Umbrella,false
+Dependency upgrade,3,Task,true

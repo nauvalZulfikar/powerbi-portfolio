@@ -1,0 +1,10 @@
+priority_raw,priority_key,priority,response_hours,resolution_days
+Blocker,1,P1 Urgent,24,7
+Urgent,1,P1 Urgent,24,7
+Critical,2,P2 High,72,30
+High,2,P2 High,72,30
+Major,3,P3 Normal,168,90
+Normal,3,P3 Normal,168,90
+Minor,4,P4 Low,336,180
+Low,4,P4 Low,336,180
+Trivial,4,P4 Low,336,180

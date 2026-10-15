@@ -1,0 +1,19 @@
+perspective 'Data Quality'
+
+	perspectiveTable 'Data Checks'
+		includeAll
+
+	perspectiveTable 'Status Map'
+		includeAll
+
+	perspectiveTable 'Import Errors'
+		includeAll
+
+	perspectiveTable Teams
+		includeAll
+
+	perspectiveTable Tickets
+		includeAll
+
+	perspectiveTable Date
+		includeAll

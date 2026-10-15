@@ -1,0 +1,63 @@
+table 'Stage Transitions'
+	lineageTag: 81f91460-6fbd-5ba5-90f6-872fd692e0f6
+
+	column 'Ticket Key'
+		dataType: string
+		isHidden
+		lineageTag: 2cfa51d5-b056-5446-95a0-e665e98699cc
+		summarizeBy: none
+		sourceColumn: Ticket Key
+
+	column 'From Stage Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 055679ba-dbcb-579e-83de-b42e0d1e1820
+		summarizeBy: none
+		sourceColumn: From Stage Key
+
+	column 'To Stage Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8cc29d64-f223-5211-838d-346f12cf85e6
+		summarizeBy: none
+		sourceColumn: To Stage Key
+
+	column 'From Stage' =
+			LOOKUPVALUE ( Stages[Stage], Stages[Stage Key], 'Stage Transitions'[From Stage Key] )
+		dataType: string
+		lineageTag: f499de6d-8e1c-593e-b8ca-dbdba32c72c5
+		summarizeBy: none
+		sortByColumn: 'From Stage Key'
+
+	column 'To Stage' =
+			LOOKUPVALUE ( Stages[Stage], Stages[Stage Key], 'Stage Transitions'[To Stage Key] )
+		dataType: string
+		lineageTag: 5af6c84a-4bd8-5e76-b5b5-e1a05e000bd6
+		summarizeBy: none
+		sortByColumn: 'To Stage Key'
+
+	column 'Transition Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: 6736d123-20be-5960-9fcb-49dd90a23985
+		summarizeBy: none
+		sourceColumn: Transition Date
+
+	partition 'Stage Transitions' = m
+		mode: import
+		source =
+				let
+				    // Read the mart the pipeline wrote
+				    Data = Parquet.Document(File.Contents(DataFolder & "fact_stage_transition.parquet")),
+				    // Keep only the columns the model uses, first: Parquet (and SQL) then reads just these
+				    Kept = Table.SelectColumns(Data, {"ticket_key", "from_stage_key", "to_stage_key", "transition_date"}),
+				    // Business names
+				    Renamed = Table.RenameColumns(Kept, {{"ticket_key", "Ticket Key"}, {"from_stage_key", "From Stage Key"}, {"to_stage_key", "To Stage Key"}, {"transition_date", "Transition Date"}}),
+				    // Types last, once the shape is final
+				    Typed = Table.TransformColumnTypes(Renamed, {{"Ticket Key", type text}, {"From Stage Key", Int64.Type}, {"To Stage Key", Int64.Type}, {"Transition Date", type date}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

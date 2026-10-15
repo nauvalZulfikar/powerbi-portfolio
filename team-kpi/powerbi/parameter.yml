@@ -1,0 +1,44 @@
+# fabric-cicd parameter.yml (pbi-kit) — per-environment values for team-kpi.
+# deploy.py --env Test|Prod picks the column. Placeholders only: real workspace/lakehouse/user names go here,
+# secrets never (they live in the GitHub environments Test/Prod).
+# Each regex matches the TMDL `expression X = "..."` line, so it works whatever value is committed (the dev Mac path).
+
+find_replace:
+  # Import tables read the parquet marts; on the Service that is a gateway-visible share per stage.
+  - find_value: 'expression DataFolder = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "\\\\fileserver\\pbi-test\\team-kpi\\data\\marts\\"
+      Prod: "\\\\fileserver\\pbi\\team-kpi\\data\\marts\\"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+  # Seed CSVs (status map, quarter goals) sit next to the marts on the same share.
+  - find_value: 'expression SeedFolder = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "\\\\fileserver\\pbi-test\\team-kpi\\seeds\\"
+      Prod: "\\\\fileserver\\pbi\\team-kpi\\seeds\\"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+  # DirectQuery/Direct Lake source: one Lakehouse SQL endpoint per stage.
+  - find_value: 'expression LakehouseSqlEndpoint = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "team-kpi-test.datawarehouse.fabric.microsoft.com"
+      Prod: "team-kpi-prod.datawarehouse.fabric.microsoft.com"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+  # The user the RLS test page impersonates: a test account in Test, a real team lead in Prod.
+  - find_value: 'expression TestUpn = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "test.lead@example.org"
+      Prod: "rls.check@example.org"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+# TeamKPI.Report is bound byPath to TeamKPI.SemanticModel; fabric-cicd rebinds it to the model it just
+# published in the same workspace, so no semantic_model_binding is needed.

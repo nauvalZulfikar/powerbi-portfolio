@@ -1,0 +1,49 @@
+table Priorities
+	lineageTag: c999353b-e275-5949-a658-629478ed6f55
+
+	column 'Priority Key'
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: ef00ddb4-96b9-52ca-9740-2870f190c869
+		summarizeBy: none
+		sourceColumn: Priority Key
+
+	column Priority
+		dataType: string
+		lineageTag: 5eef7fa1-13e1-5c35-a37d-eb57a27d5b8d
+		summarizeBy: none
+		sourceColumn: Priority
+		sortByColumn: 'Priority Key'
+
+	column 'Response Target Hours'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 4dbdcc57-34ee-5790-b9f3-466823e2f17e
+		summarizeBy: none
+		sourceColumn: Response Target Hours
+
+	column 'Resolution Target Days'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 12276bb1-ca59-56eb-8b3f-39c0d0322de3
+		summarizeBy: none
+		sourceColumn: Resolution Target Days
+
+	partition Priorities = m
+		mode: import
+		source =
+				let
+				    // Read the mart the pipeline wrote
+				    Data = Parquet.Document(File.Contents(DataFolder & "dim_priority.parquet")),
+				    // Keep only the columns the model uses, first: Parquet (and SQL) then reads just these
+				    Kept = Table.SelectColumns(Data, {"priority_key", "priority", "response_hours", "resolution_days"}),
+				    // Business names
+				    Renamed = Table.RenameColumns(Kept, {{"priority_key", "Priority Key"}, {"priority", "Priority"}, {"response_hours", "Response Target Hours"}, {"resolution_days", "Resolution Target Days"}}),
+				    // Types last, once the shape is final
+				    Typed = Table.TransformColumnTypes(Renamed, {{"Priority Key", Int64.Type}, {"Priority", type text}, {"Response Target Hours", Int64.Type}, {"Resolution Target Days", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

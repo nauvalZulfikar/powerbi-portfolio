@@ -1,0 +1,235 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "deneb_scatter",
+  "position": {
+    "x": 704,
+    "y": 216,
+    "z": 2700,
+    "width": 432,
+    "height": 332,
+    "tabOrder": 800
+  },
+  "visual": {
+    "visualType": "deneb7E15AEF80B9E4D4F8E12924291ECE89A",
+    "objects": {
+      "vega": [
+        {
+          "properties": {
+            "provider": {
+              "expr": {
+                "Literal": {
+                  "Value": "'vegaLite'"
+                }
+              }
+            },
+            "renderMode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'svg'"
+                }
+              }
+            },
+            "jsonSpec": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{\n  \"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\",\n  \"description\": \"Cycle-time scatter: one dot per delivered ticket, dashed P50 / P85 lines (Deneb, Vega-Lite).\",\n  \"data\": {\n    \"name\": \"dataset\"\n  },\n  \"width\": \"container\",\n  \"height\": \"container\",\n  \"layer\": [\n    {\n      \"mark\": {\n        \"type\": \"circle\",\n        \"size\": 18,\n        \"opacity\": 0.55\n      },\n      \"encoding\": {\n        \"x\": {\n          \"field\": \"Resolved Date\",\n          \"type\": \"temporal\",\n          \"title\": null,\n          \"axis\": {\n            \"format\": \"%b %y\",\n            \"labelColor\": \"#898781\",\n            \"grid\": false\n          }\n        },\n        \"y\": {\n          \"field\": \"Lead Days\",\n          \"type\": \"quantitative\",\n          \"title\": \"Lead days\",\n          \"scale\": {\n            \"type\": \"symlog\"\n          },\n          \"axis\": {\n            \"labelColor\": \"#898781\",\n            \"gridColor\": \"#ECEBE6\"\n          }\n        },\n        \"color\": {\n          \"field\": \"Team\",\n          \"type\": \"nominal\",\n          \"legend\": {\n            \"orient\": \"top\",\n            \"title\": null\n          }\n        },\n        \"tooltip\": [\n          {\n            \"field\": \"Ticket Key\"\n          },\n          {\n            \"field\": \"Team\"\n          },\n          {\n            \"field\": \"Lead Days\",\n            \"format\": \",.1f\"\n          },\n          {\n            \"field\": \"Resolved Date\",\n            \"type\": \"temporal\"\n          }\n        ]\n      }\n    },\n    {\n      \"transform\": [\n        {\n          \"quantile\": \"Lead Days\",\n          \"probs\": [\n            0.5,\n            0.85\n          ],\n          \"as\": [\n            \"prob\",\n            \"value\"\n          ]\n        },\n        {\n          \"calculate\": \"''P'' + round(datum.prob * 100) + '' = '' + format(datum.value, '',.0f'') + '' d''\",\n          \"as\": \"label\"\n        }\n      ],\n      \"layer\": [\n        {\n          \"mark\": {\n            \"type\": \"rule\",\n            \"strokeDash\": [\n              4,\n              3\n            ],\n            \"color\": \"#52514e\"\n          },\n          \"encoding\": {\n            \"y\": {\n              \"field\": \"value\",\n              \"type\": \"quantitative\"\n            }\n          }\n        },\n        {\n          \"mark\": {\n            \"type\": \"text\",\n            \"align\": \"left\",\n            \"dx\": 4,\n            \"dy\": -6,\n            \"fontSize\": 9,\n            \"color\": \"#52514e\"\n          },\n          \"encoding\": {\n            \"y\": {\n              \"field\": \"value\",\n              \"type\": \"quantitative\"\n            },\n            \"x\": {\n              \"value\": 0\n            },\n            \"text\": {\n              \"field\": \"label\"\n            }\n          }\n        }\n      ]\n    }\n  ]\n}\n'"
+                }
+              }
+            },
+            "jsonConfig": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{}'"
+                }
+              }
+            },
+            "isNewDialogOpen": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Lead time scatter: one dot per delivered ticket'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Deneb (Vega-Lite) custom visual; dashed lines = P50 and P85. Spec: powerbi/deneb/lead-time-scatter.json'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Lead time scatter: one dot per delivered ticket. Deneb (Vega-Lite) custom visual; dashed lines = P50 and P85. Spec: powerbi/deneb/lead-time-scatter.json'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "dataset": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Tickets"
+                    }
+                  },
+                  "Property": "Ticket Key"
+                }
+              },
+              "queryRef": "Tickets.Ticket Key",
+              "nativeQueryRef": "Ticket Key"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Tickets"
+                    }
+                  },
+                  "Property": "Resolved Date"
+                }
+              },
+              "queryRef": "Tickets.Resolved Date",
+              "nativeQueryRef": "Resolved Date"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Tickets"
+                    }
+                  },
+                  "Property": "Lead Days"
+                }
+              },
+              "queryRef": "Tickets.Lead Days",
+              "nativeQueryRef": "Lead Days"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Teams"
+                    }
+                  },
+                  "Property": "Team"
+                }
+              },
+              "queryRef": "Teams.Team",
+              "nativeQueryRef": "Team"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "delivered",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Tickets"
+              }
+            },
+            "Property": "Outcome"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "t",
+              "Entity": "Tickets",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "t"
+                          }
+                        },
+                        "Property": "Outcome"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'Delivered'"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

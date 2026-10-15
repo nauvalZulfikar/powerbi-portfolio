@@ -1,0 +1,40 @@
+table Components
+	lineageTag: bb0ee56c-36b2-5364-842b-ac410d76ddac
+
+	column 'Component Key'
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: affdd15b-fe58-5a79-8257-d522c7973396
+		summarizeBy: none
+		sourceColumn: Component Key
+
+	column Project
+		dataType: string
+		lineageTag: 96ce72bd-2385-5869-b394-8d21b8e836d6
+		summarizeBy: none
+		sourceColumn: Project
+
+	column Component
+		dataType: string
+		lineageTag: edc1c783-cf43-5c5f-a4a4-c03976e8f4f0
+		summarizeBy: none
+		sourceColumn: Component
+
+	partition Components = m
+		mode: import
+		source =
+				let
+				    // Read the mart the pipeline wrote
+				    Data = Parquet.Document(File.Contents(DataFolder & "dim_component.parquet")),
+				    // Keep only the columns the model uses, first: Parquet (and SQL) then reads just these
+				    Kept = Table.SelectColumns(Data, {"component_key", "team_key", "component"}),
+				    // Business names
+				    Renamed = Table.RenameColumns(Kept, {{"component_key", "Component Key"}, {"team_key", "Project"}, {"component", "Component"}}),
+				    // Types last, once the shape is final
+				    Typed = Table.TransformColumnTypes(Renamed, {{"Component Key", Int64.Type}, {"Project", type text}, {"Component", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

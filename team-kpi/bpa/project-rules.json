@@ -1,0 +1,11 @@
+[
+  {
+    "ID": "PROJ_TEAMKPI_SLA_HONOURS_SCALE",
+    "Name": "[Project] SLA % measures must apply the SLA Scale what-if",
+    "Category": "Project",
+    "Description": "team-kpi: every '... SLA %' measure must read [SLA Scale %] (directly or through [Resolution SLA %]); otherwise the SLA Scale slider silently stops moving that number and the what-if page lies.",
+    "Severity": 3,
+    "Scope": "Measure",
+    "Expression": "Name.EndsWith(\"SLA %\") and not (Expression.Contains(\"[SLA Scale %]\") or Expression.Contains(\"[Resolution SLA %]\"))"
+  }
+]

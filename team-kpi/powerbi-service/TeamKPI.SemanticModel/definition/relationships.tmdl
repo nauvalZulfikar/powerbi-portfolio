@@ -1,0 +1,85 @@
+relationship d4811dfc-39df-50d0-aabd-b6d82a90ce57
+	fromColumn: Tickets.'Created Date'
+	toColumn: Date.Date
+
+relationship a3b8fee9-5595-5691-86d2-07d4f7ae8475
+	isActive: false
+	fromColumn: Tickets.'Resolved Date'
+	toColumn: Date.Date
+
+relationship b872dc0d-7188-5fca-8b26-e38949b278ad
+	fromColumn: Tickets.'Team Key'
+	toColumn: Teams.'Team Key'
+
+relationship e75b5571-ff46-5690-b92f-60a002fe8770
+	fromColumn: Tickets.'Type Key'
+	toColumn: Types.'Type Key'
+
+relationship 3497479c-2d12-5419-a3a8-1bbc73ecc4eb
+	fromColumn: Tickets.'Priority Key'
+	toColumn: Priorities.'Priority Key'
+
+relationship cbfa08e5-4c28-5b8b-8626-88ba0b56fc12
+	fromColumn: Tickets.'Person Key'
+	toColumn: People.'Person Key'
+
+relationship b5418032-4d01-59ad-a35a-b9e56ab2991f
+	fromColumn: 'Stage Time'.'Ticket Key'
+	toColumn: Tickets.'Ticket Key'
+
+relationship 09ffee06-e2a6-5fde-9783-e49976829083
+	fromColumn: 'Stage Time'.'Stage Key'
+	toColumn: Stages.'Stage Key'
+
+relationship de872797-d3d7-555f-9661-c22a9155e3e2
+	fromColumn: 'Stage Transitions'.'Ticket Key'
+	toColumn: Tickets.'Ticket Key'
+
+relationship 5d1336c2-2df4-5db7-bed4-05b8f12fc6ad
+	fromColumn: Backlog.Date
+	toColumn: Date.Date
+
+relationship 1a12b90c-78c4-5120-93bd-6d6db90c3804
+	fromColumn: Backlog.'Team Key'
+	toColumn: Teams.'Team Key'
+
+relationship 9bd465d1-25f0-5d1e-a6cc-51d19e8812ec
+	fromColumn: Backlog.'Priority Key'
+	toColumn: Priorities.'Priority Key'
+
+relationship e568bce0-f526-565d-be2a-c4f493ae5018
+	fromColumn: Backlog.'Stage Key'
+	toColumn: Stages.'Stage Key'
+
+relationship 9234bb77-0bed-5cfa-870c-31b53bfc1d1b
+	fromColumn: 'Status Map'.'Team Key'
+	toColumn: Teams.'Team Key'
+
+relationship 2fc4638c-d9c8-51c3-909b-7a8edbc111e5
+	fromColumn: 'Data Checks'.'Team Key'
+	toColumn: Teams.'Team Key'
+
+relationship 95aea21d-375f-5cff-bb17-7cc073012e58
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: 'Ticket Text'.'Ticket Key'
+	toColumn: Tickets.'Ticket Key'
+
+relationship 0fa19d34-64a8-5f34-a05e-5878721cd14e
+	fromCardinality: many
+	toCardinality: many
+	fromColumn: 'Quarter Goals'.'Year Quarter'
+	toColumn: Date.'Year Quarter'
+
+relationship 05b80176-7218-575a-a454-a6446caddef5
+	fromColumn: 'Quarter Goals'.'Team Key'
+	toColumn: Teams.'Team Key'
+
+relationship 478e1bce-dd5d-5468-9290-337e20daa012
+	crossFilteringBehavior: bothDirections
+	fromColumn: 'Ticket Components'.'Ticket Key'
+	toColumn: Tickets.'Ticket Key'
+
+relationship 2ea16cb4-f695-5eea-84fe-fc168125c273
+	fromColumn: 'Ticket Components'.'Component Key'
+	toColumn: Components.'Component Key'

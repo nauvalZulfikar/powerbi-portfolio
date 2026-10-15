@@ -1,0 +1,35 @@
+table 'Ticket Components'
+	lineageTag: 84ced478-db74-5bae-b0cd-00639d9e0898
+	isHidden
+
+	column 'Ticket Key'
+		dataType: string
+		isHidden
+		lineageTag: 4dea2024-ba34-5a37-892e-da1cc139d17e
+		summarizeBy: none
+		sourceColumn: Ticket Key
+
+	column 'Component Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c15abef2-cd0d-5268-a4fb-b554da304d43
+		summarizeBy: none
+		sourceColumn: Component Key
+
+	partition 'Ticket Components' = m
+		mode: import
+		source =
+				let
+				    // Read the mart the pipeline wrote
+				    Data = Parquet.Document(fnOneLake("data/marts/bridge_ticket_component.parquet")),
+				    // Keep only the columns the model uses, first: Parquet (and SQL) then reads just these
+				    Kept = Table.SelectColumns(Data, {"ticket_key", "component_key"}),
+				    // Business names
+				    Renamed = Table.RenameColumns(Kept, {{"ticket_key", "Ticket Key"}, {"component_key", "Component Key"}}),
+				    // Types last, once the shape is final
+				    Typed = Table.TransformColumnTypes(Renamed, {{"Ticket Key", type text}, {"Component Key", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

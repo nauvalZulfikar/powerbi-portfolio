@@ -1,0 +1,9 @@
+role Stakeholder
+	modelPermission: read
+
+	tablePermission 'Ticket Text'
+
+		columnPermission Summary = none
+
+	tablePermission People
+		metadataPermission: none

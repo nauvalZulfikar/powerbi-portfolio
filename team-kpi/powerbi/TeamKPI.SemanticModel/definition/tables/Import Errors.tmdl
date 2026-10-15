@@ -1,0 +1,31 @@
+table 'Import Errors'
+	lineageTag: 5e324367-4f30-5ae3-935c-9e578daf17e4
+
+	column 'Ticket Key'
+		dataType: string
+		lineageTag: 042a0bde-52b1-504d-ae15-4e163c5a9c87
+		summarizeBy: none
+		sourceColumn: Ticket Key
+
+	column Issue
+		dataType: string
+		lineageTag: 6acda97f-acb0-5666-ba38-9e661d601ee2
+		summarizeBy: none
+		sourceColumn: Issue
+
+	partition 'Import Errors' = m
+		mode: import
+		source =
+				let
+				    // Same staging query as Tickets
+				    Source = #"Tickets Source",
+				    // Keep the rows where a duration failed its type (normally none)
+				    Errors = Table.SelectRowsWithErrors(Source, {"Lead Days", "Cycle Days", "Response Hours"}),
+				    // Just the key
+				    Keys = Table.SelectColumns(Errors, {"Ticket Key"}),
+				    // What went wrong
+				    Flagged = Table.AddColumn(Keys, "Issue", each "A lead, cycle or response value failed its type", type text)
+				in
+				    Flagged
+
+	annotation PBI_ResultType = Table

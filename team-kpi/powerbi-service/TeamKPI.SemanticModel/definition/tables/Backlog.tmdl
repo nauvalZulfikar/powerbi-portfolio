@@ -1,0 +1,86 @@
+table Backlog
+	lineageTag: b6104221-d506-5f69-9c53-18b78d7c3b50
+	isHidden
+
+	column Date
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy
+		lineageTag: 627756e0-6aa8-5f66-a6ec-ef655e486f1c
+		summarizeBy: none
+		sourceColumn: Date
+
+	column 'Team Key'
+		dataType: string
+		isHidden
+		lineageTag: 99d0cf98-bf9c-55d6-a93a-d54d1e006ea4
+		summarizeBy: none
+		sourceColumn: Team Key
+
+	column 'Priority Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: bdb7fa2c-c331-539a-a349-daa3415296d2
+		summarizeBy: none
+		sourceColumn: Priority Key
+
+	column 'Stage Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: fd0a7495-fa9a-5a95-8591-2bce7907709f
+		summarizeBy: none
+		sourceColumn: Stage Key
+
+	column 'Open Count'
+		dataType: int64
+		isHidden
+		formatString: #,0
+		lineageTag: d27e7eb3-91e8-5d1b-8351-ef10d4bc6a30
+		summarizeBy: none
+		sourceColumn: Open Count
+
+	refreshPolicy
+		policyType: basic
+		rollingWindowGranularity: month
+		rollingWindowPeriods: 24
+		incrementalGranularity: day
+		incrementalPeriods: 7
+		sourceExpression =
+				let
+				    // Read the mart the pipeline wrote
+				    Data = Parquet.Document(fnOneLake("data/marts/fact_backlog_daily.parquet")),
+				    // Keep only the columns the model uses, first: Parquet (and SQL) then reads just these
+				    Kept = Table.SelectColumns(Data, {"date", "team_key", "priority_key", "stage_key", "open_tickets"}),
+				    // Business names
+				    Renamed = Table.RenameColumns(Kept, {{"date", "Date"}, {"team_key", "Team Key"}, {"priority_key", "Priority Key"}, {"stage_key", "Stage Key"}, {"open_tickets", "Open Count"}}),
+				    // Types last, once the shape is final
+				    Typed = Table.TransformColumnTypes(Renamed, {{"Date", type date}, {"Team Key", type text}, {"Priority Key", Int64.Type}, {"Stage Key", Int64.Type}, {"Open Count", Int64.Type}}),
+				    // Nothing after the as-of date (parameter AsOfDate)
+				    UpToAsOf = Table.SelectRows(Typed, each [Date] <= Date.From(AsOfDate)),
+				    // Incremental refresh: the Service swaps RangeStart/RangeEnd per partition (>= start, < end)
+				    InRange = Table.SelectRows(UpToAsOf, each DateTime.From([Date]) >= RangeStart and DateTime.From([Date]) < RangeEnd)
+				in
+				    InRange
+
+	partition Backlog = m
+		mode: import
+		source =
+				let
+				    // Read the mart the pipeline wrote
+				    Data = Parquet.Document(fnOneLake("data/marts/fact_backlog_daily.parquet")),
+				    // Keep only the columns the model uses, first: Parquet (and SQL) then reads just these
+				    Kept = Table.SelectColumns(Data, {"date", "team_key", "priority_key", "stage_key", "open_tickets"}),
+				    // Business names
+				    Renamed = Table.RenameColumns(Kept, {{"date", "Date"}, {"team_key", "Team Key"}, {"priority_key", "Priority Key"}, {"stage_key", "Stage Key"}, {"open_tickets", "Open Count"}}),
+				    // Types last, once the shape is final
+				    Typed = Table.TransformColumnTypes(Renamed, {{"Date", type date}, {"Team Key", type text}, {"Priority Key", Int64.Type}, {"Stage Key", Int64.Type}, {"Open Count", Int64.Type}}),
+				    // Nothing after the as-of date (parameter AsOfDate)
+				    UpToAsOf = Table.SelectRows(Typed, each [Date] <= Date.From(AsOfDate)),
+				    // Incremental refresh: the Service swaps RangeStart/RangeEnd per partition (>= start, < end)
+				    InRange = Table.SelectRows(UpToAsOf, each DateTime.From([Date]) >= RangeStart and DateTime.From([Date]) < RangeEnd)
+				in
+				    InRange
+
+	annotation PBI_ResultType = Table

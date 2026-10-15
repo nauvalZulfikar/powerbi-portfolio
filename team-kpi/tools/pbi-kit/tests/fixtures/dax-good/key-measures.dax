@@ -1,0 +1,5 @@
+// key measures — one EVALUATE, values asserted by key-measures.assert.json
+DEFINE
+    MEASURE Sales[Double Good] = [Good] * 2
+EVALUATE
+ROW ( "Good", [Good], "Double", [Double Good], "Rows", COUNTROWS ( 'Sales' ) )

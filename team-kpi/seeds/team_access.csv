@@ -1,0 +1,9 @@
+email,team_key
+hive.lead@example.org,HIVE
+cassandra.lead@example.org,CASSANDRA
+hbase.lead@example.org,HBASE
+artemis.lead@example.org,ARTEMIS
+platform.director@example.org,HIVE
+platform.director@example.org,CASSANDRA
+platform.director@example.org,HBASE
+platform.director@example.org,ARTEMIS

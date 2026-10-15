@@ -1,0 +1,11 @@
+[project]
+name = "team-kpi"
+version = "0.1.0"
+description = "Jira tickets via REST API -> DuckDB -> team KPIs, cycle time and SLA in Power BI (TMDL/PBIR)"
+requires-python = ">=3.12"
+dependencies = [
+    "duckdb>=1.5.6",
+    "openpyxl>=3.1.5",
+    "pillow>=12.3.0",
+    "plotly>=7.1.0",
+]

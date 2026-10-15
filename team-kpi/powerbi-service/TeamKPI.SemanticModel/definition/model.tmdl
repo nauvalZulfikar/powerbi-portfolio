@@ -1,0 +1,48 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+ref table Tickets
+ref table 'Ticket Text'
+ref table Components
+ref table 'Ticket Components'
+ref table 'Stage Time'
+ref table Backlog
+ref table Teams
+ref table People
+ref table 'Stage Transitions'
+ref table Priorities
+ref table Types
+ref table Stages
+ref table Date
+ref table 'Status Map'
+ref table 'Data Checks'
+ref table 'Team Access'
+ref table 'Quarter Goals'
+ref table 'Import Errors'
+ref table 'SLA Scale'
+ref table 'ABC Class'
+ref table 'Load Band'
+ref table 'Funnel Step'
+ref table 'Quarter Offset'
+ref table 'Contributor Segments'
+ref table 'Time Intelligence'
+ref table 'Analyze By'
+ref table 'Metric Picker'
+ref table _Measures
+
+ref role 'Team Lead'
+ref role Stakeholder
+ref role 'HBase Readers'
+
+ref perspective Delivery
+ref perspective 'Data Quality'
+
+ref cultureInfo en-US

@@ -1,0 +1,6 @@
+bin/
+obj/
+.venv/
+__pycache__/
+*.pyc
+fabric_cicd.error.log

@@ -1,0 +1,36 @@
+table 'Team Access'
+	lineageTag: b9e006c7-4d94-57d4-a47d-4ff927935d84
+	isHidden
+
+	column Email
+		dataType: string
+		lineageTag: 204378a7-37fb-5527-8ad6-9860809e466f
+		summarizeBy: none
+		sourceColumn: Email
+
+	column 'Team Key'
+		dataType: string
+		lineageTag: a4619617-22ff-52f1-af5f-4e96977f7ef3
+		summarizeBy: none
+		sourceColumn: Team Key
+
+	partition 'Team Access' = m
+		mode: import
+		source =
+				let
+				    // Read the mart the pipeline wrote
+				    Data = Parquet.Document(fnOneLake("data/marts/team_access.parquet")),
+				    // Keep only the columns the model uses, first: Parquet (and SQL) then reads just these
+				    Kept = Table.SelectColumns(Data, {"email", "team_key"}),
+				    // Business names
+				    Renamed = Table.RenameColumns(Kept, {{"email", "Email"}, {"team_key", "Team Key"}}),
+				    // Types last, once the shape is final
+				    Typed = Table.TransformColumnTypes(Renamed, {{"Email", type text}, {"Team Key", type text}}),
+				    // One extra login for testing the Team Lead role in the Service (parameter TestUpn)
+				    TestUser = #table(type table [Email = text, #"Team Key" = text], {{TestUpn, "HBASE"}}),
+				    // Append: the seed rows + the test login
+				    Combined = Table.Combine({Typed, TestUser})
+				in
+				    Combined
+
+	annotation PBI_ResultType = Table

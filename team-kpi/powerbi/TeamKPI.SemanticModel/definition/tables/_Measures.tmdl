@@ -1,0 +1,585 @@
+table _Measures
+	lineageTag: fd895805-bb86-5a96-9982-165ac0efa77e
+
+	/// Tickets opened in the period (by created date).
+	measure Created = COUNTROWS ( Tickets )
+		formatString: #,0
+		displayFolder: Flow
+		lineageTag: 106356cc-1d42-52e1-94f8-83654f143267
+
+	/// Tickets resolved in the period, any outcome (by resolved date, inactive relationship).
+	measure Resolved = CALCULATE ( COUNTROWS ( Tickets ), USERELATIONSHIP ( Tickets[Resolved Date], 'Date'[Date] ), NOT ISBLANK ( Tickets[Resolved Date] ) )
+		formatString: #,0
+		displayFolder: Flow
+		lineageTag: 748ff6e9-2783-5c1c-b18e-590a23a4e369
+
+	/// Tickets resolved as fixed or done in the period.
+	measure Delivered = CALCULATE ( [Resolved], Tickets[Outcome] = "Delivered" )
+		formatString: #,0
+		displayFolder: Flow
+		lineageTag: 7f2a98f6-4a97-51b3-ba5e-42d0e4768bfa
+
+	/// Created − resolved. Positive means the backlog grew.
+	measure 'Net Flow' = [Created] - [Resolved]
+		formatString: +#,0;-#,0;0
+		displayFolder: Flow
+		lineageTag: 5ffd1a1e-1b2a-5593-b7dc-c71236cac47e
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Open tickets at the end of the last day in the period (daily snapshot).
+	measure 'Open Backlog' =
+			VAR _d = MAX ( 'Date'[Date] )
+			RETURN CALCULATE ( SUM ( Backlog[Open Count] ), 'Date'[Date] = _d )
+		formatString: #,0
+		displayFolder: Flow
+		lineageTag: b3b0cb63-7187-5221-87de-03231e70d630
+
+	/// Delivered tickets per ISO week in the period.
+	measure 'Weekly Throughput' = DIVIDE ( [Delivered], DISTINCTCOUNT ( 'Date'[Year Week] ) )
+		formatString: #,0.0
+		displayFolder: Flow
+		lineageTag: 5520b728-5d22-5b7d-adb4-e72487265421
+
+	/// Delivered a week earlier on the ISO-week calendar (UDF Kpi.PriorWeek).
+	measure 'Delivered Prev Week' = Kpi.PriorWeek ( [Delivered], 'Weekly' )
+		formatString: #,0
+		displayFolder: Flow
+		lineageTag: 94687558-739e-5ba9-bf35-feb0f144c22f
+
+	/// Created a year earlier (UDF Kpi.PriorYear).
+	measure 'Created PY' = Kpi.PriorYear ( [Created], 'Gregorian' )
+		formatString: #,0
+		displayFolder: Flow
+		lineageTag: 6560327e-d27d-5b22-8e56-b5190c932361
+
+	/// Change in tickets created against a year earlier.
+	measure 'Created YoY %' = DIVIDE ( [Created] - [Created PY], [Created PY] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Flow
+		lineageTag: 101ed340-abdb-54c5-9fcd-3bf544b272d9
+
+	/// Delivered in the week minus the week before, via OFFSET over the selected weeks (a card shows the last week).
+	measure 'Throughput Δ vs Prev Week' =
+			VAR _weeks = ALLSELECTED ( 'Date'[Week Start] )
+			VAR _wk = MAX ( 'Date'[Week Start] )
+			RETURN
+			    CALCULATE (
+			        VAR _prev = OFFSET ( -1, _weeks, ORDERBY ( 'Date'[Week Start] ) )
+			        RETURN IF ( NOT ISEMPTY ( _prev ),
+			            [Delivered] - CALCULATE ( [Delivered], REMOVEFILTERS ( 'Date' ), _prev ) ),
+			        'Date'[Week Start] = _wk )
+		formatString: +#,0;-#,0;0
+		displayFolder: Flow
+		lineageTag: 57f5bf6e-9627-59f3-aa92-c0821227ede0
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Delivered per week averaged over this week and the three before, via WINDOW (works in cards and tooltips).
+	measure 'Delivered 4W Avg' =
+			VAR _weeks = ALLSELECTED ( 'Date'[Week Start] )
+			VAR _wk = MAX ( 'Date'[Week Start] )
+			RETURN
+			    CALCULATE (
+			        AVERAGEX (
+			            WINDOW ( -3, REL, 0, REL, _weeks, ORDERBY ( 'Date'[Week Start] ) ),
+			            VAR _w = 'Date'[Week Start]
+			            RETURN CALCULATE ( [Delivered], REMOVEFILTERS ( 'Date' ), 'Date'[Week Start] = _w ) + 0 ),
+			        'Date'[Week Start] = _wk )
+		formatString: #,0.0
+		displayFolder: Flow
+		lineageTag: 0eca2dea-e2a8-5177-9209-55810fa7baab
+
+	/// Share of tickets resolved in the period that had been reopened at least once.
+	measure 'Reopen Rate' = Kpi.Rate ( CALCULATE ( COUNTROWS ( Tickets ), USERELATIONSHIP ( Tickets[Resolved Date], 'Date'[Date] ), NOT ISBLANK ( Tickets[Resolved Date] ), Tickets[Reopened] > 0 ), [Resolved] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Flow
+		lineageTag: 3bba3575-a352-50d4-90a7-c391e45f41e4
+
+	/// Days from created to resolved, median, for tickets delivered in the period.
+	measure 'Median Lead Time' = CALCULATE ( MEDIAN ( Tickets[Lead Days] ), USERELATIONSHIP ( Tickets[Resolved Date], 'Date'[Date] ), Tickets[Outcome] = "Delivered" )
+		formatString: #,0.0
+		displayFolder: Speed
+		lineageTag: 0e4b0394-0316-5eec-92b5-7ed2b8bf99ef
+
+	/// 85% of delivered tickets were resolved within this many days (UDF Flow.Percentile).
+	measure 'Lead Time P85' = CALCULATE ( Flow.Percentile ( Tickets[Lead Days], 0.85 ), USERELATIONSHIP ( Tickets[Resolved Date], 'Date'[Date] ), Tickets[Outcome] = "Delivered" )
+		formatString: #,0.0
+		displayFolder: Speed
+		lineageTag: d1787b38-c7bf-5da9-bd45-e4c7dc024007
+
+	/// Days from first marked in progress to resolved, median, where the start is known.
+	measure 'Median Cycle Time' = CALCULATE ( MEDIAN ( Tickets[Cycle Days] ), USERELATIONSHIP ( Tickets[Resolved Date], 'Date'[Date] ), Tickets[Outcome] = "Delivered", NOT ISBLANK ( Tickets[Started At] ) )
+		formatString: #,0.0
+		displayFolder: Speed
+		lineageTag: 2add5aa0-2718-57f9-81c7-f2e6cf469acb
+
+	/// Share of delivered tickets that were ever marked in progress or in review.
+	measure 'Cycle Time Coverage' = Kpi.Rate ( CALCULATE ( [Delivered], NOT ISBLANK ( Tickets[Started At] ) ), [Delivered] )
+		formatString: 0%
+		displayFolder: Speed
+		lineageTag: e00a6b4f-663e-56fb-962a-e438f9db41aa
+
+	/// Median lead time here minus the median of the whole team in the same dates (ALLEXCEPT keeps only the team).
+	measure 'Lead Time vs Team Median' =
+			VAR _dates = VALUES ( 'Date'[Date] )
+			VAR _team = CALCULATE ( [Median Lead Time], ALLEXCEPT ( Tickets, Teams[Team] ), _dates )
+			RETURN IF ( NOT ISBLANK ( [Median Lead Time] ), [Median Lead Time] - _team )
+		formatString: +#,0.0;-#,0.0;0.0
+		displayFolder: Speed
+		lineageTag: 45a4450e-6d7f-5410-8ec6-7732971e9d7e
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// Days tickets spent in a workflow stage (open stages only).
+	measure 'Days in Stage' = SUM ( 'Stage Time'[Days] )
+		formatString: #,0.0
+		displayFolder: Speed
+		lineageTag: 04688ecd-9aa7-552a-8191-c42e524617e3
+
+	/// Share of open time spent being worked on (in progress or in review) rather than waiting.
+	measure 'Flow Efficiency' = Kpi.Rate ( CALCULATE ( [Days in Stage], Stages[Stage] IN { "In Progress", "In Review" } ), CALCULATE ( [Days in Stage], REMOVEFILTERS ( Stages ) ) )
+		formatString: 0%
+		displayFolder: Speed
+		lineageTag: cd61368a-617c-5d09-9f84-78d4431e9fc1
+
+	/// What-if multiplier on every SLA target; 100% is the policy.
+	measure 'SLA Scale %' = SELECTEDVALUE ( 'SLA Scale'[SLA Scale], 1 )
+		formatString: 0%
+		displayFolder: SLA
+		lineageTag: debf2fba-e8bd-5efc-bd65-cc01f21070ef
+
+	/// Hours from created to the first action by someone other than the reporter.
+	measure 'Median First Response' = MEDIAN ( Tickets[Response Hours] )
+		formatString: #,0.0
+		displayFolder: SLA
+		lineageTag: d112a501-0903-5a06-9a8d-d8cd3fea6b26
+
+	/// Tickets created in the period that got a first response within the priority's target. Tickets still waiting count once their target has passed.
+	measure 'Response SLA %' =
+			VAR _s = [SLA Scale %]
+			VAR _t = ADDCOLUMNS ( Tickets, "@target", RELATED ( Priorities[Response Target Hours] ) )
+			VAR _met = COUNTROWS ( FILTER ( _t, NOT ISBLANK ( Tickets[Response Hours] ) && Sla.Within ( Tickets[Wait Hours], [@target], _s ) ) )
+			VAR _due = COUNTROWS ( FILTER ( _t, NOT ISBLANK ( Tickets[Response Hours] ) || NOT Sla.Within ( Tickets[Wait Hours], [@target], _s ) ) )
+			RETURN Kpi.Rate ( _met, _due )
+		formatString: 0%
+		displayFolder: SLA
+		lineageTag: d42f0cae-25f2-5bbd-b5d0-dda0537b2d66
+
+	/// The resolution SLA target: 90%, where on track starts (gauge target line).
+	measure 'Resolution SLA Target' = 0.9
+		formatString: 0%
+		displayFolder: SLA
+		lineageTag: f6fdc9e0-81ba-52b4-82c7-3b1bacd843a6
+
+	/// Tickets resolved in the period within the priority's resolution target.
+	measure 'Resolution SLA %' =
+			VAR _s = [SLA Scale %]
+			RETURN CALCULATE (
+			    Kpi.Rate (
+			        COUNTROWS ( FILTER ( Tickets, Sla.Within ( Tickets[Lead Days], RELATED ( Priorities[Resolution Target Days] ), _s ) ) ),
+			        COUNTROWS ( Tickets ) ),
+			    USERELATIONSHIP ( Tickets[Resolved Date], 'Date'[Date] ), NOT ISBLANK ( Tickets[Resolved Date] ) )
+		formatString: 0%
+		displayFolder: SLA
+		lineageTag: 6cd940e4-490f-59a1-8eec-f46b8957161d
+
+	/// Resolution SLA for P1 tickets; KEEPFILTERS intersects with a Priority slicer instead of replacing it.
+	measure 'P1 Resolution SLA %' = CALCULATE ( [Resolution SLA %], KEEPFILTERS ( Priorities[Priority Key] = 1 ) )
+		formatString: 0%
+		displayFolder: SLA
+		lineageTag: 2f3a6f75-79c9-55c1-99fb-1a1727efe040
+
+	/// Tickets open on the as-of date that are already past their resolution target.
+	measure 'Open Breached' =
+			VAR _s = [SLA Scale %]
+			RETURN
+			    CALCULATE (
+			        [Open Tickets],
+			        // FILTER as a filter argument: RELATED works because a Tickets row carries its expanded table,
+			        // every column on the one side of its relationships (Priorities included)
+			        FILTER (
+			            CALCULATETABLE ( Tickets, REMOVEFILTERS ( 'Date' ) ),
+			            NOT Sla.Within ( Tickets[Age Days], RELATED ( Priorities[Resolution Target Days] ), _s ) ) )
+		formatString: #,0
+		displayFolder: SLA
+		lineageTag: bc860644-ae19-5878-a46f-8e10f7364613
+
+	/// On track / at risk / off track on the resolution SLA (UDF Kpi.Status).
+	measure 'SLA Status' = Kpi.Status ( [Resolution SLA %] )
+		displayFolder: SLA
+		lineageTag: 64ed5f73-bb25-5702-9969-52a224499f3a
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Colour for the SLA status, used by conditional formatting.
+	measure 'SLA Color' = Kpi.StatusColor ( [SLA Status] )
+		displayFolder: SLA
+		lineageTag: 1c75062a-5f0e-547b-9abb-c44e49845436
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Tickets open on the as-of date (30 Sep 2026), whatever the date filter.
+	measure 'Open Tickets' = CALCULATE ( COUNTROWS ( Tickets ), ISBLANK ( Tickets[Resolved At] ), REMOVEFILTERS ( 'Date' ) )
+		formatString: #,0
+		displayFolder: Workload
+		lineageTag: 31c0d36a-f086-5fd0-955e-20d9934b1b73
+
+	/// Open tickets in progress or in review on the as-of date.
+	measure 'Work in Progress' = CALCULATE ( [Open Tickets], Tickets[Stage] IN { "In Progress", "In Review" } )
+		formatString: #,0
+		displayFolder: Workload
+		lineageTag: dcda2281-fa8d-5c33-9faf-a1f452200f16
+
+	/// Open tickets nobody is assigned to.
+	measure 'Unassigned Open' = CALCULATE ( [Open Tickets], People[Person Key] = 0 )
+		formatString: #,0
+		displayFolder: Workload
+		lineageTag: 74700932-d223-5c8c-bb63-b977850fbb74
+
+	/// Open tickets older than 180 days.
+	measure 'Aged Open' = CALCULATE ( [Open Tickets], Tickets[Age Days] > 180 )
+		formatString: #,0
+		displayFolder: Workload
+		lineageTag: 88155cb5-3ca5-52f1-a8f4-72c328cc417e
+
+	/// Engineers with at least one open ticket assigned.
+	measure 'Engineers With Open Work' = CALCULATE ( DISTINCTCOUNT ( Tickets[Person Key] ), ISBLANK ( Tickets[Resolved At] ), REMOVEFILTERS ( 'Date' ), People[Person Key] <> 0 )
+		formatString: #,0
+		displayFolder: Workload
+		lineageTag: f2f5b328-87e3-5cc3-885c-1c30d2c23b66
+
+	/// Assigned open tickets per engineer who has any.
+	measure 'Open per Engineer' = DIVIDE ( [Open Tickets] - [Unassigned Open], [Engineers With Open Work] )
+		formatString: #,0.0
+		displayFolder: Workload
+		lineageTag: 2504a2bf-98c9-5f2a-bd52-f5ae2fb5f54b
+
+	/// Engineers who resolved at least one ticket in the period.
+	measure 'Active Engineers' = CALCULATE ( DISTINCTCOUNT ( Tickets[Person Key] ), USERELATIONSHIP ( Tickets[Resolved Date], 'Date'[Date] ), NOT ISBLANK ( Tickets[Resolved Date] ), People[Person Key] <> 0 )
+		formatString: #,0
+		displayFolder: Workload
+		lineageTag: 3fa3835f-fcf4-5773-972b-7b28d19c4cf3
+
+	/// Share of all delivered tickets in the current filter (UDF Kpi.ShareOf).
+	measure 'Delivered Share' = Kpi.ShareOf ( [Delivered], People )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Workload
+		lineageTag: 2cb99498-3308-54da-a436-faf86e178270
+
+	/// Share of what the engineers shown in the visual delivered (ALLSELECTED keeps the visual and page filters).
+	measure 'Visible Delivered Share' = DIVIDE ( [Delivered], CALCULATE ( [Delivered], ALLSELECTED ( People ) ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Workload
+		lineageTag: 362b5dac-bf94-5098-9163-013d954fd5b2
+
+	/// Rank by delivered tickets among the engineers of the same home team.
+	measure 'Engineer Rank in Team' =
+			IF ( ISINSCOPE ( People[Person] ) && NOT ISBLANK ( [Delivered] ),
+			    RANK ( DENSE, ALLSELECTED ( People[Person], People[Home Team] ), ORDERBY ( [Delivered], DESC ), LAST,
+			        PARTITIONBY ( People[Home Team] ) ) )
+		formatString: #,0
+		displayFolder: Workload
+		lineageTag: b51af309-87bd-567b-bccb-16efd6530d89
+
+	/// The engineer who delivered the most in the current filter (INDEX 1).
+	measure 'Top Engineer' =
+			VAR _people = FILTER ( ALLSELECTED ( People[Person] ), People[Person] <> "Unassigned" )
+			VAR _top = INDEX ( 1, _people, ORDERBY ( [Delivered], DESC ) )
+			RETURN IF ( NOT ISBLANK ( [Delivered] ), MAXX ( _top, People[Person] ) )
+		displayFolder: Workload
+		lineageTag: 1e7855f4-e3bd-566a-af92-ffef86e96df2
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Share of the assigned delivered tickets that the busiest engineer closed: a bus-factor warning when high.
+	measure 'Top Engineer Share' =
+			VAR _top = MAXX ( FILTER ( VALUES ( People[Person Key] ), People[Person Key] <> 0 ), [Delivered] )
+			RETURN DIVIDE ( _top, CALCULATE ( [Delivered], People[Person Key] <> 0 ) )
+		formatString: 0%
+		displayFolder: Workload
+		lineageTag: 62b20fff-da1a-5979-a24d-6fe0fde08bbd
+
+	/// Engineers holding more than 20 open tickets on the as-of date.
+	measure 'Overloaded Engineers' = COUNTROWS ( FILTER ( VALUES ( People[Person Key] ), People[Person Key] <> 0 && [Open Tickets] > 20 ) ) + 0
+		formatString: #,0
+		displayFolder: Workload
+		lineageTag: f9092644-093b-5362-be6f-775ab46a461b
+
+	/// Delivery goal for the quarters in the filter (synthetic goals, Quarter Goals).
+	measure 'Delivery Target' = SUM ( 'Quarter Goals'[Delivery Goal] )
+		formatString: #,0
+		displayFolder: Goals
+		lineageTag: dde896b6-253c-5725-a37b-3be7f57fbd6f
+
+	/// Delivered ÷ delivery goal; goals are per whole quarter (synthetic).
+	measure 'Goal Attainment %' = Kpi.Rate ( [Delivered], [Delivery Target] )
+		formatString: 0%
+		displayFolder: Goals
+		lineageTag: 236a9dd6-f399-57f5-996c-1ec5928e5a5f
+
+	/// Pareto: share of all delivered tickets closed by this engineer and everyone who delivered at least as many.
+	measure 'Delivered Cumulative %' =
+			VAR _me = [Delivered]
+			VAR _t = ADDCOLUMNS ( FILTER ( ALLSELECTED ( People[Person] ), People[Person] <> "Unassigned" ), "@d", [Delivered] )
+			RETURN IF ( NOT ISBLANK ( _me ), DIVIDE ( SUMX ( FILTER ( _t, [@d] >= _me ), [@d] ), SUMX ( _t, [@d] ) ) )
+		formatString: 0%
+		displayFolder: Contributors
+		lineageTag: 35421125-1c92-5dcf-af16-857f9c5dd253
+
+	/// The 80% reference line of the Pareto chart.
+	measure 'Pareto Line' = 0.8
+		formatString: 0%
+		displayFolder: Contributors
+		lineageTag: cf7f9d6e-5a35-5018-8a88-afceeed2ec22
+
+	/// Engineers whose cumulative share of deliveries falls in the ABC class on the row (A up to 80%, B to 95%, C the rest); follows the slicers.
+	measure 'Engineers in Class' =
+			VAR _t = FILTER ( ADDCOLUMNS ( FILTER ( ALLSELECTED ( People[Person] ), People[Person] <> "Unassigned" ), "@d", [Delivered] ), [@d] > 0 )
+			VAR _tot = SUMX ( _t, [@d] )
+			VAR _cum = ADDCOLUMNS ( _t, "@cum", VAR _me = [@d] RETURN DIVIDE ( SUMX ( FILTER ( _t, [@d] >= _me ), [@d] ), _tot ) )
+			VAR _lo = MIN ( 'ABC Class'[Lower] )
+			VAR _hi = MAX ( 'ABC Class'[Upper] )
+			RETURN COUNTROWS ( FILTER ( _cum, [@cum] > _lo && [@cum] <= _hi ) ) + 0
+		formatString: #,0
+		displayFolder: Contributors
+		lineageTag: eea11d46-1740-5acb-a968-b38398b1104a
+
+	/// How many engineers close 80% of the delivered tickets (class A).
+	measure 'Engineers for 80%' = CALCULATE ( [Engineers in Class], 'ABC Class'[Class] = "A" )
+		formatString: #,0
+		displayFolder: Contributors
+		lineageTag: 56bc56b8-2ff1-5b08-a801-7b31c9acdea0
+
+	/// Engineers whose open tickets on the as-of date fall in the load band on the row.
+	measure 'Engineers in Band' =
+			VAR _lo = MIN ( 'Load Band'[Min Open] )
+			VAR _hi = MAX ( 'Load Band'[Max Open] )
+			VAR _t = ADDCOLUMNS ( FILTER ( VALUES ( People[Person Key] ), People[Person Key] <> 0 ), "@o", [Open Tickets] )
+			RETURN COUNTROWS ( FILTER ( _t, [@o] >= _lo && [@o] <= _hi ) ) + 0
+		formatString: #,0
+		displayFolder: Contributors
+		lineageTag: 101be6f9-b98a-597e-ad48-9352cdd97cad
+
+	/// Date of the engineer's most recent delivered ticket, whatever the date filter.
+	measure 'Last Delivery' = CALCULATE ( MAX ( Tickets[Resolved Date] ), Tickets[Outcome] = "Delivered", REMOVEFILTERS ( 'Date' ) )
+		formatString: d mmm yyyy
+		displayFolder: Contributors
+		lineageTag: 082f8cbf-bbeb-5ac6-9dbb-f7ab0264a07e
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// RFM recency: days from the last delivery to the as-of date.
+	measure 'Recency Days' =
+			VAR _l = [Last Delivery]
+			VAR _asof = CALCULATE ( MAX ( 'Date'[Date] ), REMOVEFILTERS ( 'Date' ) )
+			RETURN IF ( NOT ISBLANK ( _l ), DATEDIFF ( _l, _asof, DAY ) )
+		formatString: #,0
+		displayFolder: Contributors
+		lineageTag: 5a8806b1-4e57-5400-b073-6399e7f2eef6
+
+	/// RFM frequency: calendar quarters with at least one delivery.
+	measure 'Active Quarters' =
+			VAR _t = CALCULATETABLE ( Tickets, Tickets[Outcome] = "Delivered", REMOVEFILTERS ( 'Date' ) )
+			RETURN IF ( NOT ISEMPTY ( _t ), COUNTROWS ( DISTINCT ( SELECTCOLUMNS ( _t, "@q", YEAR ( Tickets[Resolved Date] ) * 10 + QUARTER ( Tickets[Resolved Date] ) ) ) ) )
+		formatString: #,0
+		displayFolder: Contributors
+		lineageTag: e668eb7d-1b29-5906-8ddf-df55beebbbfe
+
+	/// RFM volume: delivered tickets over the whole extract.
+	measure 'Delivered All Time' = CALCULATE ( [Delivered], REMOVEFILTERS ( 'Date' ) )
+		formatString: #,0
+		displayFolder: Contributors
+		lineageTag: c77734f9-899f-51b1-8459-19c3d6a4feab
+
+	/// Recency, frequency and volume scored 1–5 each, written as R-F-V.
+	measure 'RFV Score' =
+			VAR _r = [Recency Days]
+			VAR _f = [Active Quarters]
+			VAR _v = [Delivered All Time]
+			RETURN IF ( NOT ISBLANK ( _r ),
+			    SWITCH ( TRUE (), _r <= 30, 5, _r <= 90, 4, _r <= 180, 3, _r <= 365, 2, 1 ) & "-"
+			    & SWITCH ( TRUE (), _f >= 7, 5, _f >= 5, 4, _f >= 3, 3, _f >= 2, 2, 1 ) & "-"
+			    & SWITCH ( TRUE (), _v >= 200, 5, _v >= 50, 4, _v >= 20, 3, _v >= 5, 2, 1 ) )
+		displayFolder: Contributors
+		lineageTag: 1c28943d-81d8-573d-a61d-25f295b9c67c
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Core (R and F 4+), Rising (recent, F up to 3), Fading (R up to 3, F 3+), Occasional (the rest).
+	measure 'Contributor Segment' =
+			VAR _r = [Recency Days]
+			VAR _f = [Active Quarters]
+			VAR _rs = SWITCH ( TRUE (), _r <= 30, 5, _r <= 90, 4, _r <= 180, 3, _r <= 365, 2, 1 )
+			VAR _fs = SWITCH ( TRUE (), _f >= 7, 5, _f >= 5, 4, _f >= 3, 3, _f >= 2, 2, 1 )
+			RETURN IF ( NOT ISBLANK ( _r ), SWITCH ( TRUE (),
+			    _rs >= 4 && _fs >= 4, "Core", _rs >= 4, "Rising", _fs >= 3, "Fading", "Occasional" ) )
+		displayFolder: Contributors
+		lineageTag: cd3c745f-d13f-5468-9634-fbdfe1b1818e
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Engineers in the RFM segment on the row.
+	measure 'Contributors in Segment' =
+			VAR _seg = SELECTEDVALUE ( 'Contributor Segments'[Segment] )
+			VAR _t = ADDCOLUMNS ( FILTER ( VALUES ( People[Person Key] ), People[Person Key] <> 0 ), "@s", [Contributor Segment] )
+			RETURN COUNTROWS ( FILTER ( _t, [@s] = _seg ) ) + 0
+		formatString: #,0
+		displayFolder: Contributors
+		lineageTag: 9d21d743-2e9b-5a34-a561-5348bb80cf3d
+
+	/// The period the active / new / returning cards count: the selected dates, or the last quarter when nothing narrows the dates (over the whole extract everyone would be new): the quarter name, or "Selected".
+	measure 'Period Counted' =
+			VAR _full = MIN ( 'Date'[Date] ) = CALCULATE ( MIN ( 'Date'[Date] ), REMOVEFILTERS ( 'Date' ) )
+			    && MAX ( 'Date'[Date] ) = CALCULATE ( MAX ( 'Date'[Date] ), REMOVEFILTERS ( 'Date' ) )
+			VAR _lastq = CALCULATE ( MAX ( 'Date'[Year Quarter] ), REMOVEFILTERS ( 'Date' ) )
+			RETURN IF ( _full, CALCULATE ( MAX ( 'Date'[Quarter] ), REMOVEFILTERS ( 'Date' ), 'Date'[Year Quarter] = _lastq ), "Selected" )
+		displayFolder: Contributors
+		lineageTag: 3bd2a3cc-76ef-5d2e-8da0-c3efafc9c93d
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Engineers who delivered at least one ticket in the period (the last quarter when no dates are selected).
+	measure 'Active Contributors' =
+			VAR _full = MIN ( 'Date'[Date] ) = CALCULATE ( MIN ( 'Date'[Date] ), REMOVEFILTERS ( 'Date' ) )
+			    && MAX ( 'Date'[Date] ) = CALCULATE ( MAX ( 'Date'[Date] ), REMOVEFILTERS ( 'Date' ) )
+			VAR _lastq = CALCULATE ( MAX ( 'Date'[Year Quarter] ), REMOVEFILTERS ( 'Date' ) )
+			RETURN IF ( _full,
+			    CALCULATE (
+			        COUNTROWS ( FILTER ( VALUES ( People[Person Key] ), People[Person Key] <> 0 && [Delivered] > 0 ) ) + 0,
+			        REMOVEFILTERS ( 'Date' ), 'Date'[Year Quarter] = _lastq ),
+			    COUNTROWS ( FILTER ( VALUES ( People[Person Key] ), People[Person Key] <> 0 && [Delivered] > 0 ) ) + 0 )
+		formatString: #,0
+		displayFolder: Contributors
+		lineageTag: 41456b9f-a356-5c31-a451-b17cba1b1bf9
+
+	/// Active engineers whose first delivery (in the teams in the filter) falls inside the period (the last quarter when no dates are selected).
+	measure 'New Contributors' =
+			VAR _full = MIN ( 'Date'[Date] ) = CALCULATE ( MIN ( 'Date'[Date] ), REMOVEFILTERS ( 'Date' ) )
+			    && MAX ( 'Date'[Date] ) = CALCULATE ( MAX ( 'Date'[Date] ), REMOVEFILTERS ( 'Date' ) )
+			VAR _lastq = CALCULATE ( MAX ( 'Date'[Year Quarter] ), REMOVEFILTERS ( 'Date' ) )
+			RETURN IF ( _full,
+			    CALCULATE (
+			        VAR _s = MIN ( 'Date'[Date] )
+			        VAR _t = ADDCOLUMNS ( FILTER ( VALUES ( People[Person Key] ), People[Person Key] <> 0 && [Delivered] > 0 ), "@first",
+			            CALCULATE ( MIN ( Tickets[Resolved Date] ), Tickets[Outcome] = "Delivered", REMOVEFILTERS ( 'Date' ) ) )
+			        RETURN COUNTROWS ( FILTER ( _t, [@first] >= _s ) ) + 0,
+			        REMOVEFILTERS ( 'Date' ), 'Date'[Year Quarter] = _lastq ),
+			    VAR _s = MIN ( 'Date'[Date] )
+			    VAR _t = ADDCOLUMNS ( FILTER ( VALUES ( People[Person Key] ), People[Person Key] <> 0 && [Delivered] > 0 ), "@first",
+			        CALCULATE ( MIN ( Tickets[Resolved Date] ), Tickets[Outcome] = "Delivered", REMOVEFILTERS ( 'Date' ) ) )
+			    RETURN COUNTROWS ( FILTER ( _t, [@first] >= _s ) ) + 0 )
+		formatString: #,0
+		displayFolder: Contributors
+		lineageTag: d5e596ba-51e4-5c56-9fbe-f311b27be5c7
+
+	/// Active engineers who had delivered before the period started.
+	measure 'Returning Contributors' = [Active Contributors] - [New Contributors]
+		formatString: #,0
+		displayFolder: Contributors
+		lineageTag: 08135c01-5ff8-5d40-8669-12dda2c6035e
+
+	/// Share of the engineers whose first delivery was in the row's quarter who delivered again N quarters later.
+	measure 'Cohort Retention %' =
+			VAR _off = SELECTEDVALUE ( 'Quarter Offset'[Quarter Offset] )
+			VAR _fq = MIN ( People[First Quarter Key] )
+			VAR _i = INT ( _fq / 10 ) * 4 + MOD ( _fq, 10 ) - 1 + _off
+			VAR _target = INT ( _i / 4 ) * 10 + MOD ( _i, 4 ) + 1
+			VAR _last = CALCULATE ( MAX ( 'Date'[Year Quarter] ), REMOVEFILTERS ( 'Date' ) )
+			VAR _cohort = CALCULATE ( COUNTROWS ( People ), NOT ISBLANK ( People[First Quarter Key] ) )
+			VAR _active = CALCULATE ( DISTINCTCOUNT ( Tickets[Person Key] ), Tickets[Outcome] = "Delivered", REMOVEFILTERS ( 'Date' ),
+			    FILTER ( ALL ( Tickets[Resolved Date] ), YEAR ( Tickets[Resolved Date] ) * 10 + QUARTER ( Tickets[Resolved Date] ) = _target ) )
+			RETURN IF ( NOT ISBLANK ( _fq ) && NOT ISBLANK ( _off ) && _target <= _last, DIVIDE ( _active, _cohort ) + 0 )
+		formatString: 0%
+		displayFolder: Contributors
+		lineageTag: 35963003-f8be-5be1-8de1-72af32e28811
+
+	/// Engineers with 5+ deliveries and none in the last 90 days.
+	measure 'Churned Contributors' =
+			VAR _t = ADDCOLUMNS ( FILTER ( VALUES ( People[Person Key] ), People[Person Key] <> 0 ), "@v", [Delivered All Time], "@r", [Recency Days] )
+			RETURN COUNTROWS ( FILTER ( _t, [@v] >= 5 && [@r] > 90 ) ) + 0
+		formatString: #,0
+		displayFolder: Contributors
+		lineageTag: ebfa7757-7fa9-5a04-8843-bcc2c76ac012
+
+	/// Engineers with 5+ deliveries whose last one was 46–90 days ago.
+	measure 'At Risk Contributors' =
+			VAR _t = ADDCOLUMNS ( FILTER ( VALUES ( People[Person Key] ), People[Person Key] <> 0 ), "@v", [Delivered All Time], "@r", [Recency Days] )
+			RETURN COUNTROWS ( FILTER ( _t, [@v] >= 5 && [@r] > 45 && [@r] <= 90 ) ) + 0
+		formatString: #,0
+		displayFolder: Contributors
+		lineageTag: 7e46d36f-ead5-5a34-9900-d200d00183ef
+
+	/// Moves from one shared stage to another (tickets created in the period).
+	measure Transitions = COUNTROWS ( 'Stage Transitions' ) + 0
+		formatString: #,0
+		displayFolder: Stage flow
+		lineageTag: f2336b7d-abb1-5373-aee9-bf86a8ae1b91
+
+	/// Share of moves out of In Review that went back to In Progress.
+	measure 'Review Bounce Rate' =
+			DIVIDE ( CALCULATE ( [Transitions], 'Stage Transitions'[From Stage] = "In Review", 'Stage Transitions'[To Stage] = "In Progress" ),
+			    CALCULATE ( [Transitions], 'Stage Transitions'[From Stage] = "In Review" ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Stage flow
+		lineageTag: 7925f839-1d4d-56e9-bb47-13a6255e6d5e
+
+	/// Tickets created in the period that reached the funnel step on the row.
+	measure 'Funnel Tickets' =
+			SWITCH ( SELECTEDVALUE ( 'Funnel Step'[Step Order] ),
+			    1, COUNTROWS ( Tickets ),
+			    2, CALCULATE ( DISTINCTCOUNT ( 'Stage Time'[Ticket Key] ), Stages[Stage] = "In Progress" ),
+			    3, CALCULATE ( DISTINCTCOUNT ( 'Stage Time'[Ticket Key] ), Stages[Stage] = "In Review" ),
+			    4, CALCULATE ( COUNTROWS ( Tickets ), Tickets[Outcome] = "Delivered" ) )
+		formatString: #,0
+		displayFolder: Stage flow
+		lineageTag: fd2ba3d5-296c-580d-86ae-11e66d62b6dd
+
+	/// Funnel step as a share of the tickets created.
+	measure 'Funnel %' = DIVIDE ( [Funnel Tickets], CALCULATE ( [Funnel Tickets], REMOVEFILTERS ( 'Funnel Step' ), 'Funnel Step'[Step Order] = 1 ) )
+		formatString: 0%
+		displayFolder: Stage flow
+		lineageTag: 0e274eea-3fd6-5f7b-9dcc-86555f183c9c
+
+	/// This row's share of the backlog growth across the teams and priorities in the filter.
+	measure 'Net Flow Share' = DIVIDE ( [Net Flow], CALCULATE ( [Net Flow], ALLSELECTED ( Teams ), ALLSELECTED ( Priorities ) ) )
+		formatString: +0%;-0%;0%
+		displayFolder: Stage flow
+		lineageTag: bf0ad36a-f557-5a4f-a2dd-f97e2e143d90
+
+	/// Least-squares slope (LINESTX) of the week-end open backlog over the weeks in the filter, per week.
+	measure 'Backlog Trend /wk' =
+			VAR _t = ADDCOLUMNS ( VALUES ( 'Date'[Year Week] ), "@x", CONVERT ( CALCULATE ( MAX ( 'Date'[Date] ) ), DOUBLE ), "@y", [Open Backlog] )
+			RETURN MAXX ( LINESTX ( _t, [@y], [@x] ), [Slope1] ) * 7
+		formatString: +#,0.0;-#,0.0;0.0
+		displayFolder: Stage flow
+		lineageTag: 26a2b5c4-9148-5ae6-b3c5-c0bf69f3ea29
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["INTEGER_FORMATTING"]}
+
+	/// One-sentence summary that follows the slicers.
+	measure Headline =
+			VAR _net = [Net Flow]
+			RETURN
+			    FORMAT ( [Created], "#,0" ) & " tickets in, " & FORMAT ( [Resolved], "#,0" ) & " out: the backlog "
+			        & IF ( _net > 0, "grew by " & FORMAT ( _net, "#,0" ), "shrank by " & FORMAT ( -_net, "#,0" ) ) & ". "
+			        & FORMAT ( [Resolution SLA %], "0%" ) & " were resolved within SLA; median lead time "
+			        & FORMAT ( [Median Lead Time], "0.0" ) & " days. " & FORMAT ( [Open Breached], "#,0" )
+			        & " open tickets are past their target."
+		displayFolder: Narrative
+		lineageTag: 9a64dbb9-2c61-5833-8736-f6082927dff0
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	column Value
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9ecf7f34-649a-55ed-8fc4-20ba21133ace
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition _Measures = calculated
+		mode: import
+		source = {1}

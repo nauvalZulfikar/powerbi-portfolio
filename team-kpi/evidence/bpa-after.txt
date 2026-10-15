@@ -1,0 +1,221 @@
+WARN  AVOID_FLOATING_POINT_DATA_TYPES                         CalculatedTableColumn  'ABC Class'[Lower]
+WARN  AVOID_FLOATING_POINT_DATA_TYPES                         CalculatedTableColumn  'ABC Class'[Upper]
+WARN  AVOID_FLOATING_POINT_DATA_TYPES                         CalculatedTableColumn  'SLA Scale'[SLA Scale]
+WARN  AVOID_FLOATING_POINT_DATA_TYPES                         DataColumn             'Stage Time'[Days]
+WARN  AVOID_FLOATING_POINT_DATA_TYPES                         DataColumn             'Tickets'[Age Days]
+WARN  AVOID_FLOATING_POINT_DATA_TYPES                         DataColumn             'Tickets'[Cycle Days]
+WARN  AVOID_FLOATING_POINT_DATA_TYPES                         DataColumn             'Tickets'[Days Past Target]
+WARN  AVOID_FLOATING_POINT_DATA_TYPES                         DataColumn             'Tickets'[Lead Days]
+WARN  AVOID_FLOATING_POINT_DATA_TYPES                         DataColumn             'Tickets'[Response Hours]
+WARN  AVOID_FLOATING_POINT_DATA_TYPES                         DataColumn             'Tickets'[Wait Hours]
+WARN  HIDE_FACT_TABLE_COLUMNS                                 DataColumn             'Data Checks'[Tickets]
+WARN  HIDE_FACT_TABLE_COLUMNS                                 DataColumn             'Quarter Goals'[Delivery Goal]
+WARN  HIDE_FOREIGN_KEYS                                       DataColumn             'Date'[Date]
+WARN  HIDE_FOREIGN_KEYS                                       DataColumn             'Tickets'[Created Date]
+WARN  HIDE_FOREIGN_KEYS                                       DataColumn             'Tickets'[Resolved Date]
+WARN  HIDE_FOREIGN_KEYS                                       DataColumn             'Tickets'[Ticket Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             CalculatedTableColumn  '_Measures'[Value]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             CalculatedTableColumn  'ABC Class'[Lower]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             CalculatedTableColumn  'ABC Class'[Upper]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Backlog'[Date]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Backlog'[Open Count]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Backlog'[Priority Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Backlog'[Stage Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Backlog'[Team Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Components'[Component Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Data Checks'[Team Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Date'[Is Weekend]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Date'[Week of Year]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             CalculatedTableColumn  'Load Band'[Max Open]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             CalculatedTableColumn  'Load Band'[Min Open]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'People'[Person Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Quarter Goals'[Goal Row]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Quarter Goals'[Team Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Quarter Goals'[Year Quarter]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Stage Time'[Days]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Stage Time'[Stage Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Stage Time'[Ticket Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Stage Transitions'[Ticket Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Stages'[Is Open]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Status Map'[Team Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Team Access'[Email]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Team Access'[Team Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Teams'[Team Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Ticket Components'[Component Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Ticket Components'[Ticket Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Ticket Text'[Ticket Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Tickets'[Created At]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Tickets'[First Response At]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Tickets'[Person Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Tickets'[Priority Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Tickets'[Resolved At]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Tickets'[Started At]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Tickets'[Team Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Tickets'[Type Key]
+WARN  ISAVAILABLEINMDX_FALSE_NONATTRIBUTE_COLUMNS             DataColumn             'Tickets'[Wait Hours]
+WARN  MINIMIZE_POWER_QUERY_TRANSFORMATIONS                    Partition              'Import Errors'.Partitions[Import Errors]
+WARN  MINIMIZE_POWER_QUERY_TRANSFORMATIONS                    Partition              'Quarter Goals'.Partitions[Quarter Goals]
+WARN  MINIMIZE_POWER_QUERY_TRANSFORMATIONS                    Partition              'Team Access'.Partitions[Team Access]
+WARN  MINIMIZE_POWER_QUERY_TRANSFORMATIONS                    Partition              'Tickets'.Partitions[Tickets]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Cohort Retention %]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Cycle Time Coverage]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Delivered Cumulative %]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Flow Efficiency]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Funnel %]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Goal Attainment %]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Net Flow Share]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[P1 Resolution SLA %]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Pareto Line]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Resolution SLA %]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Resolution SLA Target]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Response SLA %]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[SLA Scale %]
+WARN  PERCENTAGE_FORMATTING                                   Measure                '_Measures'[Top Engineer Share]
+WARN  REDUCE_USAGE_OF_CALCULATED_TABLES                       CalculatedTable        '_Measures'
+WARN  REDUCE_USAGE_OF_CALCULATED_TABLES                       CalculatedTable        'ABC Class'
+WARN  REDUCE_USAGE_OF_CALCULATED_TABLES                       CalculatedTable        'Analyze By'
+WARN  REDUCE_USAGE_OF_CALCULATED_TABLES                       CalculatedTable        'Contributor Segments'
+WARN  REDUCE_USAGE_OF_CALCULATED_TABLES                       CalculatedTable        'Funnel Step'
+WARN  REDUCE_USAGE_OF_CALCULATED_TABLES                       CalculatedTable        'Load Band'
+WARN  REDUCE_USAGE_OF_CALCULATED_TABLES                       CalculatedTable        'Metric Picker'
+WARN  REDUCE_USAGE_OF_CALCULATED_TABLES                       CalculatedTable        'Quarter Offset'
+WARN  REDUCE_USAGE_OF_CALCULATED_TABLES                       CalculatedTable        'SLA Scale'
+WARN  SNOWFLAKE_SCHEMA_ARCHITECTURE                           Table                  'Tickets'
+WARN  UNNECESSARY_COLUMNS                                     CalculatedTableColumn  '_Measures'[Value]
+WARN  UNNECESSARY_COLUMNS                                     CalculatedTableColumn  'Analyze By'[Analyze By Fields]
+WARN  UNNECESSARY_COLUMNS                                     DataColumn             'Date'[Is Weekend]
+WARN  UNNECESSARY_COLUMNS                                     DataColumn             'Date'[Week of Year]
+WARN  UNNECESSARY_COLUMNS                                     CalculatedTableColumn  'Metric Picker'[Metric Picker Fields]
+WARN  UNNECESSARY_COLUMNS                                     DataColumn             'Quarter Goals'[Goal Row]
+WARN  UNNECESSARY_COLUMNS                                     DataColumn             'Stages'[Is Open]
+WARN  UNNECESSARY_COLUMNS                                     DataColumn             'Tickets'[Created At]
+WARN  UNNECESSARY_COLUMNS                                     DataColumn             'Tickets'[First Response At]
+INFO  CHECK_IF_BI-DIRECTIONAL_AND_MANY-TO-MANY_RELATIONSHIPS_ARE_VALID Relationship           'Quarter Goals'[Year Quarter] → 'Date'[Year Quarter]
+INFO  CHECK_IF_BI-DIRECTIONAL_AND_MANY-TO-MANY_RELATIONSHIPS_ARE_VALID Relationship           'Ticket Components'[Ticket Key] → 'Tickets'[Ticket Key]
+INFO  CHECK_IF_BI-DIRECTIONAL_AND_MANY-TO-MANY_RELATIONSHIPS_ARE_VALID Relationship           'Ticket Text'[Ticket Key] → 'Tickets'[Ticket Key]
+INFO  DATECOLUMN_FORMATSTRING                                 DataColumn             'Backlog'[Date]
+INFO  DATECOLUMN_FORMATSTRING                                 DataColumn             'Date'[Date]
+INFO  DATECOLUMN_FORMATSTRING                                 DataColumn             'Stage Transitions'[Transition Date]
+INFO  DATECOLUMN_FORMATSTRING                                 DataColumn             'Tickets'[Created Date]
+INFO  DATECOLUMN_FORMATSTRING                                 DataColumn             'Tickets'[Resolved Date]
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        CalculatedTable        '_Measures'
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        CalculatedTable        'ABC Class'
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        CalculatedTable        'Analyze By'
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        CalculatedTable        'Contributor Segments'
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        CalculatedTable        'Funnel Step'
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        Table                  'Import Errors'
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        CalculatedTable        'Load Band'
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        CalculatedTable        'Metric Picker'
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        CalculatedTable        'Quarter Offset'
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        CalculatedTable        'SLA Scale'
+INFO  ENSURE_TABLES_HAVE_RELATIONSHIPS                        Table                  'Team Access'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTable        '_Measures'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTable        'ABC Class'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'ABC Class'[Class]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTable        'Analyze By'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'Analyze By'[Analyze By]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Components'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Components'[Component]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Components'[Project]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTable        'Contributor Segments'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'Contributor Segments'[Action]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'Contributor Segments'[Segment]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Data Checks'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Data Checks'[Check]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Data Checks'[Tickets]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Date'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Date'[Date]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Date'[ISO Year]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Date'[Month Name]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Date'[Month]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Date'[Quarter]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Date'[Week Start]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Date'[Week]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Date'[Year]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTable        'Funnel Step'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'Funnel Step'[Step]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Import Errors'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Import Errors'[Issue]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Import Errors'[Ticket Key]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTable        'Load Band'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'Load Band'[Band]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTable        'Metric Picker'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'Metric Picker'[Metric Picker]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'People'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'People'[First Delivered]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'People'[First Quarter]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'People'[Home Team]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'People'[Person]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Priorities'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Priorities'[Priority]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Priorities'[Resolution Target Days]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Priorities'[Response Target Hours]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Quarter Goals'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Quarter Goals'[Delivery Goal]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTable        'Quarter Offset'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'Quarter Offset'[Quarter Offset]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTable        'SLA Scale'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedTableColumn  'SLA Scale'[SLA Scale]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Stage Transitions'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedColumn       'Stage Transitions'[From Stage]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedColumn       'Stage Transitions'[To Stage]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Stage Transitions'[Transition Date]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Stages'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Stages'[Stage]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Status Map'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Status Map'[Jira Status]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Status Map'[Shared Stage]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Status Map'[Tickets Now]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Team Access'[Email]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Team Access'[Team Key]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Teams'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Teams'[Product]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Teams'[Team]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Ticket Text'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Ticket Text'[Summary]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Tickets'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Tickets'[Age Band]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Tickets'[Age Days]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Tickets'[Created Date]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Tickets'[Cycle Days]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Tickets'[Days Past Target]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Tickets'[Jira URL]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Tickets'[Lead Days]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculatedColumn       'Tickets'[Lead Time Band]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Tickets'[Outcome]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Tickets'[Project]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Tickets'[Reopened]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Tickets'[Resolution SLA]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Tickets'[Resolution]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Tickets'[Resolved Date]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Tickets'[Response Hours]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Tickets'[Response SLA]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Tickets'[Stage]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Tickets'[Stages Visited]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Tickets'[Status]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Tickets'[Ticket Key]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             CalculationGroup       'Time Intelligence'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Time Intelligence'[Period]
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             Table                  'Types'
+INFO  OBJECTS_WITH_NO_DESCRIPTION                             DataColumn             'Types'[Type]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Backlog'[Date]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Backlog'[Team Key]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Data Checks'[Team Key]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Date'[Date]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Quarter Goals'[Team Key]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Stage Time'[Ticket Key]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Stage Transitions'[Ticket Key]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Status Map'[Team Key]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Teams'[Team Key]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Ticket Components'[Ticket Key]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Ticket Text'[Ticket Key]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Tickets'[Created Date]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Tickets'[Resolved Date]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Tickets'[Team Key]
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Tickets'[Ticket Key]
+INFO  REMOVE_ROLES_WITH_NO_MEMBERS                            ModelRole              Role[HBase Readers]
+INFO  REMOVE_ROLES_WITH_NO_MEMBERS                            ModelRole              Role[Stakeholder]
+INFO  REMOVE_ROLES_WITH_NO_MEMBERS                            ModelRole              Role[Team Lead]
+
+BPA powerbi/TeamKPI.SemanticModel/definition: 75 rules, 218 violations — error 0, warning 92, info 126; 0 skipped
+✓ no violations with severity >= 3

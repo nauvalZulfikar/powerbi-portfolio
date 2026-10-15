@@ -1,0 +1,73 @@
+perspective Delivery
+
+	perspectiveTable Tickets
+		includeAll
+
+	perspectiveTable 'Stage Time'
+		includeAll
+
+	perspectiveTable Backlog
+		includeAll
+
+	perspectiveTable Teams
+		includeAll
+
+	perspectiveTable People
+		includeAll
+
+	perspectiveTable Priorities
+		includeAll
+
+	perspectiveTable Types
+		includeAll
+
+	perspectiveTable Stages
+		includeAll
+
+	perspectiveTable Date
+		includeAll
+
+	perspectiveTable 'Time Intelligence'
+		includeAll
+
+	perspectiveTable 'Analyze By'
+		includeAll
+
+	perspectiveTable 'Metric Picker'
+		includeAll
+
+	perspectiveTable 'SLA Scale'
+		includeAll
+
+	perspectiveTable 'Quarter Goals'
+		includeAll
+
+	perspectiveTable 'Ticket Text'
+		includeAll
+
+	perspectiveTable Components
+		includeAll
+
+	perspectiveTable 'Ticket Components'
+		includeAll
+
+	perspectiveTable 'Stage Transitions'
+		includeAll
+
+	perspectiveTable 'ABC Class'
+		includeAll
+
+	perspectiveTable 'Load Band'
+		includeAll
+
+	perspectiveTable 'Funnel Step'
+		includeAll
+
+	perspectiveTable 'Quarter Offset'
+		includeAll
+
+	perspectiveTable 'Contributor Segments'
+		includeAll
+
+	perspectiveTable _Measures
+		includeAll

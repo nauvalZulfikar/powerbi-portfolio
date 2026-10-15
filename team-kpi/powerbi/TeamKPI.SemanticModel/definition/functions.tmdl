@@ -1,0 +1,37 @@
+/// Part ÷ whole; blank when the whole is empty.
+function 'Kpi.Rate' = ( part : NUMERIC, whole : NUMERIC ) => DIVIDE ( part, whole )
+	lineageTag: 194488d0-69f9-5283-9b5b-e92d824fe127
+
+/// On track from 90%, at risk from 75%, off track below that.
+function 'Kpi.Status' =
+		( rate : NUMERIC ) =>
+			SWITCH ( TRUE (),
+				ISBLANK ( rate ), BLANK (),
+				rate >= 0.9, "On track",
+				rate >= 0.75, "At risk",
+				"Off track" )
+	lineageTag: 97831efd-c180-585a-b089-60d628f5374e
+
+/// Hex colour for a status, for conditional formatting.
+function 'Kpi.StatusColor' = ( status : STRING ) => SWITCH ( status, "On track", "#1B7F4B", "At risk", "#A35F00", "Off track", "#B42318", "#8C959F" )
+	lineageTag: 38f9e692-873b-5074-8b48-cd92e731f1f1
+
+/// A measure as a share of the same measure with the filters on one table or column removed.
+function 'Kpi.ShareOf' = ( value : SCALAR NUMERIC EXPR, scope : ANYREF ) => DIVIDE ( value, CALCULATE ( value, REMOVEFILTERS ( scope ) ) )
+	lineageTag: 3c5fc224-ab4e-52f5-9708-89896da292df
+
+/// A measure one year back on the calendar passed in.
+function 'Kpi.PriorYear' = ( value : SCALAR NUMERIC EXPR, cal : CALENDARREF ) => CALCULATE ( value, DATEADD ( cal, -1, YEAR ) )
+	lineageTag: d5ddf839-90bc-50b4-be9e-cc1498eab631
+
+/// A measure one week back on the calendar passed in.
+function 'Kpi.PriorWeek' = ( value : SCALAR NUMERIC EXPR, cal : CALENDARREF ) => CALCULATE ( value, DATEADD ( cal, -1, WEEK ) )
+	lineageTag: cb9c3610-3b2a-5b9c-8c46-2e2da8076e2e
+
+/// True when the time taken is within the target scaled by the what-if SLA scale.
+function 'Sla.Within' = ( taken : NUMERIC, target : NUMERIC, scale : NUMERIC ) => taken <= target * scale
+	lineageTag: 825c909e-3844-501f-8455-3415d95a0356
+
+/// The k-th percentile of a duration column in the current filter (0.85 = 85th).
+function 'Flow.Percentile' = ( days : ANYREF, k : NUMERIC ) => PERCENTILEX.INC ( FILTER ( VALUES ( days ), NOT ISBLANK ( days ) ), days, k )
+	lineageTag: 8d3b2177-c5c7-5ff1-a757-1db7af5b7137

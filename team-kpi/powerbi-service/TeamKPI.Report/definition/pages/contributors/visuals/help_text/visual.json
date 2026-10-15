@@ -1,0 +1,66 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "help_text",
+  "position": {
+    "x": 1056,
+    "y": 104,
+    "z": 1100,
+    "width": 520,
+    "height": 260,
+    "tabOrder": 1900
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "How to read this page",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI Semibold",
+                      "fontSize": "12pt",
+                      "color": "#0b0b0b"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "The first four cards count the period on the first card: \"Selected\" (the dates you picked) or the last quarter, used when no dates are selected (over the whole extract everyone would be new). Pareto: bars are deliveries per engineer, the line their running share; everyone left of where it crosses 80% is class A. Segments score recency (days since the last delivery), frequency (quarters with a delivery) and volume 1–5. The cohort matrix: of the engineers who first delivered in a quarter, the share still delivering N quarters later. Ignores the Team slicer.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "10pt",
+                      "color": "#52514e"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'How to read this page The first four cards count the period on the first card: \"Selected\" (the dates you picked) or the last quarter, used when no dates are selected (over the whole extract everyone would be new). Pareto: bars are deliveries per engi'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "parentGroupName": "help_contributors"
+}

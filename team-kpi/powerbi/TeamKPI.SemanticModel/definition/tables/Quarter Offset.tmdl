@@ -1,0 +1,14 @@
+table 'Quarter Offset'
+	lineageTag: 77dac14c-7562-5135-903c-a3340d3e14af
+
+	column 'Quarter Offset'
+		dataType: int64
+		lineageTag: 444ec6f0-1e7e-5683-b726-f5533936368c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Quarter Offset]
+		formatString: 0
+
+	partition 'Quarter Offset' = calculated
+		mode: import
+		source = SELECTCOLUMNS ( GENERATESERIES ( 1, 7, 1 ), "Quarter Offset", [Value] )

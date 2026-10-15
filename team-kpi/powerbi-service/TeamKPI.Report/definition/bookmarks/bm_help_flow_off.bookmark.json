@@ -1,0 +1,32 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json",
+  "name": "bm_help_flow_off",
+  "displayName": "Flow & Speed: help off",
+  "options": {
+    "applyOnlyToTargetVisuals": true,
+    "targetVisualNames": [
+      "help_flow",
+      "help_text",
+      "help_close"
+    ],
+    "suppressData": true,
+    "suppressActiveSection": false
+  },
+  "explorationState": {
+    "version": "1.3",
+    "activeSection": "flow",
+    "sections": {
+      "flow": {
+        "visualContainers": {
+          "help_text": {},
+          "help_close": {}
+        },
+        "visualContainerGroups": {
+          "help_flow": {
+            "isHidden": true
+          }
+        }
+      }
+    }
+  }
+}

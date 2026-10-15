@@ -1,0 +1,8 @@
+// 11-s14: object-level security test. Run it twice in DAX query view:
+//   1. as yourself: five rows come back.
+//   2. Modeling > View as > Stakeholder, then run again: it must FAIL with an error that
+//      'Ticket Text'[Summary] can't be found (the column is secured for that role).
+// The same goes for any query that touches the People table under Stakeholder.
+EVALUATE
+TOPN ( 5, SELECTCOLUMNS ( 'Ticket Text', "Ticket", 'Ticket Text'[Ticket Key], "Summary", 'Ticket Text'[Summary] ), [Ticket], ASC )
+ORDER BY [Ticket]

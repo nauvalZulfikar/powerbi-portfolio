@@ -1,0 +1,22 @@
+table 'Funnel Step'
+	lineageTag: b17e2ac0-7dc0-5d50-880a-bd04e2b06f5c
+
+	column Step
+		dataType: string
+		lineageTag: f472e9b0-0e20-51ed-b696-95378ffb2dc1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Step]
+		sortByColumn: 'Step Order'
+
+	column 'Step Order'
+		dataType: int64
+		lineageTag: b4a29987-edb9-5a9f-9dca-cdcf6d097cdf
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Step Order]
+		isHidden
+
+	partition 'Funnel Step' = calculated
+		mode: import
+		source = DATATABLE ( "Step", STRING, "Step Order", INTEGER, { { "Created", 1 }, { "Reached In Progress", 2 }, { "Reached In Review", 3 }, { "Delivered", 4 } } )

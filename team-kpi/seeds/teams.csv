@@ -1,0 +1,5 @@
+team_key,team,product
+HIVE,Hive,SQL query engine
+CASSANDRA,Cassandra,Distributed database
+HBASE,HBase,Wide-column store
+ARTEMIS,Artemis,Message broker

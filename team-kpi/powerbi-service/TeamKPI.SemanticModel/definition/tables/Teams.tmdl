@@ -1,0 +1,39 @@
+table Teams
+	lineageTag: 76a6aa0c-77e5-5b08-b05a-d2352c5d8ba3
+
+	column 'Team Key'
+		dataType: string
+		isKey
+		isHidden
+		lineageTag: 7077e3ef-f980-5320-b3f7-564bcc9d780b
+		summarizeBy: none
+		sourceColumn: Team Key
+
+	column Team
+		dataType: string
+		lineageTag: eb1fc185-1531-501c-8254-3cd8a3f03a55
+		summarizeBy: none
+		sourceColumn: Team
+
+	column Product
+		dataType: string
+		lineageTag: d9786428-38f0-5587-a182-5428ef5f9ea9
+		summarizeBy: none
+		sourceColumn: Product
+
+	partition Teams = m
+		mode: import
+		source =
+				let
+				    // Read the mart the pipeline wrote
+				    Data = Parquet.Document(fnOneLake("data/marts/dim_team.parquet")),
+				    // Keep only the columns the model uses, first: Parquet (and SQL) then reads just these
+				    Kept = Table.SelectColumns(Data, {"team_key", "team", "product"}),
+				    // Business names
+				    Renamed = Table.RenameColumns(Kept, {{"team_key", "Team Key"}, {"team", "Team"}, {"product", "Product"}}),
+				    // Types last, once the shape is final
+				    Typed = Table.TransformColumnTypes(Renamed, {{"Team Key", type text}, {"Team", type text}, {"Product", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

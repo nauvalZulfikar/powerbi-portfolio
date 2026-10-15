@@ -1,0 +1,5 @@
+role 'HBase Readers'
+	modelPermission: read
+
+	tablePermission Teams = Teams[Team Key] = "HBASE"
+

@@ -1,0 +1,13 @@
+// Report query: one row per team with the flow, speed, SLA and workload headline measures.
+EVALUATE
+SUMMARIZECOLUMNS (
+    Teams[Team],
+    "Created", [Created],
+    "Resolved", [Resolved],
+    "Delivered", [Delivered],
+    "Median Lead Time", [Median Lead Time],
+    "Resolution SLA %", [Resolution SLA %],
+    "Open Tickets", [Open Tickets],
+    "Open Breached", [Open Breached]
+)
+ORDER BY [Delivered] DESC

@@ -1,0 +1,305 @@
+table Tickets
+	lineageTag: 14886c66-8764-5bd6-9aa2-cbd365517f22
+
+	column 'Ticket Key'
+		dataType: string
+		isKey
+		lineageTag: 0005b833-562b-578e-9eae-b86016d51bb7
+		summarizeBy: none
+		sourceColumn: Ticket Key
+		sortByColumn: 'Issue Number'
+
+	column 'Team Key'
+		dataType: string
+		isHidden
+		lineageTag: 963279a6-7c93-557c-bdfa-9e1df4da51e1
+		summarizeBy: none
+		sourceColumn: Team Key
+
+	column 'Type Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 70b0ec0c-43f8-570d-a9a2-5a15088352e7
+		summarizeBy: none
+		sourceColumn: Type Key
+
+	column 'Priority Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9045fbce-ccf7-5e06-9abe-363c523f65a0
+		summarizeBy: none
+		sourceColumn: Priority Key
+
+	column 'Person Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 449709fd-769e-5334-88b3-9d1a53a2c63a
+		summarizeBy: none
+		sourceColumn: Person Key
+
+	column Stage
+		dataType: string
+		lineageTag: 15cfc7d7-ba21-5a6a-823d-e902a4d1314a
+		summarizeBy: none
+		sourceColumn: Stage
+		sortByColumn: 'Stage Key'
+
+	column 'Stage Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: bb0e31a2-a424-5ef1-b3a3-ca33fc0d4b9e
+		summarizeBy: none
+		sourceColumn: Stage Key
+
+	column Status
+		dataType: string
+		lineageTag: 3207573b-bcef-5819-9ade-15f8f7977b77
+		summarizeBy: none
+		sourceColumn: Status
+
+	column Resolution
+		dataType: string
+		lineageTag: 93019fc0-e89e-5716-96fc-8dfc97d9ae9d
+		summarizeBy: none
+		sourceColumn: Resolution
+
+	column Outcome
+		dataType: string
+		lineageTag: 8e31239e-d096-5480-acc5-691ef1805e7d
+		summarizeBy: none
+		sourceColumn: Outcome
+
+	column 'Created At'
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy hh:nn
+		lineageTag: 23d6a627-14c0-5a6c-942c-231c9208e783
+		summarizeBy: none
+		sourceColumn: Created At
+
+	column 'Created Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: dc28a534-09cd-5e68-bb8a-5055f476be0e
+		summarizeBy: none
+		sourceColumn: Created Date
+
+	column 'Resolved At'
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy hh:nn
+		lineageTag: 12e7a769-6fb9-59e7-8d4f-7d29a6ccad6f
+		summarizeBy: none
+		sourceColumn: Resolved At
+
+	column 'Resolved Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: d63b3ccf-c5aa-5e67-8077-37da9f8a51bc
+		summarizeBy: none
+		sourceColumn: Resolved Date
+
+	column 'First Response At'
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy hh:nn
+		lineageTag: f11832c3-225a-5185-8138-7b52a66a210a
+		summarizeBy: none
+		sourceColumn: First Response At
+
+	column 'Started At'
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy hh:nn
+		lineageTag: 2d22e272-8da9-5ec0-9612-35ea1a304f47
+		summarizeBy: none
+		sourceColumn: Started At
+
+	column 'Response Hours'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: c22d995d-e2e0-5060-895e-7e1333328467
+		summarizeBy: none
+		sourceColumn: Response Hours
+
+	column 'Wait Hours'
+		dataType: double
+		isHidden
+		formatString: #,0.0
+		lineageTag: 28635183-61b3-509a-9950-f8aad825561e
+		summarizeBy: none
+		sourceColumn: Wait Hours
+
+	column 'Lead Days'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 25838802-65a7-5395-b314-5be1857cd074
+		summarizeBy: none
+		sourceColumn: Lead Days
+
+	column 'Cycle Days'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 711f2222-e036-50cc-bdc2-793139e3fd63
+		summarizeBy: none
+		sourceColumn: Cycle Days
+
+	column 'Age Days'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: e0a6390e-a248-57ce-ad91-28a73251ba28
+		summarizeBy: none
+		sourceColumn: Age Days
+
+	column Reopened
+		dataType: int64
+		formatString: #,0
+		lineageTag: 726e2242-cef0-50da-8438-d6b0bc399fff
+		summarizeBy: none
+		sourceColumn: Reopened
+
+	column 'Response SLA'
+		dataType: string
+		lineageTag: 6ab15d7b-e0c2-53ee-bf45-4cee10f1907f
+		summarizeBy: none
+		sourceColumn: Response SLA
+
+	column 'Resolution SLA'
+		dataType: string
+		lineageTag: 6b170883-60d5-5070-b55d-9a809d9ce141
+		summarizeBy: none
+		sourceColumn: Resolution SLA
+
+	column Project
+		dataType: string
+		lineageTag: 39914400-43e1-5875-8726-df8f2e6f6256
+		summarizeBy: none
+		sourceColumn: Project
+
+	column 'Issue Number'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 76f704be-b58a-5f49-b305-47ea8c610bbc
+		summarizeBy: none
+		sourceColumn: Issue Number
+
+	column 'Jira URL'
+		dataType: string
+		dataCategory: WebUrl
+		lineageTag: efe9b122-1e8a-5ba5-803a-d28d2a727df1
+		summarizeBy: none
+		sourceColumn: Jira URL
+
+	column 'Age Band'
+		dataType: string
+		lineageTag: 345f9d10-c5d1-51ec-9473-8b1074e48401
+		summarizeBy: none
+		sourceColumn: Age Band
+		sortByColumn: 'Age Band Order'
+
+	column 'Age Band Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ba37bec6-fd94-53fe-bf44-d2fa775e2ec3
+		summarizeBy: none
+		sourceColumn: Age Band Order
+
+	column 'Days Past Target'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 2163ef8b-3946-57ea-b4e4-e7e865d60034
+		summarizeBy: none
+		sourceColumn: Days Past Target
+
+	column 'Stages Visited'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 0ffbf982-194c-587f-86bf-63095380cdf9
+		summarizeBy: none
+		sourceColumn: Stages Visited
+
+	column 'Lead Time Band' =
+			VAR _d = Tickets[Lead Days]
+			RETURN SWITCH ( TRUE (),
+			    ISBLANK ( _d ), BLANK (),
+			    _d <= 1, "Up to 1 day",
+			    _d <= 7, "2–7 days",
+			    _d <= 30, "8–30 days",
+			    _d <= 90, "31–90 days",
+			    "Over 90 days" )
+		dataType: string
+		lineageTag: df816b63-70b2-53f6-bf45-ca39fbca99ec
+		summarizeBy: none
+		sortByColumn: 'Lead Time Band Order'
+
+	column 'Lead Time Band Order' =
+			VAR _d = Tickets[Lead Days]
+			RETURN SWITCH ( TRUE (),
+			    ISBLANK ( _d ), BLANK (),
+			    _d <= 1, 1,
+			    _d <= 7, 2,
+			    _d <= 30, 3,
+			    _d <= 90, 4,
+			    5 )
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b80baa1a-d762-5a66-8186-98f4b3448a45
+		summarizeBy: none
+
+	partition Tickets = m
+		mode: import
+		source =
+				let
+				    // Reference (not duplicate) the shared staging query: one place reads the Parquet file
+				    Source = #"Tickets Source",
+				    // A duration that fails its type becomes null instead of failing the refresh (Import Errors keeps those rows)
+				    NoErrors = Table.ReplaceErrorValues(Source, {{"Lead Days", null}, {"Cycle Days", null}, {"Response Hours", null}}),
+				    // Drop rows without a ticket key: they can't join to anything
+				    HasKey = Table.SelectRows(NoErrors, each [Ticket Key] <> null),
+				    // Nothing created after the as-of date (parameter AsOfDate)
+				    UpToAsOf = Table.SelectRows(HasKey, each [Created Date] <= Date.From(AsOfDate)),
+				    // No assignee -> person 0, the Unassigned row in People
+				    OwnerOrUnassigned = Table.ReplaceValue(UpToAsOf, null, 0, Replacer.ReplaceValue, {"Person Key"}),
+				    // The summary moves to Ticket Text (long free text; only the ticket list reads it)
+				    NoSummary = Table.RemoveColumns(OwnerOrUnassigned, {"Summary"}),
+				    // Title-case statuses (some teams type them in lower case)
+				    CleanText = Table.TransformColumns(NoSummary, {{"Status", Text.Proper, type text}}),
+				    // Copy the key so it survives the split
+				    KeyCopy = Table.DuplicateColumn(CleanText, "Ticket Key", "Key Parts"),
+				    // HIVE-1234 -> project HIVE + issue number 1234 (sorts tickets numerically)
+				    SplitKey = Table.SplitColumn(KeyCopy, "Key Parts", Splitter.SplitTextByDelimiter("-", QuoteStyle.None), {"Project", "Issue Number"}),
+				    // The issue number is a whole number
+				    IssueNumber = Table.TransformColumnTypes(SplitKey, {{"Issue Number", Int64.Type}}),
+				    // Link to the ticket on issues.apache.org
+				    JiraUrl = Table.AddColumn(IssueNumber, "Jira URL", each "https://issues.apache.org/jira/browse/" & [Ticket Key], type text),
+				    // Bucket the age of open tickets
+				    AgeBand = Table.AddColumn(JiraUrl, "Age Band", each if [Age Days] = null then null else if [Age Days] <= 30 then "0–30 days" else if [Age Days] <= 90 then "31–90 days" else if [Age Days] <= 180 then "91–180 days" else "Over 180 days", type text),
+				    // Sort order for the bands
+				    AgeBandOrder = Table.AddColumn(AgeBand, "Age Band Order", each if [Age Days] = null then null else if [Age Days] <= 30 then 1 else if [Age Days] <= 90 then 2 else if [Age Days] <= 180 then 3 else 4, Int64.Type),
+				    // Read the priority targets (a second source, merged below)
+				    PriorityTargets = Table.RenameColumns(Table.SelectColumns(Parquet.Document(fnOneLake("data/marts/dim_priority.parquet")), {"priority_key", "resolution_days"}), {{"priority_key", "Priority Key"}, {"resolution_days", "Target Days"}}),
+				    // Merge (left outer join) on Priority Key, like a VLOOKUP
+				    WithTarget = Table.NestedJoin(AgeBandOrder, {"Priority Key"}, PriorityTargets, {"Priority Key"}, "Priority", JoinKind.LeftOuter),
+				    // Bring back just the resolution target
+				    TargetDays = Table.ExpandTableColumn(WithTarget, "Priority", {"Target Days"}),
+				    // Open tickets: days past the resolution target (negative = time left)
+				    PastTarget = Table.AddColumn(TargetDays, "Days Past Target", each if [Age Days] = null then null else [Age Days] - [Target Days], type number),
+				    // The target itself lives in Priorities
+				    NoTargetDays = Table.RemoveColumns(PastTarget, {"Target Days"}),
+				    // Group By: how many open stages each ticket passed through (Stage Time has one row per ticket and stage)
+				    StagesPerTicket = Table.Group(Parquet.Document(fnOneLake("data/marts/fact_stage_time.parquet")), {"ticket_key"}, {{"Stages Visited", each Table.RowCount(_), Int64.Type}}),
+				    // Merge the counts back onto the tickets
+				    WithStages = Table.NestedJoin(NoTargetDays, {"Ticket Key"}, StagesPerTicket, {"ticket_key"}, "Stages", JoinKind.LeftOuter),
+				    // Tickets that never sat in an open stage visited none
+				    Tickets = Table.ReplaceValue(Table.ExpandTableColumn(WithStages, "Stages", {"Stages Visited"}), null, 0, Replacer.ReplaceValue, {"Stages Visited"})
+				in
+				    Tickets
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,125 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Cycle-time scatter: one dot per delivered ticket, dashed P50 / P85 lines (Deneb, Vega-Lite).",
+  "data": {
+    "name": "dataset"
+  },
+  "width": "container",
+  "height": "container",
+  "layer": [
+    {
+      "mark": {
+        "type": "circle",
+        "size": 18,
+        "opacity": 0.55
+      },
+      "encoding": {
+        "x": {
+          "field": "Resolved Date",
+          "type": "temporal",
+          "title": null,
+          "axis": {
+            "format": "%b %y",
+            "labelColor": "#898781",
+            "grid": false
+          }
+        },
+        "y": {
+          "field": "Lead Days",
+          "type": "quantitative",
+          "title": "Lead days",
+          "scale": {
+            "type": "symlog"
+          },
+          "axis": {
+            "labelColor": "#898781",
+            "gridColor": "#ECEBE6"
+          }
+        },
+        "color": {
+          "field": "Team",
+          "type": "nominal",
+          "legend": {
+            "orient": "top",
+            "title": null
+          }
+        },
+        "tooltip": [
+          {
+            "field": "Ticket Key"
+          },
+          {
+            "field": "Team"
+          },
+          {
+            "field": "Lead Days",
+            "format": ",.1f"
+          },
+          {
+            "field": "Resolved Date",
+            "type": "temporal"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "quantile": "Lead Days",
+          "probs": [
+            0.5,
+            0.85
+          ],
+          "as": [
+            "prob",
+            "value"
+          ]
+        },
+        {
+          "calculate": "'P' + round(datum.prob * 100) + ' = ' + format(datum.value, ',.0f') + ' d'",
+          "as": "label"
+        }
+      ],
+      "layer": [
+        {
+          "mark": {
+            "type": "rule",
+            "strokeDash": [
+              4,
+              3
+            ],
+            "color": "#52514e"
+          },
+          "encoding": {
+            "y": {
+              "field": "value",
+              "type": "quantitative"
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "align": "left",
+            "dx": 4,
+            "dy": -6,
+            "fontSize": 9,
+            "color": "#52514e"
+          },
+          "encoding": {
+            "y": {
+              "field": "value",
+              "type": "quantitative"
+            },
+            "x": {
+              "value": 0
+            },
+            "text": {
+              "field": "label"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

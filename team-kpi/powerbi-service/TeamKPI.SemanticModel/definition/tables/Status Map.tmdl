@@ -1,0 +1,45 @@
+table 'Status Map'
+	lineageTag: d23249b9-53ab-56a9-b52f-c3d62ff7781a
+
+	column 'Team Key'
+		dataType: string
+		isHidden
+		lineageTag: 4dc0b0aa-966c-5511-b03f-28b3c18b6051
+		summarizeBy: none
+		sourceColumn: Team Key
+
+	column 'Jira Status'
+		dataType: string
+		lineageTag: b58fdbe2-2a44-55c6-90e1-9192b16555ba
+		summarizeBy: none
+		sourceColumn: Jira Status
+
+	column 'Shared Stage'
+		dataType: string
+		lineageTag: afcdd31c-2bfa-5659-974c-96e80c46d2bf
+		summarizeBy: none
+		sourceColumn: Shared Stage
+
+	column 'Tickets Now'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 2c53595e-9852-5de3-a40e-f09d7861b093
+		summarizeBy: none
+		sourceColumn: Tickets Now
+
+	partition 'Status Map' = m
+		mode: import
+		source =
+				let
+				    // Read the mart the pipeline wrote
+				    Data = Parquet.Document(fnOneLake("data/marts/status_map.parquet")),
+				    // Keep only the columns the model uses, first: Parquet (and SQL) then reads just these
+				    Kept = Table.SelectColumns(Data, {"team_key", "status", "stage", "tickets"}),
+				    // Business names
+				    Renamed = Table.RenameColumns(Kept, {{"team_key", "Team Key"}, {"status", "Jira Status"}, {"stage", "Shared Stage"}, {"tickets", "Tickets Now"}}),
+				    // Types last, once the shape is final
+				    Typed = Table.TransformColumnTypes(Renamed, {{"Team Key", type text}, {"Jira Status", type text}, {"Shared Stage", type text}, {"Tickets Now", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

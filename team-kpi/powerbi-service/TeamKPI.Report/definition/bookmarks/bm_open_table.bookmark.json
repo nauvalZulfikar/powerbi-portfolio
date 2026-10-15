@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json",
+  "name": "bm_open_table",
+  "displayName": "Open work: table",
+  "options": {
+    "targetVisualNames": [
+      "bar_open_priority",
+      "matrix_open_priority"
+    ],
+    "applyOnlyToTargetVisuals": true,
+    "suppressData": true
+  },
+  "explorationState": {
+    "version": "1.3",
+    "activeSection": "teams",
+    "sections": {
+      "teams": {
+        "visualContainers": {
+          "bar_open_priority": {
+            "singleVisual": {
+              "visualType": "barChart",
+              "objects": {},
+              "display": {
+                "mode": "hidden"
+              }
+            }
+          },
+          "matrix_open_priority": {
+            "singleVisual": {
+              "visualType": "pivotTable",
+              "objects": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}

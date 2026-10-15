@@ -1,0 +1,5 @@
+role 'Team Lead'
+	modelPermission: read
+
+	tablePermission Teams = Teams[Team Key] IN CALCULATETABLE ( VALUES ( 'Team Access'[Team Key] ), 'Team Access'[Email] = USERPRINCIPALNAME () )
+

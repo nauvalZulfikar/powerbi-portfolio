@@ -1,0 +1,35 @@
+table Types
+	lineageTag: 98ff086f-0bd3-5eaf-a3c1-782d1e172ba5
+
+	column 'Type Key'
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 9536c71e-2671-5ac8-9a1e-998868f79578
+		summarizeBy: none
+		sourceColumn: Type Key
+
+	column Type
+		dataType: string
+		lineageTag: 7ee6c209-1367-55b7-b5ff-cc13a1433304
+		summarizeBy: none
+		sourceColumn: Type
+		sortByColumn: 'Type Key'
+
+	partition Types = m
+		mode: import
+		source =
+				let
+				    // Read the mart the pipeline wrote
+				    Data = Parquet.Document(fnOneLake("data/marts/dim_type.parquet")),
+				    // Keep only the columns the model uses, first: Parquet (and SQL) then reads just these
+				    Kept = Table.SelectColumns(Data, {"type_key", "type"}),
+				    // Business names
+				    Renamed = Table.RenameColumns(Kept, {{"type_key", "Type Key"}, {"type", "Type"}}),
+				    // Types last, once the shape is final
+				    Typed = Table.TransformColumnTypes(Renamed, {{"Type Key", Int64.Type}, {"Type", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

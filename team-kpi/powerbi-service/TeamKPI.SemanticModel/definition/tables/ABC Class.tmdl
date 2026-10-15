@@ -1,0 +1,31 @@
+table 'ABC Class'
+	lineageTag: c3e3dc8d-8683-5ec6-8c23-eccbc2598a38
+
+	column Class
+		dataType: string
+		lineageTag: bdad8ead-8b46-5c4d-b993-b7ad64fd0517
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Class]
+
+	column Lower
+		dataType: double
+		lineageTag: 66418857-8ab9-50aa-b550-6b176ad00fb5
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Lower]
+		isHidden
+		formatString: 0%
+
+	column Upper
+		dataType: double
+		lineageTag: 8a770243-db0b-5c38-af89-93be9e4c7296
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Upper]
+		isHidden
+		formatString: 0%
+
+	partition 'ABC Class' = calculated
+		mode: import
+		source = DATATABLE ( "Class", STRING, "Lower", DOUBLE, "Upper", DOUBLE, { { "A", 0, 0.8 }, { "B", 0.8, 0.95 }, { "C", 0.95, 1 } } )

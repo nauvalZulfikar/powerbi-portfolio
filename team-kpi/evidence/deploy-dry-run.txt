@@ -1,0 +1,22 @@
+== Test
+[37m[1m[info]   18:28:58 - Parameter file validation passed[0m
+deploy powerbi → Test (DRY RUN)
+items in scope (SemanticModel, Report): 2
+  Report         'TeamKPI'                            TeamKPI.Report
+  SemanticModel  'TeamKPI'                            TeamKPI.SemanticModel
+  find_replace[0] 'expression DataFolder = "([^"]*)"' → '\\\\fileserver\\pbi-test\\team-kpi\\data\\marts\\': TeamKPI.SemanticModel/definition/expressions.tmdl
+  find_replace[1] 'expression SeedFolder = "([^"]*)"' → '\\\\fileserver\\pbi-test\\team-kpi\\seeds\\': TeamKPI.SemanticModel/definition/expressions.tmdl
+  find_replace[2] 'expression LakehouseSqlEndpoint = "([^"]*)"' → 'team-kpi-test.datawarehouse.fabric.microsoft.com': TeamKPI.SemanticModel/definition/expressions.tmdl
+  find_replace[3] 'expression TestUpn = "([^"]*)"' → 'test.lead@example.org': TeamKPI.SemanticModel/definition/expressions.tmdl
+fabric-cicd parameter validation: OK
+== Prod
+[37m[1m[info]   18:28:58 - Parameter file validation passed[0m
+deploy powerbi → Prod (DRY RUN)
+items in scope (SemanticModel, Report): 2
+  Report         'TeamKPI'                            TeamKPI.Report
+  SemanticModel  'TeamKPI'                            TeamKPI.SemanticModel
+  find_replace[0] 'expression DataFolder = "([^"]*)"' → '\\\\fileserver\\pbi\\team-kpi\\data\\marts\\': TeamKPI.SemanticModel/definition/expressions.tmdl
+  find_replace[1] 'expression SeedFolder = "([^"]*)"' → '\\\\fileserver\\pbi\\team-kpi\\seeds\\': TeamKPI.SemanticModel/definition/expressions.tmdl
+  find_replace[2] 'expression LakehouseSqlEndpoint = "([^"]*)"' → 'team-kpi-prod.datawarehouse.fabric.microsoft.com': TeamKPI.SemanticModel/definition/expressions.tmdl
+  find_replace[3] 'expression TestUpn = "([^"]*)"' → 'rls.check@example.org': TeamKPI.SemanticModel/definition/expressions.tmdl
+fabric-cicd parameter validation: OK

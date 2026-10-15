@@ -1,0 +1,42 @@
+table Stages
+	lineageTag: 1ac06654-f64d-5ad4-968a-1b4bd26d07cd
+
+	column 'Stage Key'
+		dataType: int64
+		isKey
+		isHidden
+		formatString: 0
+		lineageTag: 96599ea8-e5ea-54e0-b480-b29e875f1717
+		summarizeBy: none
+		sourceColumn: Stage Key
+
+	column Stage
+		dataType: string
+		lineageTag: 7d486511-0889-564a-a7cb-570a9c554939
+		summarizeBy: none
+		sourceColumn: Stage
+		sortByColumn: 'Stage Key'
+
+	column 'Is Open'
+		dataType: boolean
+		isHidden
+		lineageTag: 573faed5-92ef-5f40-9be7-347c00e35ca4
+		summarizeBy: none
+		sourceColumn: Is Open
+
+	partition Stages = m
+		mode: import
+		source =
+				let
+				    // Read the mart the pipeline wrote
+				    Data = Parquet.Document(fnOneLake("data/marts/dim_stage.parquet")),
+				    // Keep only the columns the model uses, first: Parquet (and SQL) then reads just these
+				    Kept = Table.SelectColumns(Data, {"stage_key", "stage", "is_open"}),
+				    // Business names
+				    Renamed = Table.RenameColumns(Kept, {{"stage_key", "Stage Key"}, {"stage", "Stage"}, {"is_open", "Is Open"}}),
+				    // Types last, once the shape is final
+				    Typed = Table.TransformColumnTypes(Renamed, {{"Stage Key", Int64.Type}, {"Stage", type text}, {"Is Open", type logical}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
