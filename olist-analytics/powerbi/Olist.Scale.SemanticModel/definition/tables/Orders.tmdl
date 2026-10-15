@@ -1,0 +1,108 @@
+table Orders
+	lineageTag: f6550fe1-07c0-5097-a05d-13f1c89cc4f3
+
+	column 'Order Id'
+		dataType: string
+		isKey
+		lineageTag: f0f26935-5784-528a-ab23-487d9fb8d585
+		summarizeBy: none
+		sourceColumn: order_id
+
+	column 'Customer Unique Id'
+		dataType: string
+		isHidden
+		lineageTag: 4644377c-5fc1-5242-ba7e-9fe8be2204d9
+		summarizeBy: none
+		sourceColumn: customer_unique_id
+
+	column 'Order Date'
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy
+		lineageTag: 68e8175b-171d-5282-989f-6919aca11877
+		summarizeBy: none
+		sourceColumn: order_date
+
+	column 'Purchased At'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: f46dd823-7f9e-5f1c-993c-a090654e786f
+		summarizeBy: none
+		sourceColumn: purchased_at
+
+	column 'Is Valid'
+		dataType: boolean
+		lineageTag: e2f74bbd-2a5e-5432-9bf0-b72da5d00748
+		summarizeBy: none
+		sourceColumn: is_valid
+
+	column 'Is Delivered'
+		dataType: boolean
+		lineageTag: 14cd9eb5-1c88-5ae4-8f43-e6fad15aca41
+		summarizeBy: none
+		sourceColumn: is_delivered
+
+	column 'Is Late'
+		dataType: boolean
+		lineageTag: 964e7f8a-2789-56f2-b936-1a6a7155c57f
+		summarizeBy: none
+		sourceColumn: is_late
+
+	column 'Review Score'
+		dataType: int64
+		formatString: 0
+		lineageTag: 32f785cc-8dd5-5dd2-b797-054d664ce793
+		summarizeBy: none
+		sourceColumn: review_score
+
+	column 'Delivery Days'
+		dataType: double
+		formatString: General
+		lineageTag: 9f476aa2-8028-5e10-8e56-deb8e02896c9
+		summarizeBy: none
+		sourceColumn: delivery_days
+
+	refreshPolicy
+		policyType: basic
+		rollingWindowGranularity: year
+		rollingWindowPeriods: 3
+		incrementalGranularity: month
+		incrementalPeriods: 1
+		pollingExpression =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "fact_orders"]}[Data],
+				    // detect data changes: refresh a partition only when its latest purchase moved
+				    InRange = Table.SelectRows(Data, each [purchased_at] >= RangeStart and [purchased_at] < RangeEnd),
+				    Latest = List.Max(InRange[purchased_at])
+				in
+				    Latest
+		sourceExpression =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "fact_orders"]}[Data],
+				    // folds -> WHERE purchased_at >= @RangeStart AND purchased_at < @RangeEnd (filter first)
+				    #"Filtered purchase window" = Table.SelectRows(Data, each [purchased_at] >= RangeStart and [purchased_at] < RangeEnd),
+				    // folds -> SELECT only these columns
+				    #"Chose columns" = Table.SelectColumns(#"Filtered purchase window", {"order_id", "customer_unique_id", "order_date", "purchased_at", "is_valid", "is_delivered", "is_late", "review_score", "delivery_days"}),
+				    // folds -> CAST per column
+				    Typed = Table.TransformColumnTypes(#"Chose columns", {{"order_id", type text}, {"customer_unique_id", type text}, {"order_date", type date}, {"purchased_at", type datetime}, {"is_valid", type logical}, {"is_delivered", type logical}, {"is_late", type logical}, {"review_score", Int64.Type}, {"delivery_days", type number}})
+				in
+				    Typed
+
+	partition Orders = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "fact_orders"]}[Data],
+				    // folds -> WHERE purchased_at >= @RangeStart AND purchased_at < @RangeEnd (filter first)
+				    #"Filtered purchase window" = Table.SelectRows(Data, each [purchased_at] >= RangeStart and [purchased_at] < RangeEnd),
+				    // folds -> SELECT only these columns
+				    #"Chose columns" = Table.SelectColumns(#"Filtered purchase window", {"order_id", "customer_unique_id", "order_date", "purchased_at", "is_valid", "is_delivered", "is_late", "review_score", "delivery_days"}),
+				    // folds -> CAST per column
+				    Typed = Table.TransformColumnTypes(#"Chose columns", {{"order_id", type text}, {"customer_unique_id", type text}, {"order_date", type date}, {"purchased_at", type datetime}, {"is_valid", type logical}, {"is_delivered", type logical}, {"is_late", type logical}, {"review_score", Int64.Type}, {"delivery_days", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

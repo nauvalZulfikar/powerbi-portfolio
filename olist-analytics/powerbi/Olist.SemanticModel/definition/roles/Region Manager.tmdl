@@ -1,0 +1,5 @@
+role 'Region Manager'
+	modelPermission: read
+
+	tablePermission Customer = Customer[Region] IN CALCULATETABLE ( VALUES ( 'Region Access'[Region] ), 'Region Access'[Email] = USERPRINCIPALNAME () )
+

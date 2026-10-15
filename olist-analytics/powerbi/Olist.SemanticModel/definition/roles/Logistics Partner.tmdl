@@ -1,0 +1,16 @@
+role 'Logistics Partner'
+	modelPermission: read
+
+	tablePermission Customer
+
+		columnPermission 'Lifetime Value' = none
+
+	tablePermission Seller
+
+		columnPermission 'Lifetime Revenue' = none
+
+	tablePermission Payments
+		metadataPermission: none
+
+	tablePermission 'Seller Monthly'
+		metadataPermission: none

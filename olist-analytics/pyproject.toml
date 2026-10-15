@@ -1,0 +1,12 @@
+[project]
+name = "olist-analytics"
+version = "0.1.0"
+description = "Olist Brazilian e-commerce: Kaggle → DuckDB SQL star schema → Python stats → Power BI (PBIP)"
+requires-python = ">=3.12"
+dependencies = [
+    "duckdb>=1.5.5",
+    "pandas>=3.0.5",
+    "plotly>=7.0.0",
+    "pyarrow>=25.0.1",
+    "statsmodels>=0.15.0",
+]

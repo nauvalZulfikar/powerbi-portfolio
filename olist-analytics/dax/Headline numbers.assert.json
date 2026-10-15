@@ -1,0 +1,10 @@
+{
+  "rows": 1,
+  "checks": [
+    {"column": "[Revenue]", "equals": 13494400.74, "tolerance": 0.01},
+    {"column": "[Orders Placed]", "equals": 98207},
+    {"column": "[Delivered Orders]", "equals": 96470},
+    {"column": "[Late Orders]", "equals": 6535},
+    {"column": "[Late Rate]", "equals": 0.067741, "tolerance": 0.000001}
+  ]
+}

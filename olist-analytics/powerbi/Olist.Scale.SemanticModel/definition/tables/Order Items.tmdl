@@ -1,0 +1,78 @@
+table 'Order Items'
+	lineageTag: 92eee76e-a12b-5b27-84c7-5437f26e46ac
+
+	column 'Order Id'
+		dataType: string
+		lineageTag: fcae8e6c-1b4e-52c7-bc90-f44be75be94c
+		summarizeBy: none
+		sourceColumn: order_id
+
+	column 'Product Id'
+		dataType: string
+		isHidden
+		lineageTag: 8685a84d-5446-5e67-a8b5-3901e0e2bf91
+		summarizeBy: none
+		sourceColumn: product_id
+
+	column 'Seller Id'
+		dataType: string
+		isHidden
+		lineageTag: f694dd04-3b1e-5d19-8a83-977d7fb92aae
+		summarizeBy: none
+		sourceColumn: seller_id
+
+	column 'Customer Unique Id'
+		dataType: string
+		isHidden
+		lineageTag: bcf07e14-aabb-50c5-8462-c57f7e094f69
+		summarizeBy: none
+		sourceColumn: customer_unique_id
+
+	column 'Order Date'
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy
+		lineageTag: c5ae2f06-1c9e-5533-b9e1-8a92685936e3
+		summarizeBy: none
+		sourceColumn: order_date
+
+	column 'Is Valid'
+		dataType: boolean
+		lineageTag: e61298b9-fc40-5fa9-9b45-ab83eecaa4ba
+		summarizeBy: none
+		sourceColumn: is_valid
+
+	column 'Is Late'
+		dataType: boolean
+		lineageTag: a9ef7c25-d379-5725-9bb5-eb3000c208cd
+		summarizeBy: none
+		sourceColumn: is_late
+
+	column Price
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: 415e341a-658f-5876-b069-d2b9f693c802
+		summarizeBy: none
+		sourceColumn: price
+
+	column Freight
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: a5528710-f9c8-5a51-b555-03147995b8bc
+		summarizeBy: none
+		sourceColumn: freight
+
+	partition 'Order Items' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "fact_order_items"]}[Data],
+				    // folds -> SELECT only these columns
+				    #"Chose columns" = Table.SelectColumns(Data, {"order_id", "product_id", "seller_id", "customer_unique_id", "order_date", "is_valid", "is_late", "price", "freight"}),
+				    // folds -> CAST per column
+				    Typed = Table.TransformColumnTypes(#"Chose columns", {{"order_id", type text}, {"product_id", type text}, {"seller_id", type text}, {"customer_unique_id", type text}, {"order_date", type date}, {"is_valid", type logical}, {"is_late", type logical}, {"price", type number}, {"freight", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

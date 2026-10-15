@@ -1,0 +1,49 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "4592be40dbff359b",
+  "displayName": "TT Category",
+  "width": 360,
+  "height": 260,
+  "displayOption": "ActualSize",
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "tooltip_filter",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Product"
+              }
+            },
+            "Property": "Category"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "Drillthrough"
+      }
+    ]
+  },
+  "pageBinding": {
+    "name": "tooltip_binding",
+    "type": "Tooltip",
+    "parameters": [
+      {
+        "name": "tooltip_param",
+        "boundFilter": "tooltip_filter",
+        "fieldExpr": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Product"
+              }
+            },
+            "Property": "Category"
+          }
+        }
+      }
+    ]
+  },
+  "visibility": "HiddenInViewMode",
+  "type": "Tooltip"
+}

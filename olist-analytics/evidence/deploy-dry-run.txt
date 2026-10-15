@@ -1,0 +1,30 @@
+[info]   18:35:45 - Parameter file validation passed
+deploy powerbi → Test (DRY RUN)
+items in scope (SemanticModel, Report): 5
+  SemanticModel  'Olist DirectLake'                   Olist.DirectLake.SemanticModel
+  Report         'Olist.Ops'                          Olist.Ops.Report
+  Report         'Olist'                              Olist.Report
+  SemanticModel  'Olist Scale'                        Olist.Scale.SemanticModel
+  SemanticModel  'Olist'                              Olist.SemanticModel
+  find_replace[0] 'expression DataFolder = "([^"]*)"' → '\\\\fileserver\\pbi-test\\olist\\marts\\': Olist.SemanticModel/definition/expressions.tmdl
+  find_replace[1] 'expression PlanFolder = "([^"]*)"' → '\\\\fileserver\\pbi-test\\olist\\plan\\': Olist.SemanticModel/definition/expressions.tmdl
+  find_replace[2] 'expression SqlEndpoint = "([^"]*)"' → '<test-workspace>.datawarehouse.fabric.microsoft.com': Olist.Scale.SemanticModel/definition/expressions.tmdl
+  find_replace[3] 'expression LakehouseDb = "([^"]*)"' → 'olist_lh_test': Olist.Scale.SemanticModel/definition/expressions.tmdl
+  find_replace[4] 'Sql\\.Database\\("([^"]*)", "<lakehouse-id>"\\)' → '<test-workspace>.datawarehouse.fabric.microsoft.com': Olist.DirectLake.SemanticModel/definition/expressions.tmdl
+  find_replace[5] 'Sql\\.Database\\("[^"]*", "(<lakehouse-id>)"\\)' → '<test-lakehouse-id>': Olist.DirectLake.SemanticModel/definition/expressions.tmdl
+fabric-cicd parameter validation: OK
+[info]   18:35:45 - Parameter file validation passed
+deploy powerbi → Prod (DRY RUN)
+items in scope (SemanticModel, Report): 5
+  SemanticModel  'Olist DirectLake'                   Olist.DirectLake.SemanticModel
+  Report         'Olist.Ops'                          Olist.Ops.Report
+  Report         'Olist'                              Olist.Report
+  SemanticModel  'Olist Scale'                        Olist.Scale.SemanticModel
+  SemanticModel  'Olist'                              Olist.SemanticModel
+  find_replace[0] 'expression DataFolder = "([^"]*)"' → '\\\\fileserver\\pbi\\olist\\marts\\': Olist.SemanticModel/definition/expressions.tmdl
+  find_replace[1] 'expression PlanFolder = "([^"]*)"' → '\\\\fileserver\\pbi\\olist\\plan\\': Olist.SemanticModel/definition/expressions.tmdl
+  find_replace[2] 'expression SqlEndpoint = "([^"]*)"' → '<prod-workspace>.datawarehouse.fabric.microsoft.com': Olist.Scale.SemanticModel/definition/expressions.tmdl
+  find_replace[3] 'expression LakehouseDb = "([^"]*)"' → 'olist_lh': Olist.Scale.SemanticModel/definition/expressions.tmdl
+  find_replace[4] 'Sql\\.Database\\("([^"]*)", "<lakehouse-id>"\\)' → '<prod-workspace>.datawarehouse.fabric.microsoft.com': Olist.DirectLake.SemanticModel/definition/expressions.tmdl
+  find_replace[5] 'Sql\\.Database\\("[^"]*", "(<lakehouse-id>)"\\)' → '<prod-lakehouse-id>': Olist.DirectLake.SemanticModel/definition/expressions.tmdl
+fabric-cicd parameter validation: OK

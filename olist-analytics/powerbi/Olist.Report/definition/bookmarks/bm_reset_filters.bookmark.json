@@ -1,0 +1,169 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/2.1.0/schema.json",
+  "name": "bm_reset_filters",
+  "displayName": "Reset filters",
+  "options": {
+    "suppressDisplay": true,
+    "suppressActiveSection": true
+  },
+  "explorationState": {
+    "version": "1.3",
+    "activeSection": "381604b4e04d50cf",
+    "sections": {
+      "381604b4e04d50cf": {
+        "visualContainers": {
+          "slicer_year": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          },
+          "slicer_region": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          },
+          "slicer_group": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          }
+        }
+      },
+      "30ef5bb25858a7a7": {
+        "visualContainers": {
+          "slicer_year": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          },
+          "slicer_region": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          },
+          "slicer_group": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          }
+        }
+      },
+      "27dca8bd5bac37fc": {
+        "visualContainers": {
+          "slicer_year": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          },
+          "slicer_region": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          },
+          "slicer_state": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          }
+        }
+      },
+      "da6b71f9311d3669": {
+        "visualContainers": {
+          "slicer_year": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          },
+          "slicer_region": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          },
+          "slicer_state": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          }
+        }
+      },
+      "6b25401cafd13017": {
+        "visualContainers": {
+          "slicer_year": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          },
+          "slicer_region": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          },
+          "slicer_group": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          }
+        }
+      },
+      "d50f4765f6e86857": {
+        "visualContainers": {
+          "slicer_year": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          },
+          "slicer_region": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          },
+          "slicer_state": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          }
+        }
+      },
+      "f825ab90a9d2bf96": {
+        "visualContainers": {
+          "slicer_year": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          },
+          "slicer_region": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          },
+          "slicer_group": {
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}

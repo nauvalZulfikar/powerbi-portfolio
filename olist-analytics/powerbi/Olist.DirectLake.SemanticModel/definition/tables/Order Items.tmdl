@@ -1,0 +1,45 @@
+table 'Order Items'
+	lineageTag: 280615aa-35c1-58b2-b862-89aa9d0cbc57
+
+	column 'Order Id'
+		dataType: string
+		lineageTag: 2623786a-7f0a-534f-bace-47ab1874db0f
+		summarizeBy: none
+		sourceColumn: order_id
+
+	column 'Product Id'
+		dataType: string
+		lineageTag: 9eb3245e-deda-5617-a77b-8dc68776ba89
+		summarizeBy: none
+		sourceColumn: product_id
+
+	column 'Order Date'
+		dataType: dateTime
+		lineageTag: 5dadd1eb-9c36-5c48-b921-4dfc016adbb2
+		summarizeBy: none
+		sourceColumn: order_date
+
+	column 'Is Valid'
+		dataType: boolean
+		lineageTag: b9dde551-9827-5da0-8600-dc1d0c382da9
+		summarizeBy: none
+		sourceColumn: is_valid
+
+	column Price
+		dataType: double
+		lineageTag: a29680a4-aed9-5869-b143-f393a603dedf
+		summarizeBy: none
+		sourceColumn: price
+
+	column Freight
+		dataType: double
+		lineageTag: 0a1ebfca-28d1-50c3-a19a-830c03cab803
+		summarizeBy: none
+		sourceColumn: freight
+
+	partition 'Order Items' = entity
+		mode: directLake
+		source
+			entityName: fact_order_items
+			schemaName: dbo
+			expressionSource: DatabaseQuery

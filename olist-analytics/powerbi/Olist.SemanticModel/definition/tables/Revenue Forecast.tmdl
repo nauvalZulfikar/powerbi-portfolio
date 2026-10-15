@@ -1,0 +1,56 @@
+table 'Revenue Forecast'
+	lineageTag: f7480cf6-005b-527f-b964-ef214d69e5e8
+
+	column 'Month Start'
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy
+		lineageTag: 2322741f-310d-53fb-9826-d5ef1741c7ca
+		summarizeBy: none
+		sourceColumn: month_start
+
+	column 'Forecast Revenue'
+		dataType: double
+		formatString: \R$ #,0
+		lineageTag: b416a47f-08de-5833-bdf2-8d94265d4a78
+		summarizeBy: none
+		sourceColumn: forecast_revenue
+
+	column 'Lower 80'
+		dataType: double
+		formatString: \R$ #,0
+		lineageTag: 8fab3d89-dbb4-5083-9755-dca6cdab6515
+		summarizeBy: none
+		sourceColumn: lower_80
+
+	column 'Upper 80'
+		dataType: double
+		formatString: \R$ #,0
+		lineageTag: 32ce9e3b-01e6-5678-b71a-0470b2929dab
+		summarizeBy: none
+		sourceColumn: upper_80
+
+	column 'Lower 95'
+		dataType: double
+		formatString: \R$ #,0
+		lineageTag: f328da2a-ebca-573e-a271-74183196f79e
+		summarizeBy: none
+		sourceColumn: lower_95
+
+	column 'Upper 95'
+		dataType: double
+		formatString: \R$ #,0
+		lineageTag: fd1a8792-93d5-59d4-bfeb-53a50660be41
+		summarizeBy: none
+		sourceColumn: upper_95
+
+	partition 'Revenue Forecast' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "revenue_forecast.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"month_start", type date}, {"forecast_revenue", type number}, {"lower_80", type number}, {"upper_80", type number}, {"lower_95", type number}, {"upper_95", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

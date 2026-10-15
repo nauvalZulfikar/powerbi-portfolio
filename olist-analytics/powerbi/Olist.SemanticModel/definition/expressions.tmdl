@@ -1,0 +1,107 @@
+expression DataFolder = "/Users/shaka-mac-mini/coding-projects/portfolio-analytics/olist-analytics/data/marts/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 40d77089-9171-52ed-93c1-7819b9370987
+
+	annotation PBI_ResultType = Text
+
+expression PlanFolder = "/Users/shaka-mac-mini/coding-projects/portfolio-analytics/olist-analytics/data/plan/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 378a929b-922d-57f0-b740-251f8b6d9e4a
+
+	annotation PBI_ResultType = Text
+
+/// Reads one yearly plan sheet and returns it long and clean (one row per group, line and month).
+expression fxReadPlan =
+		(path as text) as table =>
+		    let
+		        Source = Csv.Document(File.Contents(path), [Delimiter = ",", Columns = 16, Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+		        // Two title rows sit above the header
+		        #"Skip title rows" = Table.Skip(Source, 2),
+		        // The third row holds the column names
+		        #"Promoted headers" = Table.PromoteHeaders(#"Skip title rows", [PromoteAllScalars = true]),
+		        // Empty cells arrive as ""; Fill Down only fills nulls
+		        #"Blank group to null" = Table.ReplaceValue(#"Promoted headers", "", null, Replacer.ReplaceValue, {"Category Group"}),
+		        // The group is written once per block (merged cells in the sheet): fill it down
+		        #"Filled down group" = Table.FillDown(#"Blank group to null", {"Category Group"}),
+		        // The TOTAL row is a sum of the rows above; keep only the lines
+		        #"Removed TOTAL row" = Table.SelectRows(#"Filled down group", each [Category Group] <> "TOTAL"),
+		        // One owner typed the Portuguese 'Casa' for Home
+		        #"Replaced Casa typo" = Table.ReplaceValue(#"Removed TOTAL row", "Casa", "Home", Replacer.ReplaceText, {"Category Group"}),
+		        // Stray spaces and lower case: Text.Trim + Text.Proper
+		        #"Trimmed and proper case" = Table.TransformColumns(#"Replaced Casa typo", {{"Category Group", each Text.Proper(Text.Trim(_)), type text}}),
+		        // Drop the free-text Notes and Owner columns
+		        #"Kept plan columns" = Table.SelectColumns(#"Trimmed and proper case", List.RemoveItems(Table.ColumnNames(#"Trimmed and proper case"), {"Notes", "Owner"})),
+		        // 12 month columns -> one row per group, line and month
+		        #"Unpivoted months" = Table.UnpivotOtherColumns(#"Kept plan columns", {"Category Group", "Plan Line"}, "Month", "Plan Text"),
+		        // 2018-01 -> Year 2018 and Month No 01
+		        #"Split month" = Table.SplitColumn(#"Unpivoted months", "Month", Splitter.SplitTextByDelimiter("-", QuoteStyle.None), {"Year", "Month No"}),
+		        // 'n/a' and '-' are not numbers: try … otherwise null instead of an import error
+		        #"Amounts as numbers" = Table.AddColumn(#"Split month", "Plan Revenue", each try Number.From([Plan Text], "en-US") otherwise null, type nullable number),
+		        // The text version is no longer needed
+		        #"Removed text amount" = Table.RemoveColumns(#"Amounts as numbers", {"Plan Text"}),
+		        // Types once the shape is final
+		        #"Changed type" = Table.TransformColumnTypes(#"Removed text amount", {{"Plan Line", type text}, {"Year", Int64.Type}, {"Month No", Int64.Type}}),
+		        // Safety net: a malformed month header would fail the type above; drop such rows (0 today)
+		        #"Removed errors" = Table.RemoveRowsWithErrors(#"Changed type", {"Year", "Month No"})
+		    in
+		        #"Removed errors"
+	lineageTag: d3253681-2ccd-51b4-a2cd-178da6355ee9
+
+	annotation PBI_ResultType = Function
+
+/// The 2017 plan sheet, through fxReadPlan.
+expression 'Plan 2017' =
+		let
+		    Source = fxReadPlan(PlanFolder & "category_plan_2017.csv")
+		in
+		    Source
+	lineageTag: 2281aabc-247a-50ba-abe9-754a0b02ab01
+
+	annotation PBI_ResultType = Table
+
+/// The 2018 plan sheet, through fxReadPlan.
+expression 'Plan 2018' =
+		let
+		    Source = fxReadPlan(PlanFolder & "category_plan_2018.csv")
+		in
+		    Source
+	lineageTag: 321c8247-a9ca-59b7-b3dd-ce7fa73f88fe
+
+	annotation PBI_ResultType = Table
+
+/// Both plan years stacked (Append). Staging only: the plan tables reference it.
+expression 'Plan Raw' =
+		let
+		    // Append: same columns in both years
+		    Source = Table.Combine({#"Plan 2017", #"Plan 2018"})
+		in
+		    Source
+	lineageTag: f3ab7d93-55c9-5524-96d5-606af25779d8
+
+	annotation PBI_ResultType = Table
+
+/// Distinct category groups from the product mart, with a short code: the lookup the plan is merged to.
+expression 'Plan Groups' =
+		let
+		    Source = Parquet.Document(File.Contents(DataFolder & "dim_product.parquet")),
+		    // Only the group column (Parquet reads just this)
+		    #"Kept group" = Table.SelectColumns(Source, {"category_group"}),
+		    // One row per group
+		    #"Distinct groups" = Table.Distinct(#"Kept group"),
+		    // Model name
+		    Renamed = Table.RenameColumns(#"Distinct groups", {{"category_group", "Category Group"}}),
+		    // ELEC, FASH, … for compact labels
+		    #"Group code" = Table.AddColumn(Renamed, "Group Code", each Text.Upper(Text.Start(Text.Remove([Category Group], {" ", ",", "&"}), 4)), type text)
+		in
+		    #"Group code"
+	lineageTag: d265f438-cde5-5974-8359-83958a6b49cc
+
+	annotation PBI_ResultType = Table
+
+/// Plan rows whose group is not in the product mart (left anti join). Must stay empty; the pipeline runs the same check.
+expression 'Plan Unknown Groups' =
+		let
+		    Source = Table.NestedJoin(#"Plan Raw", {"Category Group"}, #"Plan Groups", {"Category Group"}, "Match", JoinKind.LeftAnti)
+		in
+		    Source
+	lineageTag: 2c9b2d02-ed67-527b-b2bc-ca7d66fe222c
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,28 @@
+table Product
+	lineageTag: 3cc375f7-dd36-5b3d-9557-ab448f157f44
+
+	column 'Product Id'
+		dataType: string
+		isKey
+		lineageTag: c31132c0-a79e-5d7c-88b5-8603021fa20a
+		summarizeBy: none
+		sourceColumn: product_id
+
+	column Category
+		dataType: string
+		lineageTag: f1ab07ec-a335-5164-9432-448f93280962
+		summarizeBy: none
+		sourceColumn: category
+
+	column 'Category Group'
+		dataType: string
+		lineageTag: c40d85f4-a824-5c5e-afe5-99056bc16a61
+		summarizeBy: none
+		sourceColumn: category_group
+
+	partition Product = entity
+		mode: directLake
+		source
+			entityName: dim_product
+			schemaName: dbo
+			expressionSource: DatabaseQuery

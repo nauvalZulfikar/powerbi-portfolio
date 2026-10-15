@@ -1,0 +1,987 @@
+table _Measures
+	lineageTag: 5d8aa0a1-a441-501b-ab0f-2780c2d9f98d
+
+	/// Item price of valid (not canceled/unavailable) orders, excluding freight.
+	measure Revenue = CALCULATE ( SUM ( 'Order Items'[Price] ), 'Order Items'[Is Valid] = TRUE () )
+		formatString: \R$ #,0
+		displayFolder: Sales
+		lineageTag: 6beef66d-240c-5ce9-b040-eac5b2375c49
+
+	/// Freight charged on valid order items.
+	measure 'Freight Total' = CALCULATE ( SUM ( 'Order Items'[Freight] ), 'Order Items'[Is Valid] = TRUE () )
+		formatString: \R$ #,0
+		displayFolder: Sales
+		lineageTag: 364c8711-9163-5c42-aa1b-20f014fc15a3
+
+	/// Gross merchandise value = revenue + freight.
+	measure GMV = [Revenue] + [Freight Total]
+		formatString: \R$ #,0
+		displayFolder: Sales
+		lineageTag: f8a92468-b377-565e-a636-a6601923bc2f
+
+	/// Distinct valid orders.
+	measure 'Order Count' = CALCULATE ( DISTINCTCOUNT ( 'Order Items'[Order Id] ), 'Order Items'[Is Valid] = TRUE () )
+		formatString: #,0
+		displayFolder: Sales
+		lineageTag: 160a590f-bf1a-54fb-8f26-6c304884af17
+
+	/// Valid order items.
+	measure 'Items Sold' = CALCULATE ( COUNTROWS ( 'Order Items' ), 'Order Items'[Is Valid] = TRUE () )
+		formatString: #,0
+		displayFolder: Sales
+		lineageTag: d647a016-1ef8-51ea-8caa-371b5d2bbf96
+
+	/// Average order value (revenue per order).
+	measure AOV = DIVIDE ( [Revenue], [Order Count] )
+		formatString: \R$ #,0.00
+		displayFolder: Sales
+		lineageTag: 4e1ee63d-1591-51c0-ab31-e53dfd652d1e
+
+	measure 'Avg Item Price' = DIVIDE ( [Revenue], [Items Sold] )
+		formatString: \R$ #,0.00
+		displayFolder: Sales
+		lineageTag: 36301c09-5318-5c17-bdd1-d3ce71b9355a
+
+	measure 'Items per Order' = DIVIDE ( [Items Sold], [Order Count] )
+		formatString: 0.00
+		displayFolder: Sales
+		lineageTag: 7ed7cecf-3887-5321-ae0c-289d39c7eef0
+
+	/// Freight as a share of GMV.
+	measure 'Freight Share %' = Olist.SafePct ( [Freight Total], [GMV] )
+		formatString: 0.0%
+		displayFolder: Sales
+		lineageTag: 3fdefb37-96a7-55aa-9bd7-dcd1b706f666
+
+	/// Share of revenue within the current visual selection.
+	measure 'Revenue Share %' = Olist.SafePct ( [Revenue], CALCULATE ( [Revenue], ALLSELECTED () ) )
+		formatString: 0.0%
+		displayFolder: Sales
+		lineageTag: 27003d49-1c03-56c5-89db-8998267a1c9e
+
+	/// Rolling 3-month average of monthly revenue.
+	measure 'Revenue 3M Avg' =
+			VAR _end = MAX ( 'Date'[Date] )
+			RETURN
+			    DIVIDE (
+			        CALCULATE ( [Revenue], DATESINPERIOD ( 'Date'[Date], _end, -3, MONTH ) ),
+			        CALCULATE ( DISTINCTCOUNT ( 'Date'[Month Start] ), DATESINPERIOD ( 'Date'[Date], _end, -3, MONTH ) )
+			    )
+		formatString: \R$ #,0
+		displayFolder: Sales
+		lineageTag: 25e7c000-3444-5553-bb58-01cfb5d97813
+
+	/// Revenue in the same period last year, only when one year is in context, and only up to the last date with data (so a partial year is compared like-for-like).
+	measure 'Revenue PY' =
+			VAR _lastData = CALCULATE ( MAX ( 'Order Items'[Order Date] ), REMOVEFILTERS (), 'Order Items'[Is Valid] = TRUE () )
+			VAR _dates = FILTER ( VALUES ( 'Date'[Date] ), 'Date'[Date] <= _lastData )
+			RETURN IF ( HASONEVALUE ( 'Date'[Year] ), CALCULATE ( [Revenue], SAMEPERIODLASTYEAR ( _dates ) ) )
+		formatString: \R$ #,0
+		displayFolder: Time Intelligence
+		lineageTag: 347f47c5-608c-5020-959f-55544908161d
+
+	measure 'Revenue YoY %' =
+			VAR _py = [Revenue PY]
+			RETURN IF ( NOT ISBLANK ( _py ), Olist.SafePct ( [Revenue] - _py, _py ) )
+		formatString: 0.0%
+		displayFolder: Time Intelligence
+		lineageTag: 47c8e829-1cd9-533d-9cb2-2b5fd5a151bb
+
+	measure 'Revenue YTD' = TOTALYTD ( [Revenue], 'Date'[Date] )
+		formatString: \R$ #,0
+		displayFolder: Time Intelligence
+		lineageTag: 722341d5-d6d9-55ef-a17d-09ac2c4bc304
+
+	measure 'Revenue PM' = CALCULATE ( [Revenue], DATEADD ( 'Date'[Date], -1, MONTH ) )
+		formatString: \R$ #,0
+		displayFolder: Time Intelligence
+		lineageTag: ee8dd074-825c-57aa-8fc2-1e03763ae787
+
+	measure 'Revenue MoM %' =
+			VAR _pm = [Revenue PM]
+			RETURN IF ( NOT ISBLANK ( _pm ), Olist.SafePct ( [Revenue] - _pm, _pm ) )
+		formatString: 0.0%
+		displayFolder: Time Intelligence
+		lineageTag: 3a498913-4401-5649-ad1b-82b71d2f071c
+
+	/// Same rules as Revenue PY.
+	measure 'Orders PY' =
+			VAR _lastData = CALCULATE ( MAX ( 'Order Items'[Order Date] ), REMOVEFILTERS (), 'Order Items'[Is Valid] = TRUE () )
+			VAR _dates = FILTER ( VALUES ( 'Date'[Date] ), 'Date'[Date] <= _lastData )
+			RETURN IF ( HASONEVALUE ( 'Date'[Year] ), CALCULATE ( [Order Count], SAMEPERIODLASTYEAR ( _dates ) ) )
+		formatString: #,0
+		displayFolder: Time Intelligence
+		lineageTag: f3d07a8c-77fc-54b5-9a2e-57d6d21ee5af
+
+	measure 'Orders YoY %' =
+			VAR _py = [Orders PY]
+			RETURN IF ( NOT ISBLANK ( _py ), Olist.SafePct ( [Order Count] - _py, _py ) )
+		formatString: 0.0%
+		displayFolder: Time Intelligence
+		lineageTag: 6df7e71c-397e-5a34-9b80-4577f71281e1
+
+	/// Card subtitle: ▲/▼ change vs same period last year.
+	measure 'Revenue YoY Label' =
+			VAR _g = [Revenue YoY %]
+			RETURN
+			    IF ( ISBLANK ( _g ), "no prior-year data",
+			        IF ( _g >= 0, "▲ ", "▼ " ) & FORMAT ( ABS ( _g ), "0.0%" ) & " vs PY" )
+		displayFolder: Time Intelligence
+		lineageTag: 145d02a5-e98a-5e14-8296-2a3379c17938
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	measure 'Orders YoY Label' =
+			VAR _g = [Orders YoY %]
+			RETURN
+			    IF ( ISBLANK ( _g ), "no prior-year data",
+			        IF ( _g >= 0, "▲ ", "▼ " ) & FORMAT ( ABS ( _g ), "0.0%" ) & " vs PY" )
+		displayFolder: Time Intelligence
+		lineageTag: 0e7d42cc-bf59-52dd-8d34-7e8d8aa7ef11
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Green when revenue grows vs PY, red when it shrinks.
+	measure 'Revenue YoY Color' = IF ( [Revenue YoY %] < 0, "#D03B3B", "#0CA30C" )
+		displayFolder: Time Intelligence
+		lineageTag: 56c76963-26cb-5c06-8e4f-3d4c666dc631
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	measure 'Orders YoY Color' = IF ( [Orders YoY %] < 0, "#D03B3B", "#0CA30C" )
+		displayFolder: Time Intelligence
+		lineageTag: 084dc822-03f3-5339-948b-cd0b4552f49f
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Valid orders counted on the Orders table (use with order-level attributes like hour or status).
+	measure 'Orders Placed' = CALCULATE ( COUNTROWS ( Orders ), Orders[Is Valid] = TRUE () )
+		formatString: #,0
+		displayFolder: Sales
+		lineageTag: a0b6a545-af3e-57ec-a842-de59be577875
+
+	/// Distinct customers (customer_unique_id) with a valid order.
+	measure Customers = CALCULATE ( DISTINCTCOUNT ( 'Order Items'[Customer Unique Id] ), 'Order Items'[Is Valid] = TRUE () )
+		formatString: #,0
+		displayFolder: Customers
+		lineageTag: 854874f8-19d7-56df-924c-a5ef0c8ebfea
+
+	measure 'Revenue per Customer' = DIVIDE ( [Revenue], [Customers] )
+		formatString: \R$ #,0.00
+		displayFolder: Customers
+		lineageTag: e8617b97-6a44-5e3b-a490-5dea96705298
+
+	/// Customers placing their first-ever order in the period. With no date filter the period is the whole extract, where everyone is new, so it falls back to the last quarter with data (Period Counted says which).
+	measure 'New Customers' =
+			VAR _full = MIN ( 'Date'[Date] ) = CALCULATE ( MIN ( 'Date'[Date] ), REMOVEFILTERS ( 'Date' ) )
+			    && MAX ( 'Date'[Date] ) = CALCULATE ( MAX ( 'Date'[Date] ), REMOVEFILTERS ( 'Date' ) )
+			VAR _lastData = CALCULATE ( MAX ( 'Order Items'[Order Date] ), REMOVEFILTERS (), 'Order Items'[Is Valid] = TRUE () )
+			VAR _lastq = LOOKUPVALUE ( 'Date'[Year Quarter], 'Date'[Date], _lastData )
+			RETURN
+			    IF ( _full,
+			        CALCULATE ( CALCULATE ( COUNTROWS ( Orders ), Orders[Customer Order Seq] = 1, Orders[Is Valid] = TRUE () ), REMOVEFILTERS ( 'Date' ), 'Date'[Year Quarter] = _lastq ),
+			        CALCULATE ( COUNTROWS ( Orders ), Orders[Customer Order Seq] = 1, Orders[Is Valid] = TRUE () ) )
+		formatString: #,0
+		displayFolder: Customers
+		lineageTag: 476e68f6-2da3-514d-9bfe-25ca2c8d1a87
+
+	/// Customers in the period who had ordered before it (same last-quarter fallback as New Customers).
+	measure 'Returning Customers' =
+			VAR _full = MIN ( 'Date'[Date] ) = CALCULATE ( MIN ( 'Date'[Date] ), REMOVEFILTERS ( 'Date' ) )
+			    && MAX ( 'Date'[Date] ) = CALCULATE ( MAX ( 'Date'[Date] ), REMOVEFILTERS ( 'Date' ) )
+			VAR _lastData = CALCULATE ( MAX ( 'Order Items'[Order Date] ), REMOVEFILTERS (), 'Order Items'[Is Valid] = TRUE () )
+			VAR _lastq = LOOKUPVALUE ( 'Date'[Year Quarter], 'Date'[Date], _lastData )
+			RETURN
+			    IF ( _full,
+			        CALCULATE ( CALCULATE ( DISTINCTCOUNT ( Orders[Customer Unique Id] ), Orders[Customer Order Seq] > 1, Orders[Is Valid] = TRUE () ), REMOVEFILTERS ( 'Date' ), 'Date'[Year Quarter] = _lastq ),
+			        CALCULATE ( DISTINCTCOUNT ( Orders[Customer Unique Id] ), Orders[Customer Order Seq] > 1, Orders[Is Valid] = TRUE () ) )
+		formatString: #,0
+		displayFolder: Customers
+		lineageTag: ab68d5e8-5303-5d65-a4fd-abe65779fe29
+
+	/// The period New / Returning Customers count: "Selected dates", or the last quarter with data when no date filter narrows the extract.
+	measure 'Period Counted' =
+			VAR _full = MIN ( 'Date'[Date] ) = CALCULATE ( MIN ( 'Date'[Date] ), REMOVEFILTERS ( 'Date' ) )
+			    && MAX ( 'Date'[Date] ) = CALCULATE ( MAX ( 'Date'[Date] ), REMOVEFILTERS ( 'Date' ) )
+			VAR _lastData = CALCULATE ( MAX ( 'Order Items'[Order Date] ), REMOVEFILTERS (), 'Order Items'[Is Valid] = TRUE () )
+			VAR _lastq = LOOKUPVALUE ( 'Date'[Year Quarter], 'Date'[Date], _lastData )
+			RETURN IF ( _full, _lastq & " (last quarter)", "Selected dates" )
+		displayFolder: Report UI
+		lineageTag: 1baa9ee5-4dca-5a44-b9ab-ba1c4e8dedda
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Valid orders from customers who had ordered before.
+	measure 'Repeat Orders' = CALCULATE ( COUNTROWS ( Orders ), Orders[Customer Order Seq] > 1, Orders[Is Valid] = TRUE () )
+		formatString: #,0
+		displayFolder: Customers
+		lineageTag: 21ea082c-a49d-5b39-9919-d076fece6bdb
+
+	measure 'Repeat Order %' = Olist.SafePct ( [Repeat Orders], CALCULATE ( COUNTROWS ( Orders ), Orders[Is Valid] = TRUE () ) )
+		formatString: 0.0%
+		displayFolder: Customers
+		lineageTag: c547c390-91b0-5e10-b692-c70ce674b516
+
+	/// Share of customers (lifetime) with 2+ valid orders.
+	measure 'Repeat Customer Rate' =
+			Olist.SafePct (
+			    CALCULATE ( COUNTROWS ( Customer ), Customer[Valid Orders] > 1 ),
+			    CALCULATE ( COUNTROWS ( Customer ), Customer[Valid Orders] > 0 )
+			)
+		formatString: 0.0%
+		displayFolder: Customers
+		lineageTag: cde3b5df-d8ba-52cc-ae88-2c7c150a8df2
+
+	/// Customers in the Customer dimension (lifetime, ignores date).
+	measure 'Customer Count' = CALCULATE ( COUNTROWS ( Customer ), Customer[Valid Orders] > 0 )
+		formatString: #,0
+		displayFolder: Customers
+		lineageTag: 55dcc0ec-790b-5217-b590-7625b49196fd
+
+	measure 'Customer Lifetime Value' = SUM ( Customer[Lifetime Value] )
+		formatString: \R$ #,0
+		displayFolder: Customers
+		lineageTag: 341ac59e-fec0-53be-913c-e90e071d71f7
+
+	/// Average cohort retention for the selected month offsets.
+	measure 'Avg Retention %' = AVERAGE ( 'Cohort Retention'[Retention Rate] )
+		formatString: 0.00%
+		displayFolder: Customers
+		lineageTag: 35d028b3-7a4f-501c-9435-f74cfd3b90a1
+
+	measure 'Cohort Customers' = SUM ( 'Cohort Retention'[Active Customers] )
+		formatString: #,0
+		displayFolder: Customers
+		lineageTag: b3cfa30e-a7d8-56c2-8c3b-4707abc8fbb4
+
+	measure 'Delivered Orders' = CALCULATE ( COUNTROWS ( Orders ), Orders[Is Delivered] = TRUE () )
+		formatString: #,0
+		displayFolder: Delivery
+		lineageTag: 1d092c5e-5296-53a1-aab0-54753d381b11
+
+	/// Delivered after the estimated date shown at checkout.
+	measure 'Late Orders' = CALCULATE ( COUNTROWS ( Orders ), Orders[Is Late] = TRUE () )
+		formatString: #,0
+		displayFolder: Delivery
+		lineageTag: d622025a-00c3-5468-a041-1ba143a19c8d
+
+	measure 'Late Rate %' = Olist.SafePct ( [Late Orders], [Delivered Orders] )
+		formatString: 0.0%
+		displayFolder: Delivery
+		lineageTag: 43da9c7d-b63f-5b7a-994d-67f46af39b94
+
+	measure 'On-Time Rate %' = IF ( NOT ISBLANK ( [Delivered Orders] ), 1 - [Late Rate %] )
+		formatString: 0.0%
+		displayFolder: Delivery
+		lineageTag: 6bedd9a8-d541-5c6a-be03-52cd67b82394
+
+	/// Purchase to customer delivery.
+	measure 'Avg Delivery Days' = CALCULATE ( AVERAGE ( Orders[Delivery Days] ), Orders[Is Delivered] = TRUE () )
+		formatString: #,0.0
+		displayFolder: Delivery
+		lineageTag: e3b1888e-38aa-51af-9aa4-5fff4e1887b8
+
+	/// Purchase to the estimated delivery date.
+	measure 'Avg Promised Days' = CALCULATE ( AVERAGE ( Orders[Promised Days] ), Orders[Is Delivered] = TRUE () )
+		formatString: #,0.0
+		displayFolder: Delivery
+		lineageTag: 29edb28a-127c-5e94-af0b-b4bcb5ceee71
+
+	/// How much earlier than promised orders arrive on average.
+	measure 'Avg Buffer Days' = [Avg Promised Days] - [Avg Delivery Days]
+		formatString: #,0.0
+		displayFolder: Delivery
+		lineageTag: b706ea26-c0f0-5a3f-826f-b8cc5567c376
+
+	/// Purchase to hand-over to the carrier.
+	measure 'Avg Days to Carrier' = CALCULATE ( AVERAGE ( Orders[Days To Carrier] ), Orders[Is Delivered] = TRUE () )
+		formatString: #,0.0
+		displayFolder: Delivery
+		lineageTag: 5a49f624-732b-5022-bc25-011a583c850a
+
+	/// Status colour for conditional formatting of late rate.
+	measure 'Late Rate Color' =
+			VAR _r = [Late Rate %]
+			RETURN
+			    SWITCH ( TRUE (),
+			        ISBLANK ( _r ), "#C3C2B7",
+			        _r >= 0.12, "#D03B3B",
+			        _r >= 0.08, "#EC835A",
+			        "#2A78D6"
+			    )
+		displayFolder: Delivery
+		lineageTag: 28d41671-f459-5e61-9167-fe092377a358
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	measure Reviews = COUNT ( Orders[Review Score] )
+		formatString: #,0
+		displayFolder: Satisfaction
+		lineageTag: 6523e8e9-1c7b-5ba6-8847-431223ec6913
+
+	/// Average 1–5 star review score.
+	measure 'Avg Review' = AVERAGE ( Orders[Review Score] )
+		formatString: 0.00
+		displayFolder: Satisfaction
+		lineageTag: 58b7c64f-df2d-50f0-ad7c-9b357019d9b7
+
+	/// Share of reviews that are 1 or 2 stars.
+	measure 'Bad Review %' = Olist.SafePct ( CALCULATE ( [Reviews], Orders[Review Score] <= 2 ), [Reviews] )
+		formatString: 0.0%
+		displayFolder: Satisfaction
+		lineageTag: f75e4260-1eb8-5d55-960b-ca014e626e7b
+
+	measure '5-Star Review %' = Olist.SafePct ( CALCULATE ( [Reviews], Orders[Review Score] = 5 ), [Reviews] )
+		formatString: 0.0%
+		displayFolder: Satisfaction
+		lineageTag: 076b8a1f-63f3-5dc1-b86a-b28d901aaa11
+
+	/// Share of reviews within each row of the visual (for 100% bars).
+	measure 'Review Share %' = Olist.SafePct ( [Reviews], CALCULATE ( [Reviews], ALL ( Orders[Review Label], Orders[Review Score] ) ) )
+		formatString: 0.0%
+		displayFolder: Satisfaction
+		lineageTag: 525f306a-04e5-5d65-a01e-6daba3ffc5e5
+
+	/// Average review of orders containing the item (product/seller lens).
+	measure 'Item Avg Review' = CALCULATE ( AVERAGE ( 'Order Items'[Review Score] ), 'Order Items'[Is Valid] = TRUE () )
+		formatString: 0.00
+		displayFolder: Satisfaction
+		lineageTag: 8c02c731-9f5b-525e-af01-8eed51dadbb6
+
+	measure 'Avg Review Label' = FORMAT ( [Avg Review], "0.00" ) & " ★"
+		displayFolder: Satisfaction
+		lineageTag: cca80c90-a34e-5ca9-ac1e-50169f6870b9
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	measure 'Payment Value' = CALCULATE ( SUM ( Payments[Amount] ), Payments[Is Valid] = TRUE () )
+		formatString: \R$ #,0
+		displayFolder: Payments
+		lineageTag: bd6f413f-2193-5cad-a9e5-e7a9ed316b86
+
+	measure 'Payments Count' = CALCULATE ( COUNTROWS ( Payments ), Payments[Is Valid] = TRUE () )
+		formatString: #,0
+		displayFolder: Payments
+		lineageTag: dc9908ef-aa24-5811-b4b3-967bf124b2c9
+
+	measure 'Avg Installments' = CALCULATE ( AVERAGE ( Payments[Installments] ), Payments[Is Valid] = TRUE (), Payments[Payment Type] = "Credit Card" )
+		formatString: #,0.0
+		displayFolder: Payments
+		lineageTag: 57cf32c9-c68c-5163-9440-c852e5a2b895
+
+	measure 'Payment Share %' = Olist.SafePct ( [Payment Value], CALCULATE ( [Payment Value], ALLSELECTED ( Payments ) ) )
+		formatString: 0.0%
+		displayFolder: Payments
+		lineageTag: 6f2bc855-0a31-57b1-8d14-c46d533ce5c9
+
+	/// Sellers with at least one valid order item.
+	measure 'Active Sellers' = CALCULATE ( DISTINCTCOUNT ( 'Order Items'[Seller Id] ), 'Order Items'[Is Valid] = TRUE () )
+		formatString: #,0
+		displayFolder: Sellers
+		lineageTag: 1799c9ae-5c3f-5ed2-a868-1cdd8ac21d7c
+
+	measure 'Revenue per Seller' = DIVIDE ( [Revenue], [Active Sellers] )
+		formatString: \R$ #,0
+		displayFolder: Sellers
+		lineageTag: 66d87d82-a4f1-5ac8-aa9f-054690930f67
+
+	/// Revenue share of tier-A sellers (the few who make 50% of lifetime revenue).
+	measure 'Top-Tier Revenue Share %' = Olist.SafePct ( CALCULATE ( [Revenue], Seller[Pareto Tier] = "A · Top 50% revenue" ), [Revenue] )
+		formatString: 0.0%
+		displayFolder: Sellers
+		lineageTag: 9c509eda-4e83-5310-bb2e-cb415f35ebc2
+
+	/// Late share of delivered items (item lens).
+	measure 'Seller Late Rate %' =
+			Olist.SafePct (
+			    CALCULATE ( COUNTROWS ( 'Order Items' ), 'Order Items'[Is Late] = TRUE () ),
+			    CALCULATE ( COUNTROWS ( 'Order Items' ), NOT ISBLANK ( 'Order Items'[Is Late] ) )
+			)
+		formatString: 0.0%
+		displayFolder: Sellers
+		lineageTag: 737b5436-01e3-5ddc-bd7b-86bd9eef02e4
+
+	/// Average seller → customer distance.
+	measure 'Avg Distance km' = CALCULATE ( AVERAGE ( 'Order Items'[Distance Km] ), 'Order Items'[Is Valid] = TRUE () )
+		formatString: #,0
+		displayFolder: Sellers
+		lineageTag: c9d36e79-830c-516f-bd0f-031ba9c787a4
+
+	measure 'Lane Items' = SUM ( 'Freight Lanes'[Items] )
+		formatString: #,0
+		displayFolder: Logistics
+		lineageTag: 564027f3-507b-5f41-92fd-adb3128b3bd5
+
+	/// Item-weighted late rate across lanes.
+	measure 'Lane Late Rate %' = Olist.SafePct ( SUMX ( 'Freight Lanes', 'Freight Lanes'[Items] * 'Freight Lanes'[Late Rate] ), [Lane Items] )
+		formatString: 0.0%
+		displayFolder: Logistics
+		lineageTag: c41b1c04-e5de-5657-b6a0-ad0c27225dc2
+
+	measure 'Lane Avg Freight' = DIVIDE ( SUMX ( 'Freight Lanes', 'Freight Lanes'[Items] * 'Freight Lanes'[Avg Freight] ), [Lane Items] )
+		formatString: \R$ #,0.00
+		displayFolder: Logistics
+		lineageTag: 358e111b-27f2-5289-a37c-e3efea3e3195
+
+	measure 'Lane Avg Delivery Days' = DIVIDE ( SUMX ( 'Freight Lanes', 'Freight Lanes'[Items] * 'Freight Lanes'[Lane Delivery Days] ), [Lane Items] )
+		formatString: #,0.0
+		displayFolder: Logistics
+		lineageTag: 91069ad0-7d0b-5f0b-a294-14ab525a40b4
+
+	/// Selected date range, for page subtitles.
+	measure 'Period Label' = FORMAT ( MIN ( 'Date'[Date] ), "mmm yyyy" ) & " – " & FORMAT ( MAX ( 'Date'[Date] ), "mmm yyyy" )
+		displayFolder: Report UI
+		lineageTag: 6165f08e-1e4f-5c86-adb5-dcea2103986c
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Freight charged per kilogram shipped: RELATED fetches each item's product weight.
+	measure 'Freight per kg' =
+			Olist.SafePct ( [Freight Total],
+			    CALCULATE ( SUMX ( 'Order Items', RELATED ( Product[Weight G] ) ), 'Order Items'[Is Valid] = TRUE () ) / 1000 )
+		formatString: \R$ #,0.00
+		displayFolder: Logistics
+		lineageTag: 52315b22-6d0f-5fb3-944a-88121ad12a52
+
+	/// Iterator: freight ÷ distance per item, then the average of those ratios.
+	measure 'Avg Freight per Km' =
+			AVERAGEX (
+			    FILTER ( 'Order Items', 'Order Items'[Is Valid] && 'Order Items'[Distance Km] > 0 ),
+			    DIVIDE ( 'Order Items'[Freight], 'Order Items'[Distance Km] )
+			)
+		formatString: \R$ #,0.000
+		displayFolder: Logistics
+		lineageTag: 8b229702-4c20-50f2-b82a-eb26aec6fa08
+
+	/// Iterator over states: the highest state average delivery time in the selection.
+	measure 'Slowest State Days' = MAXX ( VALUES ( Customer[State] ), [Avg Delivery Days] )
+		formatString: #,0.0
+		displayFolder: Delivery
+		lineageTag: 4e0133b4-45b2-5dcd-b4e5-54dff518b801
+
+	/// Tier-A revenue, KEEPFILTERS: on a row for tier B it is blank, because the tier filter is added to the row's, not swapped in.
+	measure 'Revenue Top Tier' = CALCULATE ( [Revenue], KEEPFILTERS ( Seller[Pareto Tier] = "A · Top 50% revenue" ) )
+		formatString: \R$ #,0
+		displayFolder: Sellers
+		lineageTag: 9216af80-6374-53a4-afb9-fe52a22c3d7d
+
+	/// Tier-A revenue, plain filter: replaces the row's tier, so every tier row shows the tier-A total.
+	measure 'Revenue Top Tier (overwrite)' = CALCULATE ( [Revenue], Seller[Pareto Tier] = "A · Top 50% revenue" )
+		formatString: \R$ #,0
+		displayFolder: Sellers
+		lineageTag: 5ac19a5b-78f1-5c42-8873-4ec0b8efb5da
+
+	/// A category's share of its category group (ALLEXCEPT keeps only the group filter on Product).
+	measure 'Category Share in Group %' = Olist.SafePct ( [Revenue], CALCULATE ( [Revenue], ALLEXCEPT ( Product, Product[Category Group] ) ) )
+		formatString: 0.0%
+		displayFolder: Sales
+		lineageTag: 0a517808-8fb4-5f66-b79a-8ba4a7a3f3c1
+
+	/// Revenue from sellers whose items average under 3 stars: FILTER over sellers evaluates the review measure per seller.
+	measure 'Revenue at Risk (Low-Rated Sellers)' = CALCULATE ( [Revenue], FILTER ( VALUES ( Seller[Seller Id] ), [Item Avg Review] < 3 ) )
+		formatString: \R$ #,0
+		displayFolder: Sellers
+		lineageTag: 921328ad-6423-5164-8023-5e1845cbae3a
+
+	/// Customers with more than one order in the selection. [Order Count] inside FILTER runs once per customer: the row becomes a filter (context transition), so each customer gets their own count.
+	measure 'Repeat Customers' = COUNTROWS ( FILTER ( VALUES ( Customer[Customer Unique Id] ), [Order Count] > 1 ) )
+		formatString: #,0
+		displayFolder: Customers
+		lineageTag: 3ea6988d-9a0f-56cf-b58d-05ef661835af
+
+	/// São Paulo sellers' revenue, overwrite: replaces any seller-state filter on the row.
+	measure 'Revenue SP Sellers' = CALCULATE ( [Revenue], Seller[State] = "SP" )
+		formatString: \R$ #,0
+		displayFolder: Sellers
+		lineageTag: 1d428354-8a6a-53e1-86e3-c0d1ad455378
+
+	/// São Paulo sellers' revenue, KEEPFILTERS: blank on rows for other states.
+	measure 'Revenue SP Sellers (KEEPFILTERS)' = CALCULATE ( [Revenue], KEEPFILTERS ( Seller[State] = "SP" ) )
+		formatString: \R$ #,0
+		displayFolder: Sellers
+		lineageTag: 6726a7ed-39a3-5e5e-9088-6c65550c6097
+
+	/// Delivered orders counted in the month they arrived (inactive Delivered Date relationship).
+	measure 'Delivered Orders (by Delivery Date)' = CALCULATE ( [Delivered Orders], USERELATIONSHIP ( Orders[Delivered Date], 'Date'[Date] ) )
+		formatString: #,0
+		displayFolder: Delivery
+		lineageTag: 658942ba-0d80-5605-91f4-9cff86f5d9f4
+
+	/// Late rate by the month delivery was promised for, not the month of purchase.
+	measure 'Late Rate % (by Promise Month)' = CALCULATE ( [Late Rate %], USERELATIONSHIP ( Orders[Estimated Date], 'Date'[Date] ) )
+		formatString: 0.0%
+		displayFolder: Delivery
+		lineageTag: 1997d52f-80d1-528c-913d-9f68246a3feb
+
+	/// Quarter to date.
+	measure 'Revenue QTD' = TOTALQTD ( [Revenue], 'Date'[Date] )
+		formatString: \R$ #,0
+		displayFolder: Time Intelligence
+		lineageTag: 6c443261-6bff-5085-9b66-f654b83be8b1
+
+	/// Month to date.
+	measure 'Revenue MTD' = TOTALMTD ( [Revenue], 'Date'[Date] )
+		formatString: \R$ #,0
+		displayFolder: Time Intelligence
+		lineageTag: 57d27345-416d-5849-a648-9c4d2b423d3a
+
+	/// Orders bought but not yet delivered at the end of the period: a snapshot, so take the last day, never the sum of days.
+	measure 'Orders In Transit (EoP)' = CALCULATE ( SUM ( 'Backlog Daily'[In Transit Snapshot] ), LASTDATE ( 'Date'[Date] ) )
+		formatString: #,0
+		displayFolder: Delivery
+		lineageTag: f2ac0ba4-9982-53d2-a0f0-7604248d481c
+
+	/// Revenue from the Seller Monthly snapshot table.
+	measure 'Seller Monthly Revenue' = SUM ( 'Seller Monthly'[Monthly Revenue] )
+		formatString: \R$ #,0
+		displayFolder: Sellers
+		lineageTag: 236cb835-5f60-5ff3-99b5-1e00038cdeef
+
+	/// Orders from the Seller Monthly snapshot table.
+	measure 'Seller Monthly Orders' = SUM ( 'Seller Monthly'[Monthly Orders] )
+		formatString: #,0
+		displayFolder: Sellers
+		lineageTag: 56c620c5-8c36-5051-bb8e-675ceb38e042
+
+	/// Late rate of the seller-month rows (plain average of the monthly rates).
+	measure 'Seller Monthly Late Rate' = AVERAGE ( 'Seller Monthly'[Monthly Late Rate] )
+		formatString: 0.0%
+		displayFolder: Sellers
+		lineageTag: 56ffa95f-0ca4-5726-bba3-d8f39c7c61d2
+
+	/// Average review of the seller-month rows (plain average of the monthly averages).
+	measure 'Seller Monthly Avg Review' = AVERAGE ( 'Seller Monthly'[Monthly Avg Review] )
+		formatString: 0.00
+		displayFolder: Sellers
+		lineageTag: 56c1d02a-0af7-5188-915f-5f9add82fadb
+
+	/// Latitude of the seller's zip-prefix centroid (for the map).
+	measure 'Seller Lat' = AVERAGE ( Seller[Lat] )
+		formatString: 0.0000
+		displayFolder: Sellers
+		lineageTag: 91fdbe09-af4c-56f0-b5f5-f9e1d48bc93a
+
+	/// Longitude of the seller's zip-prefix centroid (for the map).
+	measure 'Seller Lng' = AVERAGE ( Seller[Lng] )
+		formatString: 0.0000
+		displayFolder: Sellers
+		lineageTag: 57ba6c4a-1e34-51e6-b2d1-c9e8f2877f9f
+
+	/// Prior year on the Gregorian calendar (calendar-based time intelligence).
+	measure 'Revenue PY (cal)' = CALCULATE ( [Revenue], DATEADD ( 'Gregorian', -1, YEAR ) )
+		formatString: \R$ #,0
+		displayFolder: Time Intelligence
+		lineageTag: 267a1bfa-87d5-50c8-8648-5f34abeefd78
+
+	/// Year to date on the Gregorian calendar.
+	measure 'Revenue YTD (cal)' = CALCULATE ( [Revenue], DATESYTD ( 'Gregorian' ) )
+		formatString: \R$ #,0
+		displayFolder: Time Intelligence
+		lineageTag: 9533a814-bfb6-5266-bd40-354f8f9c8d21
+
+	/// Prior quarter on the Gregorian calendar; a Weekday Name filter is kept, not cleared.
+	measure 'Revenue PQ (cal)' = CALCULATE ( [Revenue], DATEADD ( 'Gregorian', -1, QUARTER ) )
+		formatString: \R$ #,0
+		displayFolder: Time Intelligence
+		lineageTag: 0f8ae62e-b127-5912-817d-39be76128ab1
+
+	/// Distinct customers with an order item under the current filters: 'Order Items' as a filter carries its expanded table, so Product filters reach Customer.
+	measure 'Customers Buying Category' = CALCULATE ( DISTINCTCOUNT ( Customer[Customer Unique Id] ), 'Order Items' )
+		formatString: #,0
+		displayFolder: Customers
+		lineageTag: 6d58c788-63be-58dc-aa85-f9f4520989a8
+
+	/// Order-level review for the orders in context: TREATAS moves the item order ids onto Orders without a physical relationship.
+	measure 'Seller Order Review' = CALCULATE ( [Avg Review], TREATAS ( VALUES ( 'Order Items'[Order Id] ), Orders[Order Id] ) )
+		formatString: 0.00
+		displayFolder: Satisfaction
+		lineageTag: bebf78b4-f67b-525c-ac65-02c029e54fd9
+
+	/// Revenue of the three best categories in the selection (TOPN over a temporary table).
+	measure 'Top 3 Category Revenue' = SUMX ( TOPN ( 3, ADDCOLUMNS ( VALUES ( Product[Category] ), "@r", [Revenue] ), [@r] ), [@r] )
+		formatString: \R$ #,0
+		displayFolder: Sales
+		lineageTag: c31de770-1fd8-5fd5-8b4e-d6f55bc9659b
+
+	/// Previous month with OFFSET over the months in the selection (no date functions).
+	measure 'Revenue PM (OFFSET)' = CALCULATE ( [Revenue], OFFSET ( -1, ALLSELECTED ( 'Date'[Year Month], 'Date'[Year Month Key] ), ORDERBY ( 'Date'[Year Month Key] ) ) )
+		formatString: \R$ #,0
+		displayFolder: Time Intelligence
+		lineageTag: a1c13179-a34f-5294-b012-db1f1a111af0
+
+	/// Running total from the first selected month (WINDOW 1 ABS to 0 REL).
+	measure 'Revenue Running Total' = CALCULATE ( [Revenue], WINDOW ( 1, ABS, 0, REL, ALLSELECTED ( 'Date'[Year Month], 'Date'[Year Month Key] ), ORDERBY ( 'Date'[Year Month Key] ) ) )
+		formatString: \R$ #,0
+		displayFolder: Time Intelligence
+		lineageTag: 08dd7b61-beb0-5ccb-94b7-33841866767a
+
+	/// Average of this and the two previous months' revenue (WINDOW -2 REL to 0 REL).
+	measure 'Revenue 3M MA (WINDOW)' = AVERAGEX ( WINDOW ( -2, REL, 0, REL, ALLSELECTED ( 'Date'[Year Month], 'Date'[Year Month Key] ), ORDERBY ( 'Date'[Year Month Key] ) ), [Revenue] )
+		formatString: \R$ #,0
+		displayFolder: Time Intelligence
+		lineageTag: 50cc0bf0-0e3a-5a1a-96fb-fb4a71426c7a
+
+	/// Dense revenue rank of a category within the selection.
+	measure 'Category Rank' = IF ( ISINSCOPE ( Product[Category] ), RANK ( DENSE, ALLSELECTED ( Product[Category] ), ORDERBY ( [Revenue], DESC ) ) )
+		formatString: #,0
+		displayFolder: Sales
+		lineageTag: d6011a9e-87ac-5a65-961a-f72536720abf
+
+	/// Code of the highest-revenue seller in the state on the row (INDEX 1, PARTITIONBY state).
+	measure 'Top Seller in State' =
+			VAR _top =
+			    INDEX ( 1,
+			        ADDCOLUMNS ( ALLSELECTED ( Seller[State], Seller[Seller Code] ), "@rev", [Revenue] ),
+			        ORDERBY ( [@rev], DESC ), PARTITIONBY ( Seller[State] ) )
+			RETURN IF ( HASONEVALUE ( Seller[State] ), MAXX ( _top, Seller[Seller Code] ) )
+		displayFolder: Sellers
+		lineageTag: 8064c1b4-e86e-5ff4-bbd5-f0be2a82e28d
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Olist.YoY on Revenue: one function for every YoY.
+	measure 'Revenue YoY % (fn)' = Olist.YoY ( [Revenue] )
+		formatString: 0.0%
+		displayFolder: Time Intelligence
+		lineageTag: dd80f08a-42b2-5f98-bf5c-512fb4989316
+
+	/// Olist.YoY on Order Count.
+	measure 'Orders YoY % (fn)' = Olist.YoY ( [Order Count] )
+		formatString: 0.0%
+		displayFolder: Time Intelligence
+		lineageTag: 4cf00a00-030d-5d6b-99e6-aa8b55a494f3
+
+	/// Olist.YoY on Customers.
+	measure 'Customers YoY % (fn)' = Olist.YoY ( [Customers] )
+		formatString: 0.0%
+		displayFolder: Time Intelligence
+		lineageTag: 633ccedd-e9b1-5dc0-90e4-3692f4c8a96a
+
+	/// SYNTHETIC plan (see README): filtered by Product and Date through many-to-many relationships.
+	measure 'Plan Revenue' = SUM ( 'Category Plan'[Plan Revenue] )
+		formatString: \R$ #,0
+		displayFolder: Plan
+		lineageTag: ccfe726b-9766-56bc-bc75-f448f75c3603
+
+	/// Revenue above (+) or below (−) the synthetic plan.
+	measure 'Revenue vs Plan %' = IF ( NOT ISBLANK ( [Plan Revenue] ), Olist.SafePct ( [Revenue] - [Plan Revenue], [Plan Revenue] ) )
+		formatString: 0.0%
+		displayFolder: Plan
+		lineageTag: 3e2b8907-6b0f-5b44-80c7-753e6a396ab7
+
+	/// Order review per seller through the Order Seller bridge: each order counts once per seller, not once per item.
+	measure 'Seller Avg Review (order-level)' = CALCULATE ( [Avg Review], 'Order Seller' )
+		formatString: 0.00
+		displayFolder: Satisfaction
+		lineageTag: dd3e4eb4-1ac5-500e-9b55-bb80201753c6
+
+	/// Late rate of orders that ship from more than one seller.
+	measure 'Multi-seller Late Rate %' = CALCULATE ( [Late Rate %], Orders[Seller Count] > 1 )
+		formatString: 0.0%
+		displayFolder: Delivery
+		lineageTag: d006fe36-6e15-5d24-98d5-2c50951c1598
+
+	/// Late rate of orders from one seller, for comparison.
+	measure 'Single-seller Late Rate %' = CALCULATE ( [Late Rate %], Orders[Seller Count] = 1 )
+		formatString: 0.0%
+		displayFolder: Delivery
+		lineageTag: 4f1dc688-0870-57a3-a8ac-adadc9135385
+
+	/// Customers whose lifetime value falls in the Spend Bands row.
+	measure 'Customers in Spend Band' =
+			VAR _lo = MIN ( 'Spend Bands'[Min Value] )
+			VAR _hi = MAX ( 'Spend Bands'[Max Value] )
+			RETURN
+			    COUNTROWS ( FILTER ( Customer, Customer[Valid Orders] > 0
+			        && Customer[Lifetime Value] >= _lo && Customer[Lifetime Value] < _hi ) )
+		formatString: #,0
+		displayFolder: Customers
+		lineageTag: 3ec2b446-5c3d-5f95-843c-0322aaabae62
+
+	/// The measure picked in the Metric field parameter, with a format string that follows it (R$, count, %, stars).
+	measure 'Metric Value' =
+			SWITCH ( SELECTEDVALUE ( Metric[Metric Order], 0 ),
+			    0, [Revenue],
+			    1, [Order Count],
+			    2, [AOV],
+			    3, [Late Rate %],
+			    4, [Avg Review] )
+		displayFolder: Report UI
+		lineageTag: 97da85f3-8cf3-5f55-9d0c-12b88437979e
+
+		formatStringDefinition = SWITCH ( SELECTEDVALUE ( Metric[Metric Order], 0 ), 0, "\R$ #,0", 1, "#,0", 2, "\R$ #,0.00", 3, "0.0%", 4, "0.00"" ★""" )
+
+	/// Screen-reader text for the revenue card: the number and its year-over-year change, recomputed for every filter.
+	measure 'Alt Text Revenue' =
+			VAR _r = [Revenue]
+			VAR _y = [Revenue YoY %]
+			RETURN
+			    "Revenue R$ " & FORMAT ( _r, "#,0" )
+			        & IF ( ISBLANK ( _y ), ", no prior year in the selection", ", YoY " & FORMAT ( _y, "+0.0%;-0.0%" ) )
+		displayFolder: Report UI
+		lineageTag: beaee4c6-45fc-5b17-b03e-1f49276f68b3
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Late rate as a symbol and a word, so the status never depends on colour alone.
+	measure 'Late Status' =
+			VAR _r = [Late Rate %]
+			RETURN
+			    SWITCH ( TRUE (),
+			        ISBLANK ( _r ), BLANK (),
+			        _r >= 0.12, "▲ High",
+			        _r >= 0.08, "● Watch",
+			        "✓ OK" )
+		displayFolder: Report UI
+		lineageTag: ba9cade6-80d3-5b5c-a53b-110938d364fb
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Lane late rate as a symbol and a word (same thresholds as Late Status).
+	measure 'Lane Late Status' =
+			VAR _r = [Lane Late Rate %]
+			RETURN
+			    SWITCH ( TRUE (),
+			        ISBLANK ( _r ), BLANK (),
+			        _r >= 0.12, "▲ High",
+			        _r >= 0.08, "● Watch",
+			        "✓ OK" )
+		displayFolder: Report UI
+		lineageTag: 999179f1-190a-5824-b84c-c38b25e713f3
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Screen-reader text for the late-rate card.
+	measure 'Alt Text Late Rate' = "Late rate " & FORMAT ( [Late Rate %], "0.0%" ) & ", " & [Late Status]
+		displayFolder: Report UI
+		lineageTag: 9e6b991a-9bb3-53fb-9764-235cddd51f65
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Revenue for the 12 months up to the last month with data, blank before: the sparkline on the category tooltip.
+	measure 'Revenue (Last 12 Months)' =
+			VAR _last = CALCULATE ( MAX ( 'Order Items'[Order Date] ), REMOVEFILTERS (), 'Order Items'[Is Valid] = TRUE () )
+			VAR _m = MAX ( 'Date'[Month Start] )
+			RETURN IF ( _m > EDATE ( _last, -12 ) && _m <= _last, [Revenue] )
+		formatString: \R$ #,0
+		displayFolder: Sales
+		lineageTag: f71d3578-c73c-5539-926c-876163d9f847
+
+	/// Customers whose revenue in the current filters (year, region, category ...) falls in the Spend Bands row.
+	measure 'Customers in Band' =
+			VAR _lo = MIN ( 'Spend Bands'[Min Value] )
+			VAR _hi = MAX ( 'Spend Bands'[Max Value] )
+			RETURN
+			    COUNTROWS ( FILTER ( VALUES ( Customer[Customer Unique Id] ), VAR _r = [Revenue per Customer] RETURN NOT ISBLANK ( _r ) && _r >= _lo && _r < _hi ) )
+		formatString: #,0
+		displayFolder: Customers
+		lineageTag: 9dea8667-8a8b-597b-ab62-eb3a29248a70
+
+	/// Revenue of the customers in the Spend Bands row (same rule as Customers in Band).
+	measure 'Revenue in Band' =
+			VAR _lo = MIN ( 'Spend Bands'[Min Value] )
+			VAR _hi = MAX ( 'Spend Bands'[Max Value] )
+			RETURN
+			    SUMX ( FILTER ( VALUES ( Customer[Customer Unique Id] ), VAR _r = [Revenue per Customer] RETURN NOT ISBLANK ( _r ) && _r >= _lo && _r < _hi ), [Revenue] )
+		formatString: \R$ #,0
+		displayFolder: Customers
+		lineageTag: 50c0c9c0-940c-5285-8219-295eb2a2e08d
+
+	/// Customers with a valid order whose last purchase is 180+ days before the end of the data.
+	measure 'Churned Customers' = COUNTROWS ( FILTER ( Customer, Customer[Valid Orders] > 0 && Customer[Recency Days] >= 180 ) )
+		formatString: #,0
+		displayFolder: Customers
+		lineageTag: 81831c9d-3b1e-5f63-9698-09652856cd91
+
+	/// Last purchase 90–179 days before the end of the data: not churned yet.
+	measure 'At-Risk Customers (90–180d)' = COUNTROWS ( FILTER ( Customer, Customer[Valid Orders] > 0 && Customer[Recency Days] >= 90 && Customer[Recency Days] < 180 ) )
+		formatString: #,0
+		displayFolder: Customers
+		lineageTag: 978d4cf0-cf37-57b1-becf-24ba7808752e
+
+	/// Churned customers ÷ customers with a valid order.
+	measure 'Churn Rate %' = Olist.SafePct ( [Churned Customers], COUNTROWS ( FILTER ( Customer, Customer[Valid Orders] > 0 ) ) )
+		formatString: 0.0%
+		displayFolder: Customers
+		lineageTag: d2a466fd-9a95-5d83-9965-22fb5c6118ac
+
+	/// Expected item revenue in the next 12 months (BG/NBD × Gamma-Gamma), summed over customers.
+	measure 'Predicted CLV' = SUM ( Customer[Predicted CLV 12M] )
+		formatString: \R$ #,0
+		displayFolder: Customers
+		lineageTag: 3b23c8bc-ca7c-5dc2-b8ce-a0aa7c314718
+
+	/// Predicted CLV per customer with a valid order.
+	measure 'Avg Predicted CLV' = AVERAGEX ( FILTER ( Customer, Customer[Valid Orders] > 0 ), Customer[Predicted CLV 12M] )
+		formatString: \R$ #,0.00
+		displayFolder: Customers
+		lineageTag: 4b446337-2a8e-5da3-b962-4cc3dd3bb6f9
+
+	/// A/B/C tier recomputed on the current selection (A = top 50% of revenue, B = next 30%, C = rest). Pareto Tier is the lifetime version.
+	measure 'Seller ABC (dynamic)' =
+			VAR _rev = [Revenue]
+			VAR _tbl = ADDCOLUMNS ( ALLSELECTED ( Seller[Seller Code] ), "@rev", [Revenue] )
+			VAR _total = SUMX ( _tbl, [@rev] )
+			VAR _cum =
+			    SUMX (
+			        WINDOW ( 1, ABS, 0, REL, _tbl, ORDERBY ( [@rev], DESC, Seller[Seller Code], ASC ), DEFAULT, , MATCHBY ( Seller[Seller Code] ) ),
+			        [@rev] )
+			VAR _share = DIVIDE ( _cum, _total )
+			RETURN
+			    IF ( HASONEVALUE ( Seller[Seller Code] ) && NOT ISBLANK ( _rev ),
+			        SWITCH ( TRUE (), _share <= 0.5, "A", _share <= 0.8, "B", "C" ) )
+		displayFolder: Sellers
+		lineageTag: 32915acc-b247-5233-8a29-d8b9a8569a00
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Revenue rank of the seller among the sellers in the selection.
+	measure 'Seller Rank (selection)' =
+			IF ( HASONEVALUE ( Seller[Seller Code] ) && NOT ISBLANK ( [Revenue] ),
+			    RANK ( SKIP, ADDCOLUMNS ( ALLSELECTED ( Seller[Seller Code] ), "@rev", [Revenue] ), ORDERBY ( [@rev], DESC ), DEFAULT, , MATCHBY ( Seller[Seller Code] ) ) )
+		formatString: #,0
+		displayFolder: Sellers
+		lineageTag: 285b5b82-fd8b-5b72-826d-a4cff9885e20
+
+	/// 90th percentile of seller revenue in the selection: the reference line on the seller scatter.
+	measure 'Seller Revenue P90' = PERCENTILEX.INC ( FILTER ( ALLSELECTED ( Seller[Seller Code] ), NOT ISBLANK ( [Revenue] ) ), [Revenue], 0.9 )
+		formatString: \R$ #,0
+		displayFolder: Sellers
+		lineageTag: 60fd2c95-6099-5b31-b890-6d64693c3469
+
+	/// Sellers moving from the 2017 tier (row) to the 2018 tier (column), Jan–Aug both years.
+	measure 'Transition Sellers' = SUM ( 'Seller Tier Transition'[Sellers] )
+		formatString: #,0
+		displayFolder: Sellers
+		lineageTag: 8fa1c981-21d5-5da4-b5ac-62f742e454d9
+
+	/// Share of the 2017 tier (row) that ended in each 2018 tier.
+	measure 'Transition Share %' = Olist.SafePct ( [Transition Sellers], CALCULATE ( [Transition Sellers], REMOVEFILTERS ( 'Seller Tier Transition'[Tier 2018] ) ) )
+		formatString: 0.0%
+		displayFolder: Sellers
+		lineageTag: 5297dc52-01a0-507e-aaf2-8326e033f79d
+
+	/// Orders that reached the Funnel Stage row: all orders, so it lifts the valid-only report filter and the delivered-only page filter.
+	measure 'Funnel Orders' =
+			VAR _s = SELECTEDVALUE ( 'Funnel Stage'[Stage Order] )
+			VAR _purchased = CALCULATE ( COUNTROWS ( Orders ), REMOVEFILTERS ( Orders[Is Valid], Orders[Is Delivered] ) )
+			RETURN
+			    SWITCH ( _s,
+			        1, _purchased,
+			        2, CALCULATE ( COUNTROWS ( Orders ), REMOVEFILTERS ( Orders[Is Valid], Orders[Is Delivered] ), NOT ISBLANK ( Orders[Approval Hours] ) ),
+			        3, CALCULATE ( COUNTROWS ( Orders ), REMOVEFILTERS ( Orders[Is Valid], Orders[Is Delivered] ), NOT ISBLANK ( Orders[Approval Hours] ), NOT ISBLANK ( Orders[Days To Carrier] ) ),
+			        4, CALCULATE ( COUNTROWS ( Orders ), REMOVEFILTERS ( Orders[Is Valid], Orders[Is Delivered] ), NOT ISBLANK ( Orders[Approval Hours] ), NOT ISBLANK ( Orders[Days To Carrier] ), Orders[Is Delivered] = TRUE () ),
+			        5, CALCULATE ( COUNTROWS ( Orders ), REMOVEFILTERS ( Orders[Is Valid], Orders[Is Delivered] ), NOT ISBLANK ( Orders[Approval Hours] ), NOT ISBLANK ( Orders[Days To Carrier] ), Orders[Is Delivered] = TRUE (), NOT ISBLANK ( Orders[Review Score] ) ) )
+		formatString: #,0
+		displayFolder: Delivery
+		lineageTag: b88d5b81-486e-54ba-8f96-b5b3f9d004c8
+
+	/// Orders at this stage ÷ orders purchased.
+	measure 'Funnel Conversion %' = Olist.SafePct ( [Funnel Orders], CALCULATE ( [Funnel Orders], 'Funnel Stage'[Stage Order] = 1 ) )
+		formatString: 0.0%
+		displayFolder: Delivery
+		lineageTag: c0e263a3-9439-58cf-b2b2-83f5eed75b85
+
+	/// 9 in 10 delivered orders arrive within this many days (PERCENTILEX.INC).
+	measure 'Delivery Days P90' = PERCENTILEX.INC ( FILTER ( Orders, Orders[Is Delivered] = TRUE () && NOT ISBLANK ( Orders[Delivery Days] ) ), Orders[Delivery Days], 0.9 )
+		formatString: #,0.0
+		displayFolder: Delivery
+		lineageTag: 0521358f-2d26-5dd8-9f7c-8b2c307aad2c
+
+	/// Delivery Days P90 of the lane's customer state (all lanes into that state).
+	measure 'Lane State P90' = CALCULATE ( [Delivery Days P90], TREATAS ( VALUES ( 'Freight Lanes'[Customer State] ), Customer[State] ), REMOVEFILTERS ( 'Freight Lanes' ) )
+		formatString: #,0.0
+		displayFolder: Logistics
+		lineageTag: 7b626a04-034e-55f5-a936-cd84ad5720b2
+
+	/// ▲ when the lane's average delivery time is above its customer state's P90 (an outlier lane).
+	measure 'Lane Outlier' =
+			VAR _d = [Lane Avg Delivery Days]
+			VAR _p = [Lane State P90]
+			RETURN IF ( HASONEVALUE ( 'Freight Lanes'[Lane] ), IF ( _d > _p, "▲ Above state P90", "–" ) )
+		displayFolder: Logistics
+		lineageTag: ebc39f7a-9e53-504c-897d-cb5a1e97ffb5
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Red for outlier lanes (conditional formatting).
+	measure 'Lane Outlier Color' = IF ( [Lane Avg Delivery Days] > [Lane State P90], "#D03B3B", "#52514E" )
+		displayFolder: Logistics
+		lineageTag: 036b8c39-ce61-55d4-9eaa-5e6f8defbb6f
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Revenue minus the same period last year (like-for-like months, see Revenue PY).
+	measure 'Revenue YoY Δ' =
+			VAR _py = [Revenue PY]
+			RETURN IF ( NOT ISBLANK ( _py ), [Revenue] - _py )
+		formatString: \R$ #,0
+		displayFolder: Time Intelligence
+		lineageTag: 306f08de-c08f-518e-ab60-607b876eb815
+
+	/// ETS forecast of monthly revenue, Sep–Dec 2018 (src/predict.py).
+	measure 'Forecast Revenue' = SUM ( 'Revenue Forecast'[Forecast Revenue] )
+		formatString: \R$ #,0
+		displayFolder: Sales
+		lineageTag: c9b7c0fb-74b3-502d-aa8e-5cc5fb5484fe
+
+	/// 80% prediction interval, lower bound.
+	measure 'Forecast Lower 80' = SUM ( 'Revenue Forecast'[Lower 80] )
+		formatString: \R$ #,0
+		displayFolder: Sales
+		lineageTag: 457b3180-7a91-543f-bc41-3cea3d553a2f
+
+	/// 80% prediction interval, upper bound.
+	measure 'Forecast Upper 80' = SUM ( 'Revenue Forecast'[Upper 80] )
+		formatString: \R$ #,0
+		displayFolder: Sales
+		lineageTag: 20d1fe8b-d747-5011-95ad-3c534d9b3dc3
+
+	/// Revenue up to Aug 2018, blank after: the actual line next to the forecast.
+	measure 'Revenue Actual (to Aug 2018)' = IF ( MAX ( 'Date'[Month Start] ) <= DATE ( 2018, 8, 1 ) && MIN ( 'Date'[Month Start] ) >= DATE ( 2017, 1, 1 ), [Revenue] )
+		formatString: \R$ #,0
+		displayFolder: Sales
+		lineageTag: 2814119e-a5d2-5ff6-af61-0864439c7f38
+
+	/// The what-if slider: percentage points taken off the late rate.
+	measure 'Late Reduction (pp) Value' = SELECTEDVALUE ( 'Late Reduction (pp)'[Late Reduction (pp)], 0 )
+		formatString: 0
+		displayFolder: Delivery
+		lineageTag: ca8f6251-6330-5273-b5a3-bc9dfecc5df1
+
+	/// Late rate after the what-if reduction (never below 0).
+	measure 'Projected Late Rate %' = MAX ( 0, [Late Rate %] - [Late Reduction (pp) Value] / 100 )
+		formatString: 0.0%
+		displayFolder: Delivery
+		lineageTag: 0008b1d0-86f2-54e1-9a4d-672951de4829
+
+	/// Bad review share if the late rate fell by the slider: on-time bad-review rate, late odds × 8.97 (logit in src/analysis.py).
+	measure 'Projected Bad Review %' =
+			VAR _or = 8.97  -- odds ratio of late delivery in the bad-review logit (src/analysis.py)
+			VAR _pOn = CALCULATE ( [Bad Review %], Orders[Is Late] = FALSE () )
+			VAR _oddsLate = Olist.SafePct ( _pOn, 1 - _pOn ) * _or
+			VAR _pLate = Olist.SafePct ( _oddsLate, 1 + _oddsLate )
+			VAR _moved = [Late Rate %] - [Projected Late Rate %]
+			RETURN IF ( NOT ISBLANK ( [Bad Review %] ), [Bad Review %] - _moved * ( _pLate - _pOn ) )
+		formatString: 0.0%
+		displayFolder: Satisfaction
+		lineageTag: 0dbc08d1-4e14-5fec-bc30-38914783ee22
+
+	/// Projected minus actual bad review share.
+	measure 'Bad Review Δ (what-if)' = [Projected Bad Review %] - [Bad Review %]
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Satisfaction
+		lineageTag: c14e6740-ffeb-5f55-b91d-4d282c8f046e
+
+	column Value
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 960b13c0-db09-52de-83d9-d35f9661d17a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition _Measures = calculated
+		mode: import
+		source = {1}

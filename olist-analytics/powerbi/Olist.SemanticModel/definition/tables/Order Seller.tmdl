@@ -1,0 +1,28 @@
+table 'Order Seller'
+	lineageTag: f2bf7e42-8914-5927-bae8-c74f091bda56
+	isHidden
+
+	column 'Order Id'
+		dataType: string
+		isHidden
+		lineageTag: 4da479fb-5edf-5194-875a-be8654e74f0a
+		summarizeBy: none
+		sourceColumn: order_id
+
+	column 'Seller Id'
+		dataType: string
+		isHidden
+		lineageTag: c57c9a0e-16a9-510a-896d-695c31234797
+		summarizeBy: none
+		sourceColumn: seller_id
+
+	partition 'Order Seller' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "order_seller.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"order_id", type text}, {"seller_id", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

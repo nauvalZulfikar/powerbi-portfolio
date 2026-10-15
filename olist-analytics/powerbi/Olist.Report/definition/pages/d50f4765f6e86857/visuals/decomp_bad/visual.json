@@ -1,0 +1,168 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "decomp_bad",
+  "position": {
+    "x": 324,
+    "y": 693,
+    "z": 1000,
+    "width": 777,
+    "height": 369,
+    "tabOrder": 2100
+  },
+  "visual": {
+    "visualType": "decompositionTreeVisual",
+    "objects": {},
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Step 3 · where the bad reviews sit'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Decomposition tree · click + to split by bucket, region, state, tier'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Decomposition tree: Step 3 · where the bad reviews sit'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Analyze": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Bad Review %"
+                }
+              },
+              "queryRef": "_Measures.Bad Review %",
+              "nativeQueryRef": "Bad Review %"
+            }
+          ]
+        },
+        "ExplainBy": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Orders"
+                    }
+                  },
+                  "Property": "Delivery Bucket"
+                }
+              },
+              "queryRef": "Orders.Delivery Bucket",
+              "nativeQueryRef": "Delivery Bucket"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Customer"
+                    }
+                  },
+                  "Property": "Region"
+                }
+              },
+              "queryRef": "Customer.Region",
+              "nativeQueryRef": "Region"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Customer"
+                    }
+                  },
+                  "Property": "State Name"
+                }
+              },
+              "queryRef": "Customer.State Name",
+              "nativeQueryRef": "State Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Seller"
+                    }
+                  },
+                  "Property": "Pareto Tier"
+                }
+              },
+              "queryRef": "Seller.Pareto Tier",
+              "nativeQueryRef": "Pareto Tier"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Orders"
+                    }
+                  },
+                  "Property": "Main Payment Type"
+                }
+              },
+              "queryRef": "Orders.Main Payment Type",
+              "nativeQueryRef": "Main Payment Type"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

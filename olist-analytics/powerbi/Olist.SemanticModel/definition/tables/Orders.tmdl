@@ -1,0 +1,239 @@
+table Orders
+	lineageTag: 6dee79a0-ab77-5daf-9a5e-60707e350776
+
+	column 'Order Id'
+		dataType: string
+		isKey
+		lineageTag: 10ed372b-6507-5848-86da-611599d92225
+		summarizeBy: none
+		sourceColumn: order_id
+
+	column 'Customer Unique Id'
+		dataType: string
+		isHidden
+		lineageTag: 723da6a2-e162-5cf4-9aea-146a4d2a83b0
+		summarizeBy: none
+		sourceColumn: customer_unique_id
+
+	column 'Order Date'
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy
+		lineageTag: 3d0d83fe-9ddd-5106-abef-7cc07e1e016f
+		summarizeBy: none
+		sourceColumn: order_date
+
+	column 'Delivered Date'
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy
+		lineageTag: 885d510b-f4d5-5acb-9497-5327a692bc48
+		summarizeBy: none
+		sourceColumn: delivered_date
+
+	column 'Estimated Date'
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy
+		lineageTag: ab5112cc-6eb3-50c6-a2b0-cbd2d0211525
+		summarizeBy: none
+		sourceColumn: estimated_date
+
+	column 'Order Hour'
+		dataType: int64
+		formatString: 0
+		lineageTag: c53f1e70-f0e8-5101-b70b-40f20596fe38
+		summarizeBy: none
+		sourceColumn: order_hour
+
+	column 'Order Status'
+		dataType: string
+		lineageTag: 8780c44d-0a18-5ac6-b0c9-c4adc7928a96
+		summarizeBy: none
+		sourceColumn: order_status
+
+	column 'Is Valid'
+		dataType: boolean
+		lineageTag: 23214548-b6c9-5ec1-99ef-a8492836f9c8
+		summarizeBy: none
+		sourceColumn: is_valid
+
+	column 'Is Delivered'
+		dataType: boolean
+		lineageTag: b8b8078b-0b73-5b03-ad0e-40a9f66ee775
+		summarizeBy: none
+		sourceColumn: is_delivered
+
+	column 'Customer Order Seq'
+		dataType: int64
+		formatString: 0
+		lineageTag: 48c24639-ab35-53ff-9f96-946bdd11ec46
+		summarizeBy: none
+		sourceColumn: customer_order_seq
+
+	column 'Customer State'
+		dataType: string
+		lineageTag: a4a38180-dfe6-5476-8f4b-2a06773cb57e
+		summarizeBy: none
+		sourceColumn: customer_state
+
+	column 'Item Count'
+		dataType: int64
+		formatString: 0
+		lineageTag: aa1c4278-62ca-5262-b18b-53a45094355a
+		summarizeBy: none
+		sourceColumn: item_count
+
+	column 'Seller Count'
+		dataType: int64
+		formatString: 0
+		lineageTag: f7c6499c-4f22-54d5-ae7b-123ade97ca75
+		summarizeBy: none
+		sourceColumn: seller_count
+
+	column 'Items Value'
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: 380f66df-67fd-5332-8735-26982ad7c5ae
+		summarizeBy: none
+		sourceColumn: items_value
+
+	column 'Freight Value'
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: 97b4c8e0-6994-566b-b16f-03d3f12e9eb5
+		summarizeBy: none
+		sourceColumn: freight_value
+
+	column 'Paid Value'
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: ad2dc26a-c0db-5441-99c2-586ad861ada7
+		summarizeBy: none
+		sourceColumn: paid_value
+
+	column 'Main Payment Type'
+		dataType: string
+		lineageTag: 8f79c0c1-b8f5-59db-8e02-da6dfcf95141
+		summarizeBy: none
+		sourceColumn: main_payment_type
+
+	column Installments
+		dataType: int64
+		formatString: 0
+		lineageTag: b34a04af-d6d9-5c03-9036-d5decafc34e8
+		summarizeBy: none
+		sourceColumn: installments
+
+	column 'Used Multiple Methods'
+		dataType: boolean
+		lineageTag: 35ebb600-194f-5b23-9636-3568d406ed6c
+		summarizeBy: none
+		sourceColumn: used_multiple_methods
+
+	column 'Approval Hours'
+		dataType: double
+		lineageTag: b404a4cc-b1c7-520f-b08f-0e80f8a85e71
+		summarizeBy: none
+		sourceColumn: approval_hours
+
+	column 'Days To Carrier'
+		dataType: double
+		lineageTag: a10f7720-f327-54f1-acd9-8b513da525d1
+		summarizeBy: none
+		sourceColumn: days_to_carrier
+
+	column 'Delivery Days'
+		dataType: double
+		lineageTag: 7962134a-f8b0-5ba2-a532-303c74d70519
+		summarizeBy: none
+		sourceColumn: delivery_days
+
+	column 'Promised Days'
+		dataType: int64
+		formatString: 0
+		lineageTag: 8af450bb-1427-5e25-b937-bb32e1b922d6
+		summarizeBy: none
+		sourceColumn: promised_days
+
+	column 'Delay Days'
+		dataType: int64
+		formatString: 0
+		lineageTag: 6207693b-d314-5f33-ae3c-b42381e58ba8
+		summarizeBy: none
+		sourceColumn: delay_days
+
+	column 'Is Late'
+		dataType: boolean
+		lineageTag: 84aa8b4e-7014-5060-9a94-73c1ae6f79c4
+		summarizeBy: none
+		sourceColumn: is_late
+
+	column 'Delivery Bucket'
+		dataType: string
+		lineageTag: ce3c2542-14ab-509b-8b13-206ab2fdfb7e
+		summarizeBy: none
+		sourceColumn: delivery_bucket
+		sortByColumn: 'Delivery Bucket Order'
+
+	column 'Delivery Bucket Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f5a9cf22-cc13-5b23-9e3e-b66c7d2a5922
+		summarizeBy: none
+		sourceColumn: delivery_bucket_order
+
+	column 'Review Score'
+		dataType: int64
+		formatString: 0
+		lineageTag: f9dbb3fd-d0ab-5040-ad40-f5defb39091a
+		summarizeBy: none
+		sourceColumn: review_score
+
+	column 'Review Label'
+		dataType: string
+		lineageTag: 6180aac2-4a65-5a90-ace4-4a16e257f627
+		summarizeBy: none
+		sourceColumn: review_label
+
+	column 'Has Comment'
+		dataType: boolean
+		lineageTag: f85e6c34-a595-55e0-8424-f0774b225d10
+		summarizeBy: none
+		sourceColumn: has_comment
+
+	column 'Review Answer Days'
+		dataType: double
+		lineageTag: 9aeb20d4-1528-58da-b480-b995711b2c31
+		summarizeBy: none
+		sourceColumn: review_answer_days
+
+	column 'Delay Days (bins)' =
+			IF ( ISBLANK ( Orders[Delay Days] ), BLANK (), INT ( Orders[Delay Days] / 3 ) * 3 )
+		dataType: int64
+		formatString: 0
+		lineageTag: ffb7acad-92f1-5814-9d03-5ec00919830a
+		summarizeBy: none
+
+		extendedProperty GroupingMetadata =
+				{"version": 0, "groupedColumns": [{"Column": {"Expression": {"SourceRef": {"Entity": "Orders"}}, "Property": "Delay Days"}}], "binningMetadata": {"binSize": {"value": 3, "unit": 0}}}
+
+	column 'Review Outcome' =
+			IF ( ISBLANK ( Orders[Review Score] ), BLANK (), IF ( Orders[Review Score] <= 2, "Bad (1–2 ★)", "OK (3–5 ★)" ) )
+		dataType: string
+		lineageTag: 46ae0fd7-ce0a-5aff-9c1f-2b1aa7d61e2b
+		summarizeBy: none
+
+	partition Orders = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_orders.parquet")),
+				    // Leave out purchased_at (see README, performance)
+				    #"Kept columns" = Table.SelectColumns(Source, {"order_id", "customer_unique_id", "order_date", "delivered_date", "estimated_date", "order_hour", "order_status", "is_valid", "is_delivered", "customer_order_seq", "customer_state", "item_count", "seller_count", "items_value", "freight_value", "paid_value", "main_payment_type", "installments", "used_multiple_methods", "approval_hours", "days_to_carrier", "delivery_days", "promised_days", "delay_days", "is_late", "delivery_bucket", "delivery_bucket_order", "review_score", "review_label", "has_comment", "review_answer_days"}),
+				    Typed = Table.TransformColumnTypes(#"Kept columns", {{"order_id", type text}, {"customer_unique_id", type text}, {"order_date", type date}, {"delivered_date", type date}, {"estimated_date", type date}, {"order_hour", Int64.Type}, {"order_status", type text}, {"is_valid", type logical}, {"is_delivered", type logical}, {"customer_order_seq", Int64.Type}, {"customer_state", type text}, {"item_count", Int64.Type}, {"seller_count", Int64.Type}, {"items_value", type number}, {"freight_value", type number}, {"paid_value", type number}, {"main_payment_type", type text}, {"installments", Int64.Type}, {"used_multiple_methods", type logical}, {"approval_hours", type number}, {"days_to_carrier", type number}, {"delivery_days", type number}, {"promised_days", Int64.Type}, {"delay_days", Int64.Type}, {"is_late", type logical}, {"delivery_bucket", type text}, {"delivery_bucket_order", Int64.Type}, {"review_score", Int64.Type}, {"review_label", type text}, {"has_comment", type logical}, {"review_answer_days", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

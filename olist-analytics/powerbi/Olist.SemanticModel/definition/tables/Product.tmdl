@@ -1,0 +1,91 @@
+table Product
+	lineageTag: 6cd417b6-c34e-5146-858b-4a60f0bce670
+
+	column 'Product Id'
+		dataType: string
+		isKey
+		isHidden
+		lineageTag: a70cfe71-5f71-54c7-9c32-7daf0d649e74
+		summarizeBy: none
+		sourceColumn: product_id
+
+	column Category
+		dataType: string
+		lineageTag: d2694054-0b29-5548-bb44-faf04d044fc1
+		summarizeBy: none
+		sourceColumn: category
+
+	column 'Category Group'
+		dataType: string
+		lineageTag: ad1c55d8-3f06-576f-a853-04f829b96d30
+		summarizeBy: none
+		sourceColumn: category_group
+
+	column 'Photos Qty'
+		dataType: int64
+		formatString: 0
+		lineageTag: c720ab78-5f75-5264-b3dc-80f9dfd9eba1
+		summarizeBy: none
+		sourceColumn: photos_qty
+
+	column 'Weight G'
+		dataType: int64
+		formatString: 0
+		lineageTag: 96402834-0405-59cb-be02-e4b619cc48dc
+		summarizeBy: none
+		sourceColumn: weight_g
+
+	column 'Volume Cm3'
+		dataType: int64
+		formatString: 0
+		lineageTag: 67e32cfc-240f-5d2f-bfe3-966ef7c0d1e4
+		summarizeBy: none
+		sourceColumn: volume_cm3
+
+	column 'Weight Band'
+		dataType: string
+		lineageTag: b7337477-c273-564a-bdbb-50873a99359e
+		summarizeBy: none
+		sourceColumn: weight_band
+		sortByColumn: 'Weight Band Order'
+
+	column 'Weight Band Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c6125df9-351c-50c0-8977-72c477f8daf5
+		summarizeBy: none
+		sourceColumn: weight_band_order
+
+	column 'Category Group (Big 5)' =
+			SWITCH ( TRUE (),
+			    Product[Category Group] IN { "Home & Living", "Leisure, Kids & Culture", "Electronics & Appliances", "Health & Beauty", "Fashion & Accessories" }, Product[Category Group],
+			    "Other" )
+		dataType: string
+		lineageTag: 075459fa-2877-524a-8128-432188fe7e14
+		summarizeBy: none
+
+		extendedProperty GroupingMetadata =
+				{"version": 0, "groupedColumns": [{"Column": {"Expression": {"SourceRef": {"Entity": "Product"}}, "Property": "Category Group"}}]}
+
+	hierarchy 'Category Tree'
+		lineageTag: 85daf81b-da28-5724-8ea3-a5edd6d601a5
+
+		level 'Category Group'
+			lineageTag: 5ae3ce15-0027-5ca2-9651-b6a3dfea1b3f
+			column: 'Category Group'
+
+		level Category
+			lineageTag: ee2e69b3-a33a-5c47-ae25-407745febab3
+			column: Category
+
+	partition Product = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_product.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"product_id", type text}, {"category", type text}, {"category_group", type text}, {"photos_qty", Int64.Type}, {"weight_g", Int64.Type}, {"volume_cm3", Int64.Type}, {"weight_band", type text}, {"weight_band_order", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

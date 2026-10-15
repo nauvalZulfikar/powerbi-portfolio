@@ -1,0 +1,99 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "381604b4e04d50cf",
+  "displayName": "Executive Overview",
+  "displayOption": "FitToPage",
+  "height": 1080,
+  "width": 1920,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "image": {
+            "image": {
+              "name": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'bg.svg'"
+                  }
+                }
+              },
+              "url": {
+                "expr": {
+                  "ResourcePackageItem": {
+                    "PackageName": "RegisteredResources",
+                    "PackageType": 1,
+                    "ItemName": "bg.svg"
+                  }
+                }
+              },
+              "scaling": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'Fit'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0.0D"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspace": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#E9E8E3'"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "donut_payment",
+      "target": "trend_revenue",
+      "type": "HighlightFilter"
+    },
+    {
+      "source": "col_weekday",
+      "target": "kpi_revenue",
+      "type": "NoFilter"
+    },
+    {
+      "source": "col_weekday",
+      "target": "kpi_orders",
+      "type": "NoFilter"
+    },
+    {
+      "source": "col_weekday",
+      "target": "kpi_aov",
+      "type": "NoFilter"
+    },
+    {
+      "source": "col_weekday",
+      "target": "kpi_review",
+      "type": "NoFilter"
+    },
+    {
+      "source": "col_weekday",
+      "target": "kpi_late",
+      "type": "NoFilter"
+    }
+  ]
+}

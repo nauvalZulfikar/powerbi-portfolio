@@ -1,0 +1,12 @@
+PASS  bpa fixture (findings, ignores, exit 1 on severity 3)
+PASS  bpa project-rules example compiles
+PASS  bpa real model: 74 rules, 455 violations — error 0, warning 209, info 246; 0 skipped
+PASS  te/format-check.csx (stub compile + run)
+PASS  daxtest good fixtures
+PASS  daxtest bad fixtures all rejected (7)
+PASS  daxtest assert logic
+PASS  daxtest real DAXQueries
+PASS  py_compile
+PASS  yaml parse (ci templates, parameter.example.yml)
+PASS  deploy.py --dry-run (Test)
+PASS  deploy.py rejects bad parameter.yml

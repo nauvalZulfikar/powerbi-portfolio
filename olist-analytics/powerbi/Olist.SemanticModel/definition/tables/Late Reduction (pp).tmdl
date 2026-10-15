@@ -1,0 +1,17 @@
+table 'Late Reduction (pp)'
+	lineageTag: 297a307a-5c73-524d-bef9-fd29d9cfeb25
+
+	column 'Late Reduction (pp)'
+		dataType: int64
+		lineageTag: 308c6b22-35ec-51ee-b5c2-2afdbf6cca6a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Late Reduction (pp)]
+		formatString: 0
+		
+		extendedProperty ParameterMetadata =
+				{"version":0}
+
+	partition 'Late Reduction (pp)' = calculated
+		mode: import
+		source = SELECTCOLUMNS ( GENERATESERIES ( 0, 10, 1 ), "Late Reduction (pp)", [Value] )

@@ -1,0 +1,116 @@
+table Seller
+	lineageTag: d8736999-8930-5e35-87c4-94ea70494c2c
+
+	column 'Seller Id'
+		dataType: string
+		isKey
+		isHidden
+		lineageTag: e82cac76-9791-53d8-8ae9-ecdcfb909f32
+		summarizeBy: none
+		sourceColumn: seller_id
+
+	column 'Seller Code'
+		dataType: string
+		lineageTag: 3ae2ba7b-11bf-5b60-a76a-55639d80ca61
+		summarizeBy: none
+		sourceColumn: seller_code
+
+	column City
+		dataType: string
+		dataCategory: City
+		lineageTag: 330e4952-955c-5bfe-8914-d1c789cf8464
+		summarizeBy: none
+		sourceColumn: city
+
+	column State
+		dataType: string
+		lineageTag: b07e3ef6-b2a5-550b-9f4d-050941697a73
+		summarizeBy: none
+		sourceColumn: state
+
+	column 'State Name'
+		dataType: string
+		lineageTag: 43d35d5a-ae6a-5fd3-a43c-efd93e065752
+		summarizeBy: none
+		sourceColumn: state_name
+
+	column Region
+		dataType: string
+		lineageTag: 9db3fba9-b10d-5b8a-8797-ddfb91c00e11
+		summarizeBy: none
+		sourceColumn: region
+
+	column Lat
+		dataType: double
+		isHidden
+		dataCategory: Latitude
+		lineageTag: fa498fad-b9d2-5b07-bf2b-437b50713c71
+		summarizeBy: none
+		sourceColumn: lat
+
+	column Lng
+		dataType: double
+		isHidden
+		dataCategory: Longitude
+		lineageTag: 4af96d9f-6874-5852-b734-1bbb07d52b53
+		summarizeBy: none
+		sourceColumn: lng
+
+	column 'First Sale Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: fd23dc07-4ccc-563b-8745-6b16ec0982e7
+		summarizeBy: none
+		sourceColumn: first_sale_date
+
+	column 'Lifetime Revenue'
+		dataType: double
+		formatString: \R$ #,0
+		lineageTag: 139857e7-4e0c-5a0d-a301-28ba0d8e0ace
+		summarizeBy: none
+		sourceColumn: lifetime_revenue
+
+	column 'Lifetime Orders'
+		dataType: int64
+		formatString: 0
+		lineageTag: 65c4b567-ca1c-5001-a022-84612ab0010e
+		summarizeBy: none
+		sourceColumn: lifetime_orders
+
+	column 'Lifetime Avg Review'
+		dataType: double
+		formatString: 0.00
+		lineageTag: 6eb82e92-b678-51cb-9215-1eb3c321c647
+		summarizeBy: none
+		sourceColumn: lifetime_avg_review
+
+	column 'Lifetime Late Rate'
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 33e0204a-e597-551e-a732-50ae0293b1fc
+		summarizeBy: none
+		sourceColumn: lifetime_late_rate
+
+	column 'Pareto Tier'
+		dataType: string
+		lineageTag: f10dc43c-a565-5af7-9008-2b1f8dc4826f
+		summarizeBy: none
+		sourceColumn: pareto_tier
+
+	column 'Distinct Products' =
+			COUNTROWS ( DISTINCT ( SELECTCOLUMNS ( RELATEDTABLE ( 'Order Items' ), "p", 'Order Items'[Product Id] ) ) )
+		dataType: int64
+		formatString: 0
+		lineageTag: c0907ae2-e58d-5df2-87bf-a24e73643364
+		summarizeBy: none
+
+	partition Seller = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_seller.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"seller_id", type text}, {"seller_code", type text}, {"city", type text}, {"state", type text}, {"state_name", type text}, {"region", type text}, {"lat", type number}, {"lng", type number}, {"first_sale_date", type date}, {"lifetime_revenue", type number}, {"lifetime_orders", Int64.Type}, {"lifetime_avg_review", type number}, {"lifetime_late_rate", type number}, {"pareto_tier", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,45 @@
+table Metric
+	lineageTag: f1d0c42d-c35c-5d96-bdff-f43988be6509
+
+	column Metric
+		dataType: string
+		lineageTag: 4d106bf1-a881-574c-834a-842e63241fcc
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Metric Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Metric Fields'
+
+	column 'Metric Fields'
+		dataType: string
+		isHidden
+		lineageTag: f7f85dd6-b12e-5559-a2ae-a582e9b2de0f
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Metric Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	column 'Metric Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 365ead5d-bc0e-5f10-9cc1-986479ac5844
+		summarizeBy: none
+		sourceColumn: [Value3]
+
+	partition Metric = calculated
+		mode: import
+		source =
+				{
+				    ( "Revenue", NAMEOF ( [Revenue] ), 0 ),
+				    ( "Order Count", NAMEOF ( [Order Count] ), 1 ),
+				    ( "AOV", NAMEOF ( [AOV] ), 2 ),
+				    ( "Late Rate %", NAMEOF ( [Late Rate %] ), 3 ),
+				    ( "Avg Review", NAMEOF ( [Avg Review] ), 4 )
+				}

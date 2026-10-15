@@ -1,0 +1,9 @@
+// CI test: README headline numbers over the whole model (no report filter). Expected values from DuckDB over the marts.
+EVALUATE
+ROW (
+    "Revenue", [Revenue],
+    "Orders Placed", [Orders Placed],
+    "Delivered Orders", [Delivered Orders],
+    "Late Orders", [Late Orders],
+    "Late Rate", [Late Rate %]
+)

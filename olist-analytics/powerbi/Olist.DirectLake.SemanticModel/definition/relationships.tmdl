@@ -1,0 +1,13 @@
+relationship e92915ad-1508-57a9-8117-9801b1f7f1e7
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: 'Order Items'.'Order Date'
+	toColumn: Date.Date
+
+relationship b4da2144-6c6a-5737-9cd8-03276714cb0d
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: 'Order Items'.'Product Id'
+	toColumn: Product.'Product Id'

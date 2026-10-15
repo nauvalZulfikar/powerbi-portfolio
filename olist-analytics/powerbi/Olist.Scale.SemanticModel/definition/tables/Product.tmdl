@@ -1,0 +1,37 @@
+table Product
+	lineageTag: 56cc5325-4f1d-51b2-9b1a-56f2b9a9b795
+
+	column 'Product Id'
+		dataType: string
+		isKey
+		isHidden
+		lineageTag: 61e3c4a3-a731-5b99-90ee-e1d6aa8312d8
+		summarizeBy: none
+		sourceColumn: product_id
+
+	column Category
+		dataType: string
+		lineageTag: 9eecec64-e8ea-59c8-bc62-d53ea2a833f3
+		summarizeBy: none
+		sourceColumn: category
+
+	column 'Category Group'
+		dataType: string
+		lineageTag: 0249504b-b5a0-549c-ac95-ff8e3e67436f
+		summarizeBy: none
+		sourceColumn: category_group
+
+	partition Product = m
+		mode: dual
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "dim_product"]}[Data],
+				    // folds -> SELECT only these columns
+				    #"Chose columns" = Table.SelectColumns(Data, {"product_id", "category", "category_group"}),
+				    // folds -> CAST per column
+				    Typed = Table.TransformColumnTypes(#"Chose columns", {{"product_id", type text}, {"category", type text}, {"category_group", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

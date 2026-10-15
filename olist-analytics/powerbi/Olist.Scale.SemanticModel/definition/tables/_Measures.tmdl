@@ -1,0 +1,51 @@
+table _Measures
+	lineageTag: 697c1d1e-51f8-5546-9481-38685025f060
+
+	/// Item price of valid (not canceled/unavailable) orders, excluding freight.
+	measure Revenue = CALCULATE ( SUM ( 'Order Items'[Price] ), 'Order Items'[Is Valid] = TRUE () )
+		formatString: \R$ #,0
+		displayFolder: Sales
+		lineageTag: d62efcdc-d2a2-5ca2-a7eb-aa7611323b1c
+
+	/// Freight charged on valid order items.
+	measure 'Freight Total' = CALCULATE ( SUM ( 'Order Items'[Freight] ), 'Order Items'[Is Valid] = TRUE () )
+		formatString: \R$ #,0
+		displayFolder: Sales
+		lineageTag: 1e973b60-3c19-5221-bb99-48fc0ce9278e
+
+	/// Gross merchandise value = revenue + freight.
+	measure GMV = [Revenue] + [Freight Total]
+		formatString: \R$ #,0
+		displayFolder: Sales
+		lineageTag: f87a2916-89a1-5cae-92f6-9aa2bc47e944
+
+	/// Distinct valid orders.
+	measure 'Order Count' = CALCULATE ( DISTINCTCOUNT ( 'Order Items'[Order Id] ), 'Order Items'[Is Valid] = TRUE () )
+		formatString: #,0
+		displayFolder: Sales
+		lineageTag: b57c0c92-8a8f-5bae-a49b-2f665a8c4efc
+
+	/// Valid order items.
+	measure 'Items Sold' = CALCULATE ( COUNTROWS ( 'Order Items' ), 'Order Items'[Is Valid] = TRUE () )
+		formatString: #,0
+		displayFolder: Sales
+		lineageTag: fa956b28-bc6d-5b40-9fbb-aadfb2056ce8
+
+	/// Average order value (revenue per order).
+	measure AOV = DIVIDE ( [Revenue], [Order Count] )
+		formatString: \R$ #,0.00
+		displayFolder: Sales
+		lineageTag: 2890390f-3c6c-5aa8-a459-201cfb246da2
+
+	column Value
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: dab050a3-58ed-5625-ba7e-607adf58d2ac
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition _Measures = calculated
+		mode: import
+		source = {1}

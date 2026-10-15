@@ -1,0 +1,86 @@
+table 'Category Plan'
+	lineageTag: 53c4b1aa-55fc-5373-bbd3-e7eae93d96e3
+
+	column 'Category Group'
+		dataType: string
+		lineageTag: d3c785cb-f693-5685-9715-c5f46887383e
+		summarizeBy: none
+		sourceColumn: Category Group
+
+	column 'Plan Line'
+		dataType: string
+		lineageTag: b9aa9764-b2ff-5421-973e-79fbe118902c
+		summarizeBy: none
+		sourceColumn: Plan Line
+
+	column Year
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 89af2543-094a-5be0-879b-146f50e85327
+		summarizeBy: none
+		sourceColumn: Year
+
+	column 'Month No'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a6b9e4aa-9478-5ca7-bccf-7227f1406b80
+		summarizeBy: none
+		sourceColumn: Month No
+
+	column 'Plan Revenue'
+		dataType: double
+		formatString: \R$ #,0
+		lineageTag: 25b2f8b3-8883-5b4c-853e-0b55a0c4cc09
+		summarizeBy: none
+		sourceColumn: Plan Revenue
+
+	column 'Group Code'
+		dataType: string
+		lineageTag: e4e75745-af9a-5576-98c4-bc227a44f5b2
+		summarizeBy: none
+		sourceColumn: Group Code
+
+	column 'Month Start'
+		dataType: dateTime
+		formatString: mmm yyyy
+		lineageTag: 16c9ccad-8d8a-5f48-8c20-3c1ba26d0b61
+		summarizeBy: none
+		sourceColumn: Month Start
+
+	column 'Is Peak Month'
+		dataType: boolean
+		lineageTag: 26686f58-672f-577f-b0dd-39cc4b4593af
+		summarizeBy: none
+		sourceColumn: Is Peak Month
+
+	column 'Plan Row'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 71758787-f531-5950-9d05-cc6519ec10f3
+		summarizeBy: none
+		sourceColumn: Plan Row
+
+	partition 'Category Plan' = m
+		mode: import
+		source =
+				let
+				    Source = #"Plan Raw",
+				    // Merge (like a VLOOKUP) to the product groups: left outer join on Category Group
+				    #"Merged group code" = Table.NestedJoin(Source, {"Category Group"}, #"Plan Groups", {"Category Group"}, "Group", JoinKind.LeftOuter),
+				    // Bring back the code
+				    #"Expanded group code" = Table.ExpandTableColumn(#"Merged group code", "Group", {"Group Code"}),
+				    // First day of the month: the key to Date[Month Start]
+				    #"Month start" = Table.AddColumn(#"Expanded group code", "Month Start", each #date([Year], [Month No], 1), type date),
+				    // Conditional column: November is Black Friday
+				    #"Is peak month" = Table.AddColumn(#"Month start", "Is Peak Month", each [Month No] = 11, type logical),
+				    // Index column, handy when checking against the sheet (last: an index stops folding)
+				    #"Plan row" = Table.AddIndexColumn(#"Is peak month", "Plan Row", 1, 1, Int64.Type),
+				    // Final types
+				    #"Changed type" = Table.TransformColumnTypes(#"Plan row", {{"Plan Revenue", type number}, {"Group Code", type text}})
+				in
+				    #"Changed type"
+
+	annotation PBI_ResultType = Table

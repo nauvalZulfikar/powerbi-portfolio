@@ -1,0 +1,17 @@
+// 9-s14: one check per function. Every Pass column should read TRUE.
+EVALUATE
+{
+    ( "Olist.SafePct 1 / 4 = 0.25", Olist.SafePct ( 1, 4 ) = 0.25 ),
+    ( "Olist.SafePct x / 0 is blank", ISBLANK ( Olist.SafePct ( 1, 0 ) ) ),
+    ( "Olist.Growth 110 vs 100 = 10%", Olist.Growth ( 110, 100 ) = 0.1 ),
+    ( "Olist.Growth without prev is blank", ISBLANK ( Olist.Growth ( 110, BLANK () ) ) )
+}
+
+EVALUATE
+CALCULATETABLE (
+    ROW (
+        "Olist.AtPY = Revenue PY (cal)", Olist.AtPY ( [Revenue] ) = [Revenue PY (cal)],
+        "Olist.YoY = Time Calc YoY %", Olist.YoY ( [Revenue] ) = CALCULATE ( [Revenue], 'Time Calc'[Time Calc] = "YoY %" )
+    ),
+    'Date'[Year] = 2018
+)

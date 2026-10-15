@@ -1,0 +1,50 @@
+table 'Category Plan Quarterly'
+	lineageTag: d17fc9f3-2016-505c-b3fb-de0eb21ec202
+
+	column 'Category Group'
+		dataType: string
+		lineageTag: 339f8ce6-6221-5e3f-bd96-ca39424d33f6
+		summarizeBy: none
+		sourceColumn: Category Group
+
+	column Year
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ebb46f40-5371-5036-b40b-57dc205570ab
+		summarizeBy: none
+		sourceColumn: Year
+
+	column 'Year Quarter'
+		dataType: string
+		lineageTag: 9c87935d-0cc9-5818-a339-817a37197f15
+		summarizeBy: none
+		sourceColumn: Year Quarter
+
+	column 'Plan Revenue'
+		dataType: double
+		formatString: \R$ #,0
+		lineageTag: ef34cd9b-26d4-564e-b0d5-c7a534fd393c
+		summarizeBy: none
+		sourceColumn: Plan Revenue
+
+	column 'Plan Months'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7701f084-2d7f-512c-b1da-1e90962cfe51
+		summarizeBy: none
+		sourceColumn: Plan Months
+
+	partition 'Category Plan Quarterly' = m
+		mode: import
+		source =
+				let
+				    Source = #"Plan Raw",
+				    // Q1 2018, the same text as Date[Year Quarter]
+				    #"Quarter label" = Table.AddColumn(Source, "Year Quarter", each "Q" & Text.From(Number.RoundUp([Month No] / 3)) & " " & Text.From([Year]), type text),
+				    // Group By: sum the months (Base + Promo lines) per group and quarter
+				    #"Grouped by quarter" = Table.Group(#"Quarter label", {"Category Group", "Year", "Year Quarter"}, {{"Plan Revenue", each List.Sum([Plan Revenue]), type nullable number}, {"Plan Months", each List.Count(List.Distinct([Month No])), Int64.Type}})
+				in
+				    #"Grouped by quarter"
+
+	annotation PBI_ResultType = Table

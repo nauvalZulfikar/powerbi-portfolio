@@ -1,0 +1,41 @@
+table 'Spend Bands'
+	lineageTag: 6bcc172a-4732-56b0-a83d-df35480d5eab
+
+	column 'Spend Band'
+		dataType: string
+		lineageTag: cbdbad17-d85c-538f-a4d0-d34c434acf00
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Spend Band]
+		sortByColumn: 'Band Order'
+
+	column 'Band Order'
+		dataType: int64
+		lineageTag: 7c81c59d-2a8a-5529-ba83-487b62555f89
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Band Order]
+		isHidden
+		formatString: 0
+
+	column 'Min Value'
+		dataType: double
+		lineageTag: 8a26909a-9a3b-5886-a4ac-a4cbed7d582f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Min Value]
+		isHidden
+		formatString: \R$ #,0
+
+	column 'Max Value'
+		dataType: double
+		lineageTag: 11fec4db-bdcd-58e7-b992-d92edc65c23d
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Max Value]
+		isHidden
+		formatString: \R$ #,0
+
+	partition 'Spend Bands' = calculated
+		mode: import
+		source = DATATABLE ( "Spend Band", STRING, "Band Order", INTEGER, "Min Value", DOUBLE, "Max Value", DOUBLE, { { "Under R$100", 1, 0, 100 }, { "R$100–250", 2, 100, 250 }, { "R$250–500", 3, 250, 500 }, { "R$500–1,000", 4, 500, 1000 }, { "R$1,000+", 5, 1000, 1000000 } } )

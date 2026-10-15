@@ -1,0 +1,83 @@
+table 'Freight Lanes'
+	lineageTag: d3bf6843-7453-5bac-8b7b-69667c99f11b
+
+	column 'Seller State'
+		dataType: string
+		lineageTag: 3f3c45be-6208-51e6-8cd8-893054da8627
+		summarizeBy: none
+		sourceColumn: seller_state
+
+	column 'Customer State'
+		dataType: string
+		lineageTag: 686ede1c-fcf3-5e15-99c7-b8454c439e63
+		summarizeBy: none
+		sourceColumn: customer_state
+
+	column Lane
+		dataType: string
+		lineageTag: 81eca8f5-a184-56be-a906-cfacd303e693
+		summarizeBy: none
+		sourceColumn: lane
+
+	column Items
+		dataType: int64
+		formatString: 0
+		lineageTag: 3aac4c2b-9f10-5e39-91db-eca6539a121e
+		summarizeBy: none
+		sourceColumn: items
+
+	column 'Avg Distance Km'
+		dataType: double
+		lineageTag: c06bbd82-617a-5275-bc06-54c7ba057b76
+		summarizeBy: none
+		sourceColumn: avg_distance_km
+
+	column 'Avg Freight'
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: 34bc6e88-feb5-53cd-8d80-5c98b350359f
+		summarizeBy: none
+		sourceColumn: avg_freight
+
+	column 'Avg Freight Share'
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 72abdd68-0177-5d8a-8500-45d57ffe31d3
+		summarizeBy: none
+		sourceColumn: avg_freight_share
+
+	column 'Lane Delivery Days'
+		dataType: double
+		lineageTag: 8a043a47-02c1-5268-8ce5-fefe07f830bb
+		summarizeBy: none
+		sourceColumn: avg_delivery_days
+
+	column 'Late Rate'
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 4c3f7d15-f9a6-57ba-83cb-1974634b130d
+		summarizeBy: none
+		sourceColumn: late_rate
+
+	column 'Seller Region' =
+			"Seller · " & LOOKUPVALUE ( Seller[Region], Seller[State], 'Freight Lanes'[Seller State] )
+		dataType: string
+		lineageTag: a7d6bd8b-1679-54cc-babe-85da1932e369
+		summarizeBy: none
+
+	column 'Customer Region' =
+			"Customer · " & LOOKUPVALUE ( Customer[Region], Customer[State], 'Freight Lanes'[Customer State] )
+		dataType: string
+		lineageTag: f9f60de7-e4f8-568e-ba94-d3128544f163
+		summarizeBy: none
+
+	partition 'Freight Lanes' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "freight_lanes.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"seller_state", type text}, {"customer_state", type text}, {"lane", type text}, {"items", Int64.Type}, {"avg_distance_km", type number}, {"avg_freight", type number}, {"avg_freight_share", type number}, {"avg_delivery_days", type number}, {"late_rate", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

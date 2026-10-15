@@ -1,0 +1,44 @@
+table Breakdown
+	lineageTag: 0be2e32e-bec4-5b58-b793-315b580e0aee
+
+	column Breakdown
+		dataType: string
+		lineageTag: c4566ec0-848b-5597-9b48-1b3c18abe601
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Breakdown Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Breakdown Fields'
+
+	column 'Breakdown Fields'
+		dataType: string
+		isHidden
+		lineageTag: 72ddeb1e-c1bf-5c3e-ab30-a6860c1fffce
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Breakdown Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	column 'Breakdown Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0d9ba7cd-03f0-5c3f-a2de-ec7efbaf3d48
+		summarizeBy: none
+		sourceColumn: [Value3]
+
+	partition Breakdown = calculated
+		mode: import
+		source =
+				{
+				    ( "Category Group", NAMEOF ( Product[Category Group] ), 0 ),
+				    ( "Customer Region", NAMEOF ( Customer[Region] ), 1 ),
+				    ( "Seller Tier", NAMEOF ( Seller[Pareto Tier] ), 2 ),
+				    ( "Distance Band", NAMEOF ( 'Order Items'[Distance Band] ), 3 )
+				}

@@ -1,0 +1,12 @@
+// 9-s5: temporary tables. SUMMARIZECOLUMNS builds the grid, TOPN + ADDCOLUMNS rank inside it.
+EVALUATE
+SUMMARIZECOLUMNS (
+    Product[Category Group],
+    "Revenue", [Revenue],
+    "Top 3 categories", [Top 3 Category Revenue],
+    "Top 3 share", DIVIDE ( [Top 3 Category Revenue], [Revenue] )
+)
+ORDER BY [Revenue] DESC
+
+EVALUATE
+TOPN ( 10, ADDCOLUMNS ( VALUES ( Product[Category] ), "Revenue", [Revenue], "Rank", [Category Rank] ), [Revenue], DESC )

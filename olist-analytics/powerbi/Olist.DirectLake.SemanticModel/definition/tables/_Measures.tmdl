@@ -1,0 +1,27 @@
+table _Measures
+	lineageTag: 5623944c-72aa-565d-bd4d-84e2ac7bf7f7
+
+	/// Item price of valid (not canceled/unavailable) orders, excluding freight.
+	measure Revenue = CALCULATE ( SUM ( 'Order Items'[Price] ), 'Order Items'[Is Valid] = TRUE () )
+		formatString: \R$ #,0
+		displayFolder: Sales
+		lineageTag: 3f970fc3-cb95-5c1d-ad74-03e65cefa012
+
+	/// Freight charged on valid order items.
+	measure 'Freight Total' = CALCULATE ( SUM ( 'Order Items'[Freight] ), 'Order Items'[Is Valid] = TRUE () )
+		formatString: \R$ #,0
+		displayFolder: Sales
+		lineageTag: a476c0dd-6291-55a9-b576-b7e9b9851121
+
+	column Value
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f6de60b9-328e-5b95-b805-66a921b35b32
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition _Measures = calculated
+		mode: import
+		source = {1}

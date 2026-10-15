@@ -1,0 +1,191 @@
+table Customer
+	lineageTag: 1eb0333a-5b42-56ef-9356-5c685f6f09d7
+
+	column 'Customer Unique Id'
+		dataType: string
+		isKey
+		isHidden
+		lineageTag: 91adb00e-90e9-5f28-ac41-55563d13a4c7
+		summarizeBy: none
+		sourceColumn: customer_unique_id
+
+	column City
+		dataType: string
+		dataCategory: City
+		lineageTag: 94de8af0-4ac5-5bf9-9544-50e427cc68a9
+		summarizeBy: none
+		sourceColumn: city
+
+	column State
+		dataType: string
+		lineageTag: a4c63c2b-8a07-5e95-adf9-edfaf76d4a12
+		summarizeBy: none
+		sourceColumn: state
+
+	column 'State Name'
+		dataType: string
+		lineageTag: 6fed0c10-bd7c-5317-a11f-4e8b4203f0a2
+		summarizeBy: none
+		sourceColumn: state_name
+
+	column Region
+		dataType: string
+		lineageTag: 1515c234-c39e-5267-ab99-61ba382baa63
+		summarizeBy: none
+		sourceColumn: region
+
+	column 'State Geo'
+		dataType: string
+		dataCategory: StateOrProvince
+		lineageTag: a07de97b-a815-56b0-a615-8b1831a586e7
+		summarizeBy: none
+		sourceColumn: state_geo
+
+	column Lat
+		dataType: double
+		isHidden
+		dataCategory: Latitude
+		lineageTag: a8b48d22-5503-5a78-a091-812757b892d6
+		summarizeBy: none
+		sourceColumn: lat
+
+	column Lng
+		dataType: double
+		isHidden
+		dataCategory: Longitude
+		lineageTag: b30d5452-a768-5009-9738-253be6c3e4ed
+		summarizeBy: none
+		sourceColumn: lng
+
+	column 'First Order Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: fd4046b7-9bd5-5c9a-bde6-ac77392d0b79
+		summarizeBy: none
+		sourceColumn: first_order_date
+
+	column 'Cohort Month'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: 84b49615-97d8-57ae-90f7-47bfaace799e
+		summarizeBy: none
+		sourceColumn: cohort_month
+
+	column 'Last Order Date'
+		dataType: dateTime
+		formatString: dd mmm yyyy
+		lineageTag: 9bb668da-dd40-5ec6-be19-7e665f3ce6f8
+		summarizeBy: none
+		sourceColumn: last_order_date
+
+	column 'Valid Orders'
+		dataType: int64
+		formatString: 0
+		lineageTag: 2cad8ed5-1660-5f80-9e57-6738245f8951
+		summarizeBy: none
+		sourceColumn: valid_orders
+
+	column 'Lifetime Value'
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: 8dceb8e3-0c2e-5a4b-9251-eec947242b26
+		summarizeBy: none
+		sourceColumn: lifetime_value
+
+	column 'Lifetime Avg Review'
+		dataType: double
+		formatString: 0.00
+		lineageTag: 5c5a8dc3-3ccb-53be-9723-f64691032082
+		summarizeBy: none
+		sourceColumn: avg_review
+
+	column 'Recency Days'
+		dataType: int64
+		formatString: 0
+		lineageTag: 85b6388a-6875-5180-8cfb-453fe0861724
+		summarizeBy: none
+		sourceColumn: recency_days
+
+	column 'R Score'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4471bd4c-f9f9-58e1-a37d-08a4b9ce4f0e
+		summarizeBy: none
+		sourceColumn: r_score
+
+	column 'F Score'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 721bff96-a0d0-5af3-a2f9-cb2314958834
+		summarizeBy: none
+		sourceColumn: f_score
+
+	column 'M Score'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 22d03b23-7ca9-524b-9289-16e91b7dd6e2
+		summarizeBy: none
+		sourceColumn: m_score
+
+	column 'RFM Cell'
+		dataType: string
+		lineageTag: 2f864664-b8d9-54f4-9c1c-d9121a94fa19
+		summarizeBy: none
+		sourceColumn: rfm_cell
+
+	column 'RFM Segment'
+		dataType: string
+		lineageTag: 11e9a669-3759-5502-8b16-984a9999318f
+		summarizeBy: none
+		sourceColumn: rfm_segment
+		sortByColumn: 'RFM Segment Order'
+
+	column 'RFM Segment Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 48749124-53f3-5b49-8cdc-e59a296d8b25
+		summarizeBy: none
+		sourceColumn: rfm_segment_order
+
+	column 'Predicted CLV 12M'
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: 490fc1e4-f867-5adc-8da9-11f56ad8b352
+		summarizeBy: none
+		sourceColumn: predicted_clv_12m
+
+	column 'Is Repeat' =
+			Customer[Valid Orders] > 1
+		dataType: boolean
+		lineageTag: 43de726e-5847-5152-a4b4-0e149afe5003
+		summarizeBy: none
+
+	hierarchy Geo
+		lineageTag: fbac3b84-6628-5638-b742-07ba4f013a5f
+
+		level Region
+			lineageTag: 810c477f-f02f-5bcc-a55f-8ff8d6913f1e
+			column: Region
+
+		level 'State Name'
+			lineageTag: f517fa9f-84ec-5208-944a-57812428f046
+			column: 'State Name'
+
+		level City
+			lineageTag: 7c53e65a-46e9-5582-bd0b-39495beac01d
+			column: City
+
+	partition Customer = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_customer.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"customer_unique_id", type text}, {"city", type text}, {"state", type text}, {"state_name", type text}, {"region", type text}, {"state_geo", type text}, {"lat", type number}, {"lng", type number}, {"first_order_date", type date}, {"cohort_month", type date}, {"last_order_date", type date}, {"valid_orders", Int64.Type}, {"lifetime_value", type number}, {"avg_review", type number}, {"recency_days", Int64.Type}, {"r_score", Int64.Type}, {"f_score", Int64.Type}, {"m_score", Int64.Type}, {"rfm_cell", type text}, {"rfm_segment", type text}, {"rfm_segment_order", Int64.Type}, {"predicted_clv_12m", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

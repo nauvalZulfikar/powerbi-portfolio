@@ -1,0 +1,15 @@
+// 9-s6: window functions over a temporary table: ORDERBY the month key, PARTITIONBY customer region.
+DEFINE
+    VAR _m =
+        SUMMARIZECOLUMNS (
+            Customer[Region], 'Date'[Year Month], 'Date'[Year Month Key],
+            "Rev", [Revenue]
+        )
+EVALUATE
+ADDCOLUMNS (
+    _m,
+    "Prev month (same region)", MAXX ( OFFSET ( -1, _m, ORDERBY ( 'Date'[Year Month Key] ), PARTITIONBY ( Customer[Region] ) ), [Rev] ),
+    "Running total (region)", SUMX ( WINDOW ( 1, ABS, 0, REL, _m, ORDERBY ( 'Date'[Year Month Key] ), PARTITIONBY ( Customer[Region] ) ), [Rev] ),
+    "Rank in month", RANK ( DENSE, _m, ORDERBY ( [Rev], DESC ), PARTITIONBY ( 'Date'[Year Month Key] ) )
+)
+ORDER BY Customer[Region], 'Date'[Year Month Key]

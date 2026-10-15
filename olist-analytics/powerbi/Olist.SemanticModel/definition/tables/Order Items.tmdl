@@ -1,0 +1,116 @@
+table 'Order Items'
+	lineageTag: f4ecff2e-7a85-589e-b154-f6fa0bffe3a5
+
+	column 'Order Id'
+		dataType: string
+		lineageTag: 33f1ca26-77aa-5361-a25a-e21ace4245f5
+		summarizeBy: none
+		sourceColumn: order_id
+
+	column 'Order Item Id'
+		dataType: int64
+		formatString: 0
+		lineageTag: a939ccd1-b8c9-512f-b97e-e0a292d9178b
+		summarizeBy: none
+		sourceColumn: order_item_id
+
+	column 'Product Id'
+		dataType: string
+		isHidden
+		lineageTag: 4f8a649c-aea8-5fc6-9a2e-8af2a087670c
+		summarizeBy: none
+		sourceColumn: product_id
+
+	column 'Seller Id'
+		dataType: string
+		isHidden
+		lineageTag: 22e0a848-2fb5-5e07-a00e-81b09c43b384
+		summarizeBy: none
+		sourceColumn: seller_id
+
+	column 'Customer Unique Id'
+		dataType: string
+		isHidden
+		lineageTag: 688f81af-29d7-53dc-9c78-416c5f424674
+		summarizeBy: none
+		sourceColumn: customer_unique_id
+
+	column 'Order Date'
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy
+		lineageTag: aa6f75f6-4e49-5023-93dc-8b53b5da589b
+		summarizeBy: none
+		sourceColumn: order_date
+
+	column 'Is Valid'
+		dataType: boolean
+		lineageTag: 0f7f53b7-073a-5b3e-97c7-cd786dedfbe7
+		summarizeBy: none
+		sourceColumn: is_valid
+
+	column 'Is Late'
+		dataType: boolean
+		lineageTag: 0dd0fdd4-14c3-53de-90d8-9dc628b955a4
+		summarizeBy: none
+		sourceColumn: is_late
+
+	column 'Review Score'
+		dataType: int64
+		formatString: 0
+		lineageTag: 387ad38c-a77d-5ab0-9bb0-7975007ef5a5
+		summarizeBy: none
+		sourceColumn: review_score
+
+	column Price
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: ead6b750-5c33-511c-af58-2a73e12c9cd8
+		summarizeBy: none
+		sourceColumn: price
+
+	column Freight
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: aa5484ee-77b2-58ea-9575-c767606da931
+		summarizeBy: none
+		sourceColumn: freight
+
+	column 'Freight Share'
+		dataType: double
+		formatString: 0.0%
+		lineageTag: d88f2bd9-8b8b-59a7-822d-4cd95263949b
+		summarizeBy: none
+		sourceColumn: freight_share
+
+	column 'Distance Km'
+		dataType: double
+		lineageTag: a5d2dfb2-06ba-5f2e-b97c-35cc2de49700
+		summarizeBy: none
+		sourceColumn: distance_km
+
+	column 'Distance Band'
+		dataType: string
+		lineageTag: 39007cd3-707d-5342-83f5-27c9a9e35740
+		summarizeBy: none
+		sourceColumn: distance_band
+		sortByColumn: 'Distance Band Order'
+
+	column 'Distance Band Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: bd2d9c1e-5ed0-5a6f-8fe0-49f48654a9e8
+		summarizeBy: none
+		sourceColumn: distance_band_order
+
+	partition 'Order Items' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_order_items.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"order_id", type text}, {"order_item_id", Int64.Type}, {"product_id", type text}, {"seller_id", type text}, {"customer_unique_id", type text}, {"order_date", type date}, {"is_valid", type logical}, {"is_late", type logical}, {"review_score", Int64.Type}, {"price", type number}, {"freight", type number}, {"freight_share", type number}, {"distance_km", type number}, {"distance_band", type text}, {"distance_band_order", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

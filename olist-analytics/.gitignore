@@ -1,0 +1,32 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Data (rebuilt by src/pipeline.py)
+data/
+
+# .NET build output
+tools/tmdl-validate/bin/
+tools/tmdl-validate/obj/
+
+# Power BI local state
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+tools/m-check/node_modules/
+
+# pbi-kit (tools/pbi-kit/templates/pbip.gitignore) + CI artefacts
+**/.pbi/unappliedChanges.json
+*.pbix.bak
+node_modules/
+.env
+fabric_cicd.error.log
+bpa-result.json
+report.log
+bpa-*.json

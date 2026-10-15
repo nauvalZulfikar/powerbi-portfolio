@@ -1,0 +1,49 @@
+table 'Time Calc'
+	lineageTag: de240a10-8561-58b8-923a-1c36c292f125
+
+	calculationGroup
+		precedence: 10
+
+		calculationItem Current = SELECTEDMEASURE ()
+			ordinal: 0
+
+		calculationItem PY = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, YEAR ) )
+			ordinal: 1
+
+		calculationItem 'YoY %' =
+				VAR _py = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, YEAR ) )
+				RETURN IF ( NOT ISBLANK ( _py ), DIVIDE ( SELECTEDMEASURE () - _py, _py ) )
+			ordinal: 2
+			formatStringDefinition = "+0.0%;-0.0%;0.0%"
+
+		calculationItem YTD = CALCULATE ( SELECTEDMEASURE (), DATESYTD ( 'Gregorian' ) )
+			ordinal: 3
+
+		calculationItem 'MoM %' =
+				VAR _pm = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, MONTH ) )
+				RETURN IF ( NOT ISBLANK ( _pm ), DIVIDE ( SELECTEDMEASURE () - _pm, _pm ) )
+			ordinal: 4
+			formatStringDefinition = "+0.0%;-0.0%;0.0%"
+
+		calculationItem '3M Avg' =
+				VAR _months = CALCULATETABLE ( VALUES ( 'Date'[Year Month Key] ), DATESINPERIOD ( 'Date'[Date], MAX ( 'Date'[Date] ), -3, MONTH ) )
+				RETURN
+				    AVERAGEX ( _months,
+				        VAR _k = 'Date'[Year Month Key]
+				        RETURN CALCULATE ( SELECTEDMEASURE (), REMOVEFILTERS ( 'Date' ), 'Date'[Year Month Key] = _k ) )
+			ordinal: 5
+
+	column 'Time Calc'
+		dataType: string
+		lineageTag: 07b5c028-9830-5cb6-91e9-42222cf0f8e3
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+	column Ordinal
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1da0e92e-d894-5402-8c85-c63909266f54
+		summarizeBy: sum
+		sourceColumn: Ordinal

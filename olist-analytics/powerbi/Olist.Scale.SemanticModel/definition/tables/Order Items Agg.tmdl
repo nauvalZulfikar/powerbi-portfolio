@@ -1,0 +1,123 @@
+table 'Order Items Agg'
+	isHidden
+	lineageTag: 3a147c5e-4410-5b55-97be-b3f9ae858310
+
+	column 'Agg Order Date'
+		dataType: dateTime
+		isHidden
+		isAvailableInMdx: false
+		formatString: dd mmm yyyy
+		lineageTag: ae6e6f5b-7ed2-584c-a5e9-8068d7df85b6
+		summarizeBy: none
+		sourceColumn: order_date
+
+		alternateOf
+			summarization: groupBy
+			baseColumn: 'Order Items'.'Order Date'
+
+	column 'Agg Category'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: 34b84940-1c7e-5242-8465-65a35796edfe
+		summarizeBy: none
+		sourceColumn: category
+
+		alternateOf
+			summarization: groupBy
+			baseColumn: Product.Category
+
+	column 'Agg Seller Id'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: 53b371c9-9b9f-5718-9e69-e9914ed6ea50
+		summarizeBy: none
+		sourceColumn: seller_id
+
+		alternateOf
+			summarization: groupBy
+			baseColumn: 'Order Items'.'Seller Id'
+
+	column 'Agg Customer State'
+		dataType: string
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: 968c3d0a-7d72-5a71-aee4-8467df46f331
+		summarizeBy: none
+		sourceColumn: customer_state
+
+		alternateOf
+			summarization: groupBy
+			baseColumn: Customer.State
+
+	column 'Agg Is Valid'
+		dataType: boolean
+		isHidden
+		isAvailableInMdx: false
+		lineageTag: f7eb8f08-acdd-5d17-8957-246f0e5dfd4f
+		summarizeBy: none
+		sourceColumn: is_valid
+
+		alternateOf
+			summarization: groupBy
+			baseColumn: 'Order Items'.'Is Valid'
+
+	column 'Agg Price'
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		formatString: #,0.00
+		lineageTag: ec43789f-3945-5aa6-a482-f673f6c28b61
+		summarizeBy: none
+		sourceColumn: price
+
+		alternateOf
+			summarization: sum
+			baseColumn: 'Order Items'.Price
+
+	column 'Agg Freight'
+		dataType: double
+		isHidden
+		isAvailableInMdx: false
+		formatString: #,0.00
+		lineageTag: 8ec960e2-a1f3-59cf-8829-d18772df4823
+		summarizeBy: none
+		sourceColumn: freight
+
+		alternateOf
+			summarization: sum
+			baseColumn: 'Order Items'.Freight
+
+	column 'Agg Items'
+		dataType: int64
+		isHidden
+		isAvailableInMdx: false
+		formatString: 0
+		lineageTag: 5e7a194c-c463-5d8a-848b-1e8f204e054c
+		summarizeBy: none
+		sourceColumn: items
+
+		alternateOf
+			summarization: count
+			baseTable: 'Order Items'
+
+	partition 'Order Items Agg' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Items = Source{[Schema = "dbo", Item = "fact_order_items"]}[Data],
+				    Products = Table.SelectColumns(Source{[Schema = "dbo", Item = "dim_product"]}[Data], {"product_id", "category"}),
+				    Customers = Table.SelectColumns(Source{[Schema = "dbo", Item = "dim_customer"]}[Data], {"customer_unique_id", "state"}),
+				    // folds -> LEFT JOIN dim_product
+				    #"Joined product" = Table.ExpandTableColumn(Table.NestedJoin(Items, {"product_id"}, Products, {"product_id"}, "p", JoinKind.LeftOuter), "p", {"category"}),
+				    // folds -> LEFT JOIN dim_customer
+				    #"Joined customer" = Table.ExpandTableColumn(Table.NestedJoin(#"Joined product", {"customer_unique_id"}, Customers, {"customer_unique_id"}, "c", JoinKind.LeftOuter), "c", {"state"}, {"customer_state"}),
+				    // folds -> GROUP BY day, category, seller, customer state, validity
+				    Grouped = Table.Group(#"Joined customer", {"order_date", "category", "seller_id", "customer_state", "is_valid"}, {{"price", each List.Sum([price]), type number}, {"freight", each List.Sum([freight]), type number}, {"items", each Table.RowCount(_), Int64.Type}}),
+				    Typed = Table.TransformColumnTypes(Grouped, {{"order_date", type date}, {"is_valid", type logical}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

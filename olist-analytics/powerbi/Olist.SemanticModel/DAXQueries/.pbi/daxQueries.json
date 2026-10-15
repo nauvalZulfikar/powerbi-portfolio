@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "tabOrder": [
+    "KEEPFILTERS vs overwrite",
+    "Table functions",
+    "Window functions",
+    "Functions",
+    "VAL vs EXPR",
+    "Expanded table and bridge",
+    "Headline numbers"
+  ],
+  "defaultTab": "KEEPFILTERS vs overwrite"
+}

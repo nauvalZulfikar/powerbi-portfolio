@@ -1,0 +1,40 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+ref table Date
+ref table Customer
+ref table Seller
+ref table Product
+ref table Orders
+ref table 'Order Items'
+ref table Payments
+ref table 'Cohort Retention'
+ref table 'Seller Monthly'
+ref table 'Freight Lanes'
+ref table 'Order Seller'
+ref table 'Backlog Daily'
+ref table 'Seller Tier Transition'
+ref table 'Revenue Forecast'
+ref table 'Category Plan'
+ref table 'Category Plan Quarterly'
+ref table 'Spend Bands'
+ref table 'Late Reduction (pp)'
+ref table 'Funnel Stage'
+ref table 'Region Access'
+ref table 'Time Calc'
+ref table Metric
+ref table Breakdown
+ref table _Measures
+
+ref role 'Northeast Ops'
+ref role 'Region Manager'
+ref role 'Logistics Partner'
+
+ref cultureInfo en-US

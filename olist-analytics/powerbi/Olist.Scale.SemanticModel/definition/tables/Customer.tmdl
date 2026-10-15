@@ -1,0 +1,43 @@
+table Customer
+	lineageTag: c562a85d-9d78-563a-b27c-94d8f7b1253a
+
+	column 'Customer Unique Id'
+		dataType: string
+		isKey
+		isHidden
+		lineageTag: a3391554-a1db-511f-bc41-ef46286bba2c
+		summarizeBy: none
+		sourceColumn: customer_unique_id
+
+	column State
+		dataType: string
+		lineageTag: d81c37c7-5229-5180-b8f9-09316d53eb22
+		summarizeBy: none
+		sourceColumn: state
+
+	column Region
+		dataType: string
+		lineageTag: 5b8fcdea-3836-5cd6-9f83-812d78d4e09d
+		summarizeBy: none
+		sourceColumn: region
+
+	column City
+		dataType: string
+		lineageTag: 201be15c-6fab-55de-ad36-9fa50b859c78
+		summarizeBy: none
+		sourceColumn: city
+
+	partition Customer = m
+		mode: dual
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "dim_customer"]}[Data],
+				    // folds -> SELECT only these columns
+				    #"Chose columns" = Table.SelectColumns(Data, {"customer_unique_id", "state", "region", "city"}),
+				    // folds -> CAST per column
+				    Typed = Table.TransformColumnTypes(#"Chose columns", {{"customer_unique_id", type text}, {"state", type text}, {"region", type text}, {"city", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

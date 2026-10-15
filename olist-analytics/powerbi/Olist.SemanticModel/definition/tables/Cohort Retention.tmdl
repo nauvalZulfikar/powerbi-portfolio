@@ -1,0 +1,60 @@
+table 'Cohort Retention'
+	lineageTag: 5a75e4cf-a3de-523c-bc3e-82fb69dc3cb3
+
+	column 'Cohort Month'
+		dataType: dateTime
+		formatString: mmm yyyy
+		lineageTag: 5d0aa7c4-871a-50c1-80fa-06b6b5d82d86
+		summarizeBy: none
+		sourceColumn: cohort_month
+
+	column 'Cohort Label'
+		dataType: string
+		lineageTag: 00bf4e8b-099c-5911-853b-37e3bce96659
+		summarizeBy: none
+		sourceColumn: cohort_label
+
+	column 'Cohort Size'
+		dataType: int64
+		formatString: 0
+		lineageTag: 435ae74e-a952-588c-aa8d-f03bfe0cd43e
+		summarizeBy: none
+		sourceColumn: cohort_size
+
+	column 'Month Offset'
+		dataType: int64
+		formatString: 0
+		lineageTag: b0c2b1f7-5f14-5baa-8fc3-0f3778e2242c
+		summarizeBy: none
+		sourceColumn: month_offset
+
+	column 'Month Offset Label'
+		dataType: string
+		lineageTag: ef6fcd96-2242-5d70-9f1f-ac878df7ce2e
+		summarizeBy: none
+		sourceColumn: month_offset_label
+
+	column 'Active Customers'
+		dataType: int64
+		formatString: 0
+		lineageTag: 5e1ebf3e-c2a6-5915-93ac-1613ba7d5dfd
+		summarizeBy: none
+		sourceColumn: active_customers
+
+	column 'Retention Rate'
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 44514f2e-0e38-5238-98e1-4e11e5cd067f
+		summarizeBy: none
+		sourceColumn: retention_rate
+
+	partition 'Cohort Retention' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "cohort_retention.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"cohort_month", type date}, {"cohort_label", type text}, {"cohort_size", Int64.Type}, {"month_offset", Int64.Type}, {"month_offset_label", type text}, {"active_customers", Int64.Type}, {"retention_rate", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

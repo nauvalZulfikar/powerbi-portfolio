@@ -1,0 +1,134 @@
+# Olist CI/CD (pbi-kit template, adapted).
+# ci   (every push/PR, clean runner, no source data): report regenerated from source and diffed, then
+#      BPA → TOM → DAX tests (offline) → PBIR on the committed PBIP, for every semantic model.
+# data (opt-in: Run workflow → data=true, or repo var RUN_DATA=true): downloads the public source data,
+#      runs the SQL data tests, rebuilds the models from the warehouse and fails if committed TMDL is stale.
+# main → deploy-test (needs ci; data may be skipped) → approval (Prod environment reviewers) → deploy-prod.
+# Azure DevOps mirror: azure-pipelines.yml.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      data: { description: "Run the data job (downloads source data)", type: boolean, default: false }
+
+env:
+  MODEL: powerbi/Olist.SemanticModel
+  PBIP_DIR: powerbi
+  DOTNET_VERSION: "8.0.x"
+
+permissions:
+  contents: read
+  id-token: write          # OIDC to Entra ID (federated credential), no client secret
+
+jobs:
+  ci:                      # required status check in branch protection; runs on a clean clone, no source data
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - uses: actions/setup-dotnet@v4
+        with: { dotnet-version: "${{ env.DOTNET_VERSION }}" }
+
+      - name: Install pbir (report ids are regenerated per run, so the committed report is validated, not diffed)
+        run: uv tool install pbir-cli==0.9.32
+
+      - name: Best Practice Analyzer (TOM, kit rules + project rules, every model)
+        run: for m in "$PBIP_DIR"/*.SemanticModel; do tools/pbi-kit/bpa/bpa.sh "$m/definition" --rules bpa/project-rules.json --json "bpa-$(basename "$m" .SemanticModel).json" || exit 1; done
+
+      - name: TOM validate (every model deserialises with Microsoft.AnalysisServices)
+        run: for m in "$PBIP_DIR"/*.SemanticModel; do dotnet run --project tools/tmdl-validate -- "$m/definition" || exit 1; done
+
+      - name: DAX tests (offline — syntax, model references, assert files)
+        run: python3 tools/pbi-kit/dax-tests/daxtest.py "$MODEL/DAXQueries" --offline
+
+      - name: Report validate (PBIR schema)
+        run: for r in "$PBIP_DIR"/*.Report; do pbir validate "$r" --all || exit 1; done
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: bpa-result, path: "bpa-*.json" }
+
+  data:                    # opt-in: needs the public source data, which is gitignored
+    if: ${{ inputs.data || vars.RUN_DATA == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Data tests (download the public Kaggle Olist zip → DuckDB → 18 SQL tests + 4 plan tests → parquet marts)
+        run: uv run python src/pipeline.py
+      - name: Rebuild models from the warehouse and diff (generator self-checks)
+        run: |
+          uv run python src/build_model.py
+          git diff --exit-code -- "$PBIP_DIR" ':!'"$PBIP_DIR"'/*.Report/*' ':!'"$PBIP_DIR"'/**/expressions.tmdl' || { echo "::error::committed TMDL is stale: run build_model.py"; exit 1; }
+
+  deploy-test:
+    needs: [ci, data]
+    # data is opt-in: a skipped data job must not block the deploy, a failed one must
+    if: ${{ always() && github.ref == 'refs/heads/main' && needs.ci.result == 'success' && contains(fromJSON('["success","skipped"]'), needs.data.result) }}
+    runs-on: ubuntu-latest
+    environment: Test        # FABRIC_WS_TEST, PBI_DATASET_NAME (vars) + AZURE_* (secrets)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          allow-no-subscriptions: true
+      - name: Publish to Test workspace (fabric-cicd + powerbi/parameter.yml)
+        env:
+          FABRIC_WS_TEST: ${{ vars.FABRIC_WS_TEST }}
+        run: uv run --project tools/pbi-kit python tools/pbi-kit/deploy/deploy.py --repo "$PBIP_DIR" --env Test
+      - name: Refresh Olist in Test
+        env:
+          FABRIC_WS_TEST: ${{ vars.FABRIC_WS_TEST }}
+          PBI_DATASET_NAME: ${{ vars.PBI_DATASET_NAME }}
+        run: |
+          tok=$(az account get-access-token --resource https://analysis.windows.net/powerbi/api --query accessToken -o tsv)
+          ds=$(curl -sf -H "Authorization: Bearer $tok" "https://api.powerbi.com/v1.0/myorg/groups/$FABRIC_WS_TEST/datasets" \
+               | python3 -c "import json,sys,os;print(next(d['id'] for d in json.load(sys.stdin)['value'] if d['name']==os.environ['PBI_DATASET_NAME']))")
+          curl -sf -X POST -H "Authorization: Bearer $tok" -H "Content-Type: application/json" -d '{"type":"full"}' \
+               "https://api.powerbi.com/v1.0/myorg/groups/$FABRIC_WS_TEST/datasets/$ds/refreshes"
+          for i in $(seq 1 60); do
+            s=$(curl -sf -H "Authorization: Bearer $tok" "https://api.powerbi.com/v1.0/myorg/groups/$FABRIC_WS_TEST/datasets/$ds/refreshes?\$top=1" | python3 -c "import json,sys;print(json.load(sys.stdin)['value'][0]['status'])")
+            [ "$s" = Completed ] && break; [ "$s" = Failed ] && exit 1; sleep 10
+          done
+      - name: DAX tests online (executeQueries against Test)
+        # Olist has RLS roles → service principals are refused by executeQueries: PBI_ACCESS_TOKEN must be
+        # a user token (secret on the Test environment).
+        env:
+          PBI_WORKSPACE_ID: ${{ vars.FABRIC_WS_TEST }}
+          PBI_DATASET_NAME: ${{ vars.PBI_DATASET_NAME }}
+          PBI_ACCESS_TOKEN: ${{ secrets.PBI_ACCESS_TOKEN }}
+        run: python3 tools/pbi-kit/dax-tests/daxtest.py "$MODEL/DAXQueries"
+
+  deploy-prod:
+    needs: deploy-test
+    if: ${{ always() && needs.deploy-test.result == 'success' }}   # always(): data may have been skipped upstream
+    runs-on: ubuntu-latest
+    environment: Prod        # required reviewers = approval gate
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          allow-no-subscriptions: true
+      - name: Publish to Prod workspace (fabric-cicd)
+        env:
+          FABRIC_WS_PROD: ${{ vars.FABRIC_WS_PROD }}
+        run: uv run --project tools/pbi-kit python tools/pbi-kit/deploy/deploy.py --repo "$PBIP_DIR" --env Prod
+
+  bpa-te2:                 # same BPA in Tabular Editor 2 itself (Windows runner); on when vars.RUN_TE2_BPA == 'true'
+    if: ${{ vars.RUN_TE2_BPA == 'true' }}
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: BPA via TabularEditor.exe
+        shell: pwsh
+        run: ./tools/pbi-kit/bpa/te2-bpa.ps1 -Model "$env:MODEL/definition" -ProjectRules bpa/project-rules.json -Ci github

@@ -1,0 +1,92 @@
+table Date
+	lineageTag: 236e1b69-7745-5b1b-b50e-321032a046e0
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: dd mmm yyyy
+		lineageTag: e73bba37-099d-55dd-9bf9-10cdcdffae54
+		summarizeBy: none
+		sourceColumn: date
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 287fc02e-2dca-58fd-93c6-5577435edee7
+		summarizeBy: none
+		sourceColumn: year
+
+	column Quarter
+		dataType: int64
+		formatString: 0
+		lineageTag: 7475b8a3-9bbd-5240-8877-9c3b7a178a67
+		summarizeBy: none
+		sourceColumn: quarter
+
+	column 'Year Quarter'
+		dataType: string
+		lineageTag: b42c07d0-b28f-5b4b-97d8-f5421ec0f02e
+		summarizeBy: none
+		sourceColumn: year_quarter
+		sortByColumn: 'Year Quarter Key'
+
+	column 'Year Quarter Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d59bb6a9-864b-59f8-9306-d6b0ed58917a
+		summarizeBy: none
+		sourceColumn: year_quarter_key
+
+	column 'Month No'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b499a0fb-e516-5302-8402-5969555d27d8
+		summarizeBy: none
+		sourceColumn: month_no
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: 7d3557df-f1af-5e7e-904b-d8a855ec8fac
+		summarizeBy: none
+		sourceColumn: month_name
+		sortByColumn: 'Month No'
+
+	column 'Year Month'
+		dataType: string
+		lineageTag: e4579e0b-0d1c-5eb5-9f48-a73b8d280a39
+		summarizeBy: none
+		sourceColumn: year_month
+		sortByColumn: 'Year Month Key'
+
+	column 'Year Month Key'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 996ebee2-1318-57fb-89a9-425d7a3d5eaf
+		summarizeBy: none
+		sourceColumn: year_month_key
+
+	column 'Month Start'
+		dataType: dateTime
+		formatString: mmm yyyy
+		lineageTag: c096863b-08fc-54d3-b2da-35eb70f79b89
+		summarizeBy: none
+		sourceColumn: month_start
+
+	partition Date = m
+		mode: dual
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "dim_date"]}[Data],
+				    // folds -> SELECT only these columns
+				    #"Chose columns" = Table.SelectColumns(Data, {"date", "year", "quarter", "year_quarter", "year_quarter_key", "month_no", "month_name", "year_month", "year_month_key", "month_start"}),
+				    // folds -> CAST per column
+				    Typed = Table.TransformColumnTypes(#"Chose columns", {{"date", type date}, {"year", Int64.Type}, {"quarter", Int64.Type}, {"year_quarter", type text}, {"year_quarter_key", Int64.Type}, {"month_no", Int64.Type}, {"month_name", type text}, {"year_month", type text}, {"year_month_key", Int64.Type}, {"month_start", type date}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

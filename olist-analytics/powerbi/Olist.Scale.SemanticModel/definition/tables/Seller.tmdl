@@ -1,0 +1,49 @@
+table Seller
+	lineageTag: d29592ad-9314-5a76-93a0-9f720a625d31
+
+	column 'Seller Id'
+		dataType: string
+		isKey
+		isHidden
+		lineageTag: e19d3466-20db-5ecd-85d4-8e3a4ca39529
+		summarizeBy: none
+		sourceColumn: seller_id
+
+	column 'Seller Code'
+		dataType: string
+		lineageTag: e1ae2039-ce3d-5f3a-9221-ccae12fb093e
+		summarizeBy: none
+		sourceColumn: seller_code
+
+	column State
+		dataType: string
+		lineageTag: ea91f4a2-a5cf-5fa5-89bc-23dc55cc927d
+		summarizeBy: none
+		sourceColumn: state
+
+	column Region
+		dataType: string
+		lineageTag: a23977e4-a40a-5503-a85a-8e5d47255fb2
+		summarizeBy: none
+		sourceColumn: region
+
+	column 'Pareto Tier'
+		dataType: string
+		lineageTag: 8132ba84-7969-5e15-90ed-20a8b0306ad3
+		summarizeBy: none
+		sourceColumn: pareto_tier
+
+	partition Seller = m
+		mode: dual
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    Data = Source{[Schema = "dbo", Item = "dim_seller"]}[Data],
+				    // folds -> SELECT only these columns
+				    #"Chose columns" = Table.SelectColumns(Data, {"seller_id", "seller_code", "state", "region", "pareto_tier"}),
+				    // folds -> CAST per column
+				    Typed = Table.TransformColumnTypes(#"Chose columns", {{"seller_id", type text}, {"seller_code", type text}, {"state", type text}, {"region", type text}, {"pareto_tier", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

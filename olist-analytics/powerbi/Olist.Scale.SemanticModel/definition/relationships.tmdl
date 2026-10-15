@@ -1,0 +1,41 @@
+relationship 4444266d-7c42-5cd5-98df-593ddeb3582e
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: 'Order Items'.'Order Date'
+	toColumn: Date.Date
+
+relationship 825846a4-7f92-55f5-b583-16582ec116cc
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: 'Order Items'.'Product Id'
+	toColumn: Product.'Product Id'
+
+relationship bab15614-cd37-547d-a093-4d46822cf773
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: 'Order Items'.'Seller Id'
+	toColumn: Seller.'Seller Id'
+
+relationship 73f9eec7-b71e-5b56-a5c6-49bbcb3139c7
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: 'Order Items'.'Customer Unique Id'
+	toColumn: Customer.'Customer Unique Id'
+
+relationship 92fd22d4-61ee-5fb0-88bc-090bbdac1aa0
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: Orders.'Order Date'
+	toColumn: Date.Date
+
+relationship 879ca73c-ba4b-5c5d-b9f8-1663e66d2728
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: Orders.'Customer Unique Id'
+	toColumn: Customer.'Customer Unique Id'

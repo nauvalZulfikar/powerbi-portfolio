@@ -1,0 +1,130 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "sankey_lanes",
+  "position": {
+    "x": 1272,
+    "y": 1080,
+    "z": 1000,
+    "width": 624,
+    "height": 369,
+    "tabOrder": 2700
+  },
+  "visual": {
+    "visualType": "sankey02300D1BE6F5427989F3DE31CCA9E0F32020",
+    "objects": {},
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Where goods flow'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Sankey custom visual (AppSource) · seller region → customer region · items'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Sankey diagram: Where goods flow'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Source": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Freight Lanes"
+                    }
+                  },
+                  "Property": "Seller Region"
+                }
+              },
+              "queryRef": "Freight Lanes.Seller Region",
+              "nativeQueryRef": "Seller Region"
+            }
+          ]
+        },
+        "Destination": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Freight Lanes"
+                    }
+                  },
+                  "Property": "Customer Region"
+                }
+              },
+              "queryRef": "Freight Lanes.Customer Region",
+              "nativeQueryRef": "Customer Region"
+            }
+          ]
+        },
+        "Weight": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Lane Items"
+                }
+              },
+              "queryRef": "_Measures.Lane Items",
+              "nativeQueryRef": "Lane Items"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

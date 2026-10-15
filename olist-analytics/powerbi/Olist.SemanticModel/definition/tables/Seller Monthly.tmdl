@@ -1,0 +1,55 @@
+table 'Seller Monthly'
+	lineageTag: e1991904-dded-5743-af4b-e131623acc7b
+
+	column 'Seller Id'
+		dataType: string
+		isHidden
+		lineageTag: fb693cf6-fc2b-520a-9cda-cd6d6d7bbced
+		summarizeBy: none
+		sourceColumn: seller_id
+
+	column 'Month Start'
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy
+		lineageTag: d888f581-62ed-5def-ba30-58b686f2f198
+		summarizeBy: none
+		sourceColumn: month_start
+
+	column 'Monthly Orders'
+		dataType: int64
+		formatString: 0
+		lineageTag: 99a10427-3b56-5491-9571-1807c46d0eff
+		summarizeBy: none
+		sourceColumn: orders
+
+	column 'Monthly Revenue'
+		dataType: double
+		formatString: \R$ #,0
+		lineageTag: 2ca629b4-c7b9-5262-90c8-90c9f44fc95f
+		summarizeBy: none
+		sourceColumn: revenue
+
+	column 'Monthly Avg Review'
+		dataType: double
+		lineageTag: 1a1d03d8-50a2-54ff-a3d1-3efe1cc40276
+		summarizeBy: none
+		sourceColumn: avg_review
+
+	column 'Monthly Late Rate'
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 223885d6-b432-536a-8b85-5d21220b0d5e
+		summarizeBy: none
+		sourceColumn: late_rate
+
+	partition 'Seller Monthly' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "seller_monthly.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"seller_id", type text}, {"month_start", type date}, {"orders", Int64.Type}, {"revenue", type number}, {"avg_review", type number}, {"late_rate", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

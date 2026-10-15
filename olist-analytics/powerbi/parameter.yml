@@ -1,0 +1,54 @@
+# fabric-cicd parameter.yml — per-environment values for Olist (from tools/pbi-kit/deploy/parameter.example.yml).
+# Keys under replace_value = --env (Test / Prod). No secrets here: workspace ids and the service principal live in
+# GitHub environment variables/secrets. Values in <...> or \\fileserver are placeholders until the workspaces exist.
+find_replace:
+  # Olist (import): Parquet marts written by src/pipeline.py — this Mac's path in git, a gateway share on the Service
+  - find_value: 'expression DataFolder = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "\\\\fileserver\\pbi-test\\olist\\marts\\"
+      Prod: "\\\\fileserver\\pbi\\olist\\marts\\"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+  # Olist (import): the category plan CSV folder Power Query reads
+  - find_value: 'expression PlanFolder = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "\\\\fileserver\\pbi-test\\olist\\plan\\"
+      Prod: "\\\\fileserver\\pbi\\olist\\plan\\"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+  # Olist.Scale (DirectQuery/Dual/agg design): Lakehouse SQL endpoint + database
+  - find_value: 'expression SqlEndpoint = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "<test-workspace>.datawarehouse.fabric.microsoft.com"
+      Prod: "<prod-workspace>.datawarehouse.fabric.microsoft.com"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+  - find_value: 'expression LakehouseDb = "([^"]*)"'
+    is_regex: "true"
+    replace_value: {Test: "olist_lh_test", Prod: "olist_lh"}
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+  # Olist.DirectLake: its one shared expression names endpoint + lakehouse inline
+  - find_value: 'Sql\.Database\("([^"]*)", "<lakehouse-id>"\)'
+    is_regex: "true"
+    replace_value:
+      Test: "<test-workspace>.datawarehouse.fabric.microsoft.com"
+      Prod: "<prod-workspace>.datawarehouse.fabric.microsoft.com"
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+  - find_value: 'Sql\.Database\("[^"]*", "(<lakehouse-id>)"\)'
+    is_regex: "true"
+    replace_value: {Test: "<test-lakehouse-id>", Prod: "<prod-lakehouse-id>"}
+    item_type: "SemanticModel"
+    file_path: "**/definition/expressions.tmdl"
+
+# Olist.Report and Olist.Ops.Report are bound byPath to Olist.SemanticModel: fabric-cicd rebinds them to the model it
+# publishes in the same workspace, so no semantic_model_binding entry is needed.

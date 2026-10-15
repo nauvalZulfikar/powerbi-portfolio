@@ -1,0 +1,21 @@
+table 'Region Access'
+	lineageTag: b238eb52-2201-5f3a-a8aa-8ca1ffa2a5b2
+	isHidden
+
+	column Email
+		dataType: string
+		lineageTag: 23972892-cb1d-545f-80c0-a8568f2a69fa
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Email]
+
+	column Region
+		dataType: string
+		lineageTag: 0b1f74b5-fee6-5f1e-8140-49bd64306d73
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Region]
+
+	partition 'Region Access' = calculated
+		mode: import
+		source = DATATABLE ( "Email", STRING, "Region", STRING, { { "manager.northeast@example.com", "Northeast" }, { "manager.south@example.com", "South" }, { "manager.south@example.com", "Southeast" } } )

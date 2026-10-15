@@ -1,0 +1,15 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "grp_view",
+  "position": {
+    "x": 729,
+    "y": 708,
+    "z": 5000,
+    "width": 174,
+    "height": 36
+  },
+  "visualGroup": {
+    "displayName": "Bars / Map buttons",
+    "groupMode": "ScaleMode"
+  }
+}

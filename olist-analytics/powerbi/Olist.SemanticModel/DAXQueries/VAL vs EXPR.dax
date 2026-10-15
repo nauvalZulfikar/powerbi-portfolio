@@ -1,0 +1,13 @@
+// 9-s12: the same body, two parameter modes. In 2018:
+// AtPY (EXPR) re-evaluates [Revenue] inside DATEADD -> 2017 revenue.
+// AtPYVal (VAL) receives a number already computed for 2018 -> CALCULATE cannot change it -> 2018 revenue.
+EVALUATE
+CALCULATETABLE (
+    ROW (
+        "Revenue 2018", [Revenue],
+        "AtPY (EXPR)", Olist.AtPY ( [Revenue] ),
+        "AtPYVal (VAL)", Olist.AtPYVal ( [Revenue] ),
+        "Growth (VAL, VAL)", Olist.Growth ( [Revenue], Olist.AtPY ( [Revenue] ) )
+    ),
+    'Date'[Year] = 2018
+)

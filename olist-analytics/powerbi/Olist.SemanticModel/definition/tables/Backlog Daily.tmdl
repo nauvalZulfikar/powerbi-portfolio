@@ -1,0 +1,35 @@
+table 'Backlog Daily'
+	lineageTag: 19f34341-da02-56c7-9bb8-2ab749071bf7
+
+	column Date
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy
+		lineageTag: 7f6b3e60-811e-5fc1-8f70-fcb4c709e312
+		summarizeBy: none
+		sourceColumn: date
+
+	column 'In Transit Snapshot'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7eb6eb3a-8bc5-55a6-af78-d2ced6763508
+		summarizeBy: none
+		sourceColumn: in_transit
+
+	column 'Purchased Today'
+		dataType: int64
+		formatString: 0
+		lineageTag: ca580556-5d3a-58b8-bf4b-55128c9226ba
+		summarizeBy: none
+		sourceColumn: purchased_today
+
+	partition 'Backlog Daily' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_backlog_daily.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"date", type date}, {"in_transit", Int64.Type}, {"purchased_today", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,29 @@
+/// Part ÷ whole, blank when the whole is blank or zero. Every % measure uses it.
+function 'Olist.SafePct' = ( num : SCALAR NUMERIC VAL, den : SCALAR NUMERIC VAL ) => DIVIDE ( num, den )
+	lineageTag: d7cec649-19c1-5b12-ab60-1c58a299c38c
+
+	annotation Version = 1.0.0
+
+/// Change from prev to cur as a share of prev; blank without a prev. Both values arrive already computed (VAL).
+function 'Olist.Growth' = ( cur : SCALAR NUMERIC VAL, prev : SCALAR NUMERIC VAL ) => IF ( NOT ISBLANK ( prev ), DIVIDE ( cur - prev, prev ) )
+	lineageTag: d50ce211-908a-59ed-9d8d-1dcc68c968f0
+
+	annotation Version = 1.0.0
+
+/// An expression one year back on the Gregorian calendar. EXPR: the expression is evaluated inside the shifted dates.
+function 'Olist.AtPY' = ( m : SCALAR NUMERIC EXPR ) => CALCULATE ( m, DATEADD ( 'Gregorian', -1, YEAR ) )
+	lineageTag: 1f333a19-a11b-5e86-a1d5-1bc07f0a46aa
+
+	annotation Version = 1.0.0
+
+/// Teaching copy of AtPY with a VAL argument: the value is fixed before CALCULATE runs, so it returns the current year (see DAXQueries/VAL vs EXPR.dax).
+function 'Olist.AtPYVal' = ( m : SCALAR NUMERIC VAL ) => CALCULATE ( m, DATEADD ( 'Gregorian', -1, YEAR ) )
+	lineageTag: 427de78d-722b-51e6-b1d9-b58c406d731c
+
+	annotation Version = 1.0.0
+
+/// Year-over-year growth of any measure: a typed measure reference, so one function serves Revenue, Orders, Customers.
+function 'Olist.YoY' = ( m : MEASUREREF ) => Olist.Growth ( m, Olist.AtPY ( m ) )
+	lineageTag: 92f4a0f0-7af5-51aa-8bf9-647697e0fc20
+
+	annotation Version = 1.0.0

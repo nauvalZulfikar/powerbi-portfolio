@@ -1,0 +1,75 @@
+table Payments
+	lineageTag: 75831216-76e8-53c0-a10a-6d498dda9ec0
+
+	column 'Order Id'
+		dataType: string
+		lineageTag: 20a45a30-06a5-56d6-b4dd-71201e63c8db
+		summarizeBy: none
+		sourceColumn: order_id
+
+	column 'Payment Sequential'
+		dataType: int64
+		formatString: 0
+		lineageTag: 43937e88-8d60-5d88-a15d-8023b093368e
+		summarizeBy: none
+		sourceColumn: payment_sequential
+
+	column 'Order Date'
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy
+		lineageTag: f22f7e6f-d10b-54d8-a4a0-aa18c536c435
+		summarizeBy: none
+		sourceColumn: order_date
+
+	column 'Is Valid'
+		dataType: boolean
+		lineageTag: 9825af00-44ca-5de4-87db-25f971c54cbd
+		summarizeBy: none
+		sourceColumn: is_valid
+
+	column 'Payment Type'
+		dataType: string
+		lineageTag: 794994f4-9e8a-57f8-90d9-72cf921b2dc1
+		summarizeBy: none
+		sourceColumn: payment_type
+
+	column Installments
+		dataType: int64
+		formatString: 0
+		lineageTag: e3eef393-8817-5873-b5d0-603edecef6a9
+		summarizeBy: none
+		sourceColumn: installments
+
+	column 'Installment Band'
+		dataType: string
+		lineageTag: a49ab98e-75ee-5467-a1a7-0be5c307ea94
+		summarizeBy: none
+		sourceColumn: installment_band
+		sortByColumn: 'Installment Band Order'
+
+	column 'Installment Band Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 83973c21-2a0c-5334-b3f8-9dec271a0e44
+		summarizeBy: none
+		sourceColumn: installment_band_order
+
+	column Amount
+		dataType: double
+		formatString: \R$ #,0.00
+		lineageTag: 078c6655-6cf8-5c10-934a-33d8b19b410e
+		summarizeBy: none
+		sourceColumn: payment_value
+
+	partition Payments = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "fact_payments.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"order_id", type text}, {"payment_sequential", Int64.Type}, {"order_date", type date}, {"is_valid", type logical}, {"payment_type", type text}, {"installments", Int64.Type}, {"installment_band", type text}, {"installment_band_order", Int64.Type}, {"payment_value", type number}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,66 @@
+=== olist-analytics — clean clone @ 58ee11c, 2026-10-09 19:02:00
+data/ in clone: []  (gitignored → absent, as on a runner)
+
+### ci: BPA powerbi/Olist.DirectLake.SemanticModel
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Product'[Product Id]
+
+BPA powerbi/Olist.DirectLake.SemanticModel/definition: 75 rules, 35 violations — error 0, warning 11, info 24; 0 skipped
+✓ no violations with severity >= 3
+→ exit 0
+
+### ci: BPA powerbi/Olist.Scale.SemanticModel
+INFO  RELATIONSHIP_COLUMNS_SHOULD_BE_OF_INTEGER_DATA_TYPE     DataColumn             'Seller'[Seller Id]
+
+BPA powerbi/Olist.Scale.SemanticModel/definition: 75 rules, 81 violations — error 0, warning 28, info 53; 0 skipped
+✓ no violations with severity >= 3
+→ exit 0
+
+### ci: BPA powerbi/Olist.SemanticModel
+INFO  REMOVE_ROLES_WITH_NO_MEMBERS                            ModelRole              Role[Region Manager]
+
+BPA powerbi/Olist.SemanticModel/definition: 75 rules, 455 violations — error 0, warning 209, info 246; 0 skipped
+✓ no violations with severity >= 3
+→ exit 0
+
+### ci: TOM powerbi/Olist.DirectLake.SemanticModel
+✓ model.Validate(): no errors
+✓ round-trip serialize/deserialize OK
+→ exit 0
+
+### ci: TOM powerbi/Olist.Scale.SemanticModel
+✓ model.Validate(): no errors
+✓ round-trip serialize/deserialize OK
+→ exit 0
+
+### ci: TOM powerbi/Olist.SemanticModel
+✓ model.Validate(): no errors
+✓ round-trip serialize/deserialize OK
+→ exit 0
+
+### ci: DAX offline
+ok   Window functions.dax
+7/7 passed, 1 with assert file; asserts NOT executed (offline)
+→ exit 0
+
+### ci: pbir validate --all powerbi/Olist.Ops.Report
+Valid (4 warnings, 1 info)
+→ exit 0
+
+### ci: pbir validate --all powerbi/Olist.Report
+Valid (112 warnings, 3 info)
+→ exit 0
+
+### data job (opt-in) — not run here: needs src/pipeline.py to download the source data
+
+### proof it needs data: build_model.py in the clone
+_duckdb.IOException: IO Error: Cannot open database "/private/tmp/claude-501/-Users-shaka-mac-mini/bcbfd734-0774-4cb0-ac25-97fb257b9c4c/scratchpad/clone-olist-analytics/data/warehouse/olist.duckdb" in read-only mode: database does not exist
+→ exit 1
+  (expected non-zero: this is why build_model.py + the model stale check live in the data job)
+
+git status after ci steps (should be clean apart from gitignored output):
+=== olist-analytics ci job verdict: PASS
+
+### data job, model half, on the working copy (local warehouse already built; pipeline.py NOT rerun, no download)
+build_model.py → exit 0
+
+model stale check → exit 0

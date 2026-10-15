@@ -1,0 +1,50 @@
+table 'Seller Tier Transition'
+	lineageTag: a1469aec-3881-568f-9c85-380ad3d0a438
+
+	column 'Tier 2017'
+		dataType: string
+		lineageTag: 31ade3d7-cbc9-5fe1-99a7-c4c7d938842b
+		summarizeBy: none
+		sourceColumn: tier_2017
+		sortByColumn: 'Tier 2017 Order'
+
+	column 'Tier 2018'
+		dataType: string
+		lineageTag: cad5d42d-a596-58b8-90b8-0db28e1e3bf5
+		summarizeBy: none
+		sourceColumn: tier_2018
+		sortByColumn: 'Tier 2018 Order'
+
+	column 'Tier 2017 Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 47fb59e3-4e2a-57c0-8556-34d7144ada91
+		summarizeBy: none
+		sourceColumn: tier_2017_order
+
+	column 'Tier 2018 Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 08c1c307-cb7c-5d72-a07a-69019edae6a1
+		summarizeBy: none
+		sourceColumn: tier_2018_order
+
+	column Sellers
+		dataType: int64
+		formatString: 0
+		lineageTag: adc53d53-3ac9-58aa-8eb6-77de38109dd3
+		summarizeBy: none
+		sourceColumn: sellers
+
+	partition 'Seller Tier Transition' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "seller_tier_transition.parquet")),
+				    Typed = Table.TransformColumnTypes(Source, {{"tier_2017", type text}, {"tier_2018", type text}, {"tier_2017_order", Int64.Type}, {"tier_2018_order", Int64.Type}, {"sellers", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

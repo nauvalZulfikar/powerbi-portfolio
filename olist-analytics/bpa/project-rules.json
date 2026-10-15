@@ -1,0 +1,11 @@
+[
+  {
+    "ID": "PROJ_BRL_MONEY_FORMAT",
+    "Name": "[Project] Money measures are shown in reais (R$)",
+    "Category": "Project",
+    "Description": "olist-analytics: every amount comes from Brazilian orders in BRL. A revenue, freight, price, payment, spend or CLV measure needs an R$ format string, so a card never shows a bare number or a $ sign. Shares, %, counts, labels and colours are not amounts.",
+    "Severity": 3,
+    "Scope": "Measure",
+    "Expression": "RegEx.IsMatch(Name, \"(?i)revenue|freight|price|payment|spend|clv|aov\") and not RegEx.IsMatch(Name, \"(?i)%|share|label|color|alt text|count|customers in\") and not FormatString.Contains(\"R$\")"
+  }
+]

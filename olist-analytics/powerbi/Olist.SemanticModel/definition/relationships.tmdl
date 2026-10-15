@@ -1,0 +1,120 @@
+relationship 340ebea2-6675-5879-92a8-8fcdc5426e36
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: Orders.'Order Date'
+	toColumn: Date.Date
+
+relationship 28d1c760-b8d6-5389-8cf8-17758917c229
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: Orders.'Customer Unique Id'
+	toColumn: Customer.'Customer Unique Id'
+
+relationship b1809ea8-c765-5787-81e7-8c360bfc2551
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: 'Order Items'.'Order Date'
+	toColumn: Date.Date
+
+relationship 12a3f640-80ce-5004-b7a6-aebf5fe74d58
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: 'Order Items'.'Customer Unique Id'
+	toColumn: Customer.'Customer Unique Id'
+
+relationship b91889b1-130d-54e8-a928-7f1d294d148d
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: 'Order Items'.'Product Id'
+	toColumn: Product.'Product Id'
+
+relationship abc882d0-485f-5b80-a9a9-c6009c4bb335
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: 'Order Items'.'Seller Id'
+	toColumn: Seller.'Seller Id'
+
+relationship 094357ed-cafc-5b00-96ae-1b1ef8bb4934
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: Payments.'Order Id'
+	toColumn: Orders.'Order Id'
+
+relationship 819a9d2a-1b6b-5151-84cc-0d23cbf7c2f9
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: 'Seller Monthly'.'Seller Id'
+	toColumn: Seller.'Seller Id'
+
+relationship 03c3cfc6-102d-5e1e-8836-dee16ae85b8b
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: 'Seller Monthly'.'Month Start'
+	toColumn: Date.Date
+
+relationship acc5ec77-e060-51d8-809c-faf200f198fb
+	isActive: false
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: Orders.'Delivered Date'
+	toColumn: Date.Date
+
+relationship 3f10aefb-a20c-5000-8078-98682e4cff9d
+	isActive: false
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: Orders.'Estimated Date'
+	toColumn: Date.Date
+
+relationship 2c663eda-44aa-52d9-8e0e-79e80aed7332
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: many
+	fromColumn: 'Category Plan'.'Category Group'
+	toColumn: Product.'Category Group'
+
+relationship 956dd208-52c4-59fe-8322-5a2b63a43fd0
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: many
+	fromColumn: 'Category Plan'.'Month Start'
+	toColumn: Date.'Month Start'
+
+relationship c13d1800-c031-5360-833e-cc72d3c2a646
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: 'Order Seller'.'Seller Id'
+	toColumn: Seller.'Seller Id'
+
+relationship f5f1b028-eb14-5596-bba4-3df848afa200
+	crossFilteringBehavior: bothDirections
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: 'Order Seller'.'Order Id'
+	toColumn: Orders.'Order Id'
+
+relationship 43631157-a485-56d4-8754-cdff704202a9
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: 'Backlog Daily'.Date
+	toColumn: Date.Date
+
+relationship 4da28ff4-24be-5232-a490-2f051c312442
+	crossFilteringBehavior: oneDirection
+	fromCardinality: many
+	toCardinality: one
+	fromColumn: 'Revenue Forecast'.'Month Start'
+	toColumn: Date.Date

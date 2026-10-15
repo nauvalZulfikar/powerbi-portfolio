@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Compile-only check of te/*.csx against a stub of the Tabular Editor scripting surface it uses.
+       Proves the script is valid C# with the members we call; it does NOT prove TE behaviour. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../te/format-check.csx" />
+  </ItemGroup>
+</Project>

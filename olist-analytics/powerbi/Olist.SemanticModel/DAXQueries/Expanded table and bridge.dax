@@ -1,0 +1,19 @@
+// 9-s1: 'Order Items' as a CALCULATE filter carries Product, Seller, Customer and Date with it.
+EVALUATE
+SUMMARIZECOLUMNS ( Product[Category Group], "Customers buying", [Customers Buying Category], "Revenue", [Revenue] )
+ORDER BY [Revenue] DESC
+
+// 11-s4: item-level vs order-level review per seller tier, and late rate for multi-seller orders
+EVALUATE
+SUMMARIZECOLUMNS (
+    Seller[Pareto Tier],
+    "Item Avg Review", [Item Avg Review],
+    "Order-level (bridge)", [Seller Avg Review (order-level)],
+    "Order-level (TREATAS)", [Seller Order Review]
+)
+EVALUATE
+ROW ( "Single-seller late %", [Single-seller Late Rate %], "Multi-seller late %", [Multi-seller Late Rate %] )
+
+// 11-s3: synthetic plan vs revenue through the many-to-many relationships
+EVALUATE
+SUMMARIZECOLUMNS ( 'Date'[Year], Product[Category Group], "Revenue", [Revenue], "Plan", [Plan Revenue], "vs Plan", [Revenue vs Plan %] )

@@ -1,0 +1,35 @@
+table Date
+	lineageTag: 5aa92b35-cf02-56e9-870a-ca05ff4848d3
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		isKey
+		lineageTag: 169ded39-73bd-5da5-a466-90aae463ee08
+		summarizeBy: none
+		sourceColumn: date
+
+	column Year
+		dataType: int64
+		lineageTag: 3fdafb9a-5b3f-568f-85a8-6f3653383985
+		summarizeBy: none
+		sourceColumn: year
+
+	column 'Year Month'
+		dataType: string
+		lineageTag: 098443e6-3fc6-50f5-ad9f-1165bb275118
+		summarizeBy: none
+		sourceColumn: year_month
+
+	column 'Year Month Key'
+		dataType: int64
+		lineageTag: ad3d0654-d964-58bc-8125-a7d1cfa0d723
+		summarizeBy: none
+		sourceColumn: year_month_key
+
+	partition Date = entity
+		mode: directLake
+		source
+			entityName: dim_date
+			schemaName: dbo
+			expressionSource: DatabaseQuery

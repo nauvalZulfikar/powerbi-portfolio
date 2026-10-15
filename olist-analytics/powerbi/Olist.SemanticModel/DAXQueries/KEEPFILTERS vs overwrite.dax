@@ -1,0 +1,22 @@
+// 6-s3 / 9-s2: the same filter written two ways.
+// Overwrite replaces the row's filter (every tier row shows tier A revenue); KEEPFILTERS intersects (blank off tier A).
+EVALUATE
+SUMMARIZECOLUMNS (
+    Seller[Pareto Tier],
+    "Revenue", [Revenue],
+    "Top Tier (KEEPFILTERS)", [Revenue Top Tier],
+    "Top Tier (overwrite)", [Revenue Top Tier (overwrite)]
+)
+
+// Seller state rows: only the SP row keeps a value with KEEPFILTERS
+EVALUATE
+TOPN (
+    6,
+    SUMMARIZECOLUMNS (
+        Seller[State],
+        "Revenue", [Revenue],
+        "SP (overwrite)", [Revenue SP Sellers],
+        "SP (KEEPFILTERS)", [Revenue SP Sellers (KEEPFILTERS)]
+    ),
+    [Revenue], DESC
+)

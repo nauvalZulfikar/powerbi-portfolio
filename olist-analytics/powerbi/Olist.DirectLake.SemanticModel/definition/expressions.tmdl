@@ -1,0 +1,7 @@
+/// The lakehouse SQL endpoint Direct Lake reads Delta tables through (replace both placeholders).
+expression DatabaseQuery =
+		let
+		    database = Sql.Database("<workspace>.datawarehouse.fabric.microsoft.com", "<lakehouse-id>")
+		in
+		    database
+	lineageTag: 1695fa9d-58b8-579a-a61c-c23e04d6ce51
