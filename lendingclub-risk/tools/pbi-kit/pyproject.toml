@@ -1,0 +1,9 @@
+[project]
+name = "pbi-kit"
+version = "0.1.0"
+description = "Shared Power BI CI/CD kit: BPA, DAX tests, fabric-cicd deploy"
+requires-python = ">=3.11"
+dependencies = ["fabric-cicd>=0.1", "pyyaml>=6"]
+
+[tool.uv]
+package = false

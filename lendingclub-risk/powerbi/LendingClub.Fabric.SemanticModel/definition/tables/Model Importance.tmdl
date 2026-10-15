@@ -1,0 +1,34 @@
+table 'Model Importance'
+	lineageTag: 306711d1-295c-565a-a0de-8096190118ae
+
+	column 'Feature Code'
+		dataType: string
+		isHidden
+		lineageTag: 28a014ea-91e0-5b0d-920f-9312513f7f29
+		summarizeBy: none
+		sourceColumn: feature
+
+	column 'AUC Drop'
+		dataType: double
+		formatString: 0.0000
+		lineageTag: 4c1eec0a-534e-5654-8f3d-f015689ad93a
+		summarizeBy: none
+		sourceColumn: auc_drop
+
+	column Feature
+		dataType: string
+		lineageTag: 6b5aa9a3-9404-5919-bff5-fe5d7e47b225
+		summarizeBy: none
+		sourceColumn: feature_label
+
+	partition 'Model Importance' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    #"Navigated Table" = Source{[Schema = "dbo", Item = "model_importance"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(#"Navigated Table", {{"feature", type text}, {"auc_drop", type number}, {"feature_label", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table

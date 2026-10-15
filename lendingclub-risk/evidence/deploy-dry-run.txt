@@ -1,0 +1,24 @@
+=== deploy.py --env Test --dry-run
+[37m[1m[info]   18:24:46 - Parameter file validation passed[0m
+deploy /Users/shaka-mac-mini/coding-projects/portfolio-analytics/lendingclub-risk/powerbi → Test (DRY RUN)
+items in scope (SemanticModel, Report): 3
+  SemanticModel  'LendingClub (Fabric)'               LendingClub.Fabric.SemanticModel
+  Report         'LendingClub'                        LendingClub.Report
+  SemanticModel  'LendingClub'                        LendingClub.SemanticModel
+  find_replace[0] 'expression DataFolder = "([^"]*)"' → '\\\\pbi-gw01\\lendingclub\\test\\marts\\': LendingClub.SemanticModel/definition/expressions.tmdl
+  find_replace[1] 'expression SqlEndpoint = "([^"]*)"' → 'lendingclub-test.datawarehouse.fabric.microsoft.com': LendingClub.Fabric.SemanticModel/definition/expressions.tmdl
+  find_replace[2] 'expression LakehouseDb = "([^"]*)"' → 'lendingclub_lakehouse_test': LendingClub.Fabric.SemanticModel/definition/expressions.tmdl
+fabric-cicd parameter validation: OK
+exit=0
+=== deploy.py --env Prod --dry-run
+[37m[1m[info]   18:24:46 - Parameter file validation passed[0m
+deploy /Users/shaka-mac-mini/coding-projects/portfolio-analytics/lendingclub-risk/powerbi → Prod (DRY RUN)
+items in scope (SemanticModel, Report): 3
+  SemanticModel  'LendingClub (Fabric)'               LendingClub.Fabric.SemanticModel
+  Report         'LendingClub'                        LendingClub.Report
+  SemanticModel  'LendingClub'                        LendingClub.SemanticModel
+  find_replace[0] 'expression DataFolder = "([^"]*)"' → '\\\\pbi-gw01\\lendingclub\\prod\\marts\\': LendingClub.SemanticModel/definition/expressions.tmdl
+  find_replace[1] 'expression SqlEndpoint = "([^"]*)"' → 'lendingclub-prod.datawarehouse.fabric.microsoft.com': LendingClub.Fabric.SemanticModel/definition/expressions.tmdl
+  find_replace[2] 'expression LakehouseDb = "([^"]*)"' → 'lendingclub_lakehouse': LendingClub.Fabric.SemanticModel/definition/expressions.tmdl
+fabric-cicd parameter validation: OK
+exit=0

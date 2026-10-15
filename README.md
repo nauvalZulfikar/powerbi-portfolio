@@ -1,6 +1,6 @@
 # Power BI Portfolio — Nauval Zulfikar
 
-Five end-to-end Power BI projects on public data. Each one starts from a business question, cleans the source data, builds a star-schema model with DAX, and ends in a report. Every project is a Power BI Project (PBIP: TMDL model + PBIR report) under version control, with Best Practice Analyzer checks and data-quality tests.
+Six end-to-end Power BI projects on public data. Each one starts from a business question, cleans the source data, builds a star-schema model with DAX, and ends in a report. Every project is a Power BI Project (PBIP: TMDL model + PBIR report) under version control, with Best Practice Analyzer checks and data-quality tests.
 
 Open any `.pbip` file in Power BI Desktop. Each folder's README explains the data, the model, and how to rebuild it.
 
@@ -11,6 +11,7 @@ Open any `.pbip` file in Power BI Desktop. Each folder's README explains the dat
 | [CRM Sales Pipeline](crm-pipeline/) | How much of the open pipeline is real, rebuilt from a CRM API with full history? | 71% of the $4.97M open pipeline is stale deals |
 | [Inventory Restock](inventory-restock/) | What should 79 stores order now, and where is cash stuck? | $4.00M order due at a 95% service level while $11.76M sits in slow or dead stock |
 | [Team Delivery KPIs](team-kpi/) | Are four engineering teams delivering on time, built from their real Jira history? | Backlog grew by 1,645 tickets in two years; only 53% of P1 tickets met their 7-day target |
+| [Credit Risk Lab](lendingclub-risk/) | Did higher interest rates on 2.26M LendingClub loans pay for the extra defaults? | Every grade made money: F/G earned about 15% lifetime ROI vs 7.4% for A, once only matured loans are counted |
 
 ## Group Finance: Actual vs Budget
 Consolidated P&L with intercompany eliminations and minority interest. Variance split into exchange-rate and operational parts; calculation group for YTD, prior-year and YoY.
@@ -31,6 +32,10 @@ Safety stock, reorder point and order quantity per store and item, recalculated 
 ## Team Delivery KPIs: Jira to Power BI
 Four Apache teams' public Jira, replayed from full change history so every field is as of 30 Sep 2026. Each team's workflow mapped onto shared stages; lead and cycle time, SLA per priority, workload per engineer, and a data-quality page that accounts for every ticket.
 ![Team Delivery KPIs](team-kpi/reports/screenshots/01-overview.png)
+
+## Credit Risk Lab: LendingClub 2007–2018
+$34.0bn across 2.26M consumer loans. Matured-loan metrics only, vintage curves, loss given default by grade, and a probability-of-default model (AUC 0.691 out-of-time) feeding expected loss on the live book.
+![Credit Risk Lab](lendingclub-risk/reports/screenshots/overview.png)
 
 ---
 Contact: zulfikar.nauval1998@gmail.com · [LinkedIn](https://linkedin.com/in/nauval-zulfikar)

@@ -1,0 +1,4 @@
+find_replace:
+  - find_value: "crm_lakehouse"
+    replace_value:
+      Test: "only-test-has-a-value"

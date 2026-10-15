@@ -1,0 +1,6 @@
+// Mix vs rate effect (10-s13): default-rate change 2014 → 2015 vintage split into grade mix and rate within grade.
+// Expected (DuckDB, matured loans, weights = share of matured loans per grade):
+//   Mix Effect -0.40%   Rate Effect +1.59%   Default Rate Change +1.19%   (mix + rate = change)
+// Not run yet: Power BI Desktop is not available on the build machine.
+EVALUATE
+ROW ( "Mix Effect", [Mix Effect], "Rate Effect", [Rate Effect], "Default Rate Change", [Default Rate Change] )

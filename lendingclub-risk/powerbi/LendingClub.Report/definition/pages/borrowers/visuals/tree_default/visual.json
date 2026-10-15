@@ -1,0 +1,182 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "tree_default",
+  "position": {
+    "x": 256,
+    "y": 564,
+    "z": 2700,
+    "width": 880,
+    "height": 316,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "decompositionTreeVisual",
+    "objects": {},
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Decomposition tree — default rate'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Click + to split by any attribute, or let AI pick the highest value'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Decomposition tree — default rate. Click + to split by any attribute, or let AI pick the highest value'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Analyze": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Default Rate"
+                }
+              },
+              "queryRef": "_Measures.Default Rate",
+              "nativeQueryRef": "Default Rate"
+            }
+          ]
+        },
+        "ExplainBy": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Grade"
+                    }
+                  },
+                  "Property": "Risk Tier"
+                }
+              },
+              "queryRef": "Grade.Risk Tier",
+              "nativeQueryRef": "Risk Tier"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Loans"
+                    }
+                  },
+                  "Property": "Term"
+                }
+              },
+              "queryRef": "Loans.Term",
+              "nativeQueryRef": "Term"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Loans"
+                    }
+                  },
+                  "Property": "Home Ownership"
+                }
+              },
+              "queryRef": "Loans.Home Ownership",
+              "nativeQueryRef": "Home Ownership"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Loans"
+                    }
+                  },
+                  "Property": "Verification Status"
+                }
+              },
+              "queryRef": "Loans.Verification Status",
+              "nativeQueryRef": "Verification Status"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Purpose"
+                    }
+                  },
+                  "Property": "Purpose Group"
+                }
+              },
+              "queryRef": "Purpose.Purpose Group",
+              "nativeQueryRef": "Purpose Group"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Loans"
+                    }
+                  },
+                  "Property": "Income Band"
+                }
+              },
+              "queryRef": "Loans.Income Band",
+              "nativeQueryRef": "Income Band"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

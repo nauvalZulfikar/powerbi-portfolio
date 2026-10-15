@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "help_overview",
+  "position": {
+    "x": 1056,
+    "y": 104,
+    "z": 1100,
+    "width": 520,
+    "height": 260,
+    "tabOrder": 2000
+  },
+  "visualGroup": {
+    "displayName": "How to read",
+    "groupMode": "ScaleMode"
+  },
+  "isHidden": true
+}

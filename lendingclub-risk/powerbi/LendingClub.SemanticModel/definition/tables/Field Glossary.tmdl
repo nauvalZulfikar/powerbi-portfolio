@@ -1,0 +1,65 @@
+table 'Field Glossary'
+	lineageTag: cfc93e3e-56db-568c-ad20-e71570b376e5
+
+	column 'Field Order'
+		dataType: int64
+		lineageTag: ddd67153-80b9-5277-8fb8-18981e4b6bbb
+		summarizeBy: none
+		sourceColumn: Field Order
+		formatString: 0
+		isHidden
+
+	column Sheet
+		dataType: string
+		lineageTag: 8fbdffd1-5efa-5957-aeb4-3c2bf768905b
+		summarizeBy: none
+		sourceColumn: Sheet
+
+	column 'Field Code'
+		dataType: string
+		lineageTag: 9c692f49-0882-5585-985b-1c47c1dd1e7b
+		summarizeBy: none
+		sourceColumn: Field Code
+		isKey
+
+	column 'Field Label'
+		dataType: string
+		lineageTag: adabd0cd-2fb9-578a-b87d-592bbaa194c4
+		summarizeBy: none
+		sourceColumn: Field Label
+		sortByColumn: 'Field Order'
+
+	column Description
+		dataType: string
+		lineageTag: 10becdd6-2def-570b-84a0-0e2b0387bef2
+		summarizeBy: none
+		sourceColumn: Description
+
+	partition 'Field Glossary' = m
+		mode: import
+		source =
+				let
+				    Source = #"Dictionary Raw",
+				    #"Marked Sheet Headers" = Table.AddColumn(Source, "Sheet", each if [Description] = "Description" then [Field Code] else null, type nullable text),
+				    #"Filled Down Sheet" = Table.FillDown(#"Marked Sheet Headers", {"Sheet"}),
+				    // rows above the second header belong to the first sheet, whose header became the column names
+				    #"Replaced First Sheet" = Table.ReplaceValue(#"Filled Down Sheet", null, "LoanStatNew", Replacer.ReplaceValue, {"Sheet"}),
+				    #"Renamed LoanStats" = Table.ReplaceValue(#"Replaced First Sheet", "LoanStatNew", "LoanStats", Replacer.ReplaceValue, {"Sheet"}),
+				    #"Renamed browseNotes" = Table.ReplaceValue(#"Renamed LoanStats", "BrowseNotesFile", "browseNotes", Replacer.ReplaceValue, {"Sheet"}),
+				    #"Removed Sheet Header Rows" = Table.SelectRows(#"Renamed browseNotes", each [Description] <> "Description"),
+				    #"Removed Footnotes" = Table.SelectRows(#"Removed Sheet Header Rows", each [Field Code] <> null and Text.Trim(Text.From([Field Code])) <> ""),
+				    #"Cleaned Text" = Table.TransformColumns(#"Removed Footnotes", {{"Field Code", each Text.Lower(Text.Trim(Text.Replace(Text.From(_), "#(00A0)", " "))), type text},
+				        {"Description", each try Text.Clean(Text.Trim(Text.Replace(Text.From(_), "#(00A0)", " "))) otherwise null, type nullable text}}),
+				    // LCDataDictionary.xlsx swaps the two secondary-applicant FICO descriptions
+				    #"Fixed Swapped FICO Labels" = Table.ReplaceValue(#"Cleaned Text", each [Description], each
+				        if [Field Code] = "sec_app_fico_range_low" then Text.Replace([Description], "(high)", "(low)")
+				        else if [Field Code] = "sec_app_fico_range_high" then Text.Replace([Description], "(low)", "(high)")
+				        else [Description], Replacer.ReplaceValue, {"Description"}),
+				    #"Removed Duplicate Codes" = Table.Distinct(#"Fixed Swapped FICO Labels", {"Field Code"}),
+				    #"Added Field Label" = Table.AddColumn(#"Removed Duplicate Codes", "Field Label", each Text.Proper(Text.Replace([Field Code], "_", " ")), type text),
+				    #"Added Field Order" = Table.AddIndexColumn(#"Added Field Label", "Field Order", 1, 1, Int64.Type),
+				    #"Reordered Columns" = Table.SelectColumns(#"Added Field Order", {"Field Order", "Sheet", "Field Code", "Field Label", "Description"})
+				in
+				    #"Reordered Columns"
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,18 @@
+/// Customers
+table Customer
+
+	column 'Customer Key'
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: Customer Key
+
+	/// Customer name
+	column Name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Name
+
+	partition Customer = m
+		mode: import
+		source = #table({"Customer Key","Name"}, {{1,"A"}})

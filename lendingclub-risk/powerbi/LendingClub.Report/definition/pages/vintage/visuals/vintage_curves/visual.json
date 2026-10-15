@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "vintage_curves",
+  "position": {
+    "x": 256,
+    "y": 260,
+    "z": 3000,
+    "width": 880,
+    "height": 288,
+    "tabOrder": 1400
+  },
+  "visualGroup": {
+    "displayName": "Vintage curves",
+    "groupMode": "ScaleMode"
+  }
+}

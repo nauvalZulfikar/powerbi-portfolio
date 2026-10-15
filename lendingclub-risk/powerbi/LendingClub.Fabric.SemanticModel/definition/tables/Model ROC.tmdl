@@ -1,0 +1,35 @@
+table 'Model ROC'
+	lineageTag: d51beef2-0867-5f06-a367-3ab46410cb4b
+
+	column 'False Positive Rate'
+		dataType: double
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		lineageTag: 394eb2b2-023d-52ba-a6ce-6748389eb385
+		summarizeBy: none
+		sourceColumn: fpr
+
+	column 'True Positive Rate'
+		dataType: double
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		lineageTag: a47fe791-b979-5856-8746-1e06d92a75ab
+		summarizeBy: none
+		sourceColumn: tpr
+
+	column 'Random Classifier'
+		dataType: double
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		lineageTag: 0cd77244-2254-52dc-a0db-5925114212df
+		summarizeBy: none
+		sourceColumn: random
+
+	partition 'Model ROC' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    #"Navigated Table" = Source{[Schema = "dbo", Item = "model_roc"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(#"Navigated Table", {{"fpr", type number}, {"tpr", type number}, {"random", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table

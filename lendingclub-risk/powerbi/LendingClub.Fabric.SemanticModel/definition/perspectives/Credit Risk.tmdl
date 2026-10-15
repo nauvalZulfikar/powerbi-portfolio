@@ -1,0 +1,55 @@
+perspective 'Credit Risk'
+
+	perspectiveTable Loans
+		includeAll
+
+	perspectiveTable Date
+		includeAll
+
+	perspectiveTable Grade
+		includeAll
+
+	perspectiveTable State
+		includeAll
+
+	perspectiveTable Purpose
+		includeAll
+
+	perspectiveTable 'Cash Bridge'
+		includeAll
+
+	perspectiveTable 'Vintage Curve'
+		includeAll
+
+	perspectiveTable 'Vintage Summary'
+		includeAll
+
+	perspectiveTable 'Grade LGD'
+		includeAll
+
+	perspectiveTable 'Book Balance'
+		includeAll
+
+	perspectiveTable 'PD Multiplier'
+		includeAll
+
+	perspectiveTable 'LGD Shock'
+		includeAll
+
+	perspectiveTable MOB
+		includeAll
+
+	perspectiveTable 'Time Calc'
+		includeAll
+
+	perspectiveTable 'DTI Segments'
+		includeAll
+
+	perspectiveTable 'Funnel Stage'
+		includeAll
+
+	perspectiveTable 'Variance Step'
+		includeAll
+
+	perspectiveTable _Measures
+		includeAll

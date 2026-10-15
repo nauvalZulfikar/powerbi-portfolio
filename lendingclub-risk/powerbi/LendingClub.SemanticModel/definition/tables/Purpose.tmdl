@@ -1,0 +1,51 @@
+table Purpose
+	lineageTag: 225012bb-90ab-5b56-8bcd-020d5dc5395c
+
+	column 'Purpose Code'
+		dataType: string
+		isKey
+		isHidden
+		lineageTag: 5d8d8ac2-9f29-55d0-b087-07e517d40345
+		summarizeBy: none
+		sourceColumn: purpose
+
+	column Purpose
+		dataType: string
+		lineageTag: 866b7b21-cfac-5e84-b809-23e0e721c528
+		summarizeBy: none
+		sourceColumn: purpose_label
+
+	column 'Purpose Group' =
+			SWITCH (
+			    TRUE (),
+			    ISBLANK ( Purpose[Purpose] ), "(Blank)",
+			    Purpose[Purpose] IN { "Debt consolidation", "Credit card" }, "Refinancing",
+			    Purpose[Purpose] IN { "Home improvement", "House", "Moving", "Renewable energy" }, "Home",
+			    Purpose[Purpose] IN { "Small business", "Educational" }, "Business & education",
+			    Purpose[Purpose] IN { "Car", "Major purchase", "Vacation", "Wedding", "Medical" }, "Personal spending",
+			    "Other"
+			)
+		dataType: string
+		lineageTag: 6d06ae75-5e72-5a90-b7f7-42afd3d2f24e
+		summarizeBy: none
+
+		extendedProperty GroupingMetadata =
+				{
+				  "version": 0,
+				  "groupedColumns": [{"Column": {"Expression": {"SourceRef": {"Entity": "Purpose"}}, "Property": "Purpose"}}]
+				}
+
+	partition Purpose = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_purpose.parquet")),
+				    #"Kept Report Columns" = Table.SelectColumns(Source, {"purpose"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Kept Report Columns", {{"purpose", type text}}),
+				    #"Duplicated Purpose Code" = Table.DuplicateColumn(#"Changed Type", "purpose", "purpose_label"),
+				    #"Replaced Underscores" = Table.ReplaceValue(#"Duplicated Purpose Code", "_", " ", Replacer.ReplaceText, {"purpose_label"}),
+				    #"Capitalized First Letter" = Table.TransformColumns(#"Replaced Underscores", {{"purpose_label", each Text.Upper(Text.Start(_, 1)) & Text.Middle(_, 1), type text}})
+				in
+				    #"Capitalized First Letter"
+
+	annotation PBI_ResultType = Table

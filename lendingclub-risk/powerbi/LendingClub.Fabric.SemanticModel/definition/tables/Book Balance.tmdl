@@ -1,0 +1,43 @@
+table 'Book Balance'
+	lineageTag: 5ce7d771-3c6a-5403-9ad7-77b4cbb9c9a2
+
+	column 'Book Month End'
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy
+		lineageTag: adb8a7d1-9cfc-588b-929f-e6122f43c836
+		summarizeBy: none
+		sourceColumn: month_end
+
+	column 'Book Sub Grade'
+		dataType: string
+		isHidden
+		lineageTag: a5222fec-9e43-5309-8673-75c920ebbada
+		summarizeBy: none
+		sourceColumn: sub_grade
+
+	column 'Est Outstanding'
+		dataType: double
+		formatString: \$#,0
+		lineageTag: dc3c78bc-6a92-5566-8d5a-d25dff48a1b5
+		summarizeBy: none
+		sourceColumn: est_outstanding
+
+	column 'Book Active Loans'
+		dataType: int64
+		formatString: #,0
+		lineageTag: d4e8541c-c663-5a8e-b38e-88a6b73ae063
+		summarizeBy: none
+		sourceColumn: active_loans
+
+	partition 'Book Balance' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    #"Navigated Table" = Source{[Schema = "dbo", Item = "book_balance"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(#"Navigated Table", {{"month_end", type date}, {"sub_grade", type text}, {"est_outstanding", type number}, {"active_loans", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table

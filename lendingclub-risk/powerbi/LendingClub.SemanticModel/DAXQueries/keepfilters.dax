@@ -1,0 +1,27 @@
+// Replace vs add (6-s3, 9-s2). The row already filters Term; KEEPFILTERS intersects with it
+// (blank on 36-month rows), a plain filter argument overwrites it (every row shows the 60-month rate).
+// Expected (DuckDB, matured resolved funded loans):
+//   A  36 months   Default Rate 5.5%   60M KEEPFILTERS (blank)   60M Replace 8.3%
+//   A  60 months   Default Rate 8.3%   60M KEEPFILTERS 8.3%   60M Replace 8.3%
+//   B  36 months   Default Rate 11.1%   60M KEEPFILTERS (blank)   60M Replace 15.9%
+//   B  60 months   Default Rate 15.9%   60M KEEPFILTERS 15.9%   60M Replace 15.9%
+//   C  36 months   Default Rate 17.6%   60M KEEPFILTERS (blank)   60M Replace 22.1%
+//   C  60 months   Default Rate 22.1%   60M KEEPFILTERS 22.1%   60M Replace 22.1%
+//   D  36 months   Default Rate 22.8%   60M KEEPFILTERS (blank)   60M Replace 27.2%
+//   D  60 months   Default Rate 27.2%   60M KEEPFILTERS 27.2%   60M Replace 27.2%
+//   E  36 months   Default Rate 27.8%   60M KEEPFILTERS (blank)   60M Replace 30.8%
+//   E  60 months   Default Rate 30.8%   60M KEEPFILTERS 30.8%   60M Replace 30.8%
+//   F  36 months   Default Rate 32.2%   60M KEEPFILTERS (blank)   60M Replace 35.7%
+//   F  60 months   Default Rate 35.7%   60M KEEPFILTERS 35.7%   60M Replace 35.7%
+//   G  36 months   Default Rate 35.8%   60M KEEPFILTERS (blank)   60M Replace 37.8%
+//   G  60 months   Default Rate 37.8%   60M KEEPFILTERS 37.8%   60M Replace 37.8%
+// Not run yet: Power BI Desktop is not available on the build machine.
+EVALUATE
+SUMMARIZECOLUMNS (
+    Grade[Grade],
+    Loans[Term],
+    "Default Rate", [Default Rate],
+    "60M KEEPFILTERS", [Default Rate 60M],
+    "60M Replace", [Default Rate 60M (Replace)]
+)
+ORDER BY Grade[Grade], Loans[Term]

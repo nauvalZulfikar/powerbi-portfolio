@@ -1,0 +1,50 @@
+table 'Model Importance'
+	lineageTag: 306711d1-295c-565a-a0de-8096190118ae
+
+	column 'Feature Code'
+		dataType: string
+		isHidden
+		lineageTag: 28a014ea-91e0-5b0d-920f-9312513f7f29
+		summarizeBy: none
+		sourceColumn: feature
+
+	column 'AUC Drop'
+		dataType: double
+		formatString: 0.0000
+		lineageTag: 4c1eec0a-534e-5654-8f3d-f015689ad93a
+		summarizeBy: none
+		sourceColumn: auc_drop
+
+	column Feature
+		dataType: string
+		lineageTag: 6b5aa9a3-9404-5919-bff5-fe5d7e47b225
+		summarizeBy: none
+		sourceColumn: feature_label
+
+	column 'LC Field'
+		dataType: string
+		lineageTag: 5dad660c-1393-5ddb-ae67-0a851130a085
+		summarizeBy: none
+		sourceColumn: lc_field
+		isHidden
+
+	column 'Feature Description'
+		dataType: string
+		lineageTag: def368df-52de-5978-8ed9-0f5a55d3577b
+		summarizeBy: none
+		sourceColumn: feature_description
+
+	partition 'Model Importance' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "model_importance.parquet")),
+				    #"Changed Type" = Table.TransformColumnTypes(Source, {{"feature", type text}, {"auc_drop", type number}, {"feature_label", type text}}),
+				    LcFieldOf = [annual_income = "annual_inc", loan_amount = "loan_amnt", emp_years = "emp_length", credit_history_years = "earliest_cr_line", term_months = "term"],
+				    #"Added LC Field" = Table.AddColumn(#"Changed Type", "lc_field", each Record.FieldOrDefault(LcFieldOf, [feature], [feature]), type text),
+				    #"Merged Field Glossary" = Table.NestedJoin(#"Added LC Field", {"lc_field"}, #"Field Glossary", {"Field Code"}, "Glossary", JoinKind.LeftOuter),
+				    #"Expanded Description" = Table.ExpandTableColumn(#"Merged Field Glossary", "Glossary", {"Description"}, {"feature_description"})
+				in
+				    #"Expanded Description"
+
+	annotation PBI_ResultType = Table

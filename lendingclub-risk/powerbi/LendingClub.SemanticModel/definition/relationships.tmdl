@@ -1,0 +1,38 @@
+relationship 37e4fc8f-3467-5b6c-b158-3fa27408de02
+	fromColumn: Loans.'Issue Date'
+	toColumn: Date.Date
+
+relationship 6dfba487-1229-5a96-90dc-15cebee0a79c
+	isActive: false
+	fromColumn: Loans.'Last Payment Date'
+	toColumn: Date.Date
+
+relationship af4beebf-683a-5058-aa2f-b4b04e09ce10
+	fromColumn: Loans.'Sub Grade'
+	toColumn: Grade.'Sub Grade'
+
+relationship d887c1c1-23d5-5959-8bcc-3b34aac4726a
+	fromColumn: Loans.State
+	toColumn: State.'State Code'
+
+relationship 8526b34f-f6a7-53e5-bbc9-2a46c62da91a
+	fromColumn: Loans.Purpose
+	toColumn: Purpose.'Purpose Code'
+
+relationship 431a5311-15ca-5466-b556-1e41434c2931
+	fromColumn: Grade.Grade
+	toColumn: 'Grade LGD'.'LGD Grade'
+
+relationship 93750250-ba15-5edd-8ba3-408d16edc7c9
+	fromCardinality: many
+	toCardinality: many
+	fromColumn: 'Vintage Curve'.'Vintage Grade'
+	toColumn: Grade.Grade
+
+relationship b515a313-5be3-5827-893b-38e2029923dd
+	fromColumn: 'Book Balance'.'Book Month End'
+	toColumn: Date.Date
+
+relationship d11a5e6d-7d80-5512-83b8-5a8a53a119b1
+	fromColumn: 'Book Balance'.'Book Sub Grade'
+	toColumn: Grade.'Sub Grade'

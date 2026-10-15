@@ -1,0 +1,86 @@
+table Grade
+	lineageTag: d3a3531b-bf83-53d4-9012-49871fa4b115
+
+	column 'Sub Grade'
+		dataType: string
+		isKey
+		lineageTag: 905806a4-9a9c-5db3-85f6-f5734b86aed7
+		summarizeBy: none
+		sourceColumn: sub_grade
+		sortByColumn: 'Sub Grade Sort'
+
+	column Grade
+		dataType: string
+		lineageTag: 90464247-d313-5f46-bb2f-d92116ff7f2c
+		summarizeBy: none
+		sourceColumn: grade
+		sortByColumn: 'Grade Sort'
+
+	column 'Grade Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 13f50476-e568-5138-aebc-4e486897d161
+		summarizeBy: none
+		sourceColumn: grade_sort
+
+	column 'Sub Grade Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 43d5f6aa-8a34-57db-979c-44a3f15216f4
+		summarizeBy: none
+		sourceColumn: sub_grade_sort
+
+	column 'Risk Tier'
+		dataType: string
+		lineageTag: e242a471-8a68-54a8-b0f6-11ae6abc5598
+		summarizeBy: none
+		sourceColumn: risk_tier
+		sortByColumn: 'Risk Tier Sort'
+
+	column 'Risk Tier Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0b0f15d2-e61e-526b-9db8-60b7ba726615
+		summarizeBy: none
+		sourceColumn: risk_tier_sort
+
+	column 'Sub Grade Avg Rate' = CALCULATE ( AVERAGE ( Loans[Interest Rate] ) )
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 8ad41ce2-2e68-5962-b595-9c0294016e84
+		summarizeBy: none
+
+	column 'Sub Grade Loans' = COUNTROWS ( RELATEDTABLE ( Loans ) )
+		dataType: int64
+		formatString: #,0
+		lineageTag: d3553b15-96a5-5bb7-a87f-c557b874b07c
+		summarizeBy: none
+
+	hierarchy 'Credit Grade'
+		lineageTag: 1d0c2246-49e5-5a72-a681-cbb95ba542f9
+
+		level 'Risk Tier'
+			lineageTag: 793dfa23-42da-51ad-ba95-8723ce2b5722
+			column: 'Risk Tier'
+
+		level Grade
+			lineageTag: c7ce8a2a-2598-5d9a-9ec0-8624749be08f
+			column: Grade
+
+		level 'Sub Grade'
+			lineageTag: 6a86019d-5136-5093-aa5f-2a69e1edd5ae
+			column: 'Sub Grade'
+
+	partition Grade = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "dim_grade.parquet")),
+				    #"Changed Type" = Table.TransformColumnTypes(Source, {{"sub_grade", type text}, {"grade", type text}, {"grade_sort", Int64.Type}, {"sub_grade_sort", Int64.Type}, {"risk_tier", type text}, {"risk_tier_sort", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table

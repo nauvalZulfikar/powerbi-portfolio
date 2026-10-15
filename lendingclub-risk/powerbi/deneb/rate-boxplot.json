@@ -1,0 +1,76 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "name": "dataset"
+  },
+  "height": "container",
+  "width": "container",
+  "encoding": {
+    "x": {
+      "field": "Grade",
+      "type": "nominal",
+      "sort": "ascending",
+      "axis": {
+        "labelAngle": 0,
+        "title": null,
+        "labelColor": "#898781",
+        "domainColor": "#E6E4DD"
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "rule",
+        "color": "#52514e"
+      },
+      "encoding": {
+        "y": {
+          "field": "Rate P05",
+          "type": "quantitative",
+          "axis": {
+            "format": ".0%",
+            "title": "Interest rate",
+            "labelColor": "#898781",
+            "gridColor": "#ECEBE6",
+            "titleColor": "#898781"
+          }
+        },
+        "y2": {
+          "field": "Rate P95"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "bar",
+        "size": 36,
+        "color": "#2a78d6",
+        "cornerRadius": 2
+      },
+      "encoding": {
+        "y": {
+          "field": "Rate P25",
+          "type": "quantitative"
+        },
+        "y2": {
+          "field": "Rate P75"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "tick",
+        "size": 36,
+        "thickness": 2,
+        "color": "#FFFFFF"
+      },
+      "encoding": {
+        "y": {
+          "field": "Rate P50",
+          "type": "quantitative"
+        }
+      }
+    }
+  ]
+}

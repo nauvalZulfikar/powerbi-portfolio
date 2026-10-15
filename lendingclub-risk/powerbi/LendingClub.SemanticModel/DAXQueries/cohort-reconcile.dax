@@ -1,0 +1,18 @@
+// DAX cohort vs the SQL vintage curve (10-s7). Cohort Default by MOB recomputes, from loan rows, the share of
+// matured 36-month loans defaulted by month on book k (disconnected MOB table). Pooled over vintage years 2013–14 it
+// must equal 'Vintage Curve' for the 2013–14 cohort, all grades (every 36-month loan of 2013–14 has matured).
+// Expected (DuckDB):
+//   MOB 12   Vintage Curve 2.1%   Cohort Default by MOB 2.1%
+//   MOB 24   Vintage Curve 7.9%   Cohort Default by MOB 7.9%
+//   MOB 36   Vintage Curve 12.3%   Cohort Default by MOB 12.3%
+// Not run yet: Power BI Desktop is not available on the build machine.
+EVALUATE
+CALCULATETABLE (
+    ADDCOLUMNS (
+        FILTER ( VALUES ( MOB[Month On Book] ), MOB[Month On Book] IN { 12, 24, 36 } ),
+        "Cohort Default by MOB", [Cohort Default by MOB],
+        "Vintage Curve", CALCULATE ( MAX ( 'Vintage Curve'[Cum Default Rate] ), 'Vintage Curve'[Vintage] = "2013–14",
+            'Vintage Curve'[Vintage Grade] = "All", TREATAS ( { MOB[Month On Book] }, 'Vintage Curve'[Months on Book] ) )
+    ),
+    Loans[Vintage Year] IN { 2013, 2014 }
+)

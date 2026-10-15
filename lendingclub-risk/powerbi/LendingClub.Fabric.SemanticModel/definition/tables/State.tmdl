@@ -1,0 +1,78 @@
+table State
+	lineageTag: 057189c2-886d-55cb-b173-37c5a54789c4
+
+	column 'State Code'
+		dataType: string
+		isKey
+		lineageTag: e8a01b41-a536-5e4a-8a88-4bc609eb49d7
+		summarizeBy: none
+		sourceColumn: state
+
+	column 'State Name'
+		dataType: string
+		dataCategory: StateOrProvince
+		lineageTag: 62ea2635-1a34-58a2-abfe-f8174212191d
+		summarizeBy: none
+		sourceColumn: state_name
+
+	column Region
+		dataType: string
+		lineageTag: c2654d03-9c6e-5985-a98b-7c759c90d168
+		summarizeBy: none
+		sourceColumn: region
+
+	column Division
+		dataType: string
+		lineageTag: 6c5b38c8-0458-5f8e-989c-8f552932519a
+		summarizeBy: none
+		sourceColumn: division
+
+	column 'Tile Col'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ac99d1b5-152f-5b4f-9825-9eae621a1645
+		summarizeBy: none
+		sourceColumn: tile_col
+
+	column 'Tile Row'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: bb219e48-66ea-5135-83e0-1c42c6e2dbe6
+		summarizeBy: none
+		sourceColumn: tile_row
+
+	column Country
+		dataType: string
+		dataCategory: Country
+		lineageTag: c75075c5-26e3-59d8-89db-eec825eccc59
+		summarizeBy: none
+		sourceColumn: country
+
+	hierarchy Geo
+		lineageTag: 82938dbd-488f-5144-be95-450fc90e731a
+
+		level Region
+			lineageTag: 36b64e2a-63f4-59f0-897f-657065ced86a
+			column: Region
+
+		level Division
+			lineageTag: 1fc452b0-a8ac-5150-9639-b1d8c891d31a
+			column: Division
+
+		level 'State Name'
+			lineageTag: 65973045-3e8f-5866-b991-89217bb23f79
+			column: 'State Name'
+
+	partition State = m
+		mode: dual
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    #"Navigated Table" = Source{[Schema = "dbo", Item = "dim_state"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(#"Navigated Table", {{"state", type text}, {"state_name", type text}, {"region", type text}, {"division", type text}, {"tile_col", Int64.Type}, {"tile_row", Int64.Type}, {"country", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table

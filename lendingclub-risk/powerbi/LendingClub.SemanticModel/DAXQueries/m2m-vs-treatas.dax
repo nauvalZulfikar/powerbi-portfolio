@@ -1,0 +1,26 @@
+// Many-to-many relationship vs TREATAS (11-s3, 9-s4). Risk Tier filters Grade, which reaches 'Vintage Curve'
+// through the m2m relationship on the grade letter; the TREATAS measure switches that relationship off
+// (CROSSFILTER NONE) and builds the same filter at query time. Both columns must be equal on every row.
+// Expected (DuckDB, 2013–14 vintage, pooled defaults / pooled loans of the tier's grades):
+//   Near-prime  MOB 12   3.0% (both measures)
+//   Near-prime  MOB 24   11.2% (both measures)
+//   Near-prime  MOB 36   17.1% (both measures)
+//   Prime  MOB 12   1.0% (both measures)
+//   Prime  MOB 24   4.5% (both measures)
+//   Prime  MOB 36   7.8% (both measures)
+//   Sub-prime  MOB 12   6.2% (both measures)
+//   Sub-prime  MOB 24   18.5% (both measures)
+//   Sub-prime  MOB 36   25.4% (both measures)
+// Not run yet: Power BI Desktop is not available on the build machine.
+EVALUATE
+CALCULATETABLE (
+    SUMMARIZECOLUMNS (
+        Grade[Risk Tier],
+        'Vintage Curve'[Months on Book],
+        "m2m relationship", [Cumulative Default Rate],
+        "TREATAS", [Vintage Cum Default (Tier)]
+    ),
+    'Vintage Curve'[Vintage] = "2013–14",
+    'Vintage Curve'[Months on Book] IN { 12, 24, 36 }
+)
+ORDER BY Grade[Risk Tier], 'Vintage Curve'[Months on Book]

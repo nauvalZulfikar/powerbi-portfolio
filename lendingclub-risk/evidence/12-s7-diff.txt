@@ -1,0 +1,26 @@
+diff --git a/powerbi/LendingClub.Fabric.SemanticModel/definition/tables/_Measures.tmdl b/powerbi/LendingClub.Fabric.SemanticModel/definition/tables/_Measures.tmdl
+index f609bd2..e842df1 100644
+--- a/powerbi/LendingClub.Fabric.SemanticModel/definition/tables/_Measures.tmdl
++++ b/powerbi/LendingClub.Fabric.SemanticModel/definition/tables/_Measures.tmdl
+@@ -23,7 +23,7 @@ table _Measures
+ 
+ 	/// Average funded amount per loan.
+ 	measure 'Avg Loan Size' = DIVIDE ( [Funded Amount], [Loans Issued] )
+-		formatString: \$#,0
++		formatString: \$#,0.00
+ 		displayFolder: Portfolio
+ 		lineageTag: 5e126fe8-3134-5f7d-a077-aef4f35a6482
+ 
+diff --git a/powerbi/LendingClub.SemanticModel/definition/tables/_Measures.tmdl b/powerbi/LendingClub.SemanticModel/definition/tables/_Measures.tmdl
+index 0f4b2fc..253ae01 100644
+--- a/powerbi/LendingClub.SemanticModel/definition/tables/_Measures.tmdl
++++ b/powerbi/LendingClub.SemanticModel/definition/tables/_Measures.tmdl
+@@ -23,7 +23,7 @@ table _Measures
+ 
+ 	/// Average funded amount per loan.
+ 	measure 'Avg Loan Size' = DIVIDE ( [Funded Amount], [Loans Issued] )
+-		formatString: \$#,0
++		formatString: \$#,0.00
+ 		displayFolder: Portfolio
+ 		lineageTag: 5e126fe8-3134-5f7d-a077-aef4f35a6482
+ 

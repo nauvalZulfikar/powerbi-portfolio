@@ -1,0 +1,44 @@
+table 'Risk Metric'
+	lineageTag: a900ffbb-c086-5a29-a887-e86cd8b38096
+
+	column 'Risk Metric'
+		dataType: string
+		lineageTag: 072d68d2-3047-5212-bede-80d73f7d1d23
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Risk Metric Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Risk Metric Fields'
+
+	column 'Risk Metric Fields'
+		dataType: string
+		isHidden
+		lineageTag: 2830a72a-b2a3-5a41-bb38-d2291570031d
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Risk Metric Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	column 'Risk Metric Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3bc02b36-a361-59c8-9f9b-0de75a637bc8
+		summarizeBy: none
+		sourceColumn: [Value3]
+
+	partition 'Risk Metric' = calculated
+		mode: import
+		source =
+				{
+				    ( "Default Rate", NAMEOF ( [Default Rate] ), 0 ),
+				    ( "Loss Rate", NAMEOF ( [Loss Rate] ), 1 ),
+				    ( "Realised ROI", NAMEOF ( [Realised ROI] ), 2 ),
+				    ( "Avg Interest Rate", NAMEOF ( [Avg Interest Rate] ), 3 )
+				}

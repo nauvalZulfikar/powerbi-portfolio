@@ -1,0 +1,19 @@
+table 'LGD Shock'
+	lineageTag: 2d1d5feb-7996-541b-9b91-fcc2776828a2
+
+	column 'LGD Shock'
+		dataType: double
+		lineageTag: d25056a8-668b-512b-bb3d-c725d1a3021b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+		formatString: +0%;-0%;0%
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 0
+				}
+
+	partition 'LGD Shock' = calculated
+		mode: import
+		source = GENERATESERIES ( -0.2, 0.1, 0.05 )

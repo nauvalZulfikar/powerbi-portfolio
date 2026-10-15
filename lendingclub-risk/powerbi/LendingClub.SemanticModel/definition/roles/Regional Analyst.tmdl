@@ -1,0 +1,8 @@
+role 'Regional Analyst'
+	modelPermission: read
+
+	tablePermission 'Region Access' = 'Region Access'[User Email] = USERPRINCIPALNAME ()
+
+
+	tablePermission State = VAR _u = USERPRINCIPALNAME () RETURN NOT ISEMPTY ( FILTER ( 'Region Access', 'Region Access'[User Email] = _u && 'Region Access'[Region] = State[Region] ) )
+

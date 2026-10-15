@@ -1,0 +1,24 @@
+  ✓ fact_loans.loan_id is unique
+  ✓ no loan lost between staging and fact
+  ✓ every loan has an issue date inside dim_date
+  ✓ every loan has a known sub-grade
+  ✓ every loan has a known state
+  ✓ every loan has a known purpose
+  ✓ every loan is scored by the PD model
+  ✓ funded amount reconciles with raw tape (to the dollar)
+  ✓ interest rates plausible (5%–31%)
+  ✓ defaulted loans have a charge-off month on book
+  ✓ net loss never exceeds funded amount
+  ✓ vintage curves are monotone non-decreasing
+  ✓ LGD within [0, 1]
+  ✓ every state has a tile position
+  ✓ cash bridge steps add up to net profit (within 0.01% of funded)
+  ✓ matured loans are almost all resolved (< 1% still open)
+  ✓ every last payment date falls inside dim_date
+  ✓ book balance at Feb 2019 within 10% of the tape's outstanding principal
+  ✓ book balance never negative and every month end is in dim_date
+  ✓ glossary has rows from both sheets
+  ✓ glossary field codes unique
+  ✓ glossary has no footnote / header rows
+  ✓ every PD feature has an LC description (22)
+data tests: OK

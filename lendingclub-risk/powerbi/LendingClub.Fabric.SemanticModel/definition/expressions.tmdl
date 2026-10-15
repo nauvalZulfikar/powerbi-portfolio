@@ -1,0 +1,19 @@
+expression SqlEndpoint = "<workspace>.datawarehouse.fabric.microsoft.com" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 6af280c5-5b7f-58fa-936d-3a313681d2b2
+
+	annotation PBI_ResultType = Text
+
+expression LakehouseDb = "lendingclub_lakehouse" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 682b533a-4f0d-598e-9c15-7a86731b8a7d
+
+	annotation PBI_ResultType = Text
+
+expression RangeStart = #datetime(2007, 1, 1, 0, 0, 0) meta [IsParameterQuery=true, Type="DateTime", IsParameterQueryRequired=true]
+	lineageTag: 02464362-c448-51ed-953e-b40278a50e5e
+
+	annotation PBI_ResultType = DateTime
+
+expression RangeEnd = #datetime(2019, 3, 1, 0, 0, 0) meta [IsParameterQuery=true, Type="DateTime", IsParameterQueryRequired=true]
+	lineageTag: aa8d94cb-aff0-5277-9b5e-993145f54c75
+
+	annotation PBI_ResultType = DateTime

@@ -1,0 +1,22 @@
+table 'Variance Step'
+	lineageTag: e3d61bf1-e393-569c-b784-b05945a057dd
+
+	column Step
+		dataType: string
+		lineageTag: 4fc7b634-c493-5e1f-8cdb-1c8852b0e8f6
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Step]
+		sortByColumn: 'Step Sort'
+
+	column 'Step Sort'
+		dataType: int64
+		lineageTag: a52753c8-4fcb-541b-9eec-5671b367694a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Step Sort]
+		isHidden
+
+	partition 'Variance Step' = calculated
+		mode: import
+		source = DATATABLE ( "Step", STRING, "Step Sort", INTEGER, { { "Grade mix", 1 }, { "Rate within grade", 2 } } )

@@ -1,0 +1,5 @@
+role 'West Region'
+	modelPermission: read
+
+	tablePermission State = State[Region] = "West"
+

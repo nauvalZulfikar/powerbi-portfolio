@@ -1,0 +1,168 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "table_glossary",
+  "position": {
+    "x": 696,
+    "y": 156,
+    "z": 2000,
+    "width": 880,
+    "height": 724,
+    "tabOrder": 300
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "objects": {
+      "grid": [
+        {
+          "properties": {
+            "rowPadding": {
+              "expr": {
+                "Literal": {
+                  "Value": "3L"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'LendingClub data dictionary'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'LCDataDictionary.xlsx, two sheets appended and cleaned in Power Query'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'LendingClub data dictionary. LCDataDictionary.xlsx, two sheets appended and cleaned in Power Query'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Field Glossary"
+                    }
+                  },
+                  "Property": "Field Label"
+                }
+              },
+              "queryRef": "Field Glossary.Field Label",
+              "nativeQueryRef": "Field Label"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Field Glossary"
+                    }
+                  },
+                  "Property": "Field Code"
+                }
+              },
+              "queryRef": "Field Glossary.Field Code",
+              "nativeQueryRef": "Field Code"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Field Glossary"
+                    }
+                  },
+                  "Property": "Sheet"
+                }
+              },
+              "queryRef": "Field Glossary.Sheet",
+              "nativeQueryRef": "Sheet"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Field Glossary"
+                    }
+                  },
+                  "Property": "Description"
+                }
+              },
+              "queryRef": "Field Glossary.Description",
+              "nativeQueryRef": "Description"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Field Glossary"
+                  }
+                },
+                "Property": "Field Label"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": false
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "rows": 1,
+  "checks": [
+    {
+      "column": "[Bridge Total]",
+      "equals": 716036031,
+      "tolerance": 747027
+    },
+    {
+      "column": "[Matured Net Profit]",
+      "equals": 716036031,
+      "tolerance": 747027
+    }
+  ]
+}

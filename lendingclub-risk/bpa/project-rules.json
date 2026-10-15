@@ -1,0 +1,11 @@
+[
+  {
+    "ID": "LC_RATE_MATURED_ONLY",
+    "Name": "[LendingClub] Default / loss / prepayment rates must be measured on matured loans (LC.MaturedOnly)",
+    "Category": "Project",
+    "Description": "Young loans have not had time to default, so a rate over all loans understates risk. Every default, loss or prepayment rate goes through LC.MaturedOnly, a Matured* measure / Loans[Is Matured], or reuses [Default Rate] / [Loss Rate]. Rates that are deliberately on another population are excluded by name: Expected (live book), Predicted (model PD), Cumulative (Vintage Curve), Observed (model test set), Color (formatting helper).",
+    "Severity": 3,
+    "Scope": "Measure",
+    "Expression": "RegEx.IsMatch(Name, \"(?i)(default|loss|prepayment) rate\") and not RegEx.IsMatch(Name, \"(?i)expected|predicted|cumulative|observed|color\") and not RegEx.IsMatch(Expression, \"LC\\.MaturedOnly|Matured|\\[Default Rate\\]|\\[Loss Rate\\]\")"
+  }
+]

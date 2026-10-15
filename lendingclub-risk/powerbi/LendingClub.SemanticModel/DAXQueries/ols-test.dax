@@ -1,0 +1,12 @@
+// Object- and column-level security test (11-s13, 11-s14). In DAX query view pick View as > Business Viewer.
+// Expected: query 1 fails (Loans[Annual Income] cannot be found), query 2 fails ('Model ROC' cannot be found),
+// query 3 returns the default rate per grade (the role still sees every loan).
+// Not run yet: Power BI Desktop is not available on the build machine.
+EVALUATE
+TOPN ( 5, SELECTCOLUMNS ( Loans, "Income", Loans[Annual Income] ) )
+
+EVALUATE
+TOPN ( 5, 'Model ROC' )
+
+EVALUATE
+SUMMARIZECOLUMNS ( Grade[Grade], "Default Rate", [Default Rate] )

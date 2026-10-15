@@ -1,0 +1,30 @@
+table 'Cash Bridge'
+	lineageTag: 0173942c-2c2e-5ef6-b493-148c8e621de6
+
+	column 'Step Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6240958c-497c-52c7-8b84-c777ec725dd0
+		summarizeBy: none
+		sourceColumn: step_sort
+
+	column Step
+		dataType: string
+		isKey
+		lineageTag: 755d5488-36df-53ce-8294-e2be207105b1
+		summarizeBy: none
+		sourceColumn: step
+		sortByColumn: 'Step Sort'
+
+	partition 'Cash Bridge' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    #"Navigated Table" = Source{[Schema = "dbo", Item = "dim_cash_bridge"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(#"Navigated Table", {{"step_sort", Int64.Type}, {"step", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table

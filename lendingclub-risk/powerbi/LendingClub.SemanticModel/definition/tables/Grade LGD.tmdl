@@ -1,0 +1,55 @@
+table 'Grade LGD'
+	lineageTag: 6d778c1a-9c81-5ec2-852e-45a7d64ccc51
+
+	column 'LGD Grade'
+		dataType: string
+		isKey
+		lineageTag: f5c0fb5c-be31-5b24-b513-699fe4619969
+		summarizeBy: none
+		sourceColumn: grade
+
+	column 'Grade Defaulted Loans'
+		dataType: int64
+		formatString: 0
+		lineageTag: ec6016a9-c7b5-55dd-92d1-6f7073121ca4
+		summarizeBy: none
+		sourceColumn: defaulted_loans
+
+	column 'Grade EAD'
+		dataType: double
+		formatString: \$#,0
+		lineageTag: b16c5be3-42ec-5664-999b-91e1df4d6f73
+		summarizeBy: none
+		sourceColumn: exposure_at_default
+
+	column 'Grade Net Recoveries'
+		dataType: double
+		formatString: \$#,0
+		lineageTag: 01fcdc77-2041-5e02-8f67-1cbff2d60115
+		summarizeBy: none
+		sourceColumn: net_recoveries
+
+	column 'Grade LGD Rate'
+		dataType: double
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		lineageTag: 2bebc17b-69a9-592f-a527-b624a3beb0cd
+		summarizeBy: none
+		sourceColumn: lgd
+
+	column 'Grade Months to Default'
+		dataType: double
+		formatString: #,0.0
+		lineageTag: b955f7e7-53c8-5445-a0c6-8dae6dc03b41
+		summarizeBy: none
+		sourceColumn: avg_months_to_default
+
+	partition 'Grade LGD' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "grade_lgd.parquet")),
+				    #"Changed Type" = Table.TransformColumnTypes(Source, {{"grade", type text}, {"defaulted_loans", Int64.Type}, {"exposure_at_default", type number}, {"net_recoveries", type number}, {"lgd", type number}, {"avg_months_to_default", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table

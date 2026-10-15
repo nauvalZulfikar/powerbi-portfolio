@@ -1,0 +1,25 @@
+perspective 'Model Risk'
+
+	perspectiveTable Loans
+		includeAll
+
+	perspectiveTable Grade
+		includeAll
+
+	perspectiveTable 'Model Calibration'
+		includeAll
+
+	perspectiveTable 'Model ROC'
+		includeAll
+
+	perspectiveTable 'Model Importance'
+		includeAll
+
+	perspectiveTable 'Model Metrics'
+		includeAll
+
+	perspectiveTable 'Model Metrics Long'
+		includeAll
+
+	perspectiveTable _Measures
+		includeAll

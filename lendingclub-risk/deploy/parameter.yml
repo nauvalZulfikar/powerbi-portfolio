@@ -1,0 +1,38 @@
+# fabric-cicd parameter.yml for lendingclub-risk (14-s7). Values per environment; no secrets here.
+# Run: uv run --project tools/pbi-kit python tools/pbi-kit/deploy/deploy.py --repo powerbi --env Test --parameter deploy/parameter.yml [--dry-run]
+# The workspace ids come from the CI environment (FABRIC_WS_TEST / FABRIC_WS_PROD), not from this file.
+# Placeholders: replace the gateway share and the Lakehouse names with the real ones before the first publish.
+
+find_replace:
+  # LendingClub (Import): Parquet marts folder. On the Service this is a share the on-premises gateway can read.
+  # Committed value = the analyst's Mac path, so every publish must rewrite it.
+  - find_value: 'expression DataFolder = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: '\\pbi-gw01\lendingclub\test\marts\'
+      Prod: '\\pbi-gw01\lendingclub\prod\marts\'
+    item_type: "SemanticModel"
+    item_name: "LendingClub"
+    file_path: "**/definition/expressions.tmdl"
+
+  # LendingClub (Fabric): composite model on the Lakehouse SQL endpoint, one Lakehouse per environment.
+  - find_value: 'expression SqlEndpoint = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "lendingclub-test.datawarehouse.fabric.microsoft.com"
+      Prod: "lendingclub-prod.datawarehouse.fabric.microsoft.com"
+    item_type: "SemanticModel"
+    item_name: "LendingClub (Fabric)"
+    file_path: "**/definition/expressions.tmdl"
+
+  - find_value: 'expression LakehouseDb = "([^"]*)"'
+    is_regex: "true"
+    replace_value:
+      Test: "lendingclub_lakehouse_test"
+      Prod: "lendingclub_lakehouse"
+    item_type: "SemanticModel"
+    item_name: "LendingClub (Fabric)"
+    file_path: "**/definition/expressions.tmdl"
+
+# The report is bound byPath to ../LendingClub.SemanticModel: fabric-cicd rebinds it to the model it publishes
+# in the same workspace, so no semantic_model_binding is needed.

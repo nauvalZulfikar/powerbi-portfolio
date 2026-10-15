@@ -1,0 +1,149 @@
+=== TOM LendingClub.SemanticModel
+✓ TMDL parsed: compatibility 1702, 27 tables, 9 relationships, 131 measures, 4 expressions
+  Date               cols  10  measures   0  partitions 1  [date table]
+  Grade              cols   8  measures   0  partitions 1
+  State              cols   7  measures   0  partitions 1
+  Cash Bridge        cols   2  measures   0  partitions 1
+  Purpose            cols   3  measures   0  partitions 1
+  Loans              cols  43  measures   0  partitions 1
+  Vintage Curve      cols  10  measures   0  partitions 1
+  Grade LGD          cols   6  measures   0  partitions 1
+  Book Balance       cols   4  measures   0  partitions 1
+  Model Calibration  cols   9  measures   0  partitions 1
+  Model ROC          cols   3  measures   0  partitions 1
+  Model Importance   cols   5  measures   0  partitions 1
+  Model Metrics      cols   9  measures   0  partitions 1
+  Field Glossary     cols   5  measures   0  partitions 1
+  Model Metrics Long cols   3  measures   0  partitions 1
+  Vintage Summary    cols   6  measures   0  partitions 1
+  PD Multiplier      cols   1  measures   0  partitions 1
+  LGD Shock          cols   1  measures   0  partitions 1
+  MOB                cols   1  measures   0  partitions 1
+  DTI Segments       cols   4  measures   0  partitions 1
+  Funnel Stage       cols   2  measures   0  partitions 1
+  Variance Step      cols   2  measures   0  partitions 1
+  Region Access      cols   2  measures   0  partitions 1
+  Risk Metric        cols   3  measures   0  partitions 1
+  Borrower Attribute cols   3  measures   0  partitions 1
+  Time Calc          cols   2  measures   0  partitions 1
+  _Measures          cols   1  measures 131  partitions 1
+  rel Loans[Issue Date] (Many) → Date[Date] (One)
+  rel Loans[Last Payment Date] (Many) → Date[Date] (One)
+  rel Loans[Sub Grade] (Many) → Grade[Sub Grade] (One)
+  rel Loans[State] (Many) → State[State Code] (One)
+  rel Loans[Purpose] (Many) → Purpose[Purpose Code] (One)
+  rel Grade[Grade] (Many) → Grade LGD[LGD Grade] (One)
+  rel Vintage Curve[Vintage Grade] (Many) → Grade[Grade] (Many)
+  rel Book Balance[Book Month End] (Many) → Date[Date] (One)
+  rel Book Balance[Book Sub Grade] (Many) → Grade[Sub Grade] (One)
+  role Regional Analyst: Region Access, State
+  role West Region: State
+  role Business Viewer: Loans, Model ROC, Model Calibration, Model Importance
+  calc group Time Calc: Current, PY, YoY %, YTD, 12M Rolling
+  function LC.MaturedOnly
+  function LC.SafeRate
+  function LC.VsPortfolio
+  calendar Date.Gregorian: Year, Quarter, Month, Date
+  perspective Credit Risk: 18 tables
+  perspective Model Risk: 9 tables
+  OLS Business Viewer: Loans 2 columns hidden
+  OLS Business Viewer: Model ROC hidden
+  OLS Business Viewer: Model Calibration hidden
+  OLS Business Viewer: Model Importance hidden
+  sort-by: Year Quarter→Year Quarter Sort, Month Name→Month, Month Year→Month Year Sort, Sub Grade→Sub Grade Sort, Grade→Grade Sort, Risk Tier→Risk Tier Sort, Step→Step Sort, Outcome→Outcome Sort, Income Band→Income Band Sort, DTI Band→Dti Band Sort, Employment Length→Emp Length Sort, Revolving Utilisation Band→Revol Util Band Sort, Interest Rate Band→Interest Rate Band Sort, Vintage→Vintage Sort, Risk Decile→Decile, Field Label→Field Order, Metric→Metric Order, Summary Vintage→Summary Vintage Sort, DTI Segment→Segment Sort, Stage→Stage Sort, Step→Step Sort, Risk Metric→Risk Metric Order, Risk Metric Fields→Risk Metric Order, Borrower Attribute→Borrower Attribute Order, Borrower Attribute Fields→Borrower Attribute Order, Time Calc→Ordinal
+  refresh policy Loans: keep 12 Year, refresh 3 Month
+✓ model.Validate(): no errors
+✓ round-trip serialize/deserialize OK
+exit=0
+=== TOM LendingClub.Fabric.SemanticModel
+✓ TMDL parsed: compatibility 1702, 25 tables, 13 relationships, 127 measures, 4 expressions
+  Date               cols  10  measures   0  partitions 1  [date table]
+  Grade              cols   6  measures   0  partitions 1
+  State              cols   7  measures   0  partitions 1
+  Cash Bridge        cols   2  measures   0  partitions 1
+  Purpose            cols   2  measures   0  partitions 1
+  Loans              cols  40  measures   0  partitions 1
+  Vintage Curve      cols  10  measures   0  partitions 1
+  Grade LGD          cols   6  measures   0  partitions 1
+  Book Balance       cols   4  measures   0  partitions 1
+  Model Calibration  cols   9  measures   0  partitions 1
+  Model ROC          cols   3  measures   0  partitions 1
+  Model Importance   cols   3  measures   0  partitions 1
+  Model Metrics      cols   9  measures   0  partitions 1
+  Loans Agg          cols   6  measures   0  partitions 1
+  Model Metrics Long cols   3  measures   0  partitions 1
+  Vintage Summary    cols   6  measures   0  partitions 1
+  PD Multiplier      cols   1  measures   0  partitions 1
+  LGD Shock          cols   1  measures   0  partitions 1
+  MOB                cols   1  measures   0  partitions 1
+  DTI Segments       cols   4  measures   0  partitions 1
+  Funnel Stage       cols   2  measures   0  partitions 1
+  Variance Step      cols   2  measures   0  partitions 1
+  Region Access      cols   2  measures   0  partitions 1
+  Time Calc          cols   2  measures   0  partitions 1
+  _Measures          cols   1  measures 127  partitions 1
+  rel Loans[Issue Date] (Many) → Date[Date] (One)
+  rel Loans[Last Payment Date] (Many) → Date[Date] (One)
+  rel Loans[Sub Grade] (Many) → Grade[Sub Grade] (One)
+  rel Loans[State] (Many) → State[State Code] (One)
+  rel Loans[Purpose] (Many) → Purpose[Purpose Code] (One)
+  rel Grade[Grade] (Many) → Grade LGD[LGD Grade] (One)
+  rel Vintage Curve[Vintage Grade] (Many) → Grade[Grade] (Many)
+  rel Book Balance[Book Month End] (Many) → Date[Date] (One)
+  rel Book Balance[Book Sub Grade] (Many) → Grade[Sub Grade] (One)
+  rel Loans Agg[Agg Issue Date] (Many) → Date[Date] (One)
+  rel Loans Agg[Agg Sub Grade] (Many) → Grade[Sub Grade] (One)
+  rel Loans Agg[Agg State] (Many) → State[State Code] (One)
+  rel Loans Agg[Agg Purpose] (Many) → Purpose[Purpose Code] (One)
+  role Regional Analyst: Region Access, State
+  role West Region: State
+  role Business Viewer: Loans, Model ROC, Model Calibration, Model Importance
+  calc group Time Calc: Current, PY, YoY %, YTD, 12M Rolling
+  function LC.MaturedOnly
+  function LC.SafeRate
+  function LC.VsPortfolio
+  calendar Date.Gregorian: Year, Quarter, Month, Date
+  perspective Credit Risk: 18 tables
+  perspective Model Risk: 8 tables
+  OLS Business Viewer: Loans 2 columns hidden
+  OLS Business Viewer: Model ROC hidden
+  OLS Business Viewer: Model Calibration hidden
+  OLS Business Viewer: Model Importance hidden
+  sort-by: Year Quarter→Year Quarter Sort, Month Name→Month, Month Year→Month Year Sort, Sub Grade→Sub Grade Sort, Grade→Grade Sort, Risk Tier→Risk Tier Sort, Step→Step Sort, Outcome→Outcome Sort, Income Band→Income Band Sort, DTI Band→Dti Band Sort, Employment Length→Emp Length Sort, Revolving Utilisation Band→Revol Util Band Sort, Vintage→Vintage Sort, Risk Decile→Decile, Metric→Metric Order, Summary Vintage→Summary Vintage Sort, DTI Segment→Segment Sort, Stage→Stage Sort, Step→Step Sort, Time Calc→Ordinal
+  storage Dual: Date, State, Purpose
+  storage DirectQuery: Loans
+  agg Loans Agg[Agg Issue Date] = GroupBy of Loans[Issue Date]
+  agg Loans Agg[Agg Sub Grade] = GroupBy of Loans[Sub Grade]
+  agg Loans Agg[Agg State] = GroupBy of Loans[State]
+  agg Loans Agg[Agg Purpose] = GroupBy of Loans[Purpose]
+  agg Loans Agg[Agg Funded Amt] = Sum of Loans[Funded Amt]
+  agg Loans Agg[Agg Loans] = Count of Loans
+✓ model.Validate(): no errors
+✓ round-trip serialize/deserialize OK
+exit=0
+=== pbir validate
+[36mValidating LendingClub[0m
+
+
+[32m✓[0m [1mLendingClub[0m validation passed
+
+[2mPages: 10, Visuals: 248[0m
+[2mFields: SKIPPED (--fields)[0m
+[2mQA: SKIPPED (--qa)[0m
+[2mSemantic: SKIPPED (--semantic)[0m
+
+Valid (1 info)
+exit=0
+=== daxtest offline
+DAX tests: 9 file(s), mode offline (syntax/structure/references)
+ok   ci-cash-bridge.dax [assert]
+ok   ci-data-integrity.dax [assert]
+ok   ci-key-measures.dax [assert]
+ok   cohort-reconcile.dax
+ok   expected-loss-reconcile.dax
+ok   keepfilters.dax
+ok   m2m-vs-treatas.dax
+ok   mix-rate-effect.dax
+ok   ols-test.dax
+9/9 passed, 3 with assert file; asserts NOT executed (offline)
+exit=0

@@ -1,0 +1,38 @@
+table 'DTI Segments'
+	lineageTag: 5ff9d8be-40bc-5bfb-9ebc-7b5e7021b057
+
+	column 'DTI Segment'
+		dataType: string
+		lineageTag: 3ab4f396-b331-5882-8a6a-65cb1b5db319
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [DTI Segment]
+		sortByColumn: 'Segment Sort'
+
+	column 'Min DTI'
+		dataType: double
+		lineageTag: 790576b9-7111-5fdc-b595-7d68a28fb184
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Min DTI]
+		isHidden
+
+	column 'Max DTI'
+		dataType: double
+		lineageTag: 25f6c768-9895-5816-bc88-dabc60e5ef70
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Max DTI]
+		isHidden
+
+	column 'Segment Sort'
+		dataType: int64
+		lineageTag: 9d9b75ca-f237-5006-8531-e3059d03abed
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Segment Sort]
+		isHidden
+
+	partition 'DTI Segments' = calculated
+		mode: import
+		source = DATATABLE ( "DTI Segment", STRING, "Min DTI", DOUBLE, "Max DTI", DOUBLE, "Segment Sort", INTEGER, { { "Under 10", 0, 10, 1 }, { "10–20", 10, 20, 2 }, { "20–30", 20, 30, 3 }, { "30–40", 30, 40, 4 }, { "40 and over", 40, 1000, 5 } } )

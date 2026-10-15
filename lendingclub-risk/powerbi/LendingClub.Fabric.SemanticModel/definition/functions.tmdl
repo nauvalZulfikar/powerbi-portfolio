@@ -1,0 +1,13 @@
+/// Evaluates a measure on matured, resolved loans only: the methodology rule behind every lifetime rate, in one place. EXPR: the measure is evaluated inside the CALCULATE, after the filter is applied.
+function 'LC.MaturedOnly' =
+		( m : SCALAR NUMERIC EXPR ) =>
+			CALCULATE ( m, Loans[Is Resolved] = TRUE (), Loans[Is Matured] = TRUE () )
+	lineageTag: 4c0a3a14-f7bf-5e80-9e13-c2aca0b73755
+
+/// Part ÷ whole, blank when the whole is empty. VAL: both numbers are computed once, in the caller's filter context.
+function 'LC.SafeRate' = ( num : SCALAR NUMERIC VAL, den : SCALAR NUMERIC VAL ) => DIVIDE ( num, den )
+	lineageTag: 9092492b-c95b-5258-a6ba-cb8691a911d5
+
+/// A measure minus the same measure over everything selected on the page (percentage points for rates). MEASUREREF: the measure itself is passed, so it can be re-evaluated under ALLSELECTED.
+function 'LC.VsPortfolio' = ( m : MEASUREREF ) => m - CALCULATE ( m, ALLSELECTED () )
+	lineageTag: afa3e288-07b4-5e79-946f-8ad260134141

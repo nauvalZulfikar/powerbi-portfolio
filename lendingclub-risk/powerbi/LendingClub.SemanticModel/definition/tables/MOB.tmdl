@@ -1,0 +1,14 @@
+table MOB
+	lineageTag: 6e9b0284-e45f-5888-a71d-2c9857030e79
+
+	column 'Month On Book'
+		dataType: int64
+		lineageTag: 4d3e3757-064c-5bcf-b6d9-ad1bf73b1806
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month On Book]
+		formatString: 0
+
+	partition MOB = calculated
+		mode: import
+		source = SELECTCOLUMNS ( GENERATESERIES ( 0, 60, 1 ), "Month On Book", [Value] )

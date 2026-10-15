@@ -1,0 +1,40 @@
+{
+  "rows": 1,
+  "checks": [
+    {
+      "column": "[Duplicate Loan IDs]",
+      "equals": 0,
+      "tolerance": 0
+    },
+    {
+      "column": "[Loans Without Grade]",
+      "equals": 0,
+      "tolerance": 0
+    },
+    {
+      "column": "[Loans Without State]",
+      "equals": 0,
+      "tolerance": 0
+    },
+    {
+      "column": "[Loans Without Purpose]",
+      "equals": 0,
+      "tolerance": 0
+    },
+    {
+      "column": "[PD Out Of Range]",
+      "equals": 0,
+      "tolerance": 0
+    },
+    {
+      "column": "[Rates Out Of Range]",
+      "equals": 0,
+      "tolerance": 0
+    },
+    {
+      "column": "[LGD Out Of Range]",
+      "equals": 0,
+      "tolerance": 0
+    }
+  ]
+}

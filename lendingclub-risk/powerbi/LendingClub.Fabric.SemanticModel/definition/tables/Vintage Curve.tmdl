@@ -1,0 +1,84 @@
+table 'Vintage Curve'
+	lineageTag: ac41cf87-5969-5057-9136-18b9d0cfd3c9
+
+	column Vintage
+		dataType: string
+		lineageTag: d0a4c8c3-2272-5643-9ecb-49fb93fec22d
+		summarizeBy: none
+		sourceColumn: vintage
+		sortByColumn: 'Vintage Sort'
+
+	column 'Vintage Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: fccae685-b84d-5258-9ebe-c6f900ae60bf
+		summarizeBy: none
+		sourceColumn: vintage_sort
+
+	column 'Vintage Grade'
+		dataType: string
+		lineageTag: 26dfc1bd-4a60-5222-9243-1bb941238e06
+		summarizeBy: none
+		sourceColumn: grade
+
+	column 'Months on Book'
+		dataType: int64
+		formatString: 0
+		lineageTag: 17f89312-02b2-554e-998b-15c808ba90e1
+		summarizeBy: none
+		sourceColumn: mob
+
+	column 'Vintage Loans'
+		dataType: int64
+		formatString: 0
+		lineageTag: a97ffee3-62c4-5501-a63d-9cd0c0c8f682
+		summarizeBy: none
+		sourceColumn: loans
+
+	column 'Vintage Defaults'
+		dataType: int64
+		formatString: 0
+		lineageTag: d745499e-6f51-582d-bac7-837144ef041e
+		summarizeBy: none
+		sourceColumn: defaults
+
+	column 'Cum Default Rate'
+		dataType: double
+		formatString: 0.00%
+		lineageTag: ca3110dd-e3de-5ede-a54d-9607df46365e
+		summarizeBy: none
+		sourceColumn: cum_default_rate
+
+	column 'Cum Default Rate Dollar'
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 5226cd13-b30e-5998-8cd9-07ec8300ed48
+		summarizeBy: none
+		sourceColumn: cum_default_rate_dollar
+
+	column 'Vintage Funded'
+		dataType: double
+		formatString: \$#,0
+		lineageTag: ddcc233d-9394-562c-b336-2d4b0e8fd2b9
+		summarizeBy: none
+		sourceColumn: funded
+
+	column 'Vintage Defaulted Funded'
+		dataType: double
+		formatString: \$#,0
+		lineageTag: 6d2a9150-cb81-59a2-9bf4-9fe70d711bf4
+		summarizeBy: none
+		sourceColumn: defaulted_funded
+
+	partition 'Vintage Curve' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    #"Navigated Table" = Source{[Schema = "dbo", Item = "vintage_curve"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(#"Navigated Table", {{"vintage", type text}, {"vintage_sort", Int64.Type}, {"grade", type text}, {"mob", Int64.Type}, {"loans", Int64.Type}, {"defaults", Int64.Type}, {"cum_default_rate", type number}, {"cum_default_rate_dollar", type number}, {"funded", type number}, {"defaulted_funded", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table

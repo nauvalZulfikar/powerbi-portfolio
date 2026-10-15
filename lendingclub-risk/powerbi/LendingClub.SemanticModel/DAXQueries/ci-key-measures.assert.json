@@ -1,0 +1,30 @@
+{
+  "rows": 1,
+  "checks": [
+    {
+      "column": "[Loans Issued]",
+      "equals": 2260668,
+      "tolerance": 0
+    },
+    {
+      "column": "[Funded Amount]",
+      "equals": 34004208600,
+      "tolerance": 1
+    },
+    {
+      "column": "[Default Rate]",
+      "equals": 0.146649,
+      "tolerance": 5e-05
+    },
+    {
+      "column": "[AUC]",
+      "equals": 0.6912,
+      "tolerance": 0.0005
+    },
+    {
+      "column": "[Gini]",
+      "equals": 0.3824,
+      "tolerance": 0.001
+    }
+  ]
+}

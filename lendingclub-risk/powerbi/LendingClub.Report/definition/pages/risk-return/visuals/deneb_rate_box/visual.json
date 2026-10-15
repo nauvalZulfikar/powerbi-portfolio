@@ -1,0 +1,206 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "deneb_rate_box",
+  "position": {
+    "x": 256,
+    "y": 896,
+    "z": 2900,
+    "width": 520,
+    "height": 316,
+    "tabOrder": 1200
+  },
+  "visual": {
+    "visualType": "deneb7E15AEF80B9E4D4F8E12924291ECE89A",
+    "objects": {
+      "vega": [
+        {
+          "properties": {
+            "provider": {
+              "expr": {
+                "Literal": {
+                  "Value": "'vegaLite'"
+                }
+              }
+            },
+            "renderMode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'svg'"
+                }
+              }
+            },
+            "jsonSpec": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{\"$schema\": \"https://vega.github.io/schema/vega-lite/v5.json\", \"data\": {\"name\": \"dataset\"}, \"height\": \"container\", \"width\": \"container\", \"encoding\": {\"x\": {\"field\": \"Grade\", \"type\": \"nominal\", \"sort\": \"ascending\", \"axis\": {\"labelAngle\": 0, \"title\": null, \"labelColor\": \"#898781\", \"domainColor\": \"#E6E4DD\"}}}, \"layer\": [{\"mark\": {\"type\": \"rule\", \"color\": \"#52514e\"}, \"encoding\": {\"y\": {\"field\": \"Rate P05\", \"type\": \"quantitative\", \"axis\": {\"format\": \".0%\", \"title\": \"Interest rate\", \"labelColor\": \"#898781\", \"gridColor\": \"#ECEBE6\", \"titleColor\": \"#898781\"}}, \"y2\": {\"field\": \"Rate P95\"}}}, {\"mark\": {\"type\": \"bar\", \"size\": 36, \"color\": \"#2a78d6\", \"cornerRadius\": 2}, \"encoding\": {\"y\": {\"field\": \"Rate P25\", \"type\": \"quantitative\"}, \"y2\": {\"field\": \"Rate P75\"}}}, {\"mark\": {\"type\": \"tick\", \"size\": 36, \"thickness\": 2, \"color\": \"#FFFFFF\"}, \"encoding\": {\"y\": {\"field\": \"Rate P50\", \"type\": \"quantitative\"}}}]}'"
+                }
+              }
+            },
+            "jsonConfig": {
+              "expr": {
+                "Literal": {
+                  "Value": "'{}'"
+                }
+              }
+            },
+            "isNewDialogOpen": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Interest-rate spread inside each grade (box plot)'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Deneb (Vega-Lite): whisker P5–P95, box P25–P75, white tick = median. Spec in powerbi/deneb'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Interest-rate spread inside each grade (box plot). Deneb (Vega-Lite): whisker P5–P95, box P25–P75, white tick = median. Spec in powerbi/deneb'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "dataset": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Grade"
+                    }
+                  },
+                  "Property": "Grade"
+                }
+              },
+              "queryRef": "Grade.Grade",
+              "nativeQueryRef": "Grade"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Rate P05"
+                }
+              },
+              "queryRef": "_Measures.Rate P05",
+              "nativeQueryRef": "Rate P05"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Rate P25"
+                }
+              },
+              "queryRef": "_Measures.Rate P25",
+              "nativeQueryRef": "Rate P25"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Rate P50"
+                }
+              },
+              "queryRef": "_Measures.Rate P50",
+              "nativeQueryRef": "Rate P50"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Rate P75"
+                }
+              },
+              "queryRef": "_Measures.Rate P75",
+              "nativeQueryRef": "Rate P75"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Rate P95"
+                }
+              },
+              "queryRef": "_Measures.Rate P95",
+              "nativeQueryRef": "Rate P95"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

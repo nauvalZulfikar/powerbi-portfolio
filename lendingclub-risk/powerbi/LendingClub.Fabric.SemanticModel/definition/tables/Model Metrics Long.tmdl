@@ -1,0 +1,39 @@
+table 'Model Metrics Long'
+	lineageTag: c7bcd249-8eb6-5597-bb6a-970e3968926f
+
+	column Metric
+		dataType: string
+		lineageTag: 2eea96be-b0ef-5a44-bc14-085ffdfa368b
+		summarizeBy: none
+		sourceColumn: Metric
+		sortByColumn: 'Metric Order'
+
+	column 'Metric Score'
+		dataType: double
+		lineageTag: b378f9cf-6418-5a79-90a2-a201470a4fb7
+		summarizeBy: none
+		sourceColumn: Value
+		formatString: 0.000
+
+	column 'Metric Order'
+		dataType: int64
+		lineageTag: dcc5aaef-a99f-5887-82ba-9eb3f4a95ef3
+		summarizeBy: none
+		sourceColumn: Metric Order
+		formatString: 0
+		isHidden
+
+	partition 'Model Metrics Long' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "model_metrics.parquet")),
+				    #"Kept Metric Columns" = Table.SelectColumns(Source, {"auc", "gini", "ks"}),
+				    #"Renamed Metrics" = Table.RenameColumns(#"Kept Metric Columns", {{"auc", "AUC"}, {"gini", "Gini"}, {"ks", "KS"}}),
+				    #"Unpivoted Metrics" = Table.Unpivot(#"Renamed Metrics", {"AUC", "Gini", "KS"}, "Metric", "Value"),
+				    #"Added Metric Order" = Table.AddIndexColumn(#"Unpivoted Metrics", "Metric Order", 1, 1, Int64.Type),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Added Metric Order", {{"Metric", type text}, {"Value", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table

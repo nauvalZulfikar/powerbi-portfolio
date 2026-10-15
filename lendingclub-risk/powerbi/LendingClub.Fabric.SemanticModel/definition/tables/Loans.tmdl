@@ -1,0 +1,306 @@
+table Loans
+	lineageTag: 2a2cb4b4-0710-52dc-8a3f-905f258d132e
+
+	column 'Loan ID'
+		dataType: int64
+		formatString: 0
+		encodingHint: Value
+		isAvailableInMdx: false
+		lineageTag: ad4babe7-945d-5d70-995c-cfb7eae92ceb
+		summarizeBy: none
+		sourceColumn: loan_id
+
+	column 'Issue Date'
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy
+		lineageTag: 06f4321c-76b0-59da-b4bb-ff64dc5feddd
+		summarizeBy: none
+		sourceColumn: issue_date
+
+	column 'Vintage Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: 23771e0a-870c-5f53-8490-8d904ff56c6c
+		summarizeBy: none
+		sourceColumn: vintage_year
+
+	column 'Sub Grade'
+		dataType: string
+		isHidden
+		lineageTag: 9768fd28-647a-59e6-b0fd-14e4523ef653
+		summarizeBy: none
+		sourceColumn: sub_grade
+
+	column State
+		dataType: string
+		isHidden
+		lineageTag: e9902fd6-a398-5235-a8fc-f7e7482a9329
+		summarizeBy: none
+		sourceColumn: state
+
+	column Purpose
+		dataType: string
+		isHidden
+		lineageTag: 2add4d57-4427-5bc5-b696-345696a2ebe6
+		summarizeBy: none
+		sourceColumn: purpose
+
+	column Term
+		dataType: string
+		lineageTag: 362bb16d-4afb-55af-a783-9d9ed72616c1
+		summarizeBy: none
+		sourceColumn: term
+
+	column 'Home Ownership'
+		dataType: string
+		lineageTag: 39dd33fe-83f7-5b7f-85f0-33a193e306bd
+		summarizeBy: none
+		sourceColumn: home_ownership
+
+	column 'Verification Status'
+		dataType: string
+		lineageTag: 6b76fdbb-7cfa-523e-b979-e62509fc52f7
+		summarizeBy: none
+		sourceColumn: verification_status
+
+	column 'Application Type'
+		dataType: string
+		lineageTag: 08e2eefc-38a9-522b-9ac8-29551fc03653
+		summarizeBy: none
+		sourceColumn: application_type
+
+	column Outcome
+		dataType: string
+		lineageTag: 8d1e7780-9df3-5151-9df9-0a5c6e2e04a5
+		summarizeBy: none
+		sourceColumn: outcome
+		sortByColumn: 'Outcome Sort'
+
+	column 'Outcome Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d2ec0e1f-36ce-5e78-b5ca-7c5ec31bdbf5
+		summarizeBy: none
+		sourceColumn: outcome_sort
+
+	column 'Is Resolved'
+		dataType: boolean
+		lineageTag: e355ebec-5906-55cd-b43c-f33bc81b06b3
+		summarizeBy: none
+		sourceColumn: is_resolved
+
+	column 'Is Matured'
+		dataType: boolean
+		lineageTag: 6eb112a2-2411-5d5e-975c-91848e4e3dc7
+		summarizeBy: none
+		sourceColumn: is_matured
+
+	column 'Is Default'
+		dataType: int64
+		formatString: 0
+		lineageTag: b71cb09c-6119-5e0d-ba52-ffc2c6868c00
+		summarizeBy: none
+		sourceColumn: is_default
+
+	column 'Income Band'
+		dataType: string
+		lineageTag: a720a661-b4f2-5e53-8b3b-4ec319ec9d35
+		summarizeBy: none
+		sourceColumn: income_band
+		sortByColumn: 'Income Band Sort'
+
+	column 'Income Band Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8ced9b3a-9125-51f5-b398-4d9a23856b3a
+		summarizeBy: none
+		sourceColumn: income_band_sort
+
+	column 'DTI Band'
+		dataType: string
+		lineageTag: 49b31ce0-3156-574a-a984-f57d850c6893
+		summarizeBy: none
+		sourceColumn: dti_band
+		sortByColumn: 'Dti Band Sort'
+
+	column 'Dti Band Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c9be0590-3fae-5683-b934-f55c27064200
+		summarizeBy: none
+		sourceColumn: dti_band_sort
+
+	column 'Employment Length'
+		dataType: string
+		lineageTag: b53b5a02-b2f9-5f25-81b0-cae4bb3366fb
+		summarizeBy: none
+		sourceColumn: emp_length
+		sortByColumn: 'Emp Length Sort'
+
+	column 'Emp Length Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 14a0f444-db7d-5930-8d00-d2b98dbcfd77
+		summarizeBy: none
+		sourceColumn: emp_length_sort
+
+	column 'Revolving Utilisation Band'
+		dataType: string
+		lineageTag: dd639d39-f7c6-50db-9dd5-cce5e83d9d7c
+		summarizeBy: none
+		sourceColumn: revol_util_band
+		sortByColumn: 'Revol Util Band Sort'
+
+	column 'Revol Util Band Sort'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4c917d9f-7df8-5ad3-a9d1-f379df1cc7e6
+		summarizeBy: none
+		sourceColumn: revol_util_band_sort
+
+	column 'Funded Amt'
+		dataType: double
+		formatString: \$#,0
+		lineageTag: de20a3a1-e35c-5b0d-b5cc-6fb019473d58
+		summarizeBy: none
+		sourceColumn: funded_amount
+
+	column 'Interest Rate'
+		dataType: double
+		formatString: 0.00%
+		lineageTag: cf9bd7be-168c-5e35-b5f2-db491c8e4025
+		summarizeBy: none
+		sourceColumn: int_rate
+
+	column 'Annual Income'
+		dataType: double
+		lineageTag: 71fc5c50-6fe7-56fd-8fb2-333f6fdf98f1
+		summarizeBy: none
+		sourceColumn: annual_income
+
+	column DTI
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 827cb5af-ef76-5efb-bf29-69dc01dd9196
+		summarizeBy: none
+		sourceColumn: dti
+
+	column 'Principal Paid'
+		dataType: double
+		formatString: \$#,0
+		isAvailableInMdx: false
+		lineageTag: 46ea264d-dfb3-558f-94ec-ea54323ec969
+		summarizeBy: none
+		sourceColumn: principal_paid
+
+	column 'Interest Paid Amt'
+		dataType: double
+		formatString: \$#,0
+		isAvailableInMdx: false
+		lineageTag: 9198e030-9f3c-5f81-aabb-3dd3c12f0cd0
+		summarizeBy: none
+		sourceColumn: interest_paid
+
+	column 'Late Fees Amt'
+		dataType: double
+		formatString: \$#,0
+		isAvailableInMdx: false
+		lineageTag: de99417b-dc7e-5ee3-8b2d-fe953a615adc
+		summarizeBy: none
+		sourceColumn: late_fees
+
+	column 'Net Recoveries Amt'
+		dataType: double
+		formatString: \$#,0
+		isAvailableInMdx: false
+		lineageTag: 3b2e3bb5-1e3e-59c9-b9ba-1522dc4595d9
+		summarizeBy: none
+		sourceColumn: net_recoveries
+
+	column 'EAD Amt'
+		dataType: double
+		formatString: \$#,0
+		isAvailableInMdx: false
+		lineageTag: de4d9333-0af4-52db-a537-46c0070e04b3
+		summarizeBy: none
+		sourceColumn: exposure_at_default
+
+	column 'Net Loss Amt'
+		dataType: double
+		formatString: \$#,0
+		isAvailableInMdx: false
+		lineageTag: 5764b60c-19f8-5e8b-aba0-ca13776d87df
+		summarizeBy: none
+		sourceColumn: net_loss
+
+	column 'Net Profit Amt'
+		dataType: double
+		formatString: \$#,0
+		isAvailableInMdx: false
+		lineageTag: 383097f7-78ad-572f-8b5e-ed6cf42e1965
+		summarizeBy: none
+		sourceColumn: net_profit
+
+	column 'Outstanding Principal Amt'
+		dataType: double
+		formatString: \$#,0
+		isAvailableInMdx: false
+		lineageTag: 23781deb-279d-5086-8f14-0d4a7dff3217
+		summarizeBy: none
+		sourceColumn: outstanding_principal
+
+	column 'Months To Default'
+		dataType: int64
+		formatString: 0
+		lineageTag: 4c8e29c5-2c70-5124-a2e7-839e2b780e5c
+		summarizeBy: none
+		sourceColumn: months_to_default
+
+	column 'Last Payment Date'
+		dataType: dateTime
+		isHidden
+		formatString: dd mmm yyyy
+		lineageTag: 31150480-3138-5d24-92b6-734456d88f7c
+		summarizeBy: none
+		sourceColumn: last_payment_date
+
+	column PD
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 81c24f16-c562-5f44-9507-07293a8b7dc1
+		summarizeBy: none
+		sourceColumn: pd
+
+	column 'PD Band'
+		dataType: string
+		lineageTag: 8890ae3f-319d-56b8-9b6f-9d1be53cd2f7
+		summarizeBy: none
+		sourceColumn: pd_band
+
+	column 'Expected Loss Amt'
+		dataType: double
+		formatString: \$#,0
+		isAvailableInMdx: false
+		lineageTag: 1b2b5eae-d508-540e-9c0e-56d68300d9a3
+		summarizeBy: none
+		sourceColumn: expected_loss
+
+	partition Loans = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    #"Navigated Table" = Source{[Schema = "dbo", Item = "fact_loans"]}[Data],
+				    #"Kept Report Columns" = Table.SelectColumns(#"Navigated Table", {"loan_id", "issue_date", "vintage_year", "sub_grade", "state", "purpose", "term", "home_ownership", "verification_status", "application_type", "outcome", "outcome_sort", "is_resolved", "is_matured", "is_default", "income_band", "income_band_sort", "dti_band", "dti_band_sort", "emp_length", "emp_length_sort", "revol_util_band", "revol_util_band_sort", "funded_amount", "int_rate", "annual_income", "dti", "principal_paid", "interest_paid", "late_fees", "net_recoveries", "exposure_at_default", "net_loss", "net_profit", "outstanding_principal", "months_to_default", "last_payment_date", "pd", "pd_band", "expected_loss"}),
+				    #"Kept Funded Loans" = Table.SelectRows(#"Kept Report Columns", each [funded_amount] > 0),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Kept Funded Loans", {{"loan_id", Int64.Type}, {"issue_date", type date}, {"vintage_year", Int64.Type}, {"sub_grade", type text}, {"state", type text}, {"purpose", type text}, {"term", type text}, {"home_ownership", type text}, {"verification_status", type text}, {"application_type", type text}, {"outcome", type text}, {"outcome_sort", Int64.Type}, {"is_resolved", type logical}, {"is_matured", type logical}, {"is_default", Int64.Type}, {"income_band", type text}, {"income_band_sort", Int64.Type}, {"dti_band", type text}, {"dti_band_sort", Int64.Type}, {"emp_length", type text}, {"emp_length_sort", Int64.Type}, {"revol_util_band", type text}, {"revol_util_band_sort", Int64.Type}, {"funded_amount", type number}, {"int_rate", type number}, {"annual_income", type number}, {"dti", type number}, {"principal_paid", type number}, {"interest_paid", type number}, {"late_fees", type number}, {"net_recoveries", type number}, {"exposure_at_default", type number}, {"net_loss", type number}, {"net_profit", type number}, {"outstanding_principal", type number}, {"months_to_default", Int64.Type}, {"last_payment_date", type date}, {"pd", type number}, {"pd_band", type text}, {"expected_loss", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table

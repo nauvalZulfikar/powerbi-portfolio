@@ -1,0 +1,74 @@
+table 'Model Metrics'
+	lineageTag: 338297e3-2439-5f75-809f-f2be2555eae8
+
+	column Model
+		dataType: string
+		lineageTag: 64aa6f98-7fd4-51e0-9e7f-009f6fedb078
+		summarizeBy: none
+		sourceColumn: model
+
+	column 'Train Window'
+		dataType: string
+		lineageTag: a538d3d3-153c-5064-b349-acecdba98f60
+		summarizeBy: none
+		sourceColumn: train_window
+
+	column 'Test Window'
+		dataType: string
+		lineageTag: 371cdc16-437e-5fa9-b83e-a4ed588b4b50
+		summarizeBy: none
+		sourceColumn: test_window
+
+	column 'Train Loans'
+		dataType: int64
+		formatString: 0
+		lineageTag: 65fdc498-970b-54c7-a048-224c2a86abaa
+		summarizeBy: none
+		sourceColumn: train_loans
+
+	column 'Test Loans'
+		dataType: int64
+		formatString: 0
+		lineageTag: 4cbc0835-bca2-5d79-bfc6-a4d16c8475a7
+		summarizeBy: none
+		sourceColumn: test_loans
+
+	column 'Test Default Rate'
+		dataType: double
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		lineageTag: a0fe521a-e78d-56b0-b3b0-7f9f9708b2ce
+		summarizeBy: none
+		sourceColumn: test_default_rate
+
+	column 'AUC Value'
+		dataType: double
+		formatString: 0.000
+		lineageTag: c6ddf495-893e-50a0-a290-f8bb4f7b66fe
+		summarizeBy: none
+		sourceColumn: auc
+
+	column 'Gini Value'
+		dataType: double
+		formatString: 0.000
+		lineageTag: 9c0ab1a1-b160-51d7-8154-12036adedf83
+		summarizeBy: none
+		sourceColumn: gini
+
+	column 'KS Value'
+		dataType: double
+		formatString: 0.000
+		lineageTag: e3d16a37-c50d-5453-8372-efec21abc869
+		summarizeBy: none
+		sourceColumn: ks
+
+	partition 'Model Metrics' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    #"Navigated Table" = Source{[Schema = "dbo", Item = "model_metrics"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(#"Navigated Table", {{"model", type text}, {"train_window", type text}, {"test_window", type text}, {"train_loans", Int64.Type}, {"test_loans", Int64.Type}, {"test_default_rate", type number}, {"auc", type number}, {"gini", type number}, {"ks", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table

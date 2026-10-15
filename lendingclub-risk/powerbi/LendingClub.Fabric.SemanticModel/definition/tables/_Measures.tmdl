@@ -1,0 +1,974 @@
+table _Measures
+	lineageTag: 9d6220c3-34be-59df-bb6b-996b284814cc
+
+	/// Number of loans originated.
+	measure 'Loans Issued' = COUNTROWS ( Loans )
+		formatString: #,0
+		displayFolder: Portfolio
+		lineageTag: 6acb1eb4-8d08-5d89-878c-b27650aa43da
+
+	/// Principal funded by investors. Dynamic format: $bn / $m / $k by size.
+	measure 'Funded Amount' = SUM ( Loans[Funded Amt] )
+		displayFolder: Portfolio
+		lineageTag: 63317367-173b-58b0-a2b8-fa8c7d1fc0c8
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e9, "$#,0.0,,,""bn""",
+				        _v >= 1e6, "$#,0.0,,""m""",
+				        _v >= 1e3, "$#,0,""k""",
+				        "$#,0"
+				    )
+
+	/// Average funded amount per loan.
+	measure 'Avg Loan Size' = DIVIDE ( [Funded Amount], [Loans Issued] )
+		formatString: \$#,0
+		displayFolder: Portfolio
+		lineageTag: 5e126fe8-3134-5f7d-a077-aef4f35a6482
+
+	/// Funded-amount-weighted interest rate.
+	measure 'Avg Interest Rate' = DIVIDE ( SUMX ( Loans, Loans[Funded Amt] * Loans[Interest Rate] ), [Funded Amount] )
+		formatString: 0.00%
+		displayFolder: Portfolio
+		lineageTag: 69f79ca4-571e-5ac3-91a1-cba002993e53
+
+	/// Average self-reported annual income of the borrowers.
+	measure 'Avg Annual Income' = AVERAGE ( Loans[Annual Income] )
+		formatString: \$#,0
+		displayFolder: Portfolio
+		lineageTag: 34a41c2f-7670-5cb2-b826-81009179c2c0
+
+	/// Average debt-to-income ratio (%).
+	measure 'Avg DTI' = AVERAGE ( Loans[DTI] )
+		formatString: #,0.0
+		displayFolder: Portfolio
+		lineageTag: fcb705f6-6fc8-59fb-aa2f-a4f829498973
+
+	/// Loans still being repaid (current or delinquent).
+	measure 'Active Loans' = CALCULATE ( [Loans Issued], Loans[Outcome] IN { "Current", "Delinquent" } )
+		formatString: #,0
+		displayFolder: Portfolio
+		lineageTag: 6fdfb91d-1719-50eb-ace9-62b41af23fba
+
+	/// Principal still owed on the tape at the data cut-off.
+	measure 'Outstanding Principal' = SUM ( Loans[Outstanding Principal Amt] )
+		formatString: \$#,0
+		displayFolder: Portfolio
+		lineageTag: a51d3f4c-4202-5b2d-bd87-db41fe817fe3
+
+	/// Share of active loans that are late or in grace period.
+	measure 'Delinquency Rate' = DIVIDE ( CALCULATE ( [Loans Issued], Loans[Outcome] = "Delinquent" ), [Active Loans] )
+		formatString: 0.00%
+		displayFolder: Portfolio
+		lineageTag: b23f8016-f143-569e-8b09-8fcbc40a8bf0
+
+	/// Share of funded amount within the visual selection.
+	measure 'Funded Share' = DIVIDE ( [Funded Amount], CALCULATE ( [Funded Amount], ALLSELECTED () ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Portfolio
+		lineageTag: ad087001-d965-5fc0-8cd6-38687054bba2
+
+	/// Resolved loans whose full term ended before the data cut-off (Sep 2018) — their outcome is final.
+	measure 'Matured Loans' = LC.MaturedOnly ( [Loans Issued] )
+		formatString: #,0
+		displayFolder: Credit Risk
+		lineageTag: 9dd1d126-2df6-54f2-89af-72fcaf0fed9e
+
+	/// Defaults among matured loans (LC.MaturedOnly) — numerator of Default Rate.
+	measure 'Matured Defaults' = LC.MaturedOnly ( [Defaults] )
+		formatString: #,0
+		displayFolder: Credit Risk
+		lineageTag: 3098a3e3-63fc-576b-983f-85e78e71815c
+
+	/// Charged-off or defaulted loans.
+	measure Defaults = SUM ( Loans[Is Default] )
+		formatString: #,0
+		displayFolder: Credit Risk
+		lineageTag: 9edefa7f-220f-54d2-a4de-5ff7e4f8b6bf
+
+	/// Lifetime default rate on matured loans. Young loans are excluded: early defaults resolve before good payers do, which would overstate risk.
+	measure 'Default Rate' = LC.SafeRate ( [Matured Defaults], [Matured Loans] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Credit Risk
+		lineageTag: b22e49da-45b3-5b13-86a6-2c202f7e9820
+
+	/// Funded amount of defaulted loans ÷ funded amount of resolved loans.
+	measure 'Dollar Default Rate' =
+			DIVIDE (
+			    CALCULATE ( [Funded Amount], Loans[Is Default] = 1, Loans[Is Matured] = TRUE () ),
+			    CALCULATE ( [Funded Amount], Loans[Is Resolved] = TRUE (), Loans[Is Matured] = TRUE () )
+			)
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Credit Risk
+		lineageTag: 7383a94d-366e-59c8-a199-d4d91bd520d5
+
+	/// Unpaid principal at charge-off.
+	measure 'Exposure at Default' = SUM ( Loans[EAD Amt] )
+		formatString: \$#,0
+		displayFolder: Credit Risk
+		lineageTag: 3b1736db-14d0-5e0d-94b8-51828257d7fe
+
+	/// Post charge-off recoveries net of collection fees.
+	measure 'Net Recoveries' = SUM ( Loans[Net Recoveries Amt] )
+		formatString: \$#,0
+		displayFolder: Credit Risk
+		lineageTag: f536331e-4fd7-5c89-9b60-65a4c6445d45
+
+	/// Exposure at default minus net recoveries.
+	measure 'Net Credit Loss' = SUM ( Loans[Net Loss Amt] )
+		formatString: \$#,0
+		displayFolder: Credit Risk
+		lineageTag: 87a8706d-cb9d-5289-b466-c60295044d85
+
+	/// Loss given default = net credit loss ÷ exposure at default.
+	measure LGD = DIVIDE ( [Net Credit Loss], [Exposure at Default] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Credit Risk
+		lineageTag: 604e4fc9-5184-55d9-87b7-30154ab1857f
+
+	/// Net recoveries ÷ exposure at default on charged-off loans.
+	measure 'Recovery Rate' = DIVIDE ( [Net Recoveries], [Exposure at Default] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Credit Risk
+		lineageTag: 2a1c7a22-0c9e-5aaf-b0ae-6e6d971ae57b
+
+	/// Lifetime net credit loss ÷ funded amount, matured loans.
+	measure 'Loss Rate' = LC.MaturedOnly ( DIVIDE ( [Net Credit Loss], [Funded Amount] ) )
+		formatString: 0.00%
+		displayFolder: Credit Risk
+		lineageTag: 7eea77bb-6f24-55ad-b29e-1b81162d4828
+
+	/// Months on book when the loan was charged off.
+	measure 'Avg Months to Default' = AVERAGE ( Loans[Months To Default] )
+		formatString: #,0.0
+		displayFolder: Credit Risk
+		lineageTag: 959f8274-e2a6-541e-aa6d-f1ca836d2b25
+
+	/// Default rate minus the all-portfolio default rate (percentage points).
+	measure 'Default Rate vs Portfolio' = LC.VsPortfolio ( [Default Rate] )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Credit Risk
+		lineageTag: 56053c43-c111-5901-a696-da33476e769a
+
+	/// Traffic-light colour for default-rate conditional formatting.
+	measure 'Default Rate Color' =
+			VAR _r = [Default Rate]
+			RETURN
+			    SWITCH ( TRUE (),
+			        ISBLANK ( _r ), "#9AA4B2",
+			        _r >= 0.30, "#C2410C",
+			        _r >= 0.20, "#F59E0B",
+			        _r >= 0.12, "#EAB308",
+			        "#0F766E"
+			    )
+		displayFolder: Credit Risk
+		lineageTag: 3de8566f-dcb7-5c65-b63b-ef0269f469bf
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Interest paid by borrowers (all loans).
+	measure 'Interest Earned' = SUM ( Loans[Interest Paid Amt] )
+		formatString: \$#,0
+		displayFolder: Returns
+		lineageTag: 6b0e8b61-5595-57f5-a9ac-927b7bfe8217
+
+	/// Cash received minus principal funded, resolved loans only. Dynamic format.
+	measure 'Net Profit' = SUM ( Loans[Net Profit Amt] )
+		displayFolder: Returns
+		lineageTag: 3dd3eefa-12be-53e0-896d-71cf1fe0f2cb
+		formatStringDefinition =
+				VAR _v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH ( TRUE (),
+				        _v >= 1e9, "$#,0.0,,,""bn""",
+				        _v >= 1e6, "$#,0.0,,""m""",
+				        _v >= 1e3, "$#,0,""k""",
+				        "$#,0"
+				    )
+
+	/// Lifetime net profit ÷ funded amount on matured loans (final outcomes only).
+	measure 'Realised ROI' = LC.MaturedOnly ( DIVIDE ( [Net Profit], [Funded Amount] ) )
+		formatString: 0.00%
+		displayFolder: Returns
+		lineageTag: 74bce2e8-3877-5df3-a153-77540804fb60
+
+	/// Series blue; status red only when a segment lost money.
+	measure 'ROI Color' = IF ( [Realised ROI] < 0, "#d03b3b", "#2a78d6" )
+		displayFolder: Returns
+		lineageTag: 7c82d49f-80a1-59d5-a84e-912871a2307b
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Average model probability of default (lifetime, at origination).
+	measure 'Avg PD' = AVERAGE ( Loans[PD] )
+		formatString: 0.00%
+		displayFolder: Expected Loss
+		lineageTag: 1a279f17-b7fe-5734-87e4-ecab351fd0fe
+
+	/// Live book: outstanding principal × PD × grade LGD.
+	measure 'Expected Loss' = SUM ( Loans[Expected Loss Amt] )
+		formatString: \$#,0
+		displayFolder: Expected Loss
+		lineageTag: 95081b13-cff7-5cde-95b6-9f0e037b142e
+
+	/// Expected loss ÷ outstanding principal of the live book.
+	measure 'Expected Loss Rate' = DIVIDE ( [Expected Loss], CALCULATE ( [Outstanding Principal], Loans[Outcome] IN { "Current", "Delinquent" } ) )
+		formatString: 0.00%
+		displayFolder: Expected Loss
+		lineageTag: 14c5ecf8-4a9c-5abf-a80c-1f310ec087a4
+
+	/// Average PD on matured loans — compare with Default Rate.
+	measure 'Predicted Default Rate' = LC.MaturedOnly ( [Avg PD] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Expected Loss
+		lineageTag: 68729af0-d747-53b7-adbc-59cd969cbd33
+
+	/// Area under the ROC curve on the 2015 out-of-time test set.
+	measure AUC = MAX ( 'Model Metrics'[AUC Value] )
+		formatString: 0.000
+		displayFolder: Expected Loss
+		lineageTag: 193050fb-138f-5664-b6ae-8a3d24ff7714
+
+	/// Gini coefficient of the PD model on the 2015 out-of-time test set (2 × AUC − 1).
+	measure Gini = MAX ( 'Model Metrics'[Gini Value] )
+		formatString: 0.000
+		displayFolder: Expected Loss
+		lineageTag: f9f44cef-4881-5999-be88-21231f91b982
+
+	/// Kolmogorov–Smirnov separation between defaulters and payers.
+	measure KS = MAX ( 'Model Metrics'[KS Value] )
+		formatString: 0.000
+		displayFolder: Expected Loss
+		lineageTag: 62c19df3-b02d-53ea-b511-1170fbd5d14e
+
+	/// Share of all test-set defaults caught in the riskiest 10% of loans.
+	measure 'Top Decile Capture' = CALCULATE ( MAX ( 'Model Calibration'[Cum Default Capture] ), 'Model Calibration'[Risk Decile] = "D10" )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Expected Loss
+		lineageTag: 57574f6a-83ff-5974-86e1-c8b9a7f34549
+
+	/// Default rate in the riskiest 10% of loans ÷ the overall default rate (2015 test set).
+	measure 'Top Decile Lift' = CALCULATE ( MAX ( 'Model Calibration'[Lift] ), 'Model Calibration'[Risk Decile] = "D10" )
+		formatString: 0.00x
+		displayFolder: Expected Loss
+		lineageTag: 3612d57a-5dc0-554e-ba6d-a220e405e399
+
+	/// Share of a vintage's 36-month loans defaulted by the month on book. Shows all grades unless one grade is selected.
+	measure 'Cumulative Default Rate' =
+			IF (
+			    HASONEVALUE ( 'Vintage Curve'[Vintage Grade] ),
+			    AVERAGE ( 'Vintage Curve'[Cum Default Rate] ),
+			    IF (
+			        ISCROSSFILTERED ( 'Vintage Curve'[Vintage Grade] ),
+			        -- Risk tier / grade filter arrives through the many-to-many relationship: pool the selected grades
+			        DIVIDE ( SUM ( 'Vintage Curve'[Vintage Defaults] ), SUM ( 'Vintage Curve'[Vintage Loans] ) ),
+			        CALCULATE ( AVERAGE ( 'Vintage Curve'[Cum Default Rate] ), 'Vintage Curve'[Vintage Grade] = "All" )
+			    )
+			)
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Vintage
+		lineageTag: 0275b363-c25d-5811-9def-7c1423f93299
+
+	/// Highest cumulative default rate any issue cohort reached, all grades (Vintage Summary, grouped in Power Query).
+	measure 'Peak Cohort Cum Default' = CALCULATE ( MAX ( 'Vintage Summary'[Lifetime Cum Default Rate] ), 'Vintage Summary'[Summary Grade] = "All" )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Vintage
+		lineageTag: 6d679c44-dde3-5c96-a142-af97e0ba0a90
+
+	/// AUC, Gini or KS of the PD model, one per row of Model Metrics Long.
+	measure 'Metric Value' = SUM ( 'Model Metrics Long'[Metric Score] )
+		formatString: 0.000
+		displayFolder: Model Diagnostics
+		lineageTag: 16a1e665-f498-5cfb-a087-c76e96db8ce3
+
+	/// Share of defaulters caught at this ROC threshold (Model ROC).
+	measure 'ROC True Positive Rate' = MAX ( 'Model ROC'[True Positive Rate] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Model Diagnostics
+		lineageTag: d8bae86b-9df0-58fa-9a6d-1a2e5ac6c935
+
+	/// Diagonal of the ROC chart: what a random classifier would catch.
+	measure 'ROC Random Baseline' = MAX ( 'Model ROC'[Random Classifier] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Model Diagnostics
+		lineageTag: a87d9421-0566-5522-a3e4-e106e585c889
+
+	/// Average model PD in the risk decile (2015 test set).
+	measure 'Decile Predicted PD' = AVERAGE ( 'Model Calibration'[Predicted PD] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Model Diagnostics
+		lineageTag: db530bf1-a767-5ca2-b861-70504fbacd08
+
+	/// Actual default rate in the risk decile (2015 test set).
+	measure 'Decile Observed Default Rate' = AVERAGE ( 'Model Calibration'[Observed Default Rate] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Model Diagnostics
+		lineageTag: a37eb24b-f4b7-5f3a-a982-ac9edc549cc9
+
+	/// Share of all defaults caught when rejecting the riskiest X% of loans.
+	measure 'Cumulative Default Capture' = MAX ( 'Model Calibration'[Cum Default Capture] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Model Diagnostics
+		lineageTag: fdf4e774-ae33-5006-8923-46f523f69dfe
+
+	/// Drop in test AUC when the feature is shuffled (permutation importance).
+	measure 'Feature Importance' = SUM ( 'Model Importance'[AUC Drop] )
+		formatString: 0.0000
+		displayFolder: Model Diagnostics
+		lineageTag: 61930a0f-516a-5f90-84e1-641999293d05
+
+	/// Tile-grid map column.
+	measure 'Tile X' = MAX ( State[Tile Col] )
+		formatString: 0
+		displayFolder: Visual Helpers
+		lineageTag: 62999372-cfaa-5ff0-9998-843ff34238e9
+
+	/// Tile-grid map row (negated so row 0 plots at the top).
+	measure 'Tile Y' = - MAX ( State[Tile Row] )
+		formatString: 0
+		displayFolder: Visual Helpers
+		lineageTag: 60722479-82ed-5ce8-86b4-4af2afd8bcf9
+
+	/// Waterfall step value for matured loans: funded principal out, repayments in.
+	measure 'Cash Bridge Amount' =
+			VAR _step = SELECTEDVALUE ( 'Cash Bridge'[Step Sort] )
+			RETURN
+			    CALCULATE (
+			        SWITCH ( _step,
+			            1, - SUM ( Loans[Funded Amt] ),
+			            2, SUM ( Loans[Principal Paid] ),
+			            3, SUM ( Loans[Interest Paid Amt] ),
+			            4, SUM ( Loans[Late Fees Amt] ),
+			            5, SUM ( Loans[Net Recoveries Amt] )
+			        ),
+			        Loans[Is Resolved] = TRUE (),
+			        Loans[Is Matured] = TRUE ()
+			    )
+		formatString: \$#,0
+		displayFolder: Visual Helpers
+		lineageTag: 65cf152e-8c57-5849-bab0-b1804d59fbd8
+
+	/// Cumulative default rate by month on book, 2008–09 crisis vintage (one line per vintage).
+	measure 'Cum Default 2008–09 crisis' = CALCULATE ( [Cumulative Default Rate], 'Vintage Curve'[Vintage] = "2008–09 crisis" )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Vintage
+		lineageTag: 61778d71-267d-5a10-b4b4-e319c4e37836
+
+	/// Cumulative default rate by month on book, 2010–12 vintage (one line per vintage).
+	measure 'Cum Default 2010–12' = CALCULATE ( [Cumulative Default Rate], 'Vintage Curve'[Vintage] = "2010–12" )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Vintage
+		lineageTag: e58fa3bd-43de-561c-8651-6db9c0610769
+
+	/// Cumulative default rate by month on book, 2013–14 vintage (one line per vintage).
+	measure 'Cum Default 2013–14' = CALCULATE ( [Cumulative Default Rate], 'Vintage Curve'[Vintage] = "2013–14" )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Vintage
+		lineageTag: 3c466000-112e-5b2a-b509-90221fc384f3
+
+	/// Cumulative default rate by month on book, 2015–16 vintage (one line per vintage).
+	measure 'Cum Default 2015–16' = CALCULATE ( [Cumulative Default Rate], 'Vintage Curve'[Vintage] = "2015–16" )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Vintage
+		lineageTag: 17db805e-a8c9-514b-b7cc-8a614c5b108a
+
+	/// Cumulative default rate by month on book, 2017 vintage (one line per vintage).
+	measure 'Cum Default 2017' = CALCULATE ( [Cumulative Default Rate], 'Vintage Curve'[Vintage] = "2017" )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Vintage
+		lineageTag: bbf54ca5-6128-594f-9338-25bb7a0298ce
+
+	/// Funded amount in the same period last year (SAMEPERIODLASTYEAR).
+	measure 'Funded PY' = CALCULATE ( [Funded Amount], SAMEPERIODLASTYEAR ( 'Date'[Date] ) )
+		formatString: \$#,0
+		displayFolder: Time Intelligence
+		lineageTag: 8cf43e0c-6a15-56df-add7-06faffdeee7a
+
+	/// Change in funded amount vs the same period last year; blank when there is no prior year.
+	measure 'Funded YoY %' =
+			VAR _py = [Funded PY]
+			RETURN IF ( NOT ISBLANK ( _py ), DIVIDE ( [Funded Amount] - _py, _py ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Time Intelligence
+		lineageTag: a304e76d-3842-5340-8206-c3c287f58408
+
+	/// Funded amount year-to-date (TOTALYTD on the Date table).
+	measure 'Funded YTD' = TOTALYTD ( [Funded Amount], 'Date'[Date] )
+		formatString: \$#,0
+		displayFolder: Time Intelligence
+		lineageTag: bdbd925c-17f2-5f36-a778-30253973d7ad
+
+	/// Funded amount over the trailing 12 months.
+	measure 'Funded 12M Rolling' = CALCULATE ( [Funded Amount], DATESINPERIOD ( 'Date'[Date], MAX ( 'Date'[Date] ), -12, MONTH ) )
+		formatString: \$#,0
+		displayFolder: Time Intelligence
+		lineageTag: 40e685f4-8b80-502d-9d24-a34b6db0ee37
+
+	/// Card subtitle: ▲/▼ change vs same period last year.
+	measure 'Funded YoY Label' =
+			VAR _g = [Funded YoY %]
+			RETURN
+			    IF ( ISBLANK ( _g ), "no prior-year data",
+			        IF ( _g >= 0, "▲ ", "▼ " ) & FORMAT ( ABS ( _g ), "0.0%" ) & " vs prior year" )
+		displayFolder: Time Intelligence
+		lineageTag: 69628ed5-36bb-5475-9308-54636e429cb1
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Selected issue-date range, for page subtitles.
+	measure 'Period Label' = FORMAT ( MIN ( Loans[Issue Date] ), "mmm yyyy" ) & " – " & FORMAT ( MAX ( Loans[Issue Date] ), "mmm yyyy" )
+		displayFolder: Report UI
+		lineageTag: 87141118-6f88-5b85-90e5-cb53e7896301
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// One-sentence dynamic insight for the overview page.
+	measure 'Headline Insight' =
+			"Every 1 in " & FORMAT ( DIVIDE ( 1, [Default Rate] ), "0.0" ) & " resolved loans defaulted, and lenders kept "
+			    & FORMAT ( [Realised ROI], "0.0%" ) & " of funded principal as lifetime profit."
+		displayFolder: Report UI
+		lineageTag: 931222a8-146b-5007-acf2-91b174ac008f
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Distinct states with at least one loan in the selection.
+	measure 'States Lent In' = DISTINCTCOUNT ( Loans[State] )
+		formatString: #,0
+		displayFolder: Filter Context
+		lineageTag: 2b50bb5f-0d13-52db-ae42-d7bce719be61
+
+	/// Distinct sub-grades with at least one loan in the selection.
+	measure 'Sub Grades Active' = DISTINCTCOUNT ( Loans[Sub Grade] )
+		formatString: #,0
+		displayFolder: Filter Context
+		lineageTag: 2daeb318-acd9-5a8e-8319-90e438bfb427
+
+	/// Default rate of 60-month loans. KEEPFILTERS intersects with the Term already on the row: blank on 36-month rows.
+	measure 'Default Rate 60M' = CALCULATE ( [Default Rate], KEEPFILTERS ( Loans[Term] = "60 months" ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Filter Context
+		lineageTag: 45d8e7a0-ff38-5e72-b85a-e1e72cbda618
+
+	/// Same filter without KEEPFILTERS: it overwrites the row's Term, so every row shows the 60-month rate.
+	measure 'Default Rate 60M (Replace)' = CALCULATE ( [Default Rate], Loans[Term] = "60 months" )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Filter Context
+		lineageTag: 9ff177a4-7b7e-5c7b-b444-7ebd47d50ac5
+
+	/// Matured defaults in the row ÷ all matured defaults. REMOVEFILTERS(Loans) clears the expanded fact table, dimensions included.
+	measure 'Share of All Defaults' = DIVIDE ( [Matured Defaults], CALCULATE ( [Matured Defaults], REMOVEFILTERS ( Loans ) ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Filter Context
+		lineageTag: a4c0b217-3499-5794-99df-2d4018f2c02f
+
+	/// Sub-grade default rate minus its letter grade's rate (ALLEXCEPT keeps only the Grade filter).
+	measure 'Sub Grade vs Grade Default' = [Default Rate] - CALCULATE ( [Default Rate], ALLEXCEPT ( Grade, Grade[Grade] ) )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Filter Context
+		lineageTag: 45e6c59f-2c6e-57e9-8dd9-f6c3fb1fb8a5
+
+	/// Default rate of loans priced at 20% or more. FILTER over ALL of one column replaces only that column's filter.
+	measure 'High Rate Default Rate' = CALCULATE ( [Default Rate], FILTER ( ALL ( Loans[Interest Rate] ), Loans[Interest Rate] >= 0.20 ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Filter Context
+		lineageTag: e89cd406-5512-54dd-b9f4-a977ff39544e
+
+	/// Default rate of Sub-prime grades. The Grade filter reaches Loans because Loans' expanded table includes Grade.
+	measure 'Default Rate Sub-prime' = CALCULATE ( [Default Rate], Grade[Risk Tier] = "Sub-prime" )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Filter Context
+		lineageTag: 807470f4-cfb9-5579-9fe0-259405b3902e
+
+	/// Resolved loans by the month of their last payment: the inactive Last Payment Date relationship (role-playing Date).
+	measure 'Loans Closed' =
+			CALCULATE (
+			    [Loans Issued],
+			    Loans[Is Resolved] = TRUE (),
+			    USERELATIONSHIP ( Loans[Last Payment Date], 'Date'[Date] )
+			)
+		formatString: #,0
+		displayFolder: Filter Context
+		lineageTag: 6dadb2da-e403-55f2-8798-b8c1dc2c1b49
+
+	/// Expected loss recomputed loan by loan in DAX: outstanding × PD × grade LGD reached through Loans → Grade → 'Grade LGD'.
+	measure 'Expected Loss (DAX)' =
+			CALCULATE (
+			    SUMX ( Loans, Loans[Outstanding Principal Amt] * Loans[PD] * RELATED ( 'Grade LGD'[Grade LGD Rate] ) ),
+			    Loans[Outcome] IN { "Current", "Delinquent" }
+			)
+		formatString: \$#,0
+		displayFolder: Row Context
+		lineageTag: d2cfd588-3d82-5ba0-baaa-e75822fdf3c7
+
+	/// Expected Loss (DAX) minus the SQL Expected Loss: 0 when both agree.
+	measure 'Expected Loss Gap' = [Expected Loss (DAX)] - [Expected Loss]
+		formatString: \$#,0
+		displayFolder: Row Context
+		lineageTag: d2433fb3-3d07-526e-85b6-9e409394a76d
+
+	/// Highest sub-grade default rate in the selection (MAXX over VALUES).
+	measure 'Worst Sub Grade Default Rate' = MAXX ( VALUES ( Grade[Sub Grade] ), [Default Rate] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Row Context
+		lineageTag: 88eb5fe4-45b6-545e-907e-0ee68327b2da
+
+	/// State with the highest default rate among states with 1,000+ matured loans.
+	measure 'Worst State' =
+			CONCATENATEX (
+			    TOPN (
+			        1,
+			        FILTER (
+			            ADDCOLUMNS ( VALUES ( State[State Name] ), "@dr", [Default Rate], "@n", [Matured Loans] ),
+			            [@n] >= 1000
+			        ),
+			        [@dr], DESC
+			    ),
+			    State[State Name],
+			    ", "
+			)
+		displayFolder: Row Context
+		lineageTag: 41094a79-7cc1-57d0-9e68-538e98a2ee15
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Share of matured 36-month loans that defaulted by the month on book picked on the disconnected MOB axis.
+	measure 'Cohort Default by MOB' =
+			VAR _k = MAX ( MOB[Month On Book] )
+			RETURN
+			    DIVIDE (
+			        CALCULATE ( [Defaults], Loans[Months To Default] <= _k, Loans[Term] = "36 months", Loans[Is Matured] = TRUE () ),
+			        CALCULATE ( [Loans Issued], Loans[Term] = "36 months", Loans[Is Matured] = TRUE () )
+			    )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Row Context
+		lineageTag: e7c9be02-5b92-553c-98d4-d74a65f30efa
+
+	/// Default rate of the previous issue year (OFFSET -1 on Vintage Year).
+	measure 'Default Rate Prev Vintage' = CALCULATE ( [Default Rate], OFFSET ( -1, ALLSELECTED ( Loans[Vintage Year] ), ORDERBY ( Loans[Vintage Year] ) ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Window
+		lineageTag: a7627d71-f5ab-5390-a562-51425ab7bcf5
+
+	/// Funded amount from the first selected month to the current one (WINDOW).
+	measure 'Funded Running Total' =
+			CALCULATE (
+			    [Funded Amount],
+			    WINDOW ( 1, ABS, 0, REL, ALLSELECTED ( 'Date'[Month Year], 'Date'[Month Year Sort] ), ORDERBY ( 'Date'[Month Year Sort] ) )
+			)
+		formatString: \$#,0
+		displayFolder: Window
+		lineageTag: 73679a10-68b6-5dfb-a136-059c2fc89aed
+
+	/// Rank of the state by default rate, 1 = worst (RANK DENSE).
+	measure 'State Default Rank' = RANK ( DENSE, ALLSELECTED ( State[State Name] ), ORDERBY ( [Default Rate], DESC ) )
+		formatString: 0
+		displayFolder: Window
+		lineageTag: b3cbf16f-c45d-5e64-a31d-e035ab2107b7
+
+	/// Sub-grade with the highest default rate in the current grade (INDEX 1).
+	measure 'Worst Sub Grade' =
+			VAR _t = ADDCOLUMNS ( CALCULATETABLE ( VALUES ( Grade[Sub Grade] ) ), "@dr", [Default Rate] )
+			RETURN MAXX ( INDEX ( 1, _t, ORDERBY ( [@dr], DESC ) ), Grade[Sub Grade] )
+		displayFolder: Window
+		lineageTag: f89a2ec6-7e96-59e7-87dd-ba2ceea8f454
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// Funded amount quarter to date.
+	measure 'Funded QTD' = TOTALQTD ( [Funded Amount], 'Date'[Date] )
+		formatString: \$#,0
+		displayFolder: Time Intelligence
+		lineageTag: e4613c1f-411c-515b-b47a-9d023c871fc9
+
+	/// Funded amount month to date.
+	measure 'Funded MTD' = TOTALMTD ( [Funded Amount], 'Date'[Date] )
+		formatString: \$#,0
+		displayFolder: Time Intelligence
+		lineageTag: 3830cdee-d0f3-51be-8961-889e668bd3a3
+
+	/// Funded amount in the previous month.
+	measure 'Funded PM' = CALCULATE ( [Funded Amount], DATEADD ( 'Date'[Date], -1, MONTH ) )
+		formatString: \$#,0
+		displayFolder: Time Intelligence
+		lineageTag: 259aefa4-030d-5624-a16f-820414794406
+
+	/// Funded amount in the previous quarter.
+	measure 'Funded PQ' = CALCULATE ( [Funded Amount], PREVIOUSQUARTER ( 'Date'[Date] ) )
+		formatString: \$#,0
+		displayFolder: Time Intelligence
+		lineageTag: fd2c0c7d-4b03-5c38-89e4-9cd23a85678e
+
+	/// Average monthly funded amount over the trailing 3 months.
+	measure 'Funded 3M Avg' =
+			CALCULATE (
+			    AVERAGEX ( VALUES ( 'Date'[Month Year] ), [Funded Amount] ),
+			    DATESINPERIOD ( 'Date'[Date], MAX ( 'Date'[Date] ), -3, MONTH )
+			)
+		formatString: \$#,0
+		displayFolder: Time Intelligence
+		lineageTag: 5c66abde-e787-5da3-997b-215fcd2b1f19
+
+	/// Prior-year funded amount on the Gregorian calendar (calendar-based TI).
+	measure 'Funded PY (Cal)' = CALCULATE ( [Funded Amount], DATEADD ( 'Gregorian', -1, YEAR ) )
+		formatString: \$#,0
+		displayFolder: Time Intelligence
+		lineageTag: 4e790e36-0cf5-57c6-9622-e4c6b019ca41
+
+	/// YoY growth with calendar-based TI; equals Funded YoY % on a Gregorian calendar.
+	measure 'Funded YoY % (Cal)' =
+			VAR _py = [Funded PY (Cal)]
+			RETURN DIVIDE ( [Funded Amount] - _py, _py )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Time Intelligence
+		lineageTag: 32e42a30-9b42-5ece-8ad6-85283413e828
+
+	/// Estimated outstanding principal at the last date in context: semi-additive, a stock is not summed over months.
+	measure 'Book Outstanding' = CALCULATE ( SUM ( 'Book Balance'[Est Outstanding] ), LASTDATE ( 'Date'[Date] ) )
+		formatString: \$#,0
+		displayFolder: Book
+		lineageTag: 36014a39-fe63-548b-a79c-90eca11a00d4
+
+	/// Same curve as Cumulative Default Rate, but filtered by a virtual relationship (TREATAS) with the physical one switched off.
+	measure 'Vintage Cum Default (Tier)' =
+			CALCULATE (
+			    [Cumulative Default Rate],
+			    TREATAS ( VALUES ( Grade[Grade] ), 'Vintage Curve'[Vintage Grade] ),
+			    CROSSFILTER ( 'Vintage Curve'[Vintage Grade], Grade[Grade], NONE )
+			)
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Vintage
+		lineageTag: abb3ed2a-4801-5c50-b3f2-755ee811b160
+
+	/// Realised ROI minus the all-selection ROI (LC.VsPortfolio).
+	measure 'ROI vs Portfolio' = LC.VsPortfolio ( [Realised ROI] )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Returns
+		lineageTag: 1a7ccee1-4b04-5e46-b772-cbd3df0a613d
+
+	/// Selected PD stress multiplier (1.0x when nothing is selected).
+	measure 'PD Multiplier Value' = SELECTEDVALUE ( 'PD Multiplier'[PD Multiplier], 1 )
+		formatString: 0.0x
+		displayFolder: Scenario
+		lineageTag: fc7e0d94-e959-5d44-8471-46cbcf9ac8dc
+
+	/// Selected LGD shock in points (0 when nothing is selected).
+	measure 'LGD Shock Value' = SELECTEDVALUE ( 'LGD Shock'[LGD Shock], 0 )
+		formatString: +0%;-0%;0%
+		displayFolder: Scenario
+		lineageTag: 307a48bd-9faa-5ae8-a357-9ed4dd74bf40
+
+	/// Live-book expected loss with PD × multiplier (capped at 100%) and LGD + shock (kept within 0–100%).
+	measure 'Stressed Expected Loss' =
+			VAR _m = [PD Multiplier Value]
+			VAR _s = [LGD Shock Value]
+			RETURN
+			    CALCULATE (
+			        SUMX ( Loans,
+			            Loans[Outstanding Principal Amt] * MIN ( 1, Loans[PD] * _m )
+			                * MAX ( 0, MIN ( 1, RELATED ( 'Grade LGD'[Grade LGD Rate] ) + _s ) ) ),
+			        Loans[Outcome] IN { "Current", "Delinquent" }
+			    )
+		formatString: \$#,0
+		displayFolder: Scenario
+		lineageTag: 6fb54def-4b83-5165-8c48-c0cc4590b82c
+
+	/// Share of a vintage's funded dollars (36-month loans) defaulted by the month on book. Same grade logic as Cumulative Default Rate; pooled over the selected grades by dollars.
+	measure 'Cumulative Dollar Default Rate' =
+			-- a VAR would be evaluated once, before CALCULATE could change its filter, so the ratio is written twice
+			IF (
+			    HASONEVALUE ( 'Vintage Curve'[Vintage Grade] ) || ISCROSSFILTERED ( 'Vintage Curve'[Vintage Grade] ),
+			    DIVIDE ( SUM ( 'Vintage Curve'[Vintage Defaulted Funded] ), SUM ( 'Vintage Curve'[Vintage Funded] ) ),
+			    CALCULATE (
+			        DIVIDE ( SUM ( 'Vintage Curve'[Vintage Defaulted Funded] ), SUM ( 'Vintage Curve'[Vintage Funded] ) ),
+			        'Vintage Curve'[Vintage Grade] = "All"
+			    )
+			)
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Vintage
+		lineageTag: e462e6b2-8a26-5977-9d72-0ee6f2b3606e
+
+	/// Cumulative dollar default rate (defaulted ÷ funded $) by month on book, 2008–09 crisis vintage.
+	measure 'Cum Dollar Default 2008–09 crisis' = CALCULATE ( [Cumulative Dollar Default Rate], 'Vintage Curve'[Vintage] = "2008–09 crisis" )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Vintage
+		lineageTag: d12e4592-619b-541d-ab10-ca0b435460ee
+
+	/// Cumulative dollar default rate (defaulted ÷ funded $) by month on book, 2010–12 vintage.
+	measure 'Cum Dollar Default 2010–12' = CALCULATE ( [Cumulative Dollar Default Rate], 'Vintage Curve'[Vintage] = "2010–12" )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Vintage
+		lineageTag: 0d8b1618-c4c1-575a-af22-64056422233f
+
+	/// Cumulative dollar default rate (defaulted ÷ funded $) by month on book, 2013–14 vintage.
+	measure 'Cum Dollar Default 2013–14' = CALCULATE ( [Cumulative Dollar Default Rate], 'Vintage Curve'[Vintage] = "2013–14" )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Vintage
+		lineageTag: ef5bf8c0-1a26-524e-8dd4-08d37b785e47
+
+	/// Cumulative dollar default rate (defaulted ÷ funded $) by month on book, 2015–16 vintage.
+	measure 'Cum Dollar Default 2015–16' = CALCULATE ( [Cumulative Dollar Default Rate], 'Vintage Curve'[Vintage] = "2015–16" )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Vintage
+		lineageTag: 78842759-928b-54ce-af32-706045ffc7a0
+
+	/// Cumulative dollar default rate (defaulted ÷ funded $) by month on book, 2017 vintage.
+	measure 'Cum Dollar Default 2017' = CALCULATE ( [Cumulative Dollar Default Rate], 'Vintage Curve'[Vintage] = "2017" )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Vintage
+		lineageTag: e6257a0a-f502-5dcb-8a68-f65d0f6e45c4
+
+	/// 5th percentile of the loan interest rate.
+	measure 'Rate P05' = PERCENTILE.INC ( Loans[Interest Rate], 0.05 )
+		formatString: 0.00%
+		displayFolder: Pricing
+		lineageTag: 113e63b2-c2ed-57ca-8d51-a77bc261e6ed
+
+	/// 25th percentile of the loan interest rate.
+	measure 'Rate P25' = PERCENTILE.INC ( Loans[Interest Rate], 0.25 )
+		formatString: 0.00%
+		displayFolder: Pricing
+		lineageTag: 5b883122-626e-5593-9ab4-f517b965af00
+
+	/// 50th percentile of the loan interest rate.
+	measure 'Rate P50' = PERCENTILE.INC ( Loans[Interest Rate], 0.5 )
+		formatString: 0.00%
+		displayFolder: Pricing
+		lineageTag: 9ba3b648-cf90-5fad-9493-1b1c916722f1
+
+	/// 75th percentile of the loan interest rate.
+	measure 'Rate P75' = PERCENTILE.INC ( Loans[Interest Rate], 0.75 )
+		formatString: 0.00%
+		displayFolder: Pricing
+		lineageTag: 30ae55a4-bddc-516d-b0ea-8f3350295f00
+
+	/// 95th percentile of the loan interest rate.
+	measure 'Rate P95' = PERCENTILE.INC ( Loans[Interest Rate], 0.95 )
+		formatString: 0.00%
+		displayFolder: Pricing
+		lineageTag: 3efb028b-eb5d-5082-a426-574228dfd634
+
+	/// Unweighted mean of the sub-grade default rates on show: the scatter's average line.
+	measure 'Sub Grade Avg Default Rate' = AVERAGEX ( ALLSELECTED ( Grade[Sub Grade] ), [Default Rate] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Visual Helpers
+		lineageTag: e39fef39-d0ab-5041-9695-c53edf6cb619
+
+	/// Net credit loss in the row ÷ net credit loss of all states selected.
+	measure 'Loss Share' = DIVIDE ( [Net Credit Loss], CALCULATE ( [Net Credit Loss], ALLSELECTED ( State[State Code] ) ) )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Business Analysis
+		lineageTag: 9df740b7-8f11-5b53-bcba-2ec436c5c019
+
+	/// Pareto: share of net credit loss carried by this state and every state with a bigger loss (WINDOW over the states selected, biggest first).
+	measure 'Cum Loss Share' =
+			DIVIDE (
+			    CALCULATE ( [Net Credit Loss], WINDOW ( 1, ABS, 0, REL, ALLSELECTED ( State[State Code] ), ORDERBY ( [Net Credit Loss], DESC ) ) ),
+			    CALCULATE ( [Net Credit Loss], ALLSELECTED ( State[State Code] ) )
+			)
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Business Analysis
+		lineageTag: 94ec1b26-9199-52b6-a4d4-a0e036789dfa
+
+	/// Default rate of loans whose DTI falls in the segment row ('DTI Segments' is disconnected: edit its rows to re-band).
+	measure 'Default Rate by DTI Segment' =
+			VAR _lo = MIN ( 'DTI Segments'[Min DTI] )
+			VAR _hi = MAX ( 'DTI Segments'[Max DTI] )
+			RETURN CALCULATE ( [Default Rate], Loans[DTI] >= _lo, Loans[DTI] < _hi )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Business Analysis
+		lineageTag: a2944903-d92a-5233-b5bf-7354c93f2812
+
+	/// Matured loans in the DTI segment.
+	measure 'Loans by DTI Segment' =
+			VAR _lo = MIN ( 'DTI Segments'[Min DTI] )
+			VAR _hi = MAX ( 'DTI Segments'[Max DTI] )
+			RETURN CALCULATE ( [Matured Loans], Loans[DTI] >= _lo, Loans[DTI] < _hi )
+		formatString: #,0
+		displayFolder: Business Analysis
+		lineageTag: 5d94c553-74f7-5328-bdb1-8fb781c57fe0
+
+	/// Loans reaching each funnel stage: issued → term ended → resolved → defaulted → anything recovered.
+	measure 'Lifecycle Loans' =
+			SWITCH ( SELECTEDVALUE ( 'Funnel Stage'[Stage Sort] ),
+			    1, [Loans Issued],
+			    2, CALCULATE ( [Loans Issued], Loans[Is Matured] = TRUE () ),
+			    3, [Matured Loans],
+			    4, [Matured Defaults],
+			    5, CALCULATE ( [Matured Defaults], Loans[Net Recoveries Amt] > 0 )
+			)
+		formatString: #,0
+		displayFolder: Business Analysis
+		lineageTag: 99be71a4-ebba-5cd2-93b1-f0a50e80b55c
+
+	/// Change in default rate from the latest matured vintage year in the filter vs the year before, caused by the grade mix: Σ (weight now − weight before) × rate before. Whole issue years (the year slicer only picks the year).
+	measure 'Mix Effect' =
+			VAR _y = CALCULATE ( MAX ( Loans[Vintage Year] ), Loans[Is Matured] = TRUE () )
+			VAR _n1 = CALCULATE ( [Matured Loans], REMOVEFILTERS ( 'Date' ), Loans[Vintage Year] = _y )
+			VAR _n0 = CALCULATE ( [Matured Loans], REMOVEFILTERS ( 'Date' ), Loans[Vintage Year] = _y - 1 )
+			RETURN
+			    IF ( _n0 > 0,
+			        SUMX ( VALUES ( Grade[Grade] ),
+			            VAR _w1 = DIVIDE ( CALCULATE ( [Matured Loans], REMOVEFILTERS ( 'Date' ), Loans[Vintage Year] = _y ), _n1 )
+			            VAR _w0 = DIVIDE ( CALCULATE ( [Matured Loans], REMOVEFILTERS ( 'Date' ), Loans[Vintage Year] = _y - 1 ), _n0 )
+			            VAR _r1 = DIVIDE ( CALCULATE ( [Matured Defaults], REMOVEFILTERS ( 'Date' ), Loans[Vintage Year] = _y ), CALCULATE ( [Matured Loans], REMOVEFILTERS ( 'Date' ), Loans[Vintage Year] = _y ) )
+			            VAR _r0 = DIVIDE ( CALCULATE ( [Matured Defaults], REMOVEFILTERS ( 'Date' ), Loans[Vintage Year] = _y - 1 ), CALCULATE ( [Matured Loans], REMOVEFILTERS ( 'Date' ), Loans[Vintage Year] = _y - 1 ) )
+			            RETURN ( _w1 - _w0 ) * _r0
+			        )
+			    )
+		formatString: +0.00%;-0.00%;0.00%
+		displayFolder: Business Analysis
+		lineageTag: aad9a376-09c6-5b22-b020-a865d6886efb
+
+	/// Change in default rate caused by the rates inside each grade: Σ weight now × (rate now − rate before). Mix Effect + Rate Effect = the total change.
+	measure 'Rate Effect' =
+			VAR _y = CALCULATE ( MAX ( Loans[Vintage Year] ), Loans[Is Matured] = TRUE () )
+			VAR _n1 = CALCULATE ( [Matured Loans], REMOVEFILTERS ( 'Date' ), Loans[Vintage Year] = _y )
+			VAR _n0 = CALCULATE ( [Matured Loans], REMOVEFILTERS ( 'Date' ), Loans[Vintage Year] = _y - 1 )
+			RETURN
+			    IF ( _n0 > 0,
+			        SUMX ( VALUES ( Grade[Grade] ),
+			            VAR _w1 = DIVIDE ( CALCULATE ( [Matured Loans], REMOVEFILTERS ( 'Date' ), Loans[Vintage Year] = _y ), _n1 )
+			            VAR _w0 = DIVIDE ( CALCULATE ( [Matured Loans], REMOVEFILTERS ( 'Date' ), Loans[Vintage Year] = _y - 1 ), _n0 )
+			            VAR _r1 = DIVIDE ( CALCULATE ( [Matured Defaults], REMOVEFILTERS ( 'Date' ), Loans[Vintage Year] = _y ), CALCULATE ( [Matured Loans], REMOVEFILTERS ( 'Date' ), Loans[Vintage Year] = _y ) )
+			            VAR _r0 = DIVIDE ( CALCULATE ( [Matured Defaults], REMOVEFILTERS ( 'Date' ), Loans[Vintage Year] = _y - 1 ), CALCULATE ( [Matured Loans], REMOVEFILTERS ( 'Date' ), Loans[Vintage Year] = _y - 1 ) )
+			            RETURN _w1 * ( _r1 - _r0 )
+			        )
+			    )
+		formatString: +0.00%;-0.00%;0.00%
+		displayFolder: Business Analysis
+		lineageTag: 47cc0ccc-ab7b-57f2-9229-843d9df4c0a2
+
+	/// Default rate of the latest matured vintage year in the filter minus the year before (whole years).
+	measure 'Default Rate Change' =
+			VAR _y = CALCULATE ( MAX ( Loans[Vintage Year] ), Loans[Is Matured] = TRUE () )
+			VAR _n1 = CALCULATE ( [Matured Loans], REMOVEFILTERS ( 'Date' ), Loans[Vintage Year] = _y )
+			VAR _n0 = CALCULATE ( [Matured Loans], REMOVEFILTERS ( 'Date' ), Loans[Vintage Year] = _y - 1 )
+			RETURN
+			    IF ( _n0 > 0, DIVIDE ( CALCULATE ( [Matured Defaults], REMOVEFILTERS ( 'Date' ), Loans[Vintage Year] = _y ), _n1 ) - DIVIDE ( CALCULATE ( [Matured Defaults], REMOVEFILTERS ( 'Date' ), Loans[Vintage Year] = _y - 1 ), _n0 ) )
+		formatString: +0.00%;-0.00%;0.00%
+		displayFolder: Business Analysis
+		lineageTag: 36fd9469-fb95-5b16-9498-2724edee0bac
+
+	/// Waterfall step: Mix Effect or Rate Effect.
+	measure 'Variance Step Value' = SWITCH ( SELECTEDVALUE ( 'Variance Step'[Step Sort] ), 1, [Mix Effect], 2, [Rate Effect] )
+		formatString: +0.00%;-0.00%;0.00%
+		displayFolder: Business Analysis
+		lineageTag: bb66c8a0-3b01-5003-89c1-95f03c8edd0a
+
+	/// Waterfall title naming the two vintage years compared.
+	measure 'Variance Title' =
+			VAR _y = CALCULATE ( MAX ( Loans[Vintage Year] ), Loans[Is Matured] = TRUE () )
+			RETURN "Why the default rate moved: " & _y - 1 & " → " & _y & " vintage"
+		displayFolder: Business Analysis
+		lineageTag: 9c86f066-2e6c-54aa-a0ad-216044bae73d
+
+		annotation BestPracticeAnalyzer_IgnoreRules = {"RuleIDs":["PROVIDE_FORMAT_STRING_FOR_MEASURES","INTEGER_FORMATTING"]}
+
+	/// 5th percentile of the interest rate inside the sub-grade (PERCENTILEX.INC over its loans).
+	measure 'Sub Grade Rate P5' = PERCENTILEX.INC ( Loans, Loans[Interest Rate], 0.05 )
+		formatString: 0.00%
+		displayFolder: Business Analysis
+		lineageTag: 7386a70d-776f-543d-94a5-5160c091f64d
+
+	/// 95th percentile of the interest rate inside the sub-grade (PERCENTILEX.INC over its loans).
+	measure 'Sub Grade Rate P95' = PERCENTILEX.INC ( Loans, Loans[Interest Rate], 0.95 )
+		formatString: 0.00%
+		displayFolder: Business Analysis
+		lineageTag: b3373564-9ba7-5655-9270-b7a1315c55d8
+
+	/// Loans priced outside their own sub-grade's P5–P95 rate band. Mostly rate-card changes over the years, not mistakes.
+	measure 'Pricing Outliers' =
+			SUMX ( VALUES ( Grade[Sub Grade] ),
+			    VAR _lo = [Sub Grade Rate P5]
+			    VAR _hi = [Sub Grade Rate P95]
+			    RETURN CALCULATE ( COUNTROWS ( Loans ), Loans[Interest Rate] < _lo || Loans[Interest Rate] > _hi )
+			)
+		formatString: #,0
+		displayFolder: Business Analysis
+		lineageTag: 8ff59bef-34b1-578f-93d6-6b19e9efef6f
+
+	/// Pricing Outliers ÷ loans issued.
+	measure 'Pricing Outlier Share' = DIVIDE ( [Pricing Outliers], [Loans Issued] )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Business Analysis
+		lineageTag: 1e3e1098-dd47-5eb1-b3d5-0a05e5860fa1
+
+	/// Least-squares line through monthly funded amount (LINESTX over the months selected), read at this month.
+	measure 'Funded Trend' =
+			VAR _pts =
+			    FILTER (
+			        ADDCOLUMNS ( ALLSELECTED ( 'Date'[Month Start] ),
+			            "@x", YEAR ( 'Date'[Month Start] ) * 12 + MONTH ( 'Date'[Month Start] ),
+			            "@y", [Funded Amount] ),
+			        NOT ISBLANK ( [@y] )
+			    )
+			VAR _fit = LINESTX ( _pts, [@y], [@x] )
+			VAR _d = MAX ( 'Date'[Month Start] )
+			RETURN
+			    IF ( NOT ISBLANK ( [Funded Amount] ),
+			        MAXX ( _fit, [Intercept] ) + MAXX ( _fit, [Slope1] ) * ( YEAR ( _d ) * 12 + MONTH ( _d ) ) )
+		formatString: \$#,0
+		displayFolder: Business Analysis
+		lineageTag: e91d43b9-5911-54f9-b9de-5052c9f676b8
+
+	/// Cohort Default by MOB for the 2010 issue-year cohort.
+	measure 'Cohort 2010' = CALCULATE ( [Cohort Default by MOB], Loans[Vintage Year] = 2010 )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Business Analysis
+		lineageTag: 51f47c63-3bb1-5751-9402-2f484ce1d4fb
+
+	/// Cohort Default by MOB for the 2011 issue-year cohort.
+	measure 'Cohort 2011' = CALCULATE ( [Cohort Default by MOB], Loans[Vintage Year] = 2011 )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Business Analysis
+		lineageTag: bf0a5abd-2c45-57b8-b84a-5a2617ec4003
+
+	/// Cohort Default by MOB for the 2012 issue-year cohort.
+	measure 'Cohort 2012' = CALCULATE ( [Cohort Default by MOB], Loans[Vintage Year] = 2012 )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Business Analysis
+		lineageTag: a64b5553-9cc3-5204-be39-58e9443dcf64
+
+	/// Cohort Default by MOB for the 2013 issue-year cohort.
+	measure 'Cohort 2013' = CALCULATE ( [Cohort Default by MOB], Loans[Vintage Year] = 2013 )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Business Analysis
+		lineageTag: 04ca5385-6651-5b6c-af65-fed21c5bbf54
+
+	/// Cohort Default by MOB for the 2014 issue-year cohort.
+	measure 'Cohort 2014' = CALCULATE ( [Cohort Default by MOB], Loans[Vintage Year] = 2014 )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Business Analysis
+		lineageTag: 2ac37ab6-6d47-5a60-a42c-c803fd285c4e
+
+	/// Cohort Default by MOB for the 2015 issue-year cohort.
+	measure 'Cohort 2015' = CALCULATE ( [Cohort Default by MOB], Loans[Vintage Year] = 2015 )
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		displayFolder: Business Analysis
+		lineageTag: 171dc098-3185-5aba-9549-f064383d6c00
+
+	/// Stressed expected loss ÷ expected loss − 1.
+	measure 'Stress Uplift' = DIVIDE ( [Stressed Expected Loss], [Expected Loss (DAX)] ) - 1
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Scenario
+		lineageTag: d5ddafe0-2cb9-5b6a-b92b-8ce00c04be5e
+
+	/// 25th percentile of the grade ROIs on show: the ROI chart's percentile line.
+	measure 'Grade ROI P25' = PERCENTILEX.INC ( ALLSELECTED ( Grade[Grade] ), [Realised ROI], 0.25 )
+		formatString: 0.00%
+		displayFolder: Visual Helpers
+		lineageTag: 9e603288-6933-582e-8a2b-3152074eb7ec
+
+	column Value
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 203d4c3c-8239-5472-b364-8c39bf4834db
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition _Measures = calculated
+		mode: import
+		source = {1}

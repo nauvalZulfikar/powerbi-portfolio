@@ -1,0 +1,48 @@
+table 'Time Calc'
+	lineageTag: 77018f9d-8e57-5ee7-9174-48c331330acd
+
+	calculationGroup
+		precedence: 10
+
+		calculationItem Current = SELECTEDMEASURE ()
+			ordinal: 0
+
+		calculationItem PY = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, YEAR ) )
+			ordinal: 1
+
+		calculationItem 'YoY %' =
+				VAR _py = CALCULATE ( SELECTEDMEASURE (), DATEADD ( 'Gregorian', -1, YEAR ) )
+				RETURN DIVIDE ( SELECTEDMEASURE () - _py, _py )
+			ordinal: 2
+			formatStringDefinition = "+0.0%;-0.0%;0.0%"
+
+		calculationItem YTD =
+				IF (
+				    ISSELECTEDMEASURE ( [Default Rate], [Loss Rate], [Realised ROI], [Avg Interest Rate], [Delinquency Rate], [Dollar Default Rate] ),
+				    SELECTEDMEASURE (),
+				    CALCULATE ( SELECTEDMEASURE (), DATESYTD ( 'Gregorian' ) )
+				)
+			ordinal: 3
+
+		calculationItem '12M Rolling' =
+				IF (
+				    ISSELECTEDMEASURE ( [Default Rate], [Loss Rate], [Realised ROI], [Avg Interest Rate], [Delinquency Rate], [Dollar Default Rate] ),
+				    SELECTEDMEASURE (),
+				    CALCULATE ( SELECTEDMEASURE (), DATESINPERIOD ( 'Date'[Date], MAX ( 'Date'[Date] ), -12, MONTH ) )
+				)
+			ordinal: 4
+
+	column 'Time Calc'
+		dataType: string
+		lineageTag: 5d2d2682-73d7-5f78-9e23-b5d79a2cee90
+		summarizeBy: none
+		sourceColumn: Name
+		sortByColumn: Ordinal
+
+	column Ordinal
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 383846d7-0c7b-5e77-8db8-610c5c50e329
+		summarizeBy: sum
+		sourceColumn: Ordinal

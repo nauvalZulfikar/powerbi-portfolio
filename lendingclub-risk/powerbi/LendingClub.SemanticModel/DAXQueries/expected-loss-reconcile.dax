@@ -1,0 +1,19 @@
+// Row context + RELATED over two hops (3-s9): Expected Loss (DAX) recomputes outstanding x PD x grade LGD
+// loan by loan through Loans -> Grade -> 'Grade LGD' and must match the SQL column summed by Expected Loss.
+// Expected (DuckDB):
+//   A  Expected Loss 98,122,344   Expected Loss (DAX) 98,122,344   Gap 0
+//   B  Expected Loss 306,807,109   Expected Loss (DAX) 306,807,109   Gap 0
+//   C  Expected Loss 539,513,080   Expected Loss (DAX) 539,513,080   Gap 0
+//   D  Expected Loss 349,184,840   Expected Loss (DAX) 349,184,840   Gap 0
+//   E  Expected Loss 141,783,209   Expected Loss (DAX) 141,783,209   Gap 0
+//   F  Expected Loss 43,126,147   Expected Loss (DAX) 43,126,147   Gap 0
+//   G  Expected Loss 15,741,101   Expected Loss (DAX) 15,741,101   Gap 0
+// Not run yet: Power BI Desktop is not available on the build machine.
+EVALUATE
+SUMMARIZECOLUMNS (
+    Grade[Grade],
+    "Expected Loss", [Expected Loss],
+    "Expected Loss (DAX)", [Expected Loss (DAX)],
+    "Gap", [Expected Loss Gap]
+)
+ORDER BY Grade[Grade]

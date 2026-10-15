@@ -1,0 +1,66 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "help_text",
+  "position": {
+    "x": 1056,
+    "y": 104,
+    "z": 900,
+    "width": 520,
+    "height": 260,
+    "tabOrder": 2600
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "How to read this page",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI Semibold",
+                      "fontSize": "12pt",
+                      "color": "#0b0b0b"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Curves: the share of each cohort of 36-month loans that had defaulted by each month on book. The Count / Dollar buttons switch between share of loans and share of dollars. Pick a metric above the table at the bottom to change what it shows. Bottom right: the same cohort curve rebuilt in DAX per issue year, and the loan-lifecycle funnel. Default, loss and ROI figures use matured loans only (the full term has ended), so outcomes are final; loans issued from 2016 are mostly still running. ",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "10pt",
+                      "color": "#52514e"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'How to read this page Curves: the share of each cohort of 36-month loans that had defaulted by each month on book. The Count / Dollar buttons switch between share of loans and share of dollars. Pick a metric above the table at the bottom to change wh'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "parentGroupName": "help_vintage"
+}

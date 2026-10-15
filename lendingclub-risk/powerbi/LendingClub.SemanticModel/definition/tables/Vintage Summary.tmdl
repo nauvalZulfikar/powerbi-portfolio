@@ -1,0 +1,58 @@
+table 'Vintage Summary'
+	lineageTag: 7c941f61-cd75-5bf9-8fea-6c709d2c6eeb
+
+	column 'Summary Vintage'
+		dataType: string
+		lineageTag: ff6f1b11-85eb-5a3e-884c-344ed5aa33c5
+		summarizeBy: none
+		sourceColumn: vintage
+		sortByColumn: 'Summary Vintage Sort'
+
+	column 'Summary Vintage Sort'
+		dataType: int64
+		lineageTag: 90a6f741-35bd-53bd-8266-c456202ce51c
+		summarizeBy: none
+		sourceColumn: vintage_sort
+		formatString: 0
+		isHidden
+
+	column 'Summary Grade'
+		dataType: string
+		lineageTag: 6f5ef949-1517-50ba-bbf2-3424a994f2f4
+		summarizeBy: none
+		sourceColumn: grade
+
+	column 'Lifetime Cum Default Rate'
+		dataType: double
+		lineageTag: c0b74d8d-747a-5cc8-93a2-4411dbe4a212
+		summarizeBy: none
+		sourceColumn: lifetime_cum_default
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+
+	column 'Months Observed'
+		dataType: int64
+		lineageTag: 98f962f4-7f55-5880-a0a1-a41a8b9a867e
+		summarizeBy: none
+		sourceColumn: months_observed
+		formatString: 0
+
+	column 'Cohort Loans'
+		dataType: int64
+		lineageTag: d59726fe-d2ad-5b6b-b8e4-0ee87c8e2851
+		summarizeBy: none
+		sourceColumn: cohort_loans
+		formatString: #,0
+
+	partition 'Vintage Summary' = m
+		mode: import
+		source =
+				let
+				    Source = #"Vintage Curve",
+				    #"Grouped Rows" = Table.Group(Source, {"vintage", "vintage_sort", "grade"}, {
+				        {"lifetime_cum_default", each List.Max([cum_default_rate]), type number},
+				        {"months_observed", each List.Max([mob]), Int64.Type},
+				        {"cohort_loans", each List.Max([loans]), Int64.Type}})
+				in
+				    #"Grouped Rows"
+
+	annotation PBI_ResultType = Table

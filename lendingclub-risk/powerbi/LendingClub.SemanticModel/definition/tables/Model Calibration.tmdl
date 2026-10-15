@@ -1,0 +1,77 @@
+table 'Model Calibration'
+	lineageTag: 0a9477b0-c465-545c-b43d-61a60edad317
+
+	column Decile
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f2aa3539-bcf5-5745-86bd-d8292e218ad7
+		summarizeBy: none
+		sourceColumn: decile
+
+	column 'Decile Loans'
+		dataType: int64
+		formatString: 0
+		lineageTag: 0b5530d5-39ce-58ac-8631-fcdcd6ba5908
+		summarizeBy: none
+		sourceColumn: loans
+
+	column 'Decile Defaults'
+		dataType: int64
+		formatString: 0
+		lineageTag: 385536b7-c002-5c04-8ff8-1187f0cc09f8
+		summarizeBy: none
+		sourceColumn: defaults
+
+	column 'Predicted PD'
+		dataType: double
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		lineageTag: f6ac1348-866d-5f76-a113-a512228e8d1f
+		summarizeBy: none
+		sourceColumn: avg_pd
+
+	column 'Observed Default Rate'
+		dataType: double
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		lineageTag: 21c9a1d8-1ec8-5af1-96be-3194367cba36
+		summarizeBy: none
+		sourceColumn: default_rate
+
+	column 'Risk Decile'
+		dataType: string
+		lineageTag: 12ec0746-4a6d-5030-8dd3-9ebc7ef03465
+		summarizeBy: none
+		sourceColumn: decile_label
+		sortByColumn: Decile
+
+	column 'Cum Default Capture'
+		dataType: double
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		lineageTag: ad891ab7-42d1-5459-8df9-45980810e24e
+		summarizeBy: none
+		sourceColumn: cum_default_capture
+
+	column 'Cum Population'
+		dataType: double
+		formatString: #,0.0%;-#,0.0%;#,0.0%
+		lineageTag: f37a94c0-25eb-5139-8cef-14f9409bf8da
+		summarizeBy: none
+		sourceColumn: cum_population
+
+	column Lift
+		dataType: double
+		formatString: 0.00x
+		lineageTag: 672f2fe8-f2c6-592c-aaf1-6c9a065196f1
+		summarizeBy: none
+		sourceColumn: lift
+
+	partition 'Model Calibration' = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents(DataFolder & "model_calibration.parquet")),
+				    #"Changed Type" = Table.TransformColumnTypes(Source, {{"decile", Int64.Type}, {"loans", Int64.Type}, {"defaults", Int64.Type}, {"avg_pd", type number}, {"default_rate", type number}, {"decile_label", type text}, {"cum_default_capture", type number}, {"cum_population", type number}, {"lift", type number}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table

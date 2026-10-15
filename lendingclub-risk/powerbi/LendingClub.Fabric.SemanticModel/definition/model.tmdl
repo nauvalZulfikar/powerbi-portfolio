@@ -1,0 +1,45 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+ref table Date
+ref table Grade
+ref table State
+ref table 'Cash Bridge'
+ref table Purpose
+ref table Loans
+ref table 'Vintage Curve'
+ref table 'Grade LGD'
+ref table 'Book Balance'
+ref table 'Model Calibration'
+ref table 'Model ROC'
+ref table 'Model Importance'
+ref table 'Model Metrics'
+ref table 'Loans Agg'
+ref table 'Model Metrics Long'
+ref table 'Vintage Summary'
+ref table 'PD Multiplier'
+ref table 'LGD Shock'
+ref table MOB
+ref table 'DTI Segments'
+ref table 'Funnel Stage'
+ref table 'Variance Step'
+ref table 'Region Access'
+ref table 'Time Calc'
+ref table _Measures
+
+ref role 'Regional Analyst'
+ref role 'West Region'
+ref role 'Business Viewer'
+
+ref perspective 'Credit Risk'
+ref perspective 'Model Risk'
+
+ref cultureInfo en-US

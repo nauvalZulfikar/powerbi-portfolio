@@ -1,0 +1,19 @@
+table 'PD Multiplier'
+	lineageTag: b0c4b612-102c-5f73-a84f-f201e8f3258f
+
+	column 'PD Multiplier'
+		dataType: double
+		lineageTag: 7a4ff646-fd43-5bcb-86fe-65b340ce2662
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+		formatString: 0.0x
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 0
+				}
+
+	partition 'PD Multiplier' = calculated
+		mode: import
+		source = GENERATESERIES ( 0.5, 2, 0.1 )

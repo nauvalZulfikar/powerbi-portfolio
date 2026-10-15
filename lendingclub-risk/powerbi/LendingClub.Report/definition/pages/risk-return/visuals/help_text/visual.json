@@ -1,0 +1,66 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "help_text",
+  "position": {
+    "x": 1056,
+    "y": 104,
+    "z": 900,
+    "width": 520,
+    "height": 260,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "How to read this page",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI Semibold",
+                      "fontSize": "12pt",
+                      "color": "#0b0b0b"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Default, loss and ROI figures use matured loans only (the full term has ended), so outcomes are final; loans issued from 2016 are mostly still running. Scatter: one bubble per sub-grade; the dashed line is the average default rate of the sub-grades shown. Hover a bubble for the grade tooltip; right-click → Drill through → Loan Detail. ROI columns drill from tier to grade to sub-grade; the dashed line is the 25th percentile. Bottom row: prepayment by grade and term, and loans priced outside their sub-grade's usual band.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "10pt",
+                      "color": "#52514e"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'How to read this page Default, loss and ROI figures use matured loans only (the full term has ended), so outcomes are final; loans issued from 2016 are mostly still running. Scatter: one bubble per sub-grade; the dashed line is the average default ra'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "parentGroupName": "help_risk-return"
+}

@@ -1,0 +1,13 @@
+[project]
+name = "lendingclub-risk"
+version = "0.1.0"
+description = "LendingClub credit-risk analytics: Python + DuckDB SQL + PD model + Power BI"
+requires-python = ">=3.12"
+dependencies = [
+    "duckdb>=1.5.5",
+    "pandas>=3.0.5",
+    "pillow>=12.3.0",
+    "plotly>=7.0.0",
+    "pyarrow>=25.0.1",
+    "scikit-learn>=1.9.1",
+]

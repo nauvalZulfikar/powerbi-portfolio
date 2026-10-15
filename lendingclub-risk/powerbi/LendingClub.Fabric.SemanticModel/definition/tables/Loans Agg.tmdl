@@ -1,0 +1,84 @@
+table 'Loans Agg'
+	isHidden
+	lineageTag: 04305e4d-d2ab-5115-8f1d-a8c123e67a18
+
+	column 'Agg Issue Date'
+		dataType: dateTime
+		isHidden
+		lineageTag: 79e2a094-d7e6-5153-b8a1-d9d55d50c095
+		summarizeBy: none
+		sourceColumn: issue_date
+
+		alternateOf
+			summarization: groupBy
+			baseColumn: Loans.'Issue Date'
+
+	column 'Agg Sub Grade'
+		dataType: string
+		isHidden
+		lineageTag: 29d51b73-aa5a-523a-9e60-a7247744999b
+		summarizeBy: none
+		sourceColumn: sub_grade
+
+		alternateOf
+			summarization: groupBy
+			baseColumn: Loans.'Sub Grade'
+
+	column 'Agg State'
+		dataType: string
+		isHidden
+		lineageTag: aa2c312b-f4e6-5123-b735-3a4462ae41ff
+		summarizeBy: none
+		sourceColumn: state
+
+		alternateOf
+			summarization: groupBy
+			baseColumn: Loans.State
+
+	column 'Agg Purpose'
+		dataType: string
+		isHidden
+		lineageTag: 8bfcc548-fefd-538e-9134-2d4f38c6103e
+		summarizeBy: none
+		sourceColumn: purpose
+
+		alternateOf
+			summarization: groupBy
+			baseColumn: Loans.Purpose
+
+	column 'Agg Funded Amt'
+		dataType: double
+		isHidden
+		lineageTag: c688bf3d-50b1-551e-84b1-40fcb48608d4
+		summarizeBy: none
+		sourceColumn: funded_amount
+
+		alternateOf
+			summarization: sum
+			baseColumn: Loans.'Funded Amt'
+
+	column 'Agg Loans'
+		dataType: int64
+		isHidden
+		lineageTag: fd5a834f-f7d6-570f-870b-483cac89fa1e
+		summarizeBy: none
+		sourceColumn: loans
+
+		alternateOf
+			summarization: count
+			baseTable: Loans
+
+	partition 'Loans Agg' = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database(SqlEndpoint, LakehouseDb),
+				    #"Navigated Table" = Source{[Schema = "dbo", Item = "fact_loans"]}[Data],
+				    #"Kept Funded Loans" = Table.SelectRows(#"Navigated Table", each [funded_amount] > 0),
+				    #"Grouped Rows" = Table.Group(#"Kept Funded Loans", {"issue_date", "sub_grade", "state", "purpose"}, {
+				        {"funded_amount", each List.Sum([funded_amount]), type number},
+				        {"loans", each Table.RowCount(_), Int64.Type}})
+				in
+				    #"Grouped Rows"
+
+	annotation PBI_ResultType = Table

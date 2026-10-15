@@ -1,0 +1,45 @@
+table 'Borrower Attribute'
+	lineageTag: f7f8d892-9020-5878-968b-a1696ccf5c44
+
+	column 'Borrower Attribute'
+		dataType: string
+		lineageTag: b3e399f4-6da5-5037-a3d4-9af271e19c85
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Borrower Attribute Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Borrower Attribute Fields'
+
+	column 'Borrower Attribute Fields'
+		dataType: string
+		isHidden
+		lineageTag: 841d4298-fa65-5f84-8e23-02c5509dcad5
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Borrower Attribute Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+	column 'Borrower Attribute Order'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0797b40a-19c4-512a-9ab5-4dff775f4fac
+		summarizeBy: none
+		sourceColumn: [Value3]
+
+	partition 'Borrower Attribute' = calculated
+		mode: import
+		source =
+				{
+				    ( "Income", NAMEOF ( Loans[Income Band] ), 0 ),
+				    ( "Debt-to-income", NAMEOF ( Loans[DTI Band] ), 1 ),
+				    ( "Employment length", NAMEOF ( Loans[Employment Length] ), 2 ),
+				    ( "Card utilisation", NAMEOF ( Loans[Revolving Utilisation Band] ), 3 ),
+				    ( "Home ownership", NAMEOF ( Loans[Home Ownership] ), 4 )
+				}

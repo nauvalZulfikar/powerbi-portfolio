@@ -1,0 +1,66 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.9.0/schema.json",
+  "name": "help_text",
+  "position": {
+    "x": 1056,
+    "y": 104,
+    "z": 900,
+    "width": 520,
+    "height": 260,
+    "tabOrder": 1900
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "How to read this page",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI Semibold",
+                      "fontSize": "12pt",
+                      "color": "#0b0b0b"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Top row: the headline numbers for the slicers above. 12M rolling ends at the latest month in the filter. Default, loss and ROI figures use matured loans only (the full term has ended), so outcomes are final; loans issued from 2016 are mostly still running. Click a donut slice to highlight the charts below it. The Time Calc buttons switch the matrix columns (Current, PY, YoY %, YTD, 12M Rolling). In the column chart use the drill arrows: year → quarter → month. The originations chart adds Power BI's own forecast (shaded band).",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "10pt",
+                      "color": "#52514e"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'How to read this page Top row: the headline numbers for the slicers above. 12M rolling ends at the latest month in the filter. Default, loss and ROI figures use matured loans only (the full term has ended), so outcomes are final; loans issued from 20'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "parentGroupName": "help_overview"
+}

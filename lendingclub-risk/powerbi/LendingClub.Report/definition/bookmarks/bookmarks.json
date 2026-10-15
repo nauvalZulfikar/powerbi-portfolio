@@ -1,0 +1,56 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmarksMetadata/1.0.0/schema.json",
+  "items": [
+    {
+      "name": "bm_vintage_count"
+    },
+    {
+      "name": "bm_vintage_dollar"
+    },
+    {
+      "name": "bm_reset_filters"
+    },
+    {
+      "name": "bm_help_overview_on"
+    },
+    {
+      "name": "bm_help_overview_off"
+    },
+    {
+      "name": "bm_help_risk-return_on"
+    },
+    {
+      "name": "bm_help_risk-return_off"
+    },
+    {
+      "name": "bm_help_vintage_on"
+    },
+    {
+      "name": "bm_help_vintage_off"
+    },
+    {
+      "name": "bm_help_borrowers_on"
+    },
+    {
+      "name": "bm_help_borrowers_off"
+    },
+    {
+      "name": "bm_help_geography_on"
+    },
+    {
+      "name": "bm_help_geography_off"
+    },
+    {
+      "name": "bm_help_model_on"
+    },
+    {
+      "name": "bm_help_model_off"
+    },
+    {
+      "name": "bm_help_glossary_on"
+    },
+    {
+      "name": "bm_help_glossary_off"
+    }
+  ]
+}

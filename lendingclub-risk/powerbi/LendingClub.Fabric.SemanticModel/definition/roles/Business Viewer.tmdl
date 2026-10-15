@@ -1,0 +1,16 @@
+role 'Business Viewer'
+	modelPermission: read
+
+	tablePermission Loans
+
+		columnPermission 'Annual Income' = none
+		columnPermission DTI = none
+
+	tablePermission 'Model ROC'
+		metadataPermission: none
+
+	tablePermission 'Model Calibration'
+		metadataPermission: none
+
+	tablePermission 'Model Importance'
+		metadataPermission: none
